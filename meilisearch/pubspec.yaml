@@ -1,4 +1,4 @@
-name: meilisearch_dart
+name: meilisearch
 description: MeiliSearch SDK for dart language.
 version: 0.0.1
 homepage: https://github.com/themisir/meilisearch-dart

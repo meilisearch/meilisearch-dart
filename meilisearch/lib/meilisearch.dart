@@ -1,4 +1,4 @@
-library meilisearch_dart;
+library meilisearch;
 
 /// A Calculator.
 class Calculator {
