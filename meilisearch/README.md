@@ -41,7 +41,7 @@ dependencies:
 Then open your terminal and update dart packages.
 
 ```bash
-$ pub update
+$ pub get
 ```
 
 ### Run MeiliSearch
