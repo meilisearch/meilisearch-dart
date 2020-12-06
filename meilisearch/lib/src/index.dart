@@ -1,3 +1,5 @@
+import 'index_settings.dart';
+
 import 'pending_update.dart';
 import 'search_result.dart';
 
@@ -41,4 +43,8 @@ abstract class MeiliSearchIndex {
   Future<PendingUpdate> deleteDocument(dynamic id);
   Future<PendingUpdate> deleteAllDocuments();
   Future<PendingUpdate> deleteDocuments(List<dynamic> ids);
+
+  Future<IndexSettings> getSettings();
+  Future<PendingUpdate> resetSettings();
+  Future<PendingUpdate> updateSettings(IndexSettings settings);
 }

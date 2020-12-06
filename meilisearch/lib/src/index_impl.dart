@@ -1,4 +1,6 @@
 import 'package:dio/dio.dart';
+import 'package:meilisearch/src/pending_update.dart';
+import 'package:meilisearch/src/index_settings.dart';
 
 import 'client.dart';
 import 'client_impl.dart';
@@ -180,5 +182,29 @@ class MeiliSearchIndexImpl implements MeiliSearchIndex {
     );
 
     return response.data.cast<Map<String, dynamic>>();
+  }
+
+  //
+  // Settings endpoints
+  //
+
+  @override
+  Future<IndexSettings> getSettings() async {
+    final response = await dio.get('/indexes/$uid/settings');
+
+    return IndexSettings.fromMap(response.data);
+  }
+
+  @override
+  Future<PendingUpdate> resetSettings() async {
+    return await _update(dio.delete('/indexes/$uid/settings'));
+  }
+
+  @override
+  Future<PendingUpdate> updateSettings(IndexSettings settings) async {
+    return await _update(dio.post(
+      '/indexes/$uid/settings',
+      data: settings.toMap(),
+    ));
   }
 }
