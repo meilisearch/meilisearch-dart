@@ -1,0 +1,12 @@
+name: meilisearch_dart
+description: MeiliSearch SDK for dart language.
+version: 0.0.1
+homepage: https://github.com/themisir/meilisearch-dart
+
+environment:
+  sdk: ">=2.7.0 <3.0.0"
+
+dependencies: {}
+
+dev_dependencies:
+  test: ^1.15.7
