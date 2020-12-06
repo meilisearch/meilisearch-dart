@@ -1,5 +1,5 @@
+import 'pending_update.dart';
 import 'search_result.dart';
-import 'serializer.dart';
 
 abstract class MeiliSearchIndex {
   String get uid;
@@ -9,7 +9,8 @@ abstract class MeiliSearchIndex {
 
   Future<void> update({String primaryKey});
   Future<void> delete();
-  Future<SearchResult<T>> search<T>(
+
+  Future<SearchResult> search<T>(
     String query, {
     int offset,
     int limit,
@@ -21,6 +22,23 @@ abstract class MeiliSearchIndex {
     List<String> cropLength,
     List<String> attributesToHighlight,
     bool matches,
-    Serializer<T> serializer,
   });
+
+  Future<Map<String, dynamic>> getDocument(dynamic id);
+  Future<List<Map<String, dynamic>>> getDocuments({
+    int offset,
+    int limit,
+    String attributesToRetrieve = '*',
+  });
+  Future<PendingUpdate> addDocuments(
+    List<Map<String, dynamic>> documents, {
+    String primaryKey,
+  });
+  Future<PendingUpdate> updateDocuments(
+    List<Map<String, dynamic>> documents, {
+    String primaryKey,
+  });
+  Future<PendingUpdate> deleteDocument(dynamic id);
+  Future<PendingUpdate> deleteAllDocuments();
+  Future<PendingUpdate> deleteDocuments(List<dynamic> ids);
 }

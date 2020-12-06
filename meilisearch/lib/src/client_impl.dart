@@ -11,6 +11,7 @@ class MeiliSearchClientImpl implements MeiliSearchClient {
           headers: <String, dynamic>{
             if (masterKey != null) 'X-Meili-API-Key': masterKey,
           },
+          responseType: ResponseType.json,
         ));
 
   @override
@@ -33,14 +34,14 @@ class MeiliSearchClientImpl implements MeiliSearchClient {
       data: data,
     );
 
-    return MeiliSearchIndexImpl.fromMap(response.data, this);
+    return MeiliSearchIndexImpl.fromMap(this, response.data);
   }
 
   @override
   Future<MeiliSearchIndex> getIndex(String uid) async {
     final response = await dio.get<Map<String, dynamic>>('/indexes/$uid');
 
-    return MeiliSearchIndexImpl.fromMap(response.data, this);
+    return MeiliSearchIndexImpl.fromMap(this, response.data);
   }
 
   @override
@@ -48,7 +49,7 @@ class MeiliSearchClientImpl implements MeiliSearchClient {
     final response = await dio.get<List<Map<String, dynamic>>>('/indexes');
 
     return response.data
-        .map((item) => MeiliSearchIndexImpl.fromMap(item, this))
+        .map((item) => MeiliSearchIndexImpl.fromMap(this, item))
         .toList();
   }
 }

@@ -1,6 +1,4 @@
-import 'serializer.dart';
-
-class SearchResult<T> {
+class SearchResult {
   SearchResult({
     this.hits,
     this.offset,
@@ -14,7 +12,7 @@ class SearchResult<T> {
   });
 
   /// Results of the query
-  final List<T> hits;
+  final List<Map<String, dynamic>> hits;
 
   /// Number of documents skipped
   final int offset;
@@ -40,12 +38,9 @@ class SearchResult<T> {
   /// Query originating the response
   final String query;
 
-  factory SearchResult.fromMap(
-    Map<String, dynamic> map, {
-    Serializer<T> serializer,
-  }) {
+  factory SearchResult.fromMap(Map<String, dynamic> map) {
     return SearchResult(
-      hits: _deserializeHits(map, serializer: serializer),
+      hits: (map['hits'] as List).cast<Map<String, dynamic>>(),
       query: map['query'] as String,
       limit: map['limit'] as int,
       offset: map['offset'] as int,
@@ -54,26 +49,6 @@ class SearchResult<T> {
       exhaustiveNbHits: map['exhaustiveNbHits'] as bool,
       facetDistribution: map['facetDistribution'],
       exhaustiveFacetsCount: map['exhaustiveFacetsCount'] as bool,
-    );
-  }
-}
-
-Type _typeof<T>() => T;
-
-List<T> _deserializeHits<T>(
-  Map<String, dynamic> map, {
-  Serializer<T> serializer,
-}) {
-  if (serializer != null) {
-    return (map['hits'] as List)
-        .map((item) => serializer.deserialize(item))
-        .cast<T>();
-  } else if (T == dynamic || T == Map || T == _typeof<Map<String, dynamic>>()) {
-    return (map['hits'] as List).cast<T>();
-  } else {
-    throw Exception(
-      'You should either privide [serializer] argument or use '
-      'Map<String, dynamic> generic type for parsing search results.',
     );
   }
 }
