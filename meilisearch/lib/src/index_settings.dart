@@ -9,7 +9,7 @@ class IndexSettings {
     this.displayedAttributes = allAttributes,
   });
 
-  static const allAttributes = const <String>['*'];
+  static const allAttributes = <String>['*'];
 
   /// List of associated words treated similarly
   Map<String, List<String>> synonyms;
