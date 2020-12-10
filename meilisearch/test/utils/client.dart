@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'dart:math';
 
 import 'package:meilisearch/meilisearch.dart';
@@ -17,14 +18,15 @@ Future<void> deleteAllIndexes() async {
 
 Future<void> setUpClient() async {
   setUp(() {
+    var server = 'http://localhost:7700';
+    if (Platform.environment.containsKey('MEILI_SERVER')) {
+      server = Platform.environment['MEILI_SERVER'];
+    }
+
+    print('Using meilisearch server on $server for running tests.');
+
+    client = MeiliSearchClient(server, 'masterKey');
     random = Random();
-    client = MeiliSearchClient(
-      String.fromEnvironment(
-        'MEILI_SERVER',
-        defaultValue: 'http://localhost:7700',
-      ),
-      'masterKey',
-    );
   });
 
   tearDown(() async {
