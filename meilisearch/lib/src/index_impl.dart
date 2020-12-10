@@ -1,10 +1,10 @@
 import 'package:dio/dio.dart';
-import 'package:meilisearch/src/pending_update.dart';
-import 'package:meilisearch/src/index_settings.dart';
 
 import 'client.dart';
 import 'client_impl.dart';
 import 'index.dart';
+import 'index_settings.dart';
+import 'pending_update.dart';
 import 'pending_update_impl.dart';
 import 'search_result.dart';
 

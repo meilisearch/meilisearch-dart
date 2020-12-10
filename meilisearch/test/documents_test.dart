@@ -9,12 +9,12 @@ void main() {
 
     test('Add documents', () async {
       var index = await client.createIndex(randomUid());
-      await index.addDocuments(booksWithIntId);
+      await index.addDocuments(booksDoc);
     });
 
     test('Add documents', () async {
       var index = await client.createIndex(randomUid());
-      await index.addDocuments(booksWithIntId, primaryKey: 'book_id');
+      await index.addDocuments(booksDoc, primaryKey: 'book_id');
     });
 
     test('Update documents', () async {
