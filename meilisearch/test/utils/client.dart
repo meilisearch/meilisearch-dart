@@ -5,8 +5,8 @@ import 'package:meilisearch/src/pending_update.dart';
 import 'package:meilisearch/src/update_status.dart';
 import 'package:test/test.dart';
 
-final client = MeiliSearchClient('http://localhost:7700', 'masterKey');
-final random = Random();
+MeiliSearchClient client;
+Random random = Random();
 
 Future<void> deleteAllIndexes() async {
   var indexes = await client.getIndexes();
@@ -16,7 +16,16 @@ Future<void> deleteAllIndexes() async {
 }
 
 Future<void> setUpClient() async {
-  setUp(() {});
+  setUp(() {
+    random = Random();
+    client = MeiliSearchClient(
+      String.fromEnvironment(
+        'MEILI_SERVER',
+        defaultValue: 'http://localhost:7700',
+      ),
+      'masterKey',
+    );
+  });
 
   tearDown(() async {
     await deleteAllIndexes();

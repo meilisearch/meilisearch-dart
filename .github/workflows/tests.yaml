@@ -9,13 +9,21 @@ jobs:
         version: ["2.7", "2.8"]
     container:
       image:  google/dart:${{ matrix.version }}
+    services:
+      meilisearch:
+        image: getmeili/meilisearch:latest
+        env:
+          MEILI_MASTER_KEY: "masterKey"
+          MEILI_NO_ANALYTICS: "true"
+        ports:
+          - "7700:7700"
     steps:
       - uses: actions/checkout@v1
-      - name: Docker setup
-        run: docker run -d -p 7700:7700 getmeili/meilisearch:latest ./meilisearch --no-analytics=true --master-key=masterKey
       - name: Install dependencies
         run: |
           cd ./meilisearch
           pub get
-      - name: Run tests
+      - name: Test
         run: pub run test
+        env:
+          MEILI_SERVER: http://meilisearch:7700
