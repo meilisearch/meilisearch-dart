@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="assets/logo.svg" alt="MeiliSearch" width="200" height="200" />
+  <img src="https://raw.githubusercontent.com/TheMisir/meilisearch-dart/master/assets/logo.svg" alt="MeiliSearch" width="200" height="200" />
 </p>
 
 <h1 align="center">MeiliSearch Dart</h1>
@@ -49,6 +49,7 @@ $ pub get
 There are many easy ways to [download and run a MeiliSearch instance](https://docs.meilisearch.com/guides/advanced_guides/installation.html#download-and-launch).
 
 For example, if you use Docker:
+
 ```bash
 $ docker pull getmeili/meilisearch:latest # Fetch the latest version of MeiliSearch image from Docker Hub
 $ docker run -it --rm -p 7700:7700 getmeili/meilisearch:latest ./meilisearch --master-key=masterKey

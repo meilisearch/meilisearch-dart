@@ -1,3 +1,9 @@
+# 0.1.0+1
+
+### Fixes
+
+- Fixed image in pub.dev listing
+
 # 0.1.0
 
 ### Enhancements
