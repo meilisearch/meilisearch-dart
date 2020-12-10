@@ -1,13 +1,13 @@
 name: meilisearch
-description: MeiliSearch SDK for dart language.
-version: 0.1.0+1
+description: MeiliSearch Dart is the MeiliSearch API client for Dart developers. Which you can also use for your Flutter apps as well. MeiliSearch is a powerful, fast, open-source, easy to use and deploy search engine.
+version: 0.1.1
 homepage: https://github.com/themisir/meilisearch-dart
 
 environment:
   sdk: ">=2.7.0 <3.0.0"
 
 dependencies:
-  dio: ^3.0.10
+  dio: ^3.0.0
 
 dev_dependencies:
-  test: ^1.15.7
+  test: ^1.0.0

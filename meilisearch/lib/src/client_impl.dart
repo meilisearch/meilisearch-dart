@@ -5,11 +5,11 @@ import 'index.dart';
 import 'index_impl.dart';
 
 class MeiliSearchClientImpl implements MeiliSearchClient {
-  MeiliSearchClientImpl(this.serverUrl, [this.masterKey])
+  MeiliSearchClientImpl(this.serverUrl, [this.apiKey])
       : dio = Dio(BaseOptions(
           baseUrl: serverUrl,
           headers: <String, dynamic>{
-            if (masterKey != null) 'X-Meili-API-Key': masterKey,
+            if (apiKey != null) 'X-Meili-API-Key': apiKey,
           },
           responseType: ResponseType.json,
         ));
@@ -18,7 +18,7 @@ class MeiliSearchClientImpl implements MeiliSearchClient {
   final String serverUrl;
 
   @override
-  final String masterKey;
+  final String apiKey;
 
   final Dio dio;
 
@@ -52,5 +52,17 @@ class MeiliSearchClientImpl implements MeiliSearchClient {
         .cast<Map<String, dynamic>>()
         .map((item) => MeiliSearchIndexImpl.fromMap(this, item))
         .toList();
+  }
+
+  @override
+  Future<MeiliSearchIndex> getOrCreateIndex(
+    String uid, {
+    String primaryKey,
+  }) async {
+    try {
+      return await getIndex(uid);
+    } on DioError catch (_) {
+      return await createIndex(uid, primaryKey: primaryKey);
+    }
   }
 }

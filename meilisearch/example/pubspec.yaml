@@ -1,0 +1,13 @@
+name: example
+publish_to: 'none'
+version: 0.1.0
+
+environment:
+  sdk: ">=2.7.0 <3.0.0"
+
+dependencies:
+  meilisearch: ">=0.1.0 <2.0.0"
+
+dependency_overrides:
+  meilisearch:
+    path: ..
