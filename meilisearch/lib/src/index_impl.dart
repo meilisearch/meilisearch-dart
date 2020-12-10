@@ -41,8 +41,12 @@ class MeiliSearchIndexImpl implements MeiliSearchIndex {
         client,
         map['uid'] as String,
         primaryKey: map['primaryKey'] as String,
-        createdAt: DateTime.tryParse(map['createdAt'] as String),
-        updatedAt: DateTime.tryParse(map['updatedAt'] as String),
+        createdAt: map['createdAt'] != null
+            ? DateTime.tryParse(map['createdAt'] as String)
+            : null,
+        updatedAt: map['updatedAt'] != null
+            ? DateTime.tryParse(map['updatedAt'] as String)
+            : null,
       );
 
   //

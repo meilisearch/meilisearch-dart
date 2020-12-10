@@ -19,9 +19,9 @@ void main() {
         stopWords: ['is', 'or', 'and', 'to'],
         displayedAttributes: ['name'],
         searchableAttributes: ['name'],
-        synonyms: <String, String>{
-          'male': 'man',
-          'female': 'woman',
+        synonyms: <String, List<String>>{
+          'male': ['man'],
+          'female': ['woman'],
         },
       ));
       await update.waitFor();

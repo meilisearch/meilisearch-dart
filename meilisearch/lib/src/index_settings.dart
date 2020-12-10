@@ -12,7 +12,7 @@ class IndexSettings {
   static const allAttributes = const <String>['*'];
 
   /// List of associated words treated similarly
-  Map<String, dynamic> synonyms;
+  Map<String, List<String>> synonyms;
 
   /// List of words ignored by MeiliSearch when present in search queries
   List<String> stopWords;
@@ -43,7 +43,9 @@ class IndexSettings {
       };
 
   factory IndexSettings.fromMap(Map<String, dynamic> map) => IndexSettings(
-        synonyms: (map['synonyms'] as Map)?.cast<String, dynamic>(),
+        synonyms: (map['synonyms'] as Map)
+            ?.cast<String, List>()
+            ?.map((key, value) => MapEntry(key, value.cast<String>())),
         stopWords: (map['stopWords'] as List)?.cast<String>(),
         rankingRules: (map['rankingRules'] as List)?.cast<String>(),
         attributesForFaceting:

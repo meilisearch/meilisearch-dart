@@ -19,9 +19,15 @@ class UpdateStatus {
         status: map['status'] as String,
         updateId: map['updateId'] as int,
         duration: map['duration'] as double,
-        enqueuedAt: DateTime.tryParse(map['enqueuedAt'] as String),
-        processedAt: DateTime.tryParse(map['processedAt'] as String),
-        type: UpdateType.fromMap(map['type'] as Map<String, dynamic>),
+        enqueuedAt: map['enqueuedAt'] != null
+            ? DateTime.tryParse(map['enqueuedAt'] as String)
+            : null,
+        processedAt: map['processedAt'] != null
+            ? DateTime.tryParse(map['processedAt'] as String)
+            : null,
+        type: map['type'] != null
+            ? UpdateType.fromMap(map['type'] as Map<String, dynamic>)
+            : null,
       );
 }
 
