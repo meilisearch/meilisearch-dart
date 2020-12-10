@@ -57,9 +57,9 @@ class MeiliSearchIndexImpl implements MeiliSearchIndex {
     data.removeWhere((k, v) => v == null);
     final response = await dio.put('/indexes/$uid', data: data);
 
-    primaryKey = response.data['primaryKey'] as String;
-    createdAt = DateTime.parse(response.data['createdAt'] as String);
-    updatedAt = DateTime.parse(response.data['updatedAt'] as String);
+    this.primaryKey = response.data['primaryKey'] as String;
+    this.createdAt = DateTime.parse(response.data['createdAt'] as String);
+    this.updatedAt = DateTime.parse(response.data['updatedAt'] as String);
   }
 
   @override

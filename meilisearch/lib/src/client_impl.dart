@@ -46,9 +46,10 @@ class MeiliSearchClientImpl implements MeiliSearchClient {
 
   @override
   Future<List<MeiliSearchIndex>> getIndexes() async {
-    final response = await dio.get<List<Map<String, dynamic>>>('/indexes');
+    final response = await dio.get<List<dynamic>>('/indexes');
 
     return response.data
+        .cast<Map<String, dynamic>>()
         .map((item) => MeiliSearchIndexImpl.fromMap(this, item))
         .toList();
   }
