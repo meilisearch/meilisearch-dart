@@ -2,7 +2,7 @@
   <img src="https://raw.githubusercontent.com/TheMisir/meilisearch-dart/master/assets/logo.svg" alt="MeiliSearch" width="200" height="200" />
 </p>
 
-<h1 align="center">MeiliSearch Dart</h1>
+<h1 align="center">MeiliSearch Dart (WIP ⚠️)</h1>
 
 <h4 align="center">
   <a href="https://github.com/meilisearch/MeiliSearch">MeiliSearch</a> |
