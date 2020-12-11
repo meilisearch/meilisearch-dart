@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://raw.githubusercontent.com/TheMisir/meilisearch-dart/master/assets/logo.svg" alt="MeiliSearch" width="200" height="200" />
+  <img src="https://raw.githubusercontent.com/meilisearch/meilisearch-dart/master/assets/logo.svg" alt="MeiliSearch" width="200" height="200" />
 </p>
 
 <h1 align="center">MeiliSearch Dart (WIP ⚠️)</h1>
@@ -16,8 +16,8 @@
 
 <p align="center">
   <a href="https://pub.dev/packages/meilisearch"><img src="https://img.shields.io/pub/v/meilisearch" alt="Pub Version"></a>
-  <a href="https://github.com/themisir/meilisearch-dart/actions"><img src="https://github.com/themisir/meilisearch-dart/workflows/Tests/badge.svg?branch=master" alt="GitHub Workflow Status"></a>
-  <a href="https://github.com/themisir/meilisearch-dart/blob/master/LICENSE"><img src="https://img.shields.io/badge/license-MIT-informational" alt="License"></a>
+  <a href="https://github.com/meilisearch/meilisearch-dart/actions"><img src="https://github.com/meilisearch/meilisearch-dart/workflows/Tests/badge.svg" alt="GitHub Workflow Status"></a>
+  <a href="https://github.com/meilisearch/meilisearch-dart/blob/master/LICENSE"><img src="https://img.shields.io/badge/license-MIT-informational" alt="License"></a>
   <a href="https://slack.meilisearch.com"><img src="https://img.shields.io/badge/slack-MeiliSearch-blue.svg?logo=slack" alt="Slack"></a>
 </p>
 
