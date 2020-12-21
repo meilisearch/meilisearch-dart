@@ -104,15 +104,15 @@ _[Read more about this](https://github.com/meilisearch/integration-guides/blob/m
 
 ### How to Publish the Release
 
-Make a PR modifying the file `[<Add file name here>]`(\<Add relative path to the file here\>) with the right version.
+Make a PR modifying the file [`pubspec.yaml`](./pubspec.yaml) with the right version.
 
-```<Add the language here>
-<Add the line to change, e.g.: "version": X.X.X>
+```yaml
+version: X.X.X
 ```
 
 Once the changes are merged on `master`, you can publish the current draft release via the [GitHub interface](https://github.com/meilisearch/meilisearch-dart/releases).
 
-A GitHub Action will be triggered and push the package to [\<Add the platform name here, e.g. npm>](\<Add URL to the platform here\>).
+A GitHub Action will be triggered and push the package to [pub.dev](https://pub.dev/packages/meilisearch/).
 
 <hr>
 
