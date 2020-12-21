@@ -109,7 +109,7 @@ Output:
 All the supported options are described in the search parameters section of the documentation.
 
 ```dart
-var result = index.search(
+var result = await index.search(
   'prince',
   attributesToHighlight: ['title'],
   filters: 'book_id > 10',
