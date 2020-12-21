@@ -15,7 +15,7 @@ jobs:
         version: ['2.7', '2.8']
     name: integration-tests (dart ${{ matrix.version }})
     container:
-      image:  google/dart:${{ matrix.version }}
+      image: google/dart:${{ matrix.version }}
     services:
       meilisearch:
         image: getmeili/meilisearch:latest
