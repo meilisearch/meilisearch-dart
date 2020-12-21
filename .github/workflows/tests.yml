@@ -28,8 +28,8 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v1
       - name: Install dependencies
-        run: cd ./meilisearch && pub get
-      - name: Test
-        run: cd ./meilisearch && pub run test
+        run: pub get
+      - name: Run integration tests
+        run: pub run test
         env:
           MEILI_SERVER: http://meilisearch:7700
