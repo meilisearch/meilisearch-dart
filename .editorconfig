@@ -1,0 +1,19 @@
+# https://editorconfig.org/
+
+root = true
+
+[*]
+trim_trailing_whitespace = true
+insert_final_newline     = true
+end_of_line              = lf
+charset                  = utf-8
+indent_size              = 2
+indent_style             = space
+
+[*.dart]
+indent_size              = 2
+indent_style             = space
+
+[*.{yaml,yml}]
+indent_size              = 2
+indent_style             = space
