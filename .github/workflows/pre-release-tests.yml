@@ -6,7 +6,6 @@ on:
   push:
     branches:
       - bump-meilisearch-v*
-      - pre-release-tests
   pull_request:
     branches:
       - bump-meilisearch-v*
