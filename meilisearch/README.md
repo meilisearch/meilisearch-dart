@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://raw.githubusercontent.com/meilisearch/meilisearch-dart/master/assets/logo.svg" alt="MeiliSearch" width="200" height="200" />
+  <img src="https://raw.githubusercontent.com/meilisearch/integration-guides/master/assets/logos/meilisearch_dart.svg" alt="MeiliSearch" width="200" height="200" />
 </p>
 
 <h1 align="center">MeiliSearch Dart (WIP ⚠️)</h1>

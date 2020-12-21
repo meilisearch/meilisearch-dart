@@ -1,22 +1,29 @@
 name: Tests
-on: [push, pull_request]
+
+on:
+  pull_request:
+  push:
+    branches:
+      - master
+
 jobs:
-  test:
+  integration-tests:
     timeout-minutes: 10
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        version: ["2.7", "2.8"]
+        version: ['2.7', '2.8']
+    name: integration-tests (dart ${{ matrix.version }})
     container:
       image:  google/dart:${{ matrix.version }}
     services:
       meilisearch:
         image: getmeili/meilisearch:latest
         env:
-          MEILI_MASTER_KEY: "masterKey"
-          MEILI_NO_ANALYTICS: "true"
+          MEILI_MASTER_KEY: 'masterKey'
+          MEILI_NO_ANALYTICS: 'true'
         ports:
-          - "7700:7700"
+          - '7700:7700'
     steps:
       - name: Checkout
         uses: actions/checkout@v1
