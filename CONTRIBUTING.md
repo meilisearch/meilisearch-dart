@@ -1,16 +1,12 @@
-# Contributing
+# Contributing <!-- omit in TOC -->
 
 First of all, thank you for contributing to MeiliSearch! The goal of this document is to provide everything you need to know in order to contribute to MeiliSearch and its different integrations.
-
-<!-- MarkdownTOC autolink="true" style="ordered" indent="   " -->
 
 - [Assumptions](#assumptions)
 - [How to Contribute](#how-to-contribute)
 - [Development Workflow](#development-workflow)
 - [Git Guidelines](#git-guidelines)
 - [Release Process (for internal team only)](#release-process-for-internal-team-only)
-
-<!-- /MarkdownTOC -->
 
 ## Assumptions
 
@@ -30,13 +26,13 @@ First of all, thank you for contributing to MeiliSearch! The goal of this docume
 
 ## Development Workflow
 
-### Requirements
+### Requirements <!-- omit in TOC -->
 
 Install the official [Dart SDK](https://dart.dev/get-dart) or the [Flutter SDK](https://flutter.dev/docs/get-started/install) (which includes Dart SDK) using guides on the official website.
 
 Both of them include `pub`. But if you want to run the linter you need to install the Flutter SDK.
 
-### Set up
+### Set up <!-- omit in TOC -->
 
 ```bash
 $ pub get
@@ -48,7 +44,7 @@ Or if you are using Flutter SDK:
 $ flutter pub get
 ```
 
-### Tests and Linter
+### Tests and Linter <!-- omit in TOC -->
 
 Each PR should pass the tests and the linter to be accepted.
 
@@ -63,12 +59,12 @@ $ flutter analyze
 
 ## Git Guidelines
 
-### Git Branches
+### Git Branches <!-- omit in TOC -->
 
 All changes must be made in a branch and submitted as PR.
 We do not enforce any branch naming style, but please use something descriptive of your changes.
 
-### Git Commits
+### Git Commits <!-- omit in TOC -->
 
 As minimal requirements, your commit message should:
 - be capitalized
@@ -78,7 +74,7 @@ As minimal requirements, your commit message should:
 
 We don't follow any other convention, but if you want to use one, we recommend [this one](https://chris.beams.io/posts/git-commit/).
 
-### GitHub Pull Requests
+### GitHub Pull Requests <!-- omit in TOC -->
 
 Some notes on GitHub PRs:
 
@@ -92,17 +88,17 @@ Some notes on GitHub PRs:
 
 MeiliSearch tools follow the [Semantic Versioning Convention](https://semver.org/).
 
-### Automation to Rebase and Merge the PRs
+### Automation to Rebase and Merge the PRs <!-- omit in TOC -->
 
 This project integrates a bot that helps us manage pull requests merging.<br>
 _[Read more about this](https://github.com/meilisearch/integration-guides/blob/main/guides/bors.md)._
 
-### Automated Changelogs
+### Automated Changelogs <!-- omit in TOC -->
 
 This project integrates a tool to create automated changelogs.<br>
 _[Read more about this](https://github.com/meilisearch/integration-guides/blob/main/guides/release-drafter.md)._
 
-### How to Publish the Release
+### How to Publish the Release <!-- omit in TOC -->
 
 ⚠️ Before doing anything, make sure you got through the guide about [Releasing an Integration Tool](https://github.com/meilisearch/integration-guides/blob/main/guides/integration-tool-release.md).
 

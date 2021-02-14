@@ -29,7 +29,7 @@ class SearchResult {
   /// Whether [nbHits] is exhaustive
   final bool exhaustiveNbHits;
 
-  /// [Distribution of the given facets](https://docs.meilisearch.com/guides/advanced_guides/search_parameters.html#the-facets-distribution)
+  /// [Distribution of the given facets](https://docs.meilisearch.com/reference/features/search_parameters.html#the-facets-distribution)
   final dynamic facetDistribution;
 
   /// Whether [facetDistribution] is exhaustive

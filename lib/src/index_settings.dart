@@ -20,7 +20,7 @@ class IndexSettings {
   /// List of ranking rules sorted by order of importance
   List<String> rankingRules;
 
-  /// Attributes to use as [facets](https://docs.meilisearch.com/guides/advanced_guides/faceted_search.html)
+  /// Attributes to use as [facets](https://docs.meilisearch.com/reference/features/faceted_search.html)
   List<String> attributesForFaceting;
 
   /// Search returns documents with distinct (different) values of the given field
