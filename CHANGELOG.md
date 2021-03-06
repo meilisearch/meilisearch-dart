@@ -1,3 +1,6 @@
+# 0.1.2
+- Fix: Rename facetDistribution into facetsDistribution
+
 # 0.1.1
 - Add example project
 
