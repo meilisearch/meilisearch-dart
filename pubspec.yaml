@@ -1,6 +1,6 @@
 name: meilisearch
 description: MeiliSearch Dart is the MeiliSearch API client for Dart and Flutter developers.
-version: 0.1.2
+version: 0.1.3
 homepage: https://github.com/meilisearch/meilisearch-dart
 
 environment:
