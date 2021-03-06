@@ -52,3 +52,5 @@ jobs:
         run: pub get
       - name: Run linter
         uses: zgosalvez/github-actions-analyze-dart@v1
+        with:
+          fail-on-warnings: true
