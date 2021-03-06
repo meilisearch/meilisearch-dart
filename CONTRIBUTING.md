@@ -102,11 +102,31 @@ _[Read more about this](https://github.com/meilisearch/integration-guides/blob/m
 
 ⚠️ Before doing anything, make sure you got through the guide about [Releasing an Integration Tool](https://github.com/meilisearch/integration-guides/blob/main/guides/integration-tool-release.md).
 
-Make a PR modifying the file [`pubspec.yaml`](./pubspec.yaml) with the right version.
+
+Make a PR modifying the version in:
+
+- the file [`pubspec.yaml`](./pubspec.yaml).
 
 ```yaml
 version: X.X.X
 ```
+
+- the file [`example/pubspec.yaml`](./example/pubspec.yaml).
+
+```yaml
+meilisearch: "X.X.X"
+```
+
+- the file [`example/pubspec.lock`](./example/pubspec.lock).
+
+```yml
+  meilisearch:
+    dependency: "direct main"
+    ...
+    version: "X.X.X"
+```
+
+Also in this PR, update the [CHANGELOG.md](./CHANGELOG.md) file with the description of the next release.
 
 Once the changes are merged on `main`, you can publish the current draft release via the [GitHub interface](https://github.com/meilisearch/meilisearch-dart/releases).
 

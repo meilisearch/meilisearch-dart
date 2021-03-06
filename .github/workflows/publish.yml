@@ -1,19 +1,20 @@
-# name: Publish to Pub.dev
+name: Publish to Pub.dev
 
-# on:
-#   push:
-#     tags:
-#       - v*
+on:
+  push:
+    tags:
+      - v*
 
-# jobs:
-#   publishing:
-#     runs-on: ubuntu-latest
-#     steps:
-#       - name: 'Checkout'
-#         uses: actions/checkout@v2
-
-#       - name: 'Publish'
-#         uses: k-paxian/dart-package-publisher@master
-#         with:
-#           accessToken: ${{ secrets.OAUTH_ACCESS_TOKEN }}
-#           refreshToken: ${{ secrets.OAUTH_REFRESH_TOKEN }}
+jobs:
+  publishing:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Check release validity
+        run: sh .github/scripts/check-release.sh
+      - name: Publish
+        uses: k-paxian/dart-package-publisher@master
+        with:
+          accessToken: ${{ secrets.OAUTH_ACCESS_TOKEN }}
+          refreshToken: ${{ secrets.OAUTH_REFRESH_TOKEN }}
