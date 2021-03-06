@@ -16,8 +16,9 @@ void main() async {
   ];
 
   // Add documents into index we just created.
-  var update = await index.addDocuments(documents);
+  await index.addDocuments(documents);
 
   // Search
   var result = await index.search('prience');
+  print(result.hits);
 }
