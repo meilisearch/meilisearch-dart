@@ -9,10 +9,11 @@ jobs:
   publishing:
     runs-on: ubuntu-latest
     steps:
-      - name: 'Checkout'
+      - name: Checkout
         uses: actions/checkout@v2
-
-      - name: 'Publish'
+      - name: Check release validity
+        run: sh .github/scripts/check-release.sh
+      - name: Publish
         uses: k-paxian/dart-package-publisher@master
         with:
           accessToken: ${{ secrets.OAUTH_ACCESS_TOKEN }}
