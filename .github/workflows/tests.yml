@@ -17,8 +17,8 @@ jobs:
     timeout-minutes: 10
     runs-on: ubuntu-latest
     strategy:
+      fail-fast: false
       matrix:
-        fail-fast: false
         version: [
           '2.7',
           '2.8',
