@@ -1,3 +1,6 @@
+# 0.1.3
+- Upgrade dependencies
+
 # 0.1.2
 - Fix: Rename facetDistribution into facetsDistribution
 
