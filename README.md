@@ -78,7 +78,7 @@ void main() async {
   var client = MeiliSearchClient('http://127.0.0.1:7700', 'masterKey');
 
   // An index where books are stored.
-  var index = await client.createIndex('books', primaryKey: 'book_id');
+  var index = await client.createIndex('books');
 
   var documents = [
     { 'book_id': 123,  'title': 'Pride and Prejudice' },

@@ -7,7 +7,7 @@ class SearchResult {
     this.query,
     this.nbHits,
     this.exhaustiveNbHits,
-    this.facetDistribution,
+    this.facetsDistribution,
     this.exhaustiveFacetsCount,
   });
 
@@ -29,10 +29,10 @@ class SearchResult {
   /// Whether [nbHits] is exhaustive
   final bool exhaustiveNbHits;
 
-  /// [Distribution of the given facets](https://docs.meilisearch.com/reference/features/search_parameters.html#the-facets-distribution)
-  final dynamic facetDistribution;
+  /// Distribution of the given facets
+  final dynamic facetsDistribution;
 
-  /// Whether [facetDistribution] is exhaustive
+  /// Whether [facetsDistribution] is exhaustive
   final bool exhaustiveFacetsCount;
 
   /// Query originating the response
@@ -47,7 +47,7 @@ class SearchResult {
       processingTimeMs: map['processingTimeMs'] as int,
       nbHits: map['nbHits'] as int,
       exhaustiveNbHits: map['exhaustiveNbHits'] as bool,
-      facetDistribution: map['facetDistribution'],
+      facetsDistribution: map['facetsDistribution'],
       exhaustiveFacetsCount: map['exhaustiveFacetsCount'] as bool,
     );
   }
