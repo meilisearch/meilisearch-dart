@@ -17,8 +17,15 @@ jobs:
     timeout-minutes: 10
     runs-on: ubuntu-latest
     strategy:
+      fail-fast: false
       matrix:
-        version: ['2.7', '2.8']
+        version: [
+          '2.7',
+          '2.8',
+          '2.9',
+          '2.10',
+          '2.12'
+        ]
     name: integration-tests (dart ${{ matrix.version }})
     container:
       image: google/dart:${{ matrix.version }}
