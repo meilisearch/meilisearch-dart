@@ -22,7 +22,7 @@
 
 <p align="center">⚡ The MeiliSearch API client written for Dart</p>
 
-**MeiliSearch Dart** is the MeiliSearch API client for Dart developers. Which you can also use for your Flutter apps as well.
+**MeiliSearch Dart** is the MeiliSearch API client for Dart and Flutter developers.
 
 **MeiliSearch** is an open-source search engine. [Discover what MeiliSearch is!](https://github.com/meilisearch/MeiliSearch)
 
