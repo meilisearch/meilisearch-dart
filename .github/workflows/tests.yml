@@ -39,3 +39,16 @@ jobs:
         run: pub run test
         env:
           MEILI_SERVER: http://meilisearch:7700
+
+  linter:
+    name: linter-check
+    runs-on: ubuntu-latest
+    container:
+      image: google/dart:latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v1
+      - name: Install dependencies
+        run: pub get
+      - name: Run linter
+        uses: zgosalvez/github-actions-analyze-dart@v1
