@@ -23,7 +23,7 @@ Future<void> setUpClient() async {
       server = Platform.environment['MEILI_SERVER'];
     }
 
-    print('Using meilisearch server on $server for running tests.');
+    print('Using MeiliSearch server on $server for running tests.');
 
     client = MeiliSearchClient(server, 'masterKey');
     random = Random();

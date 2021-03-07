@@ -12,7 +12,7 @@ void main() {
       await index.addDocuments(booksDoc);
     });
 
-    test('Add documents', () async {
+    test('Add documents with primary key', () async {
       var index = await client.createIndex(randomUid());
       await index.addDocuments(booksDoc, primaryKey: 'book_id');
     });
