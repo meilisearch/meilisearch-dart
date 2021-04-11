@@ -1,5 +1,8 @@
 import 'package:dio/dio.dart';
 
+import 'http.dart';
+import 'http_impl.dart';
+
 import 'client.dart';
 import 'index.dart';
 import 'index_impl.dart';
@@ -12,7 +15,8 @@ class MeiliSearchClientImpl implements MeiliSearchClient {
             if (apiKey != null) 'X-Meili-API-Key': apiKey,
           },
           responseType: ResponseType.json,
-        ));
+        )),
+        http = HttpImpl(serverUrl, apiKey);
 
   @override
   final String serverUrl;
@@ -21,6 +25,7 @@ class MeiliSearchClientImpl implements MeiliSearchClient {
   final String apiKey;
 
   final Dio dio;
+  final Http http;
 
   @override
   Future<MeiliSearchIndex> createIndex(String uid, {String primaryKey}) async {
@@ -39,14 +44,17 @@ class MeiliSearchClientImpl implements MeiliSearchClient {
 
   @override
   Future<MeiliSearchIndex> getIndex(String uid) async {
-    final response = await dio.get<Map<String, dynamic>>('/indexes/$uid');
+    // final response = await dio.get<Map<String, dynamic>>('/indexes/$uid');
+    final response =
+        await http.get_method<Map<String, dynamic>>('/indexes/$uid');
 
     return MeiliSearchIndexImpl.fromMap(this, response.data);
   }
 
   @override
   Future<List<MeiliSearchIndex>> getIndexes() async {
-    final response = await dio.get<List<dynamic>>('/indexes');
+    // final response = await dio.get<List<dynamic>>('/indexes');
+    final response = await http.get_method<List<dynamic>>('/indexes');
 
     return response.data
         .cast<Map<String, dynamic>>()

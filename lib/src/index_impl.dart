@@ -3,6 +3,7 @@ import 'package:dio/dio.dart';
 import 'client.dart';
 import 'client_impl.dart';
 import 'index.dart';
+import 'http.dart';
 import 'index_settings.dart';
 import 'pending_update.dart';
 import 'pending_update_impl.dart';
@@ -32,6 +33,7 @@ class MeiliSearchIndexImpl implements MeiliSearchIndex {
   DateTime updatedAt;
 
   Dio get dio => client.dio;
+  Http get http => client.http;
 
   factory MeiliSearchIndexImpl.fromMap(
     MeiliSearchClient client,
@@ -162,7 +164,8 @@ class MeiliSearchIndexImpl implements MeiliSearchIndex {
 
   @override
   Future<Map<String, dynamic>> getDocument(id) async {
-    final response = await dio.get<Map<String, dynamic>>(
+    final response = await http.get_method<Map<String, dynamic>>(
+      // final response = await dio.get<Map<String, dynamic>>(
       '/indexes/$uid/documents/$id',
     );
 
@@ -175,7 +178,8 @@ class MeiliSearchIndexImpl implements MeiliSearchIndex {
     int limit,
     String attributesToRetrieve = '*',
   }) async {
-    final response = await dio.get<List<dynamic>>(
+    // final response = await dio.get<List<dynamic>>(
+    final response = await http.get_method<List<dynamic>>(
       '/indexes/$uid/documents',
       queryParameters: <String, dynamic>{
         if (offset != null) 'offset': offset,
@@ -194,7 +198,8 @@ class MeiliSearchIndexImpl implements MeiliSearchIndex {
 
   @override
   Future<IndexSettings> getSettings() async {
-    final response = await dio.get('/indexes/$uid/settings');
+    // final response = await dio.get('/indexes/$uid/settings');
+    final response = await http.get_method('/indexes/$uid/settings');
 
     return IndexSettings.fromMap(response.data);
   }
