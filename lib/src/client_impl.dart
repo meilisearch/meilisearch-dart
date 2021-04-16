@@ -1,22 +1,14 @@
-import 'package:dio/dio.dart';
-
 import 'http_request.dart';
 import 'http_request_impl.dart';
 
 import 'client.dart';
 import 'index.dart';
 import 'index_impl.dart';
+import 'exception.dart';
 
 class MeiliSearchClientImpl implements MeiliSearchClient {
   MeiliSearchClientImpl(this.serverUrl, [this.apiKey])
-      : dio = Dio(BaseOptions(
-          baseUrl: serverUrl,
-          headers: <String, dynamic>{
-            if (apiKey != null) 'X-Meili-API-Key': apiKey,
-          },
-          responseType: ResponseType.json,
-        )),
-        http = HttpRequestImpl(serverUrl, apiKey);
+      : http = HttpRequestImpl(serverUrl, apiKey);
 
   @override
   final String serverUrl;
@@ -24,7 +16,6 @@ class MeiliSearchClientImpl implements MeiliSearchClient {
   @override
   final String apiKey;
 
-  final Dio dio;
   final HttpRequest http;
 
   @override
@@ -34,7 +25,6 @@ class MeiliSearchClientImpl implements MeiliSearchClient {
       if (primaryKey != null) 'primaryKey': primaryKey,
     };
     data.removeWhere((k, v) => v == null);
-    // final response = await dio.post<Map<String, dynamic>>(
     final response = await http.post_method<Map<String, dynamic>>(
       '/indexes',
       data: data,
@@ -45,7 +35,6 @@ class MeiliSearchClientImpl implements MeiliSearchClient {
 
   @override
   Future<MeiliSearchIndex> getIndex(String uid) async {
-    // final response = await dio.get<Map<String, dynamic>>('/indexes/$uid');
     final response =
         await http.get_method<Map<String, dynamic>>('/indexes/$uid');
 
@@ -54,7 +43,6 @@ class MeiliSearchClientImpl implements MeiliSearchClient {
 
   @override
   Future<List<MeiliSearchIndex>> getIndexes() async {
-    // final response = await dio.get<List<dynamic>>('/indexes');
     final response = await http.get_method<List<dynamic>>('/indexes');
 
     return response.data
@@ -70,7 +58,7 @@ class MeiliSearchClientImpl implements MeiliSearchClient {
   }) async {
     try {
       return await getIndex(uid);
-    } on DioError catch (_) {
+    } on MeiliSearchApiException catch (_) {
       return await createIndex(uid, primaryKey: primaryKey);
     }
   }
