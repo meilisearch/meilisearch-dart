@@ -105,7 +105,8 @@ class MeiliSearchIndexImpl implements MeiliSearchIndex {
       'matches': matches,
     };
     data.removeWhere((k, v) => v == null);
-    final response = await dio.post('/indexes/$uid/search', data: data);
+    // final response = await dio.post('/indexes/$uid/search', data: data);
+    final response = await http.post_method('/indexes/$uid/search', data: data);
 
     return SearchResult.fromMap(response.data);
   }
@@ -121,7 +122,8 @@ class MeiliSearchIndexImpl implements MeiliSearchIndex {
 
   @override
   Future<PendingUpdateImpl> addDocuments(documents, {String primaryKey}) async {
-    return await _update(dio.post(
+    // return await _update(dio.post(
+    return await _update(http.post_method(
       '/indexes/$uid/documents',
       data: documents,
       queryParameters: <String, dynamic>{
@@ -156,7 +158,8 @@ class MeiliSearchIndexImpl implements MeiliSearchIndex {
 
   @override
   Future<PendingUpdateImpl> deleteDocuments(List ids) async {
-    return await _update(dio.post(
+    // return await _update(dio.post(
+    return await _update(http.post_method(
       '/indexes/$uid/documents/delete-batch',
       data: ids,
     ));
@@ -211,7 +214,8 @@ class MeiliSearchIndexImpl implements MeiliSearchIndex {
 
   @override
   Future<PendingUpdate> updateSettings(IndexSettings settings) async {
-    return await _update(dio.post(
+    // return await _update(dio.post(
+    return await _update(http.post_method(
       '/indexes/$uid/settings',
       data: settings.toMap(),
     ));

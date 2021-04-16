@@ -25,13 +25,31 @@ class HttpRequestImpl implements HttpRequest {
       {Map<String, dynamic> queryParameters}) async {
     var response;
     try {
-      response = await dio.get<T>(path, queryParameters: queryParameters);
+      response = await dio.get<T>(
+        path,
+        queryParameters: queryParameters,
+      );
     } on DioError catch (e) {
       throw MeiliSearchApiException(e.message, e.response.data);
     }
     return await response;
   }
 
+  @override
+  Future<Response<T>> post_method<T>(String path,
+      {dynamic data, Map<String, dynamic> queryParameters}) async {
+    var response;
+    try {
+      response = await dio.post<T>(
+        path,
+        data: data,
+        queryParameters: queryParameters,
+      );
+    } on DioError catch (e) {
+      throw MeiliSearchApiException(e.message, e.response.data);
+    }
+    return await response;
+  }
   // Future<Response<T>> post_method<T>(String path);
 
   // Future<Response<T>> put_method<T>(String path);

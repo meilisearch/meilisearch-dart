@@ -15,7 +15,8 @@ abstract class HttpRequest {
       {Map<String, dynamic> queryParameters});
 
   // /// POST method
-  // Future<Response<T>> http_post<T>(String path);
+  Future<Response<T>> post_method<T>(String path,
+      {dynamic data, Map<String, dynamic> queryParameters});
 
   // /// PUT method
   // Future<Response<T>> http_put<T>(String path);

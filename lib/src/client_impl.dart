@@ -34,7 +34,8 @@ class MeiliSearchClientImpl implements MeiliSearchClient {
       if (primaryKey != null) 'primaryKey': primaryKey,
     };
     data.removeWhere((k, v) => v == null);
-    final response = await dio.post<Map<String, dynamic>>(
+    // final response = await dio.post<Map<String, dynamic>>(
+    final response = await http.post_method<Map<String, dynamic>>(
       '/indexes',
       data: data,
     );
