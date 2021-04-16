@@ -61,7 +61,8 @@ class MeiliSearchIndexImpl implements MeiliSearchIndex {
       'primaryKey': primaryKey,
     };
     data.removeWhere((k, v) => v == null);
-    final response = await dio.put('/indexes/$uid', data: data);
+    // final response = await dio.put('/indexes/$uid', data: data);
+    final response = await http.put_method('/indexes/$uid', data: data);
 
     this.primaryKey = response.data['primaryKey'] as String;
     this.createdAt = DateTime.parse(response.data['createdAt'] as String);
@@ -70,7 +71,8 @@ class MeiliSearchIndexImpl implements MeiliSearchIndex {
 
   @override
   Future<void> delete() async {
-    await dio.delete('/indexes/$uid');
+    // await dio.delete('/indexes/$uid');
+    await http.delete_method('/indexes/$uid');
   }
 
   //
@@ -137,7 +139,8 @@ class MeiliSearchIndexImpl implements MeiliSearchIndex {
     documents, {
     String primaryKey,
   }) async {
-    return await _update(dio.put(
+    // return await _update(dio.put(
+    return await _update(http.put_method(
       '/indexes/$uid/documents',
       data: documents,
       queryParameters: <String, dynamic>{
@@ -148,12 +151,14 @@ class MeiliSearchIndexImpl implements MeiliSearchIndex {
 
   @override
   Future<PendingUpdateImpl> deleteAllDocuments() async {
-    return await _update(dio.delete('/indexes/$uid/documents'));
+    // return await _update(dio.delete('/indexes/$uid/documents'));
+    return await _update(http.delete_method('/indexes/$uid/documents'));
   }
 
   @override
   Future<PendingUpdateImpl> deleteDocument(dynamic id) async {
-    return await _update(dio.delete('/indexes/$uid/documents/$id'));
+    // return await _update(dio.delete('/indexes/$uid/documents/$id'));
+    return await _update(http.delete_method('/indexes/$uid/documents/$id'));
   }
 
   @override

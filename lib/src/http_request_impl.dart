@@ -50,9 +50,34 @@ class HttpRequestImpl implements HttpRequest {
     }
     return await response;
   }
-  // Future<Response<T>> post_method<T>(String path);
 
-  // Future<Response<T>> put_method<T>(String path);
+  @override
+  Future<Response<T>> put_method<T>(String path,
+      {dynamic data, Map<String, dynamic> queryParameters}) async {
+    var response;
+    try {
+      response = await dio.put<T>(
+        path,
+        data: data,
+        queryParameters: queryParameters,
+      );
+    } on DioError catch (e) {
+      throw MeiliSearchApiException(e.message, e.response.data);
+    }
+    return await response;
+  }
 
-  // Future<Response<T>> delete_method<T>(String path);
+  @override
+  Future<Response<T>> delete_method<T>(String path, {dynamic data}) async {
+    var response;
+    try {
+      response = await dio.delete<T>(
+        path,
+        data: data,
+      );
+    } on DioError catch (e) {
+      throw MeiliSearchApiException(e.message, e.response.data);
+    }
+    return await response;
+  }
 }
