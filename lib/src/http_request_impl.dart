@@ -1,9 +1,9 @@
 import 'package:dio/dio.dart';
-import 'http.dart';
+import 'http_request.dart';
 import 'exception.dart';
 
-class HttpImpl implements Http {
-  HttpImpl(this.serverUrl, this.apiKey)
+class HttpRequestImpl implements HttpRequest {
+  HttpRequestImpl(this.serverUrl, this.apiKey)
       : dio = Dio(BaseOptions(
           baseUrl: serverUrl,
           headers: <String, dynamic>{

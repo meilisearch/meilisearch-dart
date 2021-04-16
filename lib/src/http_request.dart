@@ -1,8 +1,8 @@
 import 'package:dio/dio.dart';
-import 'http_impl.dart';
+import 'http_request_impl.dart';
 
-abstract class Http {
-  factory Http(String serverUrl, String apiKey) = HttpImpl;
+abstract class HttpRequest {
+  factory HttpRequest(String serverUrl, String apiKey) = HttpRequestImpl;
 
   /// MeiliSearch server URL.
   final String serverUrl;

@@ -1,7 +1,7 @@
 import 'package:dio/dio.dart';
 
-import 'http.dart';
-import 'http_impl.dart';
+import 'http_request.dart';
+import 'http_request_impl.dart';
 
 import 'client.dart';
 import 'index.dart';
@@ -16,7 +16,7 @@ class MeiliSearchClientImpl implements MeiliSearchClient {
           },
           responseType: ResponseType.json,
         )),
-        http = HttpImpl(serverUrl, apiKey);
+        http = HttpRequestImpl(serverUrl, apiKey);
 
   @override
   final String serverUrl;
@@ -25,7 +25,7 @@ class MeiliSearchClientImpl implements MeiliSearchClient {
   final String apiKey;
 
   final Dio dio;
-  final Http http;
+  final HttpRequest http;
 
   @override
   Future<MeiliSearchIndex> createIndex(String uid, {String primaryKey}) async {

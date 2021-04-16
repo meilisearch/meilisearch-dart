@@ -3,7 +3,7 @@ import 'package:dio/dio.dart';
 import 'client.dart';
 import 'client_impl.dart';
 import 'index.dart';
-import 'http.dart';
+import 'http_request.dart';
 import 'index_settings.dart';
 import 'pending_update.dart';
 import 'pending_update_impl.dart';
@@ -33,7 +33,7 @@ class MeiliSearchIndexImpl implements MeiliSearchIndex {
   DateTime updatedAt;
 
   Dio get dio => client.dio;
-  Http get http => client.http;
+  HttpRequest get http => client.http;
 
   factory MeiliSearchIndexImpl.fromMap(
     MeiliSearchClient client,
