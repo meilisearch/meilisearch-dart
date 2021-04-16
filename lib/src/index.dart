@@ -30,7 +30,7 @@ abstract class MeiliSearchIndex {
   Future<List<Map<String, dynamic>>> getDocuments({
     int offset,
     int limit,
-    String attributesToRetrieve = '*',
+    String attributesToRetrieve,
   });
   Future<PendingUpdate> addDocuments(
     List<Map<String, dynamic>> documents, {

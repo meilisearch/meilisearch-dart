@@ -184,7 +184,7 @@ class MeiliSearchIndexImpl implements MeiliSearchIndex {
   Future<List<Map<String, dynamic>>> getDocuments({
     int offset,
     int limit,
-    String attributesToRetrieve = '*',
+    String attributesToRetrieve,
   }) async {
     // final response = await dio.get<List<dynamic>>(
     final response = await http.get_method<List<dynamic>>(

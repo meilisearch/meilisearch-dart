@@ -40,7 +40,6 @@ void main() {
       final uid = randomUid();
       await client.createIndex(uid);
       var index = await client.getIndex(uid);
-      expect(index, isNotNull);
       expect(index.uid, uid);
       expect(index.primaryKey, null);
     });
@@ -55,7 +54,6 @@ void main() {
       await client.createIndex(randomUid());
       await client.createIndex(randomUid());
       var indexes = await client.getIndexes();
-      expect(indexes, isNotEmpty);
       expect(indexes.length, 3);
     });
   });
