@@ -30,7 +30,7 @@ class HttpRequestImpl implements HttpRequest {
         queryParameters: queryParameters,
       );
     } on DioError catch (e) {
-      throw MeiliSearchApiException(e.message, e.response.data);
+      throwException(e);
     }
     return await response;
   }
@@ -46,7 +46,7 @@ class HttpRequestImpl implements HttpRequest {
         queryParameters: queryParameters,
       );
     } on DioError catch (e) {
-      throw MeiliSearchApiException(e.message, e.response.data);
+      throwException(e);
     }
     return await response;
   }
@@ -62,7 +62,7 @@ class HttpRequestImpl implements HttpRequest {
         queryParameters: queryParameters,
       );
     } on DioError catch (e) {
-      throw MeiliSearchApiException(e.message, e.response.data);
+      throwException(e);
     }
     return await response;
   }
@@ -76,8 +76,17 @@ class HttpRequestImpl implements HttpRequest {
         data: data,
       );
     } on DioError catch (e) {
-      throw MeiliSearchApiException(e.message, e.response.data);
+      throwException(e);
     }
     return await response;
+  }
+
+  throwException(DioError e) {
+    if (e.type == DioErrorType.RESPONSE) {
+      throw MeiliSearchApiException(e.message, e.response.data);
+    } else if (e.type == DioErrorType.DEFAULT) {
+      throw CommunicationException(e.message);
+    }
+    throw e;
   }
 }
