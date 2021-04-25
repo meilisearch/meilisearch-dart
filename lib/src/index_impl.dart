@@ -60,7 +60,7 @@ class MeiliSearchIndexImpl implements MeiliSearchIndex {
       'primaryKey': primaryKey,
     };
     data.removeWhere((k, v) => v == null);
-    final response = await http.put_method('/indexes/$uid', data: data);
+    final response = await http.putMethod('/indexes/$uid', data: data);
 
     this.primaryKey = response.data['primaryKey'] as String;
     this.createdAt = DateTime.parse(response.data['createdAt'] as String);
@@ -69,7 +69,7 @@ class MeiliSearchIndexImpl implements MeiliSearchIndex {
 
   @override
   Future<void> delete() async {
-    await http.delete_method('/indexes/$uid');
+    await http.deleteMethod('/indexes/$uid');
   }
 
   //
@@ -104,7 +104,7 @@ class MeiliSearchIndexImpl implements MeiliSearchIndex {
       'matches': matches,
     };
     data.removeWhere((k, v) => v == null);
-    final response = await http.post_method('/indexes/$uid/search', data: data);
+    final response = await http.postMethod('/indexes/$uid/search', data: data);
 
     return SearchResult.fromMap(response.data);
   }
@@ -120,7 +120,7 @@ class MeiliSearchIndexImpl implements MeiliSearchIndex {
 
   @override
   Future<PendingUpdateImpl> addDocuments(documents, {String primaryKey}) async {
-    return await _update(http.post_method(
+    return await _update(http.postMethod(
       '/indexes/$uid/documents',
       data: documents,
       queryParameters: <String, dynamic>{
@@ -134,7 +134,7 @@ class MeiliSearchIndexImpl implements MeiliSearchIndex {
     documents, {
     String primaryKey,
   }) async {
-    return await _update(http.put_method(
+    return await _update(http.putMethod(
       '/indexes/$uid/documents',
       data: documents,
       queryParameters: <String, dynamic>{
@@ -145,17 +145,17 @@ class MeiliSearchIndexImpl implements MeiliSearchIndex {
 
   @override
   Future<PendingUpdateImpl> deleteAllDocuments() async {
-    return await _update(http.delete_method('/indexes/$uid/documents'));
+    return await _update(http.deleteMethod('/indexes/$uid/documents'));
   }
 
   @override
   Future<PendingUpdateImpl> deleteDocument(dynamic id) async {
-    return await _update(http.delete_method('/indexes/$uid/documents/$id'));
+    return await _update(http.deleteMethod('/indexes/$uid/documents/$id'));
   }
 
   @override
   Future<PendingUpdateImpl> deleteDocuments(List ids) async {
-    return await _update(http.post_method(
+    return await _update(http.postMethod(
       '/indexes/$uid/documents/delete-batch',
       data: ids,
     ));
@@ -163,7 +163,7 @@ class MeiliSearchIndexImpl implements MeiliSearchIndex {
 
   @override
   Future<Map<String, dynamic>> getDocument(id) async {
-    final response = await http.get_method<Map<String, dynamic>>(
+    final response = await http.getMethod<Map<String, dynamic>>(
       '/indexes/$uid/documents/$id',
     );
 
@@ -176,7 +176,7 @@ class MeiliSearchIndexImpl implements MeiliSearchIndex {
     int limit,
     String attributesToRetrieve,
   }) async {
-    final response = await http.get_method<List<dynamic>>(
+    final response = await http.getMethod<List<dynamic>>(
       '/indexes/$uid/documents',
       queryParameters: <String, dynamic>{
         if (offset != null) 'offset': offset,
@@ -195,19 +195,19 @@ class MeiliSearchIndexImpl implements MeiliSearchIndex {
 
   @override
   Future<IndexSettings> getSettings() async {
-    final response = await http.get_method('/indexes/$uid/settings');
+    final response = await http.getMethod('/indexes/$uid/settings');
 
     return IndexSettings.fromMap(response.data);
   }
 
   @override
   Future<PendingUpdate> resetSettings() async {
-    return await _update(http.delete_method('/indexes/$uid/settings'));
+    return await _update(http.deleteMethod('/indexes/$uid/settings'));
   }
 
   @override
   Future<PendingUpdate> updateSettings(IndexSettings settings) async {
-    return await _update(http.post_method(
+    return await _update(http.postMethod(
       '/indexes/$uid/settings',
       data: settings.toMap(),
     ));

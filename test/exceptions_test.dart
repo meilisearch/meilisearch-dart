@@ -20,8 +20,7 @@ void main() {
     });
     test('Throw basic 404 exception', () async {
       expect(
-          () async =>
-              await http.get_method<Map<String, dynamic>>('/wrong-path'),
+          () async => await http.getMethod<Map<String, dynamic>>('/wrong-path'),
           throwsA(isA<MeiliSearchApiException>().having(
             (error) => error.toString(), // Actual
             'toString() method', // Description of the check

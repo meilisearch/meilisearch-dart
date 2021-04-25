@@ -25,7 +25,7 @@ class MeiliSearchClientImpl implements MeiliSearchClient {
       if (primaryKey != null) 'primaryKey': primaryKey,
     };
     data.removeWhere((k, v) => v == null);
-    final response = await http.post_method<Map<String, dynamic>>(
+    final response = await http.postMethod<Map<String, dynamic>>(
       '/indexes',
       data: data,
     );
@@ -36,14 +36,14 @@ class MeiliSearchClientImpl implements MeiliSearchClient {
   @override
   Future<MeiliSearchIndex> getIndex(String uid) async {
     final response =
-        await http.get_method<Map<String, dynamic>>('/indexes/$uid');
+        await http.getMethod<Map<String, dynamic>>('/indexes/$uid');
 
     return MeiliSearchIndexImpl.fromMap(this, response.data);
   }
 
   @override
   Future<List<MeiliSearchIndex>> getIndexes() async {
-    final response = await http.get_method<List<dynamic>>('/indexes');
+    final response = await http.getMethod<List<dynamic>>('/indexes');
 
     return response.data
         .cast<Map<String, dynamic>>()

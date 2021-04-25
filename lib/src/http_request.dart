@@ -11,17 +11,17 @@ abstract class HttpRequest {
   final String apiKey;
 
   // GET method
-  Future<Response<T>> get_method<T>(String path,
+  Future<Response<T>> getMethod<T>(String path,
       {Map<String, dynamic> queryParameters});
 
   // POST method
-  Future<Response<T>> post_method<T>(String path,
+  Future<Response<T>> postMethod<T>(String path,
       {dynamic data, Map<String, dynamic> queryParameters});
 
   // PUT method
-  Future<Response<T>> put_method<T>(String path,
+  Future<Response<T>> putMethod<T>(String path,
       {dynamic data, Map<String, dynamic> queryParameters});
 
   // DELETE method
-  Future<Response<T>> delete_method<T>(String path, {dynamic data});
+  Future<Response<T>> deleteMethod<T>(String path, {dynamic data});
 }
