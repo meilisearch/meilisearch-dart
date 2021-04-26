@@ -48,6 +48,16 @@ Future<void> setUpHttp() async {
   });
 }
 
+Future<void> setUpClientWithWrongUrl() async {
+  setUp(() {
+    var server = 'http://wrongurl:1234';
+
+    print('Using wrong url server on $server for running tests.');
+
+    client = MeiliSearchClient(server, 'masterKey');
+  });
+}
+
 String randomUid([String prefix = 'index']) {
   return '${prefix}_${random.nextInt(9999)}';
 }

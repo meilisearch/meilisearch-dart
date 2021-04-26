@@ -24,4 +24,12 @@ abstract class MeiliSearchClient {
   /// Finds index by matching [uid]. If index is not exists tries to create a
   /// new index.
   Future<MeiliSearchIndex> getOrCreateIndex(String uid, {String primaryKey});
+
+  /// Return health of the MeiliSearch server.
+  /// Throws an error if containing details if MeiliSearch can't process your request.
+  Future<Map<String, dynamic>> health();
+
+  /// Get health of the MeiliSearch server.
+  /// Return true or false.
+  Future<bool> isHealthy();
 }
