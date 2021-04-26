@@ -62,4 +62,21 @@ class MeiliSearchClientImpl implements MeiliSearchClient {
       return await createIndex(uid, primaryKey: primaryKey);
     }
   }
+
+  @override
+  Future<Map<String, dynamic>> health() async {
+    final response = await http.getMethod<Map<String, dynamic>>('/health');
+
+    return response.data;
+  }
+
+  @override
+  Future<bool> isHealthy() async {
+    try {
+      await health();
+    } on Exception catch (_) {
+      return false;
+    }
+    return true;
+  }
 }
