@@ -1,11 +1,14 @@
 import 'dart:io';
 import 'dart:math';
 
+import 'package:meilisearch/src/http_request_impl.dart';
+import 'package:meilisearch/src/http_request.dart';
 import 'package:meilisearch/meilisearch.dart';
 import 'package:meilisearch/src/pending_update.dart';
 import 'package:meilisearch/src/update_status.dart';
 import 'package:test/test.dart';
 
+HttpRequest http;
 MeiliSearchClient client;
 Random random = Random();
 
@@ -23,7 +26,7 @@ Future<void> setUpClient() async {
       server = Platform.environment['MEILI_SERVER'];
     }
 
-    print('Using meilisearch server on $server for running tests.');
+    print('Using MeiliSearch server on $server for running tests.');
 
     client = MeiliSearchClient(server, 'masterKey');
     random = Random();
@@ -31,6 +34,17 @@ Future<void> setUpClient() async {
 
   tearDown(() async {
     await deleteAllIndexes();
+  });
+}
+
+Future<void> setUpHttp() async {
+  setUp(() {
+    var server = 'http://localhost:7700';
+    if (Platform.environment.containsKey('MEILI_SERVER')) {
+      server = Platform.environment['MEILI_SERVER'];
+    }
+
+    http = HttpRequestImpl(server, 'masterKey');
   });
 }
 
