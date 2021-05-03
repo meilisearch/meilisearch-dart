@@ -5,7 +5,7 @@ import 'search_result.dart';
 
 abstract class MeiliSearchIndex {
   String get uid;
-  String get primaryKey;
+  String? get primaryKey;
   DateTime? get createdAt;
   DateTime? get updatedAt;
 

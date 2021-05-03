@@ -12,7 +12,7 @@ class MeiliSearchIndexImpl implements MeiliSearchIndex {
   MeiliSearchIndexImpl(
     this.client,
     this.uid, {
-    required String primaryKey,
+    String? primaryKey,
     DateTime? createdAt,
     DateTime? updatedAt,
   })  : _primaryKey = primaryKey,
@@ -24,10 +24,10 @@ class MeiliSearchIndexImpl implements MeiliSearchIndex {
   @override
   final String uid;
 
-  String _primaryKey;
+  String? _primaryKey;
 
   @override
-  String get primaryKey => _primaryKey;
+  String? get primaryKey => _primaryKey;
 
   DateTime? _createdAt;
 
@@ -48,7 +48,7 @@ class MeiliSearchIndexImpl implements MeiliSearchIndex {
       MeiliSearchIndexImpl(
         client,
         map['uid'] as String,
-        primaryKey: map['primaryKey'] as String,
+        primaryKey: map['primaryKey'] as String?,
         createdAt: map['createdAt'] != null
             ? DateTime.tryParse(map['createdAt'] as String)
             : null,
@@ -69,7 +69,7 @@ class MeiliSearchIndexImpl implements MeiliSearchIndex {
     data.removeWhere((k, v) => v == null);
     final response = await http.putMethod('/indexes/$uid', data: data);
 
-    _primaryKey = response.data['primaryKey'] as String;
+    _primaryKey = response.data['primaryKey'] as String?;
     _createdAt = DateTime.parse(response.data['createdAt'] as String);
     _updatedAt = DateTime.parse(response.data['updatedAt'] as String);
   }
