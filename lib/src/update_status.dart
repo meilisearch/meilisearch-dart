@@ -8,12 +8,12 @@ class UpdateStatus {
     this.processedAt,
   });
 
-  final String status;
-  final int updateId;
-  final UpdateType type;
-  final double duration;
-  final DateTime enqueuedAt;
-  final DateTime processedAt;
+  final String? status;
+  final int? updateId;
+  final UpdateType? type;
+  final double? duration;
+  final DateTime? enqueuedAt;
+  final DateTime? processedAt;
 
   factory UpdateStatus.fromMap(Map<String, dynamic> map) => UpdateStatus(
         status: map['status'] as String,
@@ -34,8 +34,8 @@ class UpdateStatus {
 class UpdateType {
   UpdateType({this.name, this.number});
 
-  final String name;
-  final int number;
+  final String? name;
+  final int? number;
 
   factory UpdateType.fromMap(Map<String, dynamic> map) => UpdateType(
         name: map['name'] as String,

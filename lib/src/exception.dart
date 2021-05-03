@@ -1,23 +1,36 @@
 class MeiliSearchApiException implements Exception {
-  String message;
-  String errorCode;
-  String errorLink;
-  String errorType;
+  MeiliSearchApiException(
+    this.message, {
+    this.errorCode,
+    this.errorLink,
+    this.errorType,
+  });
 
-  MeiliSearchApiException(String message, httpBody) {
-    if (httpBody.runtimeType != String &&
+  factory MeiliSearchApiException.fromHttpBody(
+    String message,
+    dynamic httpBody,
+  ) {
+    if (httpBody != null &&
+        httpBody.runtimeType != String &&
         httpBody.containsKey('message') &&
         httpBody.containsKey('errorCode') &&
         httpBody.containsKey('errorLink') &&
         httpBody.containsKey('errorType')) {
-      this.message = httpBody['message'];
-      this.errorCode = httpBody['errorCode'];
-      this.errorLink = httpBody['errorLink'];
-      this.errorType = httpBody['errorType'];
+      return MeiliSearchApiException(
+        httpBody['message'],
+        errorCode: httpBody['errorCode'],
+        errorLink: httpBody['errorLink'],
+        errorType: httpBody['errorType'],
+      );
     } else {
-      this.message = message;
+      return MeiliSearchApiException(message);
     }
   }
+
+  final String message;
+  final String? errorCode;
+  final String? errorLink;
+  final String? errorType;
 
   @override
   String toString() {
@@ -33,14 +46,12 @@ class MeiliSearchApiException implements Exception {
 }
 
 class CommunicationException implements Exception {
-  String message;
+  CommunicationException(this.message);
 
-  CommunicationException(message) {
-    this.message = message;
-  }
+  final String message;
 
   @override
   String toString() {
-    return 'An error occurred while trying to connect to the MeiliSearch instance: ${this.message}';
+    return 'An error occurred while trying to connect to the MeiliSearch instance: $message';
   }
 }

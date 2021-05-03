@@ -14,12 +14,12 @@ class MeiliSearchClientImpl implements MeiliSearchClient {
   final String serverUrl;
 
   @override
-  final String apiKey;
+  final String? apiKey;
 
   final HttpRequest http;
 
   @override
-  Future<MeiliSearchIndex> createIndex(String uid, {String primaryKey}) async {
+  Future<MeiliSearchIndex> createIndex(String uid, {String? primaryKey}) async {
     final data = <String, dynamic>{
       'uid': uid,
       if (primaryKey != null) 'primaryKey': primaryKey,
@@ -30,7 +30,7 @@ class MeiliSearchClientImpl implements MeiliSearchClient {
       data: data,
     );
 
-    return MeiliSearchIndexImpl.fromMap(this, response.data);
+    return MeiliSearchIndexImpl.fromMap(this, response.data!);
   }
 
   @override
@@ -38,14 +38,14 @@ class MeiliSearchClientImpl implements MeiliSearchClient {
     final response =
         await http.getMethod<Map<String, dynamic>>('/indexes/$uid');
 
-    return MeiliSearchIndexImpl.fromMap(this, response.data);
+    return MeiliSearchIndexImpl.fromMap(this, response.data!);
   }
 
   @override
   Future<List<MeiliSearchIndex>> getIndexes() async {
     final response = await http.getMethod<List<dynamic>>('/indexes');
 
-    return response.data
+    return response.data!
         .cast<Map<String, dynamic>>()
         .map((item) => MeiliSearchIndexImpl.fromMap(this, item))
         .toList();
@@ -54,7 +54,7 @@ class MeiliSearchClientImpl implements MeiliSearchClient {
   @override
   Future<MeiliSearchIndex> getOrCreateIndex(
     String uid, {
-    String primaryKey,
+    String? primaryKey,
   }) async {
     try {
       return await getIndex(uid);
@@ -67,7 +67,7 @@ class MeiliSearchClientImpl implements MeiliSearchClient {
   Future<Map<String, dynamic>> health() async {
     final response = await http.getMethod<Map<String, dynamic>>('/health');
 
-    return response.data;
+    return response.data!;
   }
 
   @override

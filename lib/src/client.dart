@@ -1,15 +1,19 @@
+import 'http_request.dart';
 import 'index.dart';
 import 'client_impl.dart';
 
 abstract class MeiliSearchClient {
-  factory MeiliSearchClient(String serverUrl, [String apiKey]) =
+  factory MeiliSearchClient(String serverUrl, [String? apiKey]) =
       MeiliSearchClientImpl;
 
+  /// Http client instance.
+  HttpRequest get http;
+
   /// MeiliSearch server URL.
-  final String serverUrl;
+  String get serverUrl;
 
   /// Master key for authenticating with meilisearch server.
-  final String apiKey;
+  String? get apiKey;
 
   /// Returns list of all exists indexes.
   Future<List<MeiliSearchIndex>> getIndexes();
