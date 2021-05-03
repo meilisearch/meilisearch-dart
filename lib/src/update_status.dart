@@ -16,9 +16,9 @@ class UpdateStatus {
   final DateTime? processedAt;
 
   factory UpdateStatus.fromMap(Map<String, dynamic> map) => UpdateStatus(
-        status: map['status'] as String,
-        updateId: map['updateId'] as int,
-        duration: map['duration'] as double,
+        status: map['status'] as String?,
+        updateId: map['updateId'] as int?,
+        duration: map['duration'] as double?,
         enqueuedAt: map['enqueuedAt'] != null
             ? DateTime.tryParse(map['enqueuedAt'] as String)
             : null,
@@ -38,7 +38,7 @@ class UpdateType {
   final int? number;
 
   factory UpdateType.fromMap(Map<String, dynamic> map) => UpdateType(
-        name: map['name'] as String,
-        number: map['number'] as int,
+        name: map['name'] as String?,
+        number: map['number'] as int?,
       );
 }

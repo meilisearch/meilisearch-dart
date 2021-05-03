@@ -40,15 +40,15 @@ class SearchResult {
 
   factory SearchResult.fromMap(Map<String, dynamic> map) {
     return SearchResult(
-      hits: (map['hits'] as List).cast<Map<String, dynamic>>(),
-      query: map['query'] as String,
-      limit: map['limit'] as int,
-      offset: map['offset'] as int,
-      processingTimeMs: map['processingTimeMs'] as int,
-      nbHits: map['nbHits'] as int,
-      exhaustiveNbHits: map['exhaustiveNbHits'] as bool,
-      facetsDistribution: map['facetsDistribution'],
-      exhaustiveFacetsCount: map['exhaustiveFacetsCount'] as bool,
+      hits: (map['hits'] as List?)?.cast<Map<String, dynamic>>(),
+      query: map['query'] as String?,
+      limit: map['limit'] as int?,
+      offset: map['offset'] as int?,
+      processingTimeMs: map['processingTimeMs'] as int?,
+      nbHits: map['nbHits'] as int?,
+      exhaustiveNbHits: map['exhaustiveNbHits'] as bool?,
+      facetsDistribution: map['facetsDistribution'] as dynamic?,
+      exhaustiveFacetsCount: map['exhaustiveFacetsCount'] as bool?,
     );
   }
 }
