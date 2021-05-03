@@ -8,6 +8,7 @@ on:
       - trying
       - staging
       - main
+      - nnbd
 
 jobs:
   integration-tests:
