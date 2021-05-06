@@ -126,6 +126,13 @@ meilisearch: "X.X.X"
     version: "X.X.X"
 ```
 
+- the file [`README.md` in the Installation section](https://github.com/meilisearch/meilisearch-dart/blob/main/README.md#-installation):
+
+```yaml
+dependencies:
+  meilisearch: ^X.X.X
+```
+
 Also in this PR, update the [CHANGELOG.md](./CHANGELOG.md) file with the description of the next release.
 
 Once the changes are merged on `main`, you can publish the current draft release via the [GitHub interface](https://github.com/meilisearch/meilisearch-dart/releases).
