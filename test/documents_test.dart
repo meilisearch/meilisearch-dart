@@ -32,8 +32,9 @@ void main() {
       ]).waitFor();
       expect(response.status, 'processed');
       final doc = await index.getDocument(1344);
-      expect(doc['book_id'], 1344);
-      expect(doc['title'], 'The Hobbit 2');
+      expect(doc, isNotNull);
+      expect(doc?['book_id'], 1344);
+      expect(doc?['title'], 'The Hobbit 2');
     });
 
     test('Update documents and pass a primary key', () async {
@@ -46,8 +47,9 @@ void main() {
       index = await client.getIndex(uid);
       expect(index.primaryKey, 'the_book_id');
       final doc = await index.getDocument(1344);
-      expect(doc['the_book_id'], 1344);
-      expect(doc['title'], 'The Hobbit 2');
+      expect(doc, isNotNull);
+      expect(doc?['the_book_id'], 1344);
+      expect(doc?['title'], 'The Hobbit 2');
     });
 
     test('Delete one document', () async {

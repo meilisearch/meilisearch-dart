@@ -20,7 +20,7 @@
   <a href="https://app.bors.tech/repositories/30842"><img src="https://bors.tech/images/badge_small.svg" alt="Bors enabled"></a>
 </p>
 
-<p align="center">⚡ The MeiliSearch API client written for Dart</p>
+<p align="center">⚡ The MeiliSearch API client written in Dart</p>
 
 **MeiliSearch Dart** is the MeiliSearch API client for Dart and Flutter developers.
 
@@ -45,7 +45,7 @@ You can install the **meilisearch** package by adding a few lines into `pubspec.
 
 ```yaml
 dependencies:
-  meilisearch: ">=0.0.1 <2.0.0"
+  meilisearch: ^0.2.0
 ```
 
 Then open your terminal and update dart packages.

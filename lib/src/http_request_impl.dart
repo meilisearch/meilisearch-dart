@@ -16,13 +16,15 @@ class HttpRequestImpl implements HttpRequest {
   final String serverUrl;
 
   @override
-  final String apiKey;
+  final String? apiKey;
 
   final Dio dio;
 
   @override
-  Future<Response<T>> getMethod<T>(String path,
-      {Map<String, dynamic> queryParameters}) async {
+  Future<Response<T>> getMethod<T>(
+    String path, {
+    Map<String, dynamic>? queryParameters,
+  }) async {
     var response;
     try {
       response = await dio.get<T>(
@@ -36,8 +38,11 @@ class HttpRequestImpl implements HttpRequest {
   }
 
   @override
-  Future<Response<T>> postMethod<T>(String path,
-      {dynamic data, Map<String, dynamic> queryParameters}) async {
+  Future<Response<T>> postMethod<T>(
+    String path, {
+    dynamic? data,
+    Map<String, dynamic>? queryParameters,
+  }) async {
     var response;
     try {
       response = await dio.post<T>(
@@ -52,8 +57,11 @@ class HttpRequestImpl implements HttpRequest {
   }
 
   @override
-  Future<Response<T>> putMethod<T>(String path,
-      {dynamic data, Map<String, dynamic> queryParameters}) async {
+  Future<Response<T>> putMethod<T>(
+    String path, {
+    dynamic? data,
+    Map<String, dynamic>? queryParameters,
+  }) async {
     var response;
     try {
       response = await dio.put<T>(
@@ -68,7 +76,7 @@ class HttpRequestImpl implements HttpRequest {
   }
 
   @override
-  Future<Response<T>> deleteMethod<T>(String path, {dynamic data}) async {
+  Future<Response<T>> deleteMethod<T>(String path, {dynamic? data}) async {
     var response;
     try {
       response = await dio.delete<T>(
@@ -82,11 +90,10 @@ class HttpRequestImpl implements HttpRequest {
   }
 
   throwException(DioError e) {
-    if (e.type == DioErrorType.RESPONSE) {
-      throw MeiliSearchApiException(e.message, e.response.data);
-    } else if (e.type == DioErrorType.DEFAULT) {
+    if (e.type == DioErrorType.response) {
+      throw MeiliSearchApiException.fromHttpBody(e.message, e.response?.data);
+    } else {
       throw CommunicationException(e.message);
     }
-    throw e;
   }
 }

@@ -21,6 +21,6 @@ class PendingUpdateImpl implements PendingUpdate {
       '/indexes/${index.uid}/updates/$updateId',
     );
 
-    return UpdateStatus.fromMap(response.data);
+    return UpdateStatus.fromMap(response.data!);
   }
 }
