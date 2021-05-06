@@ -8,9 +8,13 @@ import 'package:meilisearch/src/pending_update.dart';
 import 'package:meilisearch/src/update_status.dart';
 import 'package:test/test.dart';
 
-HttpRequest http;
-MeiliSearchClient client;
+late HttpRequest http;
+late MeiliSearchClient client;
 Random random = Random();
+
+String get _testServer {
+  return Platform.environment['MEILI_SERVER'] ?? 'http://localhost:7700';
+}
 
 Future<void> deleteAllIndexes() async {
   var indexes = await client.getIndexes();
@@ -21,10 +25,7 @@ Future<void> deleteAllIndexes() async {
 
 Future<void> setUpClient() async {
   setUp(() {
-    var server = 'http://localhost:7700';
-    if (Platform.environment.containsKey('MEILI_SERVER')) {
-      server = Platform.environment['MEILI_SERVER'];
-    }
+    final String server = _testServer;
 
     print('Using MeiliSearch server on $server for running tests.');
 
@@ -39,10 +40,7 @@ Future<void> setUpClient() async {
 
 Future<void> setUpHttp() async {
   setUp(() {
-    var server = 'http://localhost:7700';
-    if (Platform.environment.containsKey('MEILI_SERVER')) {
-      server = Platform.environment['MEILI_SERVER'];
-    }
+    final String server = _testServer;
 
     http = HttpRequestImpl(server, 'masterKey');
   });
@@ -50,7 +48,7 @@ Future<void> setUpHttp() async {
 
 Future<void> setUpClientWithWrongUrl() async {
   setUp(() {
-    var server = 'http://wrongurl:1234';
+    final String server = 'http://wrongurl:1234';
 
     print('Using wrong url server on $server for running tests.');
 
