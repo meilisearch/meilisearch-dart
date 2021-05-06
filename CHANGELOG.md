@@ -1,3 +1,10 @@
+# 0.2.0
+### Changes
+- Add health method (#38) @alallema
+### Breaking changes
+- Null-safety migration (#42) @TheMisir
+- Add an error handler (#36) @curquiza
+
 # 0.1.3
 - Upgrade dependencies
 
