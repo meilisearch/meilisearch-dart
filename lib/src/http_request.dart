@@ -19,17 +19,17 @@ abstract class HttpRequest {
   /// POST method
   Future<Response<T>> postMethod<T>(
     String path, {
-    dynamic? data,
+    dynamic data,
     Map<String, dynamic>? queryParameters,
   });
 
   /// PUT method
   Future<Response<T>> putMethod<T>(
     String path, {
-    dynamic? data,
+    dynamic data,
     Map<String, dynamic>? queryParameters,
   });
 
   /// DELETE method
-  Future<Response<T>> deleteMethod<T>(String path, {dynamic? data});
+  Future<Response<T>> deleteMethod<T>(String path, {dynamic data});
 }
