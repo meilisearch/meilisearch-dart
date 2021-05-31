@@ -17,7 +17,7 @@ abstract class MeiliSearchIndex {
     int? offset,
     int? limit,
     String? filters,
-    dynamic? facetFilters,
+    dynamic facetFilters,
     List<String>? facetsDistribution,
     List<String>? attributesToRetrieve,
     List<String>? attributesToCrop,
