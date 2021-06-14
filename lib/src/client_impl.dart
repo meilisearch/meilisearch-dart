@@ -19,6 +19,11 @@ class MeiliSearchClientImpl implements MeiliSearchClient {
   final HttpRequest http;
 
   @override
+  MeiliSearchIndex index(String uid) {
+    return new MeiliSearchIndexImpl(this, uid);
+  }
+
+  @override
   Future<MeiliSearchIndex> createIndex(String uid, {String? primaryKey}) async {
     final data = <String, dynamic>{
       'uid': uid,
@@ -58,9 +63,24 @@ class MeiliSearchClientImpl implements MeiliSearchClient {
   }) async {
     try {
       return await getIndex(uid);
-    } on MeiliSearchApiException catch (_) {
+    } on MeiliSearchApiException catch (e) {
+      if (e.errorCode != 'index_not_found') {
+        throw (e);
+      }
       return await createIndex(uid, primaryKey: primaryKey);
     }
+  }
+
+  @override
+  Future<void> deleteIndex(String uid) async {
+    final index = this.index(uid);
+    await index.delete();
+  }
+
+  @override
+  Future<void> updateIndex(String uid, String primaryKey) async {
+    final index = this.index(uid);
+    await index.update(primaryKey: primaryKey);
   }
 
   @override

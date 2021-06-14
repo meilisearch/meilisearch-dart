@@ -9,7 +9,7 @@ void main() {
     setUpClient();
 
     test('Add documents', () async {
-      var index = await client.createIndex(randomUid());
+      var index = client.index(randomUid());
       final response = await index.addDocuments(booksDoc).waitFor();
       expect(response.status, 'processed');
       final docs = await index.getDocuments();
@@ -17,7 +17,7 @@ void main() {
     });
 
     test('Add documents with primary key', () async {
-      final index = await client.createIndex(randomUid());
+      final index = client.index(randomUid());
       final response =
           await index.addDocuments(booksDoc, primaryKey: 'book_id').waitFor();
       expect(response.status, 'processed');
@@ -39,7 +39,7 @@ void main() {
 
     test('Update documents and pass a primary key', () async {
       final uid = randomUid();
-      var index = await client.createIndex(uid);
+      var index = client.index(uid);
       final response = await index.updateDocuments([
         {'the_book_id': 1344, 'title': 'The Hobbit 2'},
       ], primaryKey: 'the_book_id').waitFor();
