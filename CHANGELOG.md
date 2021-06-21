@@ -1,3 +1,6 @@
+# 0.2.1
+- Changes due to the implicit index creation (#48) @alallema
+
 # 0.2.0
 ### Changes
 - Add health method (#38) @alallema
