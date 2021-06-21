@@ -29,6 +29,11 @@ class MeiliSearchIndexImpl implements MeiliSearchIndex {
   @override
   String? get primaryKey => _primaryKey;
 
+  @override
+  set primaryKey(String? primaryKey) {
+    this._primaryKey = primaryKey;
+  }
+
   DateTime? _createdAt;
 
   @override
@@ -43,17 +48,17 @@ class MeiliSearchIndexImpl implements MeiliSearchIndex {
 
   factory MeiliSearchIndexImpl.fromMap(
     MeiliSearchClient client,
-    Map<String, dynamic> map,
+    Map<String, dynamic>? map,
   ) =>
       MeiliSearchIndexImpl(
         client,
-        map['uid'] as String,
-        primaryKey: map['primaryKey'] as String?,
-        createdAt: map['createdAt'] != null
-            ? DateTime.tryParse(map['createdAt'] as String)
+        map?['uid'] as String,
+        primaryKey: map?['primaryKey'] as String?,
+        createdAt: map?['createdAt'] != null
+            ? DateTime.tryParse(map?['createdAt'] as String)
             : null,
-        updatedAt: map['updatedAt'] != null
-            ? DateTime.tryParse(map['updatedAt'] as String)
+        updatedAt: map?['updatedAt'] != null
+            ? DateTime.tryParse(map?['updatedAt'] as String)
             : null,
       );
 
@@ -77,6 +82,21 @@ class MeiliSearchIndexImpl implements MeiliSearchIndex {
   @override
   Future<void> delete() async {
     await http.deleteMethod('/indexes/$uid');
+  }
+
+  @override
+  Future<MeiliSearchIndex> fetchInfo() async {
+    final index = await client.getIndex(uid);
+    _primaryKey = index.primaryKey;
+    _createdAt = index.createdAt;
+    _updatedAt = index.updatedAt;
+    return index;
+  }
+
+  @override
+  Future<String?> fetchPrimaryKey() async {
+    final index = await fetchInfo();
+    return index.primaryKey;
   }
 
   //
