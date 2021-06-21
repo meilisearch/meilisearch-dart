@@ -40,7 +40,7 @@ class HttpRequestImpl implements HttpRequest {
   @override
   Future<Response<T>> postMethod<T>(
     String path, {
-    dynamic? data,
+    dynamic data,
     Map<String, dynamic>? queryParameters,
   }) async {
     var response;
@@ -59,7 +59,7 @@ class HttpRequestImpl implements HttpRequest {
   @override
   Future<Response<T>> putMethod<T>(
     String path, {
-    dynamic? data,
+    dynamic data,
     Map<String, dynamic>? queryParameters,
   }) async {
     var response;
@@ -76,7 +76,7 @@ class HttpRequestImpl implements HttpRequest {
   }
 
   @override
-  Future<Response<T>> deleteMethod<T>(String path, {dynamic? data}) async {
+  Future<Response<T>> deleteMethod<T>(String path, {dynamic data}) async {
     var response;
     try {
       response = await dio.delete<T>(

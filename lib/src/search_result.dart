@@ -30,7 +30,7 @@ class SearchResult {
   final bool? exhaustiveNbHits;
 
   /// Distribution of the given facets
-  final dynamic? facetsDistribution;
+  final dynamic facetsDistribution;
 
   /// Whether [facetsDistribution] is exhaustive
   final bool? exhaustiveFacetsCount;
@@ -47,7 +47,7 @@ class SearchResult {
       processingTimeMs: map['processingTimeMs'] as int?,
       nbHits: map['nbHits'] as int?,
       exhaustiveNbHits: map['exhaustiveNbHits'] as bool?,
-      facetsDistribution: map['facetsDistribution'] as dynamic?,
+      facetsDistribution: map['facetsDistribution'] as dynamic,
       exhaustiveFacetsCount: map['exhaustiveFacetsCount'] as bool?,
     );
   }
