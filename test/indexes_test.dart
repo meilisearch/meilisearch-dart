@@ -113,5 +113,12 @@ void main() {
       final index = await client.getIndex(uid);
       expect(index.uid, uid);
     });
+
+    test('Create index object and get it without add it', () async {
+      final uid = randomUid();
+      client.index(uid);
+      expect(client.getIndex(randomUid(uid)),
+          throwsA(isA<MeiliSearchApiException>()));
+    });
   });
 }
