@@ -3,13 +3,14 @@ import 'http_request.dart';
 import 'exception.dart';
 
 class HttpRequestImpl implements HttpRequest {
-  HttpRequestImpl(this.serverUrl, this.apiKey)
+  HttpRequestImpl(this.serverUrl, this.apiKey, [this.connectTimeout])
       : dio = Dio(BaseOptions(
           baseUrl: serverUrl,
           headers: <String, dynamic>{
             if (apiKey != null) 'X-Meili-API-Key': apiKey,
           },
           responseType: ResponseType.json,
+          connectTimeout: connectTimeout ?? 0,
         ));
 
   @override
@@ -17,6 +18,9 @@ class HttpRequestImpl implements HttpRequest {
 
   @override
   final String? apiKey;
+
+  @override
+  final int? connectTimeout;
 
   final Dio dio;
 
