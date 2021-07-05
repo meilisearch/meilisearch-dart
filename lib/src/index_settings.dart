@@ -3,7 +3,7 @@ class IndexSettings {
     this.synonyms,
     this.stopWords,
     this.rankingRules,
-    this.attributesForFaceting,
+    this.filterableAttributes,
     this.distinctAttribute,
     this.searchableAttributes = allAttributes,
     this.displayedAttributes = allAttributes,
@@ -21,7 +21,7 @@ class IndexSettings {
   List<String>? rankingRules;
 
   /// Attributes to use as [facets](https://docs.meilisearch.com/reference/features/faceted_search.html)
-  List<String>? attributesForFaceting;
+  List<String>? filterableAttributes;
 
   /// Search returns documents with distinct (different) values of the given field
   List<String>? distinctAttribute;
@@ -36,7 +36,7 @@ class IndexSettings {
         'synonyms': synonyms,
         'stopWords': stopWords,
         'rankingRules': rankingRules,
-        'attributesForFaceting': attributesForFaceting,
+        'filterableAttributes': filterableAttributes,
         'distinctAttribute': distinctAttribute,
         'searchableAttributes': searchableAttributes,
         'displayedAttributes': displayedAttributes,
@@ -48,8 +48,8 @@ class IndexSettings {
             .map((key, value) => MapEntry(key, value.cast<String>())),
         stopWords: (map['stopWords'] as List?)?.cast<String>(),
         rankingRules: (map['rankingRules'] as List?)?.cast<String>(),
-        attributesForFaceting:
-            (map['attributesForFaceting'] as List?)?.cast<String>(),
+        filterableAttributes:
+            (map['filterableAttributes'] as List?)?.cast<String>(),
         distinctAttribute: (map['distinctAttribute'] as List?)?.cast<String>(),
         searchableAttributes:
             (map['searchableAttributes'] as List?)?.cast<String>(),
