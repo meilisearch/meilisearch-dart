@@ -48,10 +48,10 @@ void main() {
       test('filter parameter', () async {
         var index = await createBooksIndex();
         var response = await index
-          .updateSettings(IndexSettings(
-            filterableAttributes: ['tag'],
-          ))
-          .waitFor();
+            .updateSettings(IndexSettings(
+              filterableAttributes: ['tag'],
+            ))
+            .waitFor();
         expect(response.status, 'processed');
         var result = await index.search('prince', filter: 'tag = Tale');
         expect(result.hits, hasLength(1));
@@ -60,22 +60,23 @@ void main() {
       test('filter parameter with number', () async {
         var index = await createBooksIndex();
         var response = await index
-          .updateSettings(IndexSettings(
-            filterableAttributes: ['tag', 'book_id'],
-          ))
-          .waitFor();
+            .updateSettings(IndexSettings(
+              filterableAttributes: ['tag', 'book_id'],
+            ))
+            .waitFor();
         expect(response.status, 'processed');
-        var result = await index.search('', filter: 'book_id < 100 AND tag = Tale');
+        var result =
+            await index.search('', filter: 'book_id < 100 AND tag = Tale');
         expect(result.hits, hasLength(1));
       });
 
       test('facetDistributions parameter', () async {
         var index = await createBooksIndex();
         var response = await index
-          .updateSettings(IndexSettings(
-            filterableAttributes: ['tag'],
-          ))
-          .waitFor();
+            .updateSettings(IndexSettings(
+              filterableAttributes: ['tag'],
+            ))
+            .waitFor();
         expect(response.status, 'processed');
         var result = await index.search('prince', facetsDistribution: ['*']);
         expect(result.hits, hasLength(2));
