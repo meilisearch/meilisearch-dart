@@ -69,7 +69,7 @@ extension PendingUpdateX on PendingUpdate {
 
     while (DateTime.now().isBefore(endingTime)) {
       var response = await getStatus();
-      if (response.status != 'enqueued') {
+      if (response.status != 'enqueued' && response.status != 'processing') {
         return response;
       }
       await Future.delayed(interval);
