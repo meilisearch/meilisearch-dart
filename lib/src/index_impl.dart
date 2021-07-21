@@ -108,8 +108,7 @@ class MeiliSearchIndexImpl implements MeiliSearchIndex {
     String? query, {
     int? offset,
     int? limit,
-    String? filter,
-    // dynamic facetFilters,
+    dynamic filter,
     List<String>? facetsDistribution,
     List<String>? attributesToRetrieve,
     List<String>? attributesToCrop,
@@ -122,7 +121,6 @@ class MeiliSearchIndexImpl implements MeiliSearchIndex {
       'offset': offset,
       'limit': limit,
       'filter': filter,
-      // 'facetFilters': facetFilters,
       'facetsDistribution': facetsDistribution,
       'attributesToRetrieve': attributesToRetrieve,
       'attributesToCrop': attributesToCrop,

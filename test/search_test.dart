@@ -26,9 +26,9 @@ void main() {
       expect(result.hits, hasLength(booksDoc.length));
     });
 
-    test('with basic query with quote', () async {
+    test('with basic query with phrase search', () async {
       var index = await createBooksIndex();
-      var result = await index.search('coco \"harry\"');
+      var result = await index.search('coco "harry"');
       expect(result.hits, hasLength(1));
     });
 
@@ -67,6 +67,33 @@ void main() {
         expect(response.status, 'processed');
         var result =
             await index.search('', filter: 'book_id < 100 AND tag = Tale');
+        expect(result.hits, hasLength(1));
+      });
+
+      test('filter parameter with array', () async {
+        var index = await createBooksIndex();
+        var response = await index
+            .updateSettings(IndexSettings(
+              filterableAttributes: ['tag'],
+            ))
+            .waitFor();
+        expect(response.status, 'processed');
+        var result = await index.search('prince', filter: ['tag = Tale']);
+        expect(result.hits, hasLength(1));
+      });
+
+      test('filter parameter with multiple array', () async {
+        var index = await createBooksIndex();
+        var response = await index
+            .updateSettings(IndexSettings(
+              filterableAttributes: ['tag'],
+            ))
+            .waitFor();
+        expect(response.status, 'processed');
+        var result = await index.search('prince', filter: [
+          ['tag = Tale', 'tag = Tale'],
+          'tag = Tale'
+        ]);
         expect(result.hits, hasLength(1));
       });
 
