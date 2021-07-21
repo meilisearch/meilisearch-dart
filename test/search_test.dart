@@ -90,7 +90,10 @@ void main() {
             ))
             .waitFor();
         expect(response.status, 'processed');
-        var result = await index.search('prince', filter: [['tag = Tale', 'tag = Tale'], 'tag = Tale']);
+        var result = await index.search('prince', filter: [
+          ['tag = Tale', 'tag = Tale'],
+          'tag = Tale'
+        ]);
         expect(result.hits, hasLength(1));
       });
 
