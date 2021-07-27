@@ -3,8 +3,8 @@ import 'index.dart';
 import 'client_impl.dart';
 
 abstract class MeiliSearchClient {
-  factory MeiliSearchClient(String serverUrl, [String? apiKey]) =
-      MeiliSearchClientImpl;
+  factory MeiliSearchClient(String serverUrl,
+      [String? apiKey, int? connectTimeout]) = MeiliSearchClientImpl;
 
   /// Http client instance.
   HttpRequest get http;
@@ -14,6 +14,9 @@ abstract class MeiliSearchClient {
 
   /// Master key for authenticating with meilisearch server.
   String? get apiKey;
+
+  /// Timeout in milliseconds for opening a url.
+  int? get connectTimeout;
 
   /// Create an index object by given [uid].
   MeiliSearchIndex index(String uid);

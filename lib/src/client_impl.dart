@@ -7,14 +7,17 @@ import 'index_impl.dart';
 import 'exception.dart';
 
 class MeiliSearchClientImpl implements MeiliSearchClient {
-  MeiliSearchClientImpl(this.serverUrl, [this.apiKey])
-      : http = HttpRequestImpl(serverUrl, apiKey);
+  MeiliSearchClientImpl(this.serverUrl, [this.apiKey, this.connectTimeout])
+      : http = HttpRequestImpl(serverUrl, apiKey, connectTimeout);
 
   @override
   final String serverUrl;
 
   @override
   final String? apiKey;
+
+  @override
+  final int? connectTimeout;
 
   final HttpRequest http;
 
