@@ -48,4 +48,7 @@ abstract class MeiliSearchClient {
   /// Get health of the MeiliSearch server.
   /// Return true or false.
   Future<bool> isHealthy();
+
+  /// Get the public and private keys
+  Future<Map<String, String>> getKeys();
 }
