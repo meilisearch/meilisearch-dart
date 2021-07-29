@@ -104,6 +104,19 @@ class MeiliSearchClientImpl implements MeiliSearchClient {
   }
 
   @override
+  Future<Map<String, String>> createDump() async {
+    final response = await http.postMethod<Map<String, dynamic>>('/dumps');
+    return response.data!.map((k, v) => MapEntry(k, v.toString()));
+  }
+
+  @override
+  Future<Map<String, String>> getDumpStatus(String uid) async {
+    final response =
+        await http.getMethod<Map<String, dynamic>>('/dumps/$uid/status');
+    return response.data!.map((k, v) => MapEntry(k, v.toString()));
+  }
+
+  @override
   Future<Map<String, String>> getKeys() async {
     final response = await http.getMethod<Map<String, dynamic>>('/keys');
     return response.data!.map((k, v) => MapEntry(k, v.toString()));
