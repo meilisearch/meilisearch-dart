@@ -49,6 +49,12 @@ abstract class MeiliSearchClient {
   /// Return true or false.
   Future<bool> isHealthy();
 
-  /// Get the public and private keys
+  /// Triggers a dump creation process.
+  Future<Map<String, String>> createDump();
+
+  /// Get the status of a dump creation process.
+  Future<Map<String, String>> getDumpStatus(String uid);
+
+  /// Get the public and private keys.
   Future<Map<String, String>> getKeys();
 }
