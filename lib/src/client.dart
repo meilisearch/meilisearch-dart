@@ -49,7 +49,7 @@ abstract class MeiliSearchClient {
   /// Return true or false.
   Future<bool> isHealthy();
 
-  /// Triggers a dump creation process.
+  /// Trigger a dump creation process.
   Future<Map<String, String>> createDump();
 
   /// Get the status of a dump creation process.
