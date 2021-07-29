@@ -57,4 +57,7 @@ abstract class MeiliSearchClient {
 
   /// Get the public and private keys.
   Future<Map<String, String>> getKeys();
+
+  /// Get the MeiliSearch version
+  Future<Map<String, String>> getVersion();
 }
