@@ -7,6 +7,7 @@ import 'index_settings.dart';
 import 'pending_update.dart';
 import 'pending_update_impl.dart';
 import 'search_result.dart';
+import 'stats.dart' show IndexStats;
 
 class MeiliSearchIndexImpl implements MeiliSearchIndex {
   MeiliSearchIndexImpl(
@@ -389,5 +390,16 @@ class MeiliSearchIndexImpl implements MeiliSearchIndex {
       Map<String, List<String>> synonyms) async {
     return await _update(
         http.postMethod('/indexes/$uid/settings/synonyms', data: synonyms));
+  }
+
+  ///
+  /// Stats endponts
+  ///
+
+  @override
+  Future<IndexStats> getStats() async {
+    final response = await http.getMethod('/indexes/$uid/stats');
+
+    return IndexStats.fromMap(response.data);
   }
 }
