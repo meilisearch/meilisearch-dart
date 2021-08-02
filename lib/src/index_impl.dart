@@ -242,4 +242,152 @@ class MeiliSearchIndexImpl implements MeiliSearchIndex {
       data: settings.toMap(),
     ));
   }
+
+  @override
+  Future<List<String>> getAttributesForFaceting() async {
+    final response =
+        await http.getMethod('/indexes/$uid/settings/attributes-for-faceting');
+
+    return (response.data as List).cast<String>();
+  }
+
+  @override
+  Future<PendingUpdate> resetAttributesForFaceting() async {
+    return await _update(
+        http.deleteMethod('/indexes/$uid/settings/attributes-for-faceting'));
+  }
+
+  @override
+  Future<PendingUpdate> updateAttributesForFaceting(
+      List<String> attributesForFaceting) async {
+    return await _update(http.postMethod(
+        '/indexes/$uid/settings/attributes-for-faceting',
+        data: attributesForFaceting));
+  }
+
+  @override
+  Future<List<String>> getDisplayedAttributes() async {
+    final response =
+        await http.getMethod('/indexes/$uid/settings/displayed-attributes');
+
+    return (response.data as List).cast<String>();
+  }
+
+  @override
+  Future<PendingUpdate> resetDisplayedAttributes() async {
+    return await _update(
+        http.deleteMethod('/indexes/$uid/settings/displayed-attributes'));
+  }
+
+  @override
+  Future<PendingUpdate> updateDisplayedAttributes(
+      List<String> displayedAttributes) async {
+    return await _update(http.postMethod(
+        '/indexes/$uid/settings/displayed-attributes',
+        data: displayedAttributes));
+  }
+
+  @override
+  Future<String?> getDistinctAttribute() async {
+    final response =
+        await http.getMethod('/indexes/$uid/settings/distinct-attribute');
+
+    return response.data as String?;
+  }
+
+  @override
+  Future<PendingUpdate> resetDistinctAttribute() async {
+    return await _update(
+        http.deleteMethod('/indexes/$uid/settings/distinct-attribute'));
+  }
+
+  @override
+  Future<PendingUpdate> updateDistinctAttribute(
+      String distinctAttribute) async {
+    return await _update(http.postMethod(
+        '/indexes/$uid/settings/distinct-attribute',
+        data: '"$distinctAttribute"'));
+  }
+
+  @override
+  Future<List<String>> getRankingRules() async {
+    final response =
+        await http.getMethod('/indexes/$uid/settings/ranking-rules');
+
+    return (response.data as List).cast<String>();
+  }
+
+  @override
+  Future<PendingUpdate> resetRankingRules() async {
+    return await _update(
+        http.deleteMethod('/indexes/$uid/settings/ranking-rules'));
+  }
+
+  @override
+  Future<PendingUpdate> updateRankingRules(List<String> rankingRules) async {
+    return await _update(http.postMethod('/indexes/$uid/settings/ranking-rules',
+        data: rankingRules));
+  }
+
+  @override
+  Future<List<String>> getStopWords() async {
+    final response = await http.getMethod('/indexes/$uid/settings/stop-words');
+
+    return (response.data as List).cast<String>();
+  }
+
+  @override
+  Future<PendingUpdate> resetStopWords() async {
+    return await _update(
+        http.deleteMethod('/indexes/$uid/settings/stop-words'));
+  }
+
+  @override
+  Future<List<String>> getSearchableAttributes() async {
+    final response =
+        await http.getMethod('/indexes/$uid/settings/searchable-attributes');
+
+    return (response.data as List).cast<String>();
+  }
+
+  @override
+  Future<PendingUpdate> resetSearchableAttributes() async {
+    return await _update(
+        http.deleteMethod('/indexes/$uid/settings/searchable-attributes'));
+  }
+
+  @override
+  Future<PendingUpdate> updateSearchableAttributes(
+      List<String> searchableAttributes) async {
+    return await _update(http.postMethod(
+        '/indexes/$uid/settings/searchable-attributes',
+        data: searchableAttributes));
+  }
+
+  @override
+  Future<PendingUpdate> updateStopWords(List<String> stopWords) async {
+    return await _update(
+        http.postMethod('/indexes/$uid/settings/stop-words', data: stopWords));
+  }
+
+  @override
+  Future<Map<String, List<String>>> getSynonyms() async {
+    final response = await http.getMethod('/indexes/$uid/settings/synonyms');
+
+    return (response.data as Map)
+        .cast<String, List>()
+        .map((k, v) => MapEntry(k, v.cast<String>()));
+  }
+
+  @override
+  Future<PendingUpdate> resetSynonyms() async {
+    return await _update(http.deleteMethod('/indexes/$uid/settings/synonyms'));
+  }
+
+  @override
+  Future<PendingUpdate> updateSynonyms(
+      Map<String, List<String>> synonyms) async {
+    return await _update(
+        http.postMethod('/indexes/$uid/settings/synonyms', data: synonyms));
+  }
 }
