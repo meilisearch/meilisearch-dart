@@ -53,7 +53,7 @@ void main() {
 
     test('Getting, setting, and deleting filterable attributes', () async {
       final index = await client.createIndex(randomUid());
-      final updatedFilterableAttributes = ['director', 'genres'];
+      final updatedFilterableAttributes = ['director'];
       var response = await index
           .updateFilterableAttributes(updatedFilterableAttributes)
           .waitFor();
