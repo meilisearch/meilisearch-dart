@@ -121,4 +121,10 @@ class MeiliSearchClientImpl implements MeiliSearchClient {
     final response = await http.getMethod<Map<String, dynamic>>('/keys');
     return response.data!.map((k, v) => MapEntry(k, v.toString()));
   }
+
+  @override
+  Future<Map<String, String>> getVersion() async {
+    final response = await http.getMethod<Map<String, dynamic>>('/version');
+    return response.data!.map((k, v) => MapEntry(k, v.toString()));
+  }
 }
