@@ -67,6 +67,72 @@ abstract class MeiliSearchIndex {
   /// Get the settings of the index.
   Future<IndexSettings> getSettings();
 
+  /// Get attributes for faceting of the index.
+  Future<List<String>> getAttributesForFaceting();
+
+  /// Reset attributes for faceting of the index.
+  Future<PendingUpdate> resetAttributesForFaceting();
+
+  /// Update attriutes for faceting of the index.
+  Future<PendingUpdate> updateAttributesForFaceting(
+      List<String> attributesForFaceting);
+
+  /// Get the displayed attributes of the index.
+  Future<List<String>> getDisplayedAttributes();
+
+  /// Reset the displayed attributes of the index.
+  Future<PendingUpdate> resetDisplayedAttributes();
+
+  /// Update the displayed attributes of the index.
+  Future<PendingUpdate> updateDisplayedAttributes(
+      List<String> displayedAttributes);
+
+  /// Get the distinct attribute for the index.
+  Future<String?> getDistinctAttribute();
+
+  /// Reset the distinct attribute for the index.
+  Future<PendingUpdate> resetDistinctAttribute();
+
+  /// Update the distinct attribute for the index.
+  Future<PendingUpdate> updateDistinctAttribute(String distinctAttribute);
+
+  /// Get ranking rules of the index.
+  Future<List<String>> getRankingRules();
+
+  /// Reset ranking rules of the index.
+  Future<PendingUpdate> resetRankingRules();
+
+  /// Update ranking rules of the index.
+  Future<PendingUpdate> updateRankingRules(List<String> rankingRules);
+
+  /// Get searchable attributes of the index.
+  Future<List<String>> getSearchableAttributes();
+
+  /// Reset searchable attributes of the index.
+  Future<PendingUpdate> resetSearchableAttributes();
+
+  /// Update the searchable attributes of the index.
+  Future<PendingUpdate> updateSearchableAttributes(
+      List<String> searchableAttributes);
+
+  /// Get stop words of the index.
+  Future<List<String>> getStopWords();
+
+  /// Reset stop words of the index.
+  Future<PendingUpdate> resetStopWords();
+
+  /// Update stop words of the index
+  Future<PendingUpdate> updateStopWords(List<String> stopWords);
+
+  /// Get synonyms of the index.
+  Future<Map<String, List<String>>> getSynonyms();
+
+  /// Reset synonyms of the index.
+  Future<PendingUpdate> resetSynonyms();
+
+  /// Update synonyms of the index
+  Future<PendingUpdate> updateSynonyms(Map<String, List<String>> synonyms);
+
   /// Reset the settings of the index.
   /// All settings will be reset to their default value.
   Future<PendingUpdate> resetSettings();

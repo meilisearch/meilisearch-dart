@@ -10,7 +10,7 @@ First of all, thank you for contributing to MeiliSearch! The goal of this docume
 
 ## Assumptions
 
-1. **You're familiar with [GitHub](https://github.com) and the [Pull Request](https://help.github.com/en/github/collaborating-with-issues-and-pull-requests/about-pull-requests)(PR) workflow.**
+1. **You're familiar with [GitHub](https://github.com) and the [Pull Request](https://help.github.com/en/github/collaborating-with-issues-and-pull-requests/about-pull-requests) (PR) workflow.**
 2. **You've read the MeiliSearch [documentation](https://docs.meilisearch.com) and the [README](/README.md).**
 3. **You know about the [MeiliSearch community](https://docs.meilisearch.com/learn/what_is_meilisearch/contact.html). Please use this for help.**
 
@@ -52,7 +52,7 @@ Each PR should pass the tests and the linter to be accepted.
 # Tests
 docker pull getmeili/meilisearch:latest # Fetch the latest version of MeiliSearch image from Docker Hub
 docker run -p 7700:7700 getmeili/meilisearch:latest ./meilisearch --master-key=masterKey --no-analytics=true
-pub run test
+pub run test --concurrency=1
 # Linter
 flutter analyze
 ```

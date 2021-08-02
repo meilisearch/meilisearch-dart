@@ -3,8 +3,8 @@ import 'index.dart';
 import 'client_impl.dart';
 
 abstract class MeiliSearchClient {
-  factory MeiliSearchClient(String serverUrl, [String? apiKey]) =
-      MeiliSearchClientImpl;
+  factory MeiliSearchClient(String serverUrl,
+      [String? apiKey, int? connectTimeout]) = MeiliSearchClientImpl;
 
   /// Http client instance.
   HttpRequest get http;
@@ -14,6 +14,9 @@ abstract class MeiliSearchClient {
 
   /// Master key for authenticating with meilisearch server.
   String? get apiKey;
+
+  /// Timeout in milliseconds for opening a url.
+  int? get connectTimeout;
 
   /// Create an index object by given [uid].
   MeiliSearchIndex index(String uid);
@@ -45,4 +48,16 @@ abstract class MeiliSearchClient {
   /// Get health of the MeiliSearch server.
   /// Return true or false.
   Future<bool> isHealthy();
+
+  /// Trigger a dump creation process.
+  Future<Map<String, String>> createDump();
+
+  /// Get the status of a dump creation process.
+  Future<Map<String, String>> getDumpStatus(String uid);
+
+  /// Get the public and private keys.
+  Future<Map<String, String>> getKeys();
+
+  /// Get the MeiliSearch version
+  Future<Map<String, String>> getVersion();
 }

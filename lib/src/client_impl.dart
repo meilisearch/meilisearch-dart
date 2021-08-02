@@ -7,14 +7,17 @@ import 'index_impl.dart';
 import 'exception.dart';
 
 class MeiliSearchClientImpl implements MeiliSearchClient {
-  MeiliSearchClientImpl(this.serverUrl, [this.apiKey])
-      : http = HttpRequestImpl(serverUrl, apiKey);
+  MeiliSearchClientImpl(this.serverUrl, [this.apiKey, this.connectTimeout])
+      : http = HttpRequestImpl(serverUrl, apiKey, connectTimeout);
 
   @override
   final String serverUrl;
 
   @override
   final String? apiKey;
+
+  @override
+  final int? connectTimeout;
 
   final HttpRequest http;
 
@@ -98,5 +101,30 @@ class MeiliSearchClientImpl implements MeiliSearchClient {
       return false;
     }
     return true;
+  }
+
+  @override
+  Future<Map<String, String>> createDump() async {
+    final response = await http.postMethod<Map<String, dynamic>>('/dumps');
+    return response.data!.map((k, v) => MapEntry(k, v.toString()));
+  }
+
+  @override
+  Future<Map<String, String>> getDumpStatus(String uid) async {
+    final response =
+        await http.getMethod<Map<String, dynamic>>('/dumps/$uid/status');
+    return response.data!.map((k, v) => MapEntry(k, v.toString()));
+  }
+
+  @override
+  Future<Map<String, String>> getKeys() async {
+    final response = await http.getMethod<Map<String, dynamic>>('/keys');
+    return response.data!.map((k, v) => MapEntry(k, v.toString()));
+  }
+
+  @override
+  Future<Map<String, String>> getVersion() async {
+    final response = await http.getMethod<Map<String, dynamic>>('/version');
+    return response.data!.map((k, v) => MapEntry(k, v.toString()));
   }
 }

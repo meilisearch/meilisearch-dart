@@ -49,10 +49,12 @@ Future<void> setUpHttp() async {
 Future<void> setUpClientWithWrongUrl() async {
   setUp(() {
     final String server = 'http://wrongurl:1234';
+    final int connectTimeout = 1000;
 
-    print('Using wrong url server on $server for running tests.');
+    print(
+        'Using wrong url server on $server with timeout of $connectTimeout ms running tests.');
 
-    client = MeiliSearchClient(server, 'masterKey');
+    client = MeiliSearchClient(server, 'masterKey', connectTimeout);
   });
 }
 

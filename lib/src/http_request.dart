@@ -2,13 +2,17 @@ import 'package:dio/dio.dart';
 import 'http_request_impl.dart';
 
 abstract class HttpRequest {
-  factory HttpRequest(String serverUrl, String apiKey) = HttpRequestImpl;
+  factory HttpRequest(String serverUrl, String apiKey, [int connectTimeout]) =
+      HttpRequestImpl;
 
   /// MeiliSearch server URL.
   String get serverUrl;
 
   /// API key for authenticating with MeiliSearch server.
   String? get apiKey;
+
+  /// Timeout in milliseconds for opening a url.
+  int? get connectTimeout;
 
   /// GET method
   Future<Response<T>> getMethod<T>(
