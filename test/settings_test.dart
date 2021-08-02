@@ -51,19 +51,19 @@ void main() {
       expect(settings.displayedAttributes, equals(['*']));
     });
 
-    test('Getting, setting, and deleting attributes for faceting', () async {
+    test('Getting, setting, and deleting filterable attributes', () async {
       final index = await client.createIndex(randomUid());
-      final updatedAttributesForFaceting = ['genres', 'director'];
+      final updatedFilterableAttributes = ['director', 'genres'];
       var response = await index
-          .updateAttributesForFaceting(updatedAttributesForFaceting)
+          .updateFilterableAttributes(updatedFilterableAttributes)
           .waitFor();
       expect(response.status, 'processed');
-      var attributesForFaceting = await index.getAttributesForFaceting();
-      expect(attributesForFaceting, updatedAttributesForFaceting);
-      response = await index.resetAttributesForFaceting().waitFor();
+      var filterableAttributes = await index.getFilterableAttributes();
+      expect(filterableAttributes, updatedFilterableAttributes);
+      response = await index.resetFilterableAttributes().waitFor();
       expect(response.status, 'processed');
-      attributesForFaceting = await index.getAttributesForFaceting();
-      expect(attributesForFaceting, []);
+      filterableAttributes = await index.getFilterableAttributes();
+      expect(filterableAttributes, []);
     });
 
     test('Getting, setting, and deleting displayed attributes', () async {

@@ -242,25 +242,25 @@ class MeiliSearchIndexImpl implements MeiliSearchIndex {
   }
 
   @override
-  Future<List<String>> getAttributesForFaceting() async {
+  Future<List<String>> getFilterableAttributes() async {
     final response =
-        await http.getMethod('/indexes/$uid/settings/attributes-for-faceting');
+        await http.getMethod('/indexes/$uid/settings/filterable-attributes');
 
     return (response.data as List).cast<String>();
   }
 
   @override
-  Future<PendingUpdate> resetAttributesForFaceting() async {
+  Future<PendingUpdate> resetFilterableAttributes() async {
     return await _update(
-        http.deleteMethod('/indexes/$uid/settings/attributes-for-faceting'));
+        http.deleteMethod('/indexes/$uid/settings/filterable-attributes'));
   }
 
   @override
-  Future<PendingUpdate> updateAttributesForFaceting(
-      List<String> attributesForFaceting) async {
+  Future<PendingUpdate> updateFilterableAttributes(
+      List<String> filterableAttributes) async {
     return await _update(http.postMethod(
-        '/indexes/$uid/settings/attributes-for-faceting',
-        data: attributesForFaceting));
+        '/indexes/$uid/settings/filterable-attributes',
+        data: filterableAttributes));
   }
 
   @override
