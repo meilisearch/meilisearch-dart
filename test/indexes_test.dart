@@ -120,5 +120,17 @@ void main() {
       expect(client.getIndex(randomUid(uid)),
           throwsA(isA<MeiliSearchApiException>()));
     });
+
+    test("Geting index stats", () async {
+      final uid = randomUid();
+      final index = client.index(uid);
+      final response = await index.addDocuments([
+        {'book_id': 123, 'title': 'Pride and Prejudice'},
+        {'book_id': 456, 'title': 'The Martin'},
+      ]).waitFor();
+      expect(response.status, 'processed');
+      final stats = await index.getStats();
+      expect(stats.numberOfDocuments, 2);
+    });
   });
 }

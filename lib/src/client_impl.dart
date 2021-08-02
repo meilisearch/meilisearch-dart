@@ -5,6 +5,7 @@ import 'client.dart';
 import 'index.dart';
 import 'index_impl.dart';
 import 'exception.dart';
+import 'stats.dart' show AllStats;
 
 class MeiliSearchClientImpl implements MeiliSearchClient {
   MeiliSearchClientImpl(this.serverUrl, [this.apiKey, this.connectTimeout])
@@ -126,5 +127,12 @@ class MeiliSearchClientImpl implements MeiliSearchClient {
   Future<Map<String, String>> getVersion() async {
     final response = await http.getMethod<Map<String, dynamic>>('/version');
     return response.data!.map((k, v) => MapEntry(k, v.toString()));
+  }
+
+  @override
+  Future<AllStats> getStats() async {
+    final response = await http.getMethod('/stats');
+
+    return AllStats.fromMap(response.data);
   }
 }

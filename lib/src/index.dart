@@ -2,6 +2,7 @@ import 'index_settings.dart';
 
 import 'pending_update.dart';
 import 'search_result.dart';
+import 'stats.dart' show IndexStats;
 
 abstract class MeiliSearchIndex {
   String get uid;
@@ -146,4 +147,7 @@ abstract class MeiliSearchIndex {
 
   /// Update the primaryKey of the index and return it.
   Future<String?> fetchPrimaryKey();
+
+  /// Get stats of the index.
+  Future<IndexStats> getStats();
 }
