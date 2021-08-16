@@ -1,8 +1,11 @@
+import 'package:meilisearch/src/update_status.dart';
+
 import 'index_settings.dart';
 
 import 'pending_update.dart';
 import 'search_result.dart';
 import 'stats.dart' show IndexStats;
+import 'update_status.dart';
 
 abstract class MeiliSearchIndex {
   String get uid;
@@ -150,4 +153,10 @@ abstract class MeiliSearchIndex {
 
   /// Get stats of the index.
   Future<IndexStats> getStats();
+
+  /// Get all update status.
+  Future<List<UpdateStatus>?> getAllUpdateStatus();
+
+  /// Gets an update status based on the update id.
+  Future<UpdateStatus> getUpdateStatus(int updateId);
 }
