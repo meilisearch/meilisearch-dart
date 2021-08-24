@@ -126,7 +126,7 @@ meilisearch: "X.X.X"
     version: "X.X.X"
 ```
 
-- the file [`README.md` in the Installation section](https://github.com/meilisearch/meilisearch-dart/blob/main/README.md#-installation):
+- the file [`README.md` in the Installation section](./README.md):
 
 ```yaml
 dependencies:
