@@ -120,5 +120,50 @@ void main() {
       expect(client.getIndex(randomUid(uid)),
           throwsA(isA<MeiliSearchApiException>()));
     });
+
+    test('Geting index stats', () async {
+      final uid = randomUid();
+      final index = client.index(uid);
+      final response = await index.addDocuments([
+        {'book_id': 123, 'title': 'Pride and Prejudice'},
+        {'book_id': 456, 'title': 'The Martin'},
+      ]).waitFor();
+      expect(response.status, 'processed');
+      final stats = await index.getStats();
+      expect(stats.numberOfDocuments, 2);
+    });
+
+    test('Getting all update statuses default', () async {
+      final index = await client.createIndex(randomUid());
+      final response = await index.getAllUpdateStatus();
+      expect(response, []);
+    });
+
+    test('Getting all update statuses', () async {
+      final index = client.index(randomUid());
+      await index.addDocuments([
+        {'book_id': 1234, 'title': 'Pride and Prejudice'}
+      ]);
+      await index.addDocuments([
+        {'book_id': 5678}
+      ]);
+      final update_status = await index.getAllUpdateStatus();
+      expect(update_status!.length, 2);
+    });
+
+    test('Getting update status', () async {
+      final index = client.index(randomUid());
+      final response = await index.addDocuments([
+        {'book_id': 1234, 'title': 'Pride and Prejudice'}
+      ]);
+      final update_status = await index.getUpdateStatus(response.updateId);
+      expect(update_status.updateId, response.updateId);
+    });
+
+    test('Getting non-existant update status', () async {
+      final index = await client.createIndex(randomUid());
+      expect(() async => await index.getUpdateStatus(9999),
+          throwsA(isA<MeiliSearchApiException>()));
+    });
   });
 }

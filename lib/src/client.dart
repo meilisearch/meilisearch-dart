@@ -1,6 +1,7 @@
 import 'http_request.dart';
 import 'index.dart';
 import 'client_impl.dart';
+import 'stats.dart' show AllStats;
 
 abstract class MeiliSearchClient {
   factory MeiliSearchClient(String serverUrl,
@@ -60,4 +61,7 @@ abstract class MeiliSearchClient {
 
   /// Get the MeiliSearch version
   Future<Map<String, String>> getVersion();
+
+  /// Get all index stats.
+  Future<AllStats> getStats();
 }

@@ -17,10 +17,6 @@ class PendingUpdateImpl implements PendingUpdate {
 
   @override
   Future<UpdateStatus> getStatus() async {
-    final response = await index.http.getMethod<Map<String, dynamic>>(
-      '/indexes/${index.uid}/updates/$updateId',
-    );
-
-    return UpdateStatus.fromMap(response.data!);
+    return index.getUpdateStatus(updateId);
   }
 }
