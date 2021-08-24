@@ -1,3 +1,4 @@
+import 'package:meilisearch/meilisearch.dart';
 import 'package:test/test.dart';
 
 import 'utils/books.dart';
@@ -25,6 +26,12 @@ void main() {
       expect(result.hits, hasLength(booksDoc.length));
     });
 
+    test('with basic query with phrase search', () async {
+      var index = await createBooksIndex();
+      var result = await index.search('coco "harry"');
+      expect(result.hits, hasLength(1));
+    });
+
     group('with', () {
       test('offset parameter', () async {
         var index = await createBooksIndex();
@@ -36,6 +43,70 @@ void main() {
         var index = await createBooksIndex();
         var result = await index.search('', limit: 3);
         expect(result.hits, hasLength(3));
+      });
+
+      test('filter parameter', () async {
+        var index = await createBooksIndex();
+        var response = await index
+            .updateSettings(IndexSettings(
+              filterableAttributes: ['tag'],
+            ))
+            .waitFor();
+        expect(response.status, 'processed');
+        var result = await index.search('prince', filter: 'tag = Tale');
+        expect(result.hits, hasLength(1));
+      });
+
+      test('filter parameter with number', () async {
+        var index = await createBooksIndex();
+        var response = await index
+            .updateSettings(IndexSettings(
+              filterableAttributes: ['tag', 'book_id'],
+            ))
+            .waitFor();
+        expect(response.status, 'processed');
+        var result =
+            await index.search('', filter: 'book_id < 100 AND tag = Tale');
+        expect(result.hits, hasLength(1));
+      });
+
+      test('filter parameter with array', () async {
+        var index = await createBooksIndex();
+        var response = await index
+            .updateSettings(IndexSettings(
+              filterableAttributes: ['tag'],
+            ))
+            .waitFor();
+        expect(response.status, 'processed');
+        var result = await index.search('prince', filter: ['tag = Tale']);
+        expect(result.hits, hasLength(1));
+      });
+
+      test('filter parameter with multiple array', () async {
+        var index = await createBooksIndex();
+        var response = await index
+            .updateSettings(IndexSettings(
+              filterableAttributes: ['tag'],
+            ))
+            .waitFor();
+        expect(response.status, 'processed');
+        var result = await index.search('prince', filter: [
+          ['tag = Tale', 'tag = Tale'],
+          'tag = Tale'
+        ]);
+        expect(result.hits, hasLength(1));
+      });
+
+      test('facetDistributions parameter', () async {
+        var index = await createBooksIndex();
+        var response = await index
+            .updateSettings(IndexSettings(
+              filterableAttributes: ['tag'],
+            ))
+            .waitFor();
+        expect(response.status, 'processed');
+        var result = await index.search('prince', facetsDistribution: ['*']);
+        expect(result.hits, hasLength(2));
       });
     });
   });

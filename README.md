@@ -94,7 +94,7 @@ void main() async {
 }
 ```
 
-With the `updateId`, you can check the status (`enqueued`, `processed` or `failed`) of your documents addition using the [update endpoint](https://docs.meilisearch.com/reference/api/updates.html#get-an-update-status).
+With the `updateId`, you can check the status (`enqueued`, `processing`, `processed` or `failed`) of your documents addition using the [update endpoint](https://docs.meilisearch.com/reference/api/updates.html#get-an-update-status).
 
 #### Basic Search <!-- omit in toc -->
 
@@ -124,7 +124,6 @@ All the supported options are described in the [search parameters](https://docs.
 var result = await index.search(
   'prince',
   attributesToHighlight: ['title'],
-  filters: 'book_id > 10',
 );
 ```
 
@@ -151,7 +150,7 @@ JSON output:
 
 ## 🤖 Compatibility with MeiliSearch
 
-This package only guarantees the compatibility with the [version v0.20.0 of MeiliSearch](https://github.com/meilisearch/MeiliSearch/releases/tag/v0.20.0).
+This package only guarantees the compatibility with the [version v0.21.0 of MeiliSearch](https://github.com/meilisearch/MeiliSearch/releases/tag/v0.21.0).
 
 ## 💡 Learn More
 

@@ -26,8 +26,7 @@ abstract class MeiliSearchIndex {
     String? query, {
     int? offset,
     int? limit,
-    String? filters,
-    dynamic facetFilters,
+    dynamic filter,
     List<String>? facetsDistribution,
     List<String>? attributesToRetrieve,
     List<String>? attributesToCrop,
@@ -72,15 +71,15 @@ abstract class MeiliSearchIndex {
   /// Get the settings of the index.
   Future<IndexSettings> getSettings();
 
-  /// Get attributes for faceting of the index.
-  Future<List<String>> getAttributesForFaceting();
+  /// Get filterable attributes of the index.
+  Future<List<String>> getFilterableAttributes();
 
-  /// Reset attributes for faceting of the index.
-  Future<PendingUpdate> resetAttributesForFaceting();
+  /// Reset filterable attributes of the index.
+  Future<PendingUpdate> resetFilterableAttributes();
 
-  /// Update attriutes for faceting of the index.
-  Future<PendingUpdate> updateAttributesForFaceting(
-      List<String> attributesForFaceting);
+  /// Update filterable attributes of the index.
+  Future<PendingUpdate> updateFilterableAttributes(
+      List<String> filterableAttributes);
 
   /// Get the displayed attributes of the index.
   Future<List<String>> getDisplayedAttributes();
