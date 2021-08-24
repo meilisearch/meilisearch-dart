@@ -1,3 +1,20 @@
+# 0.3.0
+This version makes this package compatible with MeiliSearch v0.21.0
+### Changes
+- Update PendingUpdateX (#62) @alallema
+- Adding option to specify a connectTimeout duration (#59) @sanders41
+- Adding getKeys method (#66) @sanders41
+- Adding dump methods (#67) @sanders41
+- Adding getVersion method (#68) @sanders41
+- Adding sub-settings methods (#70) @sanders41
+- Adding index.getStats and client.getStats methods (#69) @sanders41
+- Adding getAllUpdateStatus and getUpdateStatus methods (#73) @sanders41
+### Breaking changes
+- Rename attributes_for_faceting into filterable_attributes (#61) @alallema
+- Rename Filters into Filter (#63) @alallema
+- Rename attributes for faceting into filterable attributes (#71) @curquiza
+- Changes related to the next MeiliSearch release (v0.21.0) (#40)
+
 # 0.2.1
 - Changes due to the implicit index creation (#48) @alallema
 
