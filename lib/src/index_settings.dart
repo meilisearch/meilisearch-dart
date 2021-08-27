@@ -24,7 +24,7 @@ class IndexSettings {
   List<String>? filterableAttributes;
 
   /// Search returns documents with distinct (different) values of the given field
-  List<String>? distinctAttribute;
+  String? distinctAttribute;
 
   /// Fields in which to search for matching query words sorted by order of importance
   List<String>? searchableAttributes;
@@ -50,7 +50,7 @@ class IndexSettings {
         rankingRules: (map['rankingRules'] as List?)?.cast<String>(),
         filterableAttributes:
             (map['filterableAttributes'] as List?)?.cast<String>(),
-        distinctAttribute: (map['distinctAttribute'] as List?)?.cast<String>(),
+        distinctAttribute: (map['distinctAttribute'] as String?),
         searchableAttributes:
             (map['searchableAttributes'] as List?)?.cast<String>(),
         displayedAttributes:
