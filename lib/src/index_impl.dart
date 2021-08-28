@@ -114,7 +114,7 @@ class MeiliSearchIndexImpl implements MeiliSearchIndex {
     List<String>? facetsDistribution,
     List<String>? attributesToRetrieve,
     List<String>? attributesToCrop,
-    List<String>? cropLength,
+    int? cropLength,
     List<String>? attributesToHighlight,
     bool? matches,
   }) async {
