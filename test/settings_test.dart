@@ -24,6 +24,7 @@ void main() {
               'male': ['man'],
               'female': ['woman'],
             },
+            distinctAttribute: 'movie_id',
           ))
           .waitFor();
       expect(response.status, 'processed');
@@ -37,6 +38,7 @@ void main() {
             'male': ['man'],
             'female': ['woman'],
           }));
+      expect(settings.distinctAttribute, equals('movie_id'));
     });
 
     test('Resetting the settings', () async {
