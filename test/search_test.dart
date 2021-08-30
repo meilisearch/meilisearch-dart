@@ -45,6 +45,13 @@ void main() {
         expect(result.hits, hasLength(3));
       });
 
+      test('cropLength parameter', () async {
+        var index = await createBooksIndex();
+        var result = await index.search('Alice In Wonderland',
+            attributesToCrop: ["title"], cropLength: 2);
+        expect(result.hits![0]['_formatted']['title'], equals('Alice In'));
+      });
+
       test('filter parameter', () async {
         var index = await createBooksIndex();
         var response = await index
