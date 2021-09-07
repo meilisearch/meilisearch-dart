@@ -391,6 +391,27 @@ class MeiliSearchIndexImpl implements MeiliSearchIndex {
         http.postMethod('/indexes/$uid/settings/synonyms', data: synonyms));
   }
 
+  @override
+  Future<List<String>> getSortableAttributes() async {
+    final response =
+        await http.getMethod('/indexes/$uid/settings/sortable-attributes');
+
+    return (response.data as List).cast<String>();
+  }
+
+  @override
+  Future<PendingUpdate> resetSortableAttributes() async {
+    return await _update(
+        http.deleteMethod('/indexes/$uid/settings/sortable-attributes'));
+  }
+
+  @override
+  Future<PendingUpdate> updateSortableAttributes(
+      List<String> sortableAttributes) async {
+    return _update(http.postMethod('/indexes/$uid/settings/sortable-attributes',
+        data: sortableAttributes));
+  }
+
   ///
   /// Stats endponts
   ///
