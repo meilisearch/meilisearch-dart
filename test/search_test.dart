@@ -115,6 +115,19 @@ void main() {
         var result = await index.search('prince', facetsDistribution: ['*']);
         expect(result.hits, hasLength(2));
       });
+
+      test('sort parameter', () async {
+        var index = await createBooksIndex();
+        var response = await index
+            .updateSettings(IndexSettings(
+              sortableAttributes: ['title'],
+            ))
+            .waitFor();
+        expect(response.status, 'processed');
+        var result = await index.search('prince', sort: ['title:asc']);
+        expect(result.hits, hasLength(2));
+        expect(result.hits![0]['book_id'], 4);
+      });
     });
   });
 }
