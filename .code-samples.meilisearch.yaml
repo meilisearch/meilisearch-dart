@@ -61,8 +61,8 @@ update_settings_1: |-
           'proximity',
           'attribute',
           'exactness',
-          'desc(release_date)',
-          'desc(rank)'
+          'release_date:desc',
+          'rank:desc'
         ],
         distinctAttribute: 'movie_id',
         searchableAttributes: ['title', 'description', 'genre'],
@@ -102,8 +102,8 @@ update_ranking_rules_1: |-
     'proximity',
     'attribute',
     'exactness',
-    'asc(release_date)',
-    'desc(rank)'
+    'release_date:asc',
+    'rank:desc'
   ]);
 reset_ranking_rules_1: |-
   await client.index('movies').resetRankingRules();
@@ -218,8 +218,8 @@ settings_guide_ranking_rules_1: |-
         'proximity',
         'attribute',
         'exactness',
-        'asc(release_date)',
-        'desc(rank)'
+        'release_date:asc',
+        'rank:desc'
       ]));
 settings_guide_distinct_1: |-
   await client
@@ -301,3 +301,29 @@ get_dump_status_1: |-
   await client.getDumpStatus('20201101-110357260');
 phrase_search_1: |-
   await client.index('movies').search('"african american" horror');
+sorting_guide_update_sortable_attributes_1: |-
+  await client.index('books').updateSortableAttributes(['author', 'price']);
+sorting_guide_update_ranking_rules_1: |-
+  await client.index('books').updateRankingRules([
+    'words',
+    'sort',
+    'typo',
+    'proximity',
+    'attribute',
+    'exactness'
+  ]);
+sorting_guide_sort_parameter_1: |-
+  await client.index('books').search('science fiction', sort: ['price:asc']);
+sorting_guide_sort_parameter_2: |-
+  await client.index('books').search('butler', sort: ['author:desc']);
+get_sortable_attributes_1: |-
+  await client.index('books').sortableAttributes();
+update_sortable_attributes_1: |-
+  await client.index('books').updateSortableAttributes([
+    'price',
+    'author'
+  ]);
+reset_sortable_attributes_1: |-
+  await client.index('books').resetSortableAttributes();
+search_parameter_guide_sort_1: |-
+  await client.index('books').search('science fiction', sort: ['price:asc']);
