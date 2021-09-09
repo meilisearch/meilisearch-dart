@@ -119,9 +119,16 @@ void main() {
       test('sort parameter', () async {
         var index = await createBooksIndex();
         var response = await index
-            .updateSettings(IndexSettings(
-              sortableAttributes: ['title'],
-            ))
+            .updateSettings(IndexSettings(sortableAttributes: [
+              'title'
+            ], rankingRules: [
+              'words',
+              'sort',
+              'typo',
+              'proximity',
+              'attribute',
+              'exactness'
+            ]))
             .waitFor();
         expect(response.status, 'processed');
         var result = await index.search('prince', sort: ['title:asc']);
