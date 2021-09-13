@@ -255,7 +255,7 @@ search_guide_2: |-
 getting_started_add_documents_md: |-
   ```yaml
   dependencies:
-    meilisearch: ^0.3.0
+    meilisearch: ^0.3.1
   ```
 
   ```dart
