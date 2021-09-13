@@ -116,7 +116,7 @@ void main() {
         expect(result.hits, hasLength(2));
       });
 
-      test('sort parameter', () async {
+      test('Sort parameter', () async {
         var index = await createBooksIndex();
         var response = await index
             .updateSettings(IndexSettings(sortableAttributes: [
