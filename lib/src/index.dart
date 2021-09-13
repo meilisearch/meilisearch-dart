@@ -138,7 +138,7 @@ abstract class MeiliSearchIndex {
   /// Update synonyms of the index
   Future<PendingUpdate> updateSynonyms(Map<String, List<String>> synonyms);
 
-  /// Get sortalbe attributes of the iindex.
+  /// Get sortable attributes of the index.
   Future<List<String>> getSortableAttributes();
 
   /// Reset sortable attributes of the index.
