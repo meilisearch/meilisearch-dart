@@ -1,3 +1,10 @@
+# 0.3.1
+- Fixed cropLength type (#79) @sanders41
+- Fix distinctAttribute in settings (#77) @sanders41
+- Changes related to the next MeiliSearch release (v0.22.0) (#82)
+  - Added sortable attributes (#83) @sanders41
+  - Add `sort` parameter (#84) @curquiza
+
 # 0.3.0
 This version makes this package compatible with MeiliSearch v0.21.0
 ### Changes
