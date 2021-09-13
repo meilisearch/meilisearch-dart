@@ -25,6 +25,7 @@ void main() {
               'female': ['woman'],
             },
             distinctAttribute: 'movie_id',
+            sortableAttributes: ['genre', 'title'],
           ))
           .waitFor();
       expect(response.status, 'processed');
@@ -39,9 +40,10 @@ void main() {
             'female': ['woman'],
           }));
       expect(settings.distinctAttribute, equals('movie_id'));
+      expect(settings.sortableAttributes, equals(['genre', 'title']));
     });
 
-    test('Resetting the settings', () async {
+    test('Reseting the settings', () async {
       final index = await client.createIndex(randomUid());
       var response = await index
           .updateSettings(IndexSettings(displayedAttributes: ['displayName']))
@@ -160,6 +162,20 @@ void main() {
       expect(response.status, 'processed');
       final resetSynonyms = await index.getSynonyms();
       expect(resetSynonyms, {});
+    });
+
+    test('Getting, setting, and deleting sortable attributes', () async {
+      final index = await client.createIndex(randomUid());
+      final updatedSortableAttributes = ['genre', 'title'];
+      var response = await index
+          .updateSortableAttributes(updatedSortableAttributes)
+          .waitFor();
+      expect(response.status, 'processed');
+      final sortableAttributes = await index.getSortableAttributes();
+      expect(sortableAttributes, updatedSortableAttributes);
+      response = await index.resetSortableAttributes().waitFor();
+      final resetSortablettributes = await index.getSortableAttributes();
+      expect(resetSortablettributes, []);
     });
   });
 }

@@ -111,6 +111,7 @@ class MeiliSearchIndexImpl implements MeiliSearchIndex {
     int? offset,
     int? limit,
     dynamic filter,
+    List<String>? sort,
     List<String>? facetsDistribution,
     List<String>? attributesToRetrieve,
     List<String>? attributesToCrop,
@@ -123,6 +124,7 @@ class MeiliSearchIndexImpl implements MeiliSearchIndex {
       'offset': offset,
       'limit': limit,
       'filter': filter,
+      'sort': sort,
       'facetsDistribution': facetsDistribution,
       'attributesToRetrieve': attributesToRetrieve,
       'attributesToCrop': attributesToCrop,
@@ -389,6 +391,27 @@ class MeiliSearchIndexImpl implements MeiliSearchIndex {
       Map<String, List<String>> synonyms) async {
     return await _update(
         http.postMethod('/indexes/$uid/settings/synonyms', data: synonyms));
+  }
+
+  @override
+  Future<List<String>> getSortableAttributes() async {
+    final response =
+        await http.getMethod('/indexes/$uid/settings/sortable-attributes');
+
+    return (response.data as List).cast<String>();
+  }
+
+  @override
+  Future<PendingUpdate> resetSortableAttributes() async {
+    return await _update(
+        http.deleteMethod('/indexes/$uid/settings/sortable-attributes'));
+  }
+
+  @override
+  Future<PendingUpdate> updateSortableAttributes(
+      List<String> sortableAttributes) async {
+    return _update(http.postMethod('/indexes/$uid/settings/sortable-attributes',
+        data: sortableAttributes));
   }
 
   ///

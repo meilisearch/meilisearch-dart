@@ -27,6 +27,7 @@ abstract class MeiliSearchIndex {
     int? offset,
     int? limit,
     dynamic filter,
+    List<String>? sort,
     List<String>? facetsDistribution,
     List<String>? attributesToRetrieve,
     List<String>? attributesToCrop,
@@ -136,6 +137,16 @@ abstract class MeiliSearchIndex {
 
   /// Update synonyms of the index
   Future<PendingUpdate> updateSynonyms(Map<String, List<String>> synonyms);
+
+  /// Get sortable attributes of the index.
+  Future<List<String>> getSortableAttributes();
+
+  /// Reset sortable attributes of the index.
+  Future<PendingUpdate> resetSortableAttributes();
+
+  /// Update sortable attributes of the index.
+  Future<PendingUpdate> updateSortableAttributes(
+      List<String> sortableAttributes);
 
   /// Reset the settings of the index.
   /// All settings will be reset to their default value.

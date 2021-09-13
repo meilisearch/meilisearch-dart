@@ -5,6 +5,7 @@ class IndexSettings {
     this.rankingRules,
     this.filterableAttributes,
     this.distinctAttribute,
+    this.sortableAttributes,
     this.searchableAttributes = allAttributes,
     this.displayedAttributes = allAttributes,
   });
@@ -32,6 +33,9 @@ class IndexSettings {
   /// Fields displayed in the returned documents
   List<String>? displayedAttributes;
 
+  /// List of attributes by which to sort results
+  List<String>? sortableAttributes;
+
   Map<String, dynamic> toMap() => <String, dynamic>{
         'synonyms': synonyms,
         'stopWords': stopWords,
@@ -40,6 +44,7 @@ class IndexSettings {
         'distinctAttribute': distinctAttribute,
         'searchableAttributes': searchableAttributes,
         'displayedAttributes': displayedAttributes,
+        'sortableAttributes': sortableAttributes,
       };
 
   factory IndexSettings.fromMap(Map<String, dynamic> map) => IndexSettings(
@@ -55,5 +60,7 @@ class IndexSettings {
             (map['searchableAttributes'] as List?)?.cast<String>(),
         displayedAttributes:
             (map['displayedAttributes'] as List?)?.cast<String>(),
+        sortableAttributes:
+            (map['sortableAttributes'] as List?)?.cast<String>(),
       );
 }
