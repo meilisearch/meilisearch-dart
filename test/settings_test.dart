@@ -43,7 +43,7 @@ void main() {
       expect(settings.sortableAttributes, equals(['genre', 'title']));
     });
 
-    test('Resetting the settings', () async {
+    test('Reseting the settings', () async {
       final index = await client.createIndex(randomUid());
       var response = await index
           .updateSettings(IndexSettings(displayedAttributes: ['displayName']))
