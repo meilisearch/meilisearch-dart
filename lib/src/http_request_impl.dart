@@ -8,6 +8,7 @@ class HttpRequestImpl implements HttpRequest {
           baseUrl: serverUrl,
           headers: <String, dynamic>{
             if (apiKey != null) 'X-Meili-API-Key': apiKey,
+            'Content-Type': 'application/json',
           },
           responseType: ResponseType.json,
           connectTimeout: connectTimeout ?? 0,
