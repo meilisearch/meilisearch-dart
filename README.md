@@ -77,7 +77,7 @@ import 'package:meilisearch/meilisearch.dart';
 void main() async {
   var client = MeiliSearchClient('http://127.0.0.1:7700', 'masterKey');
 
-  // An index where movies are stored.
+  // An index is where the documents are stored.
   var index = client.index('movies');
 
    const documents = [
