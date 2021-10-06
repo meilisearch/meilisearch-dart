@@ -89,7 +89,7 @@ void main() async {
       { id: 6, title: 'Philadelphia', genres: ['Drama'] },
   ]
 
-  // Add documents into index we just created.
+  // If the index 'movies' does not exist, MeiliSearch creates it when you first add the documents.
   var update = await index.addDocuments(documents); // => { "updateId": 0 }
 }
 ```
