@@ -100,7 +100,7 @@ With the `updateId`, you can check the status (`enqueued`, `processing`, `proces
 
 ```dart
 // MeiliSearch is typo-tolerant:
-var result = await index.search('harry pottre');
+var result = await index.search('carlo');
 
 print(result.hits);
 ```
@@ -134,18 +134,18 @@ JSON output:
 {
     "hits": [
         {
-            "id": 3,
-            "title": "Life of Pi",
+            "id": 1,
+            "title": "Carol",
             "_formatted": {
-                "id": 3,
-                "title": "Life of <em>Pi</em>"
+                "id": 1,
+                "title": "<em>Carol</em>"
             }
         }
     ],
     "offset": 0,
     "limit": 20,
     "processingTimeMs": 0,
-    "query": "pi"
+    "query": "carol"
 }
 ```
 
