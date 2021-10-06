@@ -112,7 +112,7 @@ JSON Output:
   {
     "id": 4,
     "title": "Mad Max: Fury Road",
-    "genres": ['Adventure', 'Science Fiction']
+    "genres": ["Adventure", "Science Fiction"]
   }
 ]
 ```
