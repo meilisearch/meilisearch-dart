@@ -77,19 +77,19 @@ import 'package:meilisearch/meilisearch.dart';
 void main() async {
   var client = MeiliSearchClient('http://127.0.0.1:7700', 'masterKey');
 
-  // An index where books are stored.
-  var index = client.index('books');
+  // An index is where the documents are stored.
+  var index = client.index('movies');
 
-  var documents = [
-    { 'book_id': 123,  'title': 'Pride and Prejudice' },
-    { 'book_id': 456,  'title': 'Le Petit Prince' },
-    { 'book_id': 1,    'title': 'Alice In Wonderland' },
-    { 'book_id': 1344, 'title': 'The Hobbit' },
-    { 'book_id': 4,    'title': 'Harry Potter and the Half-Blood Prince' },
-    { 'book_id': 42,   'title': 'The Hitchhiker\'s Guide to the Galaxy' }
-  ];
+  const documents = [
+      { id: 1, title: 'Carol', genres: ['Romance', 'Drama'] },
+      { id: 2, title: 'Wonder Woman', genres: ['Action', 'Adventure'] },
+      { id: 3, title: 'Life of Pi', genres: ['Adventure', 'Drama'] },
+      { id: 4, title: 'Mad Max: Fury Road', genres: ['Adventure', 'Science Fiction'] },
+      { id: 5, title: 'Moana', genres: ['Fantasy', 'Action']},
+      { id: 6, title: 'Philadelphia', genres: ['Drama'] },
+  ]
 
-  // Add documents into index we just created.
+  // If the index 'movies' does not exist, MeiliSearch creates it when you first add the documents.
   var update = await index.addDocuments(documents); // => { "updateId": 0 }
 }
 ```
@@ -100,7 +100,7 @@ With the `updateId`, you can check the status (`enqueued`, `processing`, `proces
 
 ```dart
 // MeiliSearch is typo-tolerant:
-var result = await index.search('harry pottre');
+var result = await index.search('Life of Pi');
 
 print(result.hits);
 ```
@@ -110,8 +110,9 @@ JSON Output:
 ```json
 [
   {
-    "book_id": 4,
-    "title": "Harry Potter and the Half-Blood Prince"
+    "id": 3,
+    "title": "Life of Pi", 
+    "genres": ["Adventure", "Drama"]
   }
 ]
 ```
@@ -122,7 +123,7 @@ All the supported options are described in the [search parameters](https://docs.
 
 ```dart
 var result = await index.search(
-  'prince',
+  'road',
   attributesToHighlight: ['title'],
 );
 ```
@@ -133,18 +134,18 @@ JSON output:
 {
     "hits": [
         {
-            "book_id": 456,
-            "title": "Le Petit Prince",
+            "book_id": 4,
+            "title": "Mad Max: Fury Road",
             "_formatted": {
-                "book_id": 456,
-                "title": "Le Petit <em>Prince</em>"
+                "book_id": 4,
+                "title": "Mad Max: Fury <em>Road</em>"
             }
         }
     ],
     "offset": 0,
     "limit": 20,
     "processingTimeMs": 0,
-    "query": "prince"
+    "query": "road"
 }
 ```
 
