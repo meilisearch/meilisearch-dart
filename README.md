@@ -123,7 +123,7 @@ All the supported options are described in the [search parameters](https://docs.
 
 ```dart
 var result = await index.search(
-  'prince',
+  'carol',
   attributesToHighlight: ['title'],
 );
 ```
