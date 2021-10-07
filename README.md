@@ -80,7 +80,7 @@ void main() async {
   // An index is where the documents are stored.
   var index = client.index('movies');
 
-   const documents = [
+  const documents = [
       { id: 1, title: 'Carol', genres: ['Romance', 'Drama'] },
       { id: 2, title: 'Wonder Woman', genres: ['Action', 'Adventure'] },
       { id: 3, title: 'Life of Pi', genres: ['Adventure', 'Drama'] },
