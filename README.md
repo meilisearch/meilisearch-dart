@@ -110,9 +110,9 @@ JSON Output:
 ```json
 [
   {
-    "id": 4,
-    "title": "Mad Max: Fury Road",
-    "genres": ["Adventure", "Science Fiction"]
+    "id": 1,
+    "title": "Carol",
+    "genres": ["Romance", "Drama"]
   }
 ]
 ```
