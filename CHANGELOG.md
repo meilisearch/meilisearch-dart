@@ -1,3 +1,6 @@
+# 0.3.2
+- Add json content type by default as header to make it compatible with MeiliSearch v0.23.0 (#89) @curquiza
+
 # 0.3.1
 - Fixed cropLength type (#79) @sanders41
 - Fix distinctAttribute in settings (#77) @sanders41
