@@ -111,11 +111,11 @@ update_ranking_rules_1: |-
 reset_ranking_rules_1: |-
   await client.index('movies').resetRankingRules();
 get_distinct_attribute_1: |-
-  await client.index('movies').getDistinctAttribute();
+  await client.index('shoes').getDistinctAttribute();
 update_distinct_attribute_1: |-
-  await client.index('movies').updateDistinctAttribute('movie_id');
+  await client.index('shoes').updateDistinctAttribute('skuid');
 reset_distinct_attribute_1: |-
-  await client.index('movies').resetDistinctAttribute();
+  await client.index('shoes').resetDistinctAttribute();
 get_filterable_attributes_1: |-
   await client.index('movies').getFilterableAttributes();
 update_filterable_attributes_1: |-
