@@ -13,8 +13,8 @@ void main() {
       expect(
           () async => await client.getIndex('wrongUID'),
           throwsA(isA<MeiliSearchApiException>().having(
-            (error) => error.errorCode, // Actual
-            'errorCode', // Description of the check
+            (error) => error.code, // Actual
+            'code', // Description of the check
             'index_not_found', // Expected
           )));
     });
