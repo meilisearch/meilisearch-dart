@@ -1,3 +1,7 @@
+# 0.4.0
+- Rename `errorCode`, `errorType` and `errorLink` into `code`, `type` and `link` in the error handler (#110) @curquiza
+- Changes related to the next MeiliSearch release (v0.24.0) (#109)
+
 # 0.3.2
 - Add json content type by default as header to make it compatible with MeiliSearch v0.23.0 (#89) @curquiza
 
