@@ -1,9 +1,9 @@
 class MeiliSearchApiException implements Exception {
   MeiliSearchApiException(
     this.message, {
-    this.errorCode,
-    this.errorLink,
-    this.errorType,
+    this.code,
+    this.link,
+    this.type,
   });
 
   factory MeiliSearchApiException.fromHttpBody(
@@ -13,14 +13,14 @@ class MeiliSearchApiException implements Exception {
     if (httpBody != null &&
         httpBody.runtimeType != String &&
         httpBody.containsKey('message') &&
-        httpBody.containsKey('errorCode') &&
-        httpBody.containsKey('errorLink') &&
-        httpBody.containsKey('errorType')) {
+        httpBody.containsKey('code') &&
+        httpBody.containsKey('link') &&
+        httpBody.containsKey('type')) {
       return MeiliSearchApiException(
         httpBody['message'],
-        errorCode: httpBody['errorCode'],
-        errorLink: httpBody['errorLink'],
-        errorType: httpBody['errorType'],
+        code: httpBody['code'],
+        link: httpBody['link'],
+        type: httpBody['type'],
       );
     } else {
       return MeiliSearchApiException(message);
@@ -28,18 +28,16 @@ class MeiliSearchApiException implements Exception {
   }
 
   final String message;
-  final String? errorCode;
-  final String? errorLink;
-  final String? errorType;
+  final String? code;
+  final String? link;
+  final String? type;
 
   @override
   String toString() {
     var output = 'MeiliSearchApiError - message: ${this.message}';
-    if (this.errorCode != null &&
-        this.errorLink != null &&
-        this.errorType != null) {
+    if (this.code != null && this.link != null && this.type != null) {
       output +=
-          ' - errorCode: ${this.errorCode} - errorType: ${this.errorType} - errorLink: ${this.errorLink}';
+          ' - code: ${this.code} - type: ${this.type} - link: ${this.link}';
     }
     return output;
   }

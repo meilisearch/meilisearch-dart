@@ -68,7 +68,7 @@ class MeiliSearchClientImpl implements MeiliSearchClient {
     try {
       return await getIndex(uid);
     } on MeiliSearchApiException catch (e) {
-      if (e.errorCode != 'index_not_found') {
+      if (e.code != 'index_not_found') {
         throw (e);
       }
       return await createIndex(uid, primaryKey: primaryKey);

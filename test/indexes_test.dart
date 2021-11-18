@@ -160,6 +160,14 @@ void main() {
       expect(update_status.updateId, response.updateId);
     });
 
+    test('Getting a failing update status', () async {
+      final index = client.index(randomUid());
+      final response =
+          await index.updateRankingRules(['wrong_ranking_rules']).waitFor();
+      expect(response.updateId, response.updateId);
+      expect(response.error!.type, 'invalid_request');
+    });
+
     test('Getting non-existant update status', () async {
       final index = await client.createIndex(randomUid());
       expect(() async => await index.getUpdateStatus(9999),
