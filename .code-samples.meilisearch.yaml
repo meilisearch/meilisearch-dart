@@ -235,6 +235,10 @@ settings_guide_searchable_1: |-
 settings_guide_displayed_1: |-
   await client.index('movies').updateSettings(IndexSettings(
       displayedAttributes: ['title', 'description', 'genre', 'release_date']));
+settings_guide_sortable_1: |-
+  await client
+      .index('books')
+      .updateSettings(IndexSettings(sortableAttributes: ['author', 'price']));
 add_movies_json_1: |-
   import 'dart:io';
   import 'dart:convert';
