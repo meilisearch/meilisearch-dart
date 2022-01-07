@@ -4,7 +4,6 @@ import 'http_request_impl.dart';
 import 'client.dart';
 import 'index.dart';
 import 'index_impl.dart';
-import 'exception.dart';
 import 'stats.dart' show AllStats;
 
 class MeiliSearchClientImpl implements MeiliSearchClient {
@@ -58,21 +57,6 @@ class MeiliSearchClientImpl implements MeiliSearchClient {
         .cast<Map<String, dynamic>>()
         .map((item) => MeiliSearchIndexImpl.fromMap(this, item))
         .toList();
-  }
-
-  @override
-  Future<MeiliSearchIndex> getOrCreateIndex(
-    String uid, {
-    String? primaryKey,
-  }) async {
-    try {
-      return await getIndex(uid);
-    } on MeiliSearchApiException catch (e) {
-      if (e.code != 'index_not_found') {
-        throw (e);
-      }
-      return await createIndex(uid, primaryKey: primaryKey);
-    }
   }
 
   @override
