@@ -32,10 +32,6 @@ abstract class MeiliSearchClient {
   /// Throws an error if index is already exists.
   Future<MeiliSearchIndex> createIndex(String uid, {String primaryKey});
 
-  /// Find index by matching [uid]. If index is not exists tries to create a
-  /// new index.
-  Future<MeiliSearchIndex> getOrCreateIndex(String uid, {String primaryKey});
-
   /// Delete the index by matching [uid].
   Future<void> deleteIndex(String uid);
 

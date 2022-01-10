@@ -73,29 +73,6 @@ void main() {
       expect(indexes.length, 3);
     });
 
-    test('GetOrCreate index with right UID', () async {
-      final uid = randomUid();
-      await client.getOrCreateIndex(uid);
-      final index = await client.getIndex(uid);
-      expect(index.uid, uid);
-    });
-
-    test('GetOrCreate index with right UID with a primary', () async {
-      final uid = randomUid();
-      await client.getOrCreateIndex(uid, primaryKey: 'myId');
-      final index = await client.getIndex(uid);
-      expect(index.uid, uid);
-      expect(index.primaryKey, 'myId');
-    });
-
-    test('GetOrCreate index on existing index', () async {
-      final uid = randomUid();
-      await client.createIndex(uid);
-      await client.getOrCreateIndex(uid);
-      final index = await client.getIndex(uid);
-      expect(index.uid, uid);
-    });
-
     test('Create index object with UID', () async {
       final uid = randomUid();
       final index = client.index(uid);
