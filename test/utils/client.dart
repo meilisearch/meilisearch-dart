@@ -12,7 +12,7 @@ late HttpRequest http;
 late MeiliSearchClient client;
 Random random = Random();
 
-String get _testServer {
+String get testServer {
   return Platform.environment['MEILI_SERVER'] ?? 'http://localhost:7700';
 }
 
@@ -25,7 +25,7 @@ Future<void> deleteAllIndexes() async {
 
 Future<void> setUpClient() async {
   setUp(() {
-    final String server = _testServer;
+    final String server = testServer;
 
     print('Using MeiliSearch server on $server for running tests.');
 
@@ -40,7 +40,7 @@ Future<void> setUpClient() async {
 
 Future<void> setUpHttp() async {
   setUp(() {
-    final String server = _testServer;
+    final String server = testServer;
 
     http = HttpRequestImpl(server, 'masterKey');
   });
