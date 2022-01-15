@@ -13,7 +13,7 @@ class PendingUpdateImpl implements PendingUpdate {
     MeiliSearchIndexImpl index,
     Map<String, dynamic> map,
   ) =>
-      PendingUpdateImpl(index, map['updateId'] as int);
+      PendingUpdateImpl(index, map['uid'] as int);
 
   @override
   Future<UpdateStatus> getStatus() async {
