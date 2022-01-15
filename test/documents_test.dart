@@ -11,7 +11,7 @@ void main() {
     test('Add documents', () async {
       var index = client.index(randomUid());
       final response = await index.addDocuments(booksDoc).waitFor();
-      expect(response.status, 'processed');
+      expect(response.status, 'succeeded');
       final docs = await index.getDocuments();
       expect(docs.length, 6);
     });
@@ -20,7 +20,7 @@ void main() {
       final index = client.index(randomUid());
       final response =
           await index.addDocuments(booksDoc, primaryKey: 'book_id').waitFor();
-      expect(response.status, 'processed');
+      expect(response.status, 'succeeded');
       final docs = await index.getDocuments();
       expect(docs.length, 6);
     });
@@ -30,7 +30,7 @@ void main() {
       final response = await index.updateDocuments([
         {'book_id': 1344, 'title': 'The Hobbit 2'},
       ]).waitFor();
-      expect(response.status, 'processed');
+      expect(response.status, 'succeeded');
       final doc = await index.getDocument(1344);
       expect(doc, isNotNull);
       expect(doc?['book_id'], 1344);
@@ -43,7 +43,7 @@ void main() {
       final response = await index.updateDocuments([
         {'the_book_id': 1344, 'title': 'The Hobbit 2'},
       ], primaryKey: 'the_book_id').waitFor();
-      expect(response.status, 'processed');
+      expect(response.status, 'succeeded');
       index = await client.getIndex(uid);
       expect(index.primaryKey, 'the_book_id');
       final doc = await index.getDocument(1344);
@@ -55,14 +55,14 @@ void main() {
     test('Delete one document', () async {
       final index = await createBooksIndex();
       final response = await index.deleteDocument(456).waitFor();
-      expect(response.status, 'processed');
+      expect(response.status, 'succeeded');
       expect(index.getDocument(456), throwsA(isA<MeiliSearchApiException>()));
     });
 
     test('Delete multiple documents', () async {
       final index = await createBooksIndex();
       final response = await index.deleteDocuments([456, 4]).waitFor();
-      expect(response.status, 'processed');
+      expect(response.status, 'succeeded');
       expect(index.getDocument(4), throwsA(isA<MeiliSearchApiException>()));
       expect(index.getDocument(456), throwsA(isA<MeiliSearchApiException>()));
     });
@@ -70,7 +70,7 @@ void main() {
     test('Delete all documents', () async {
       final index = await createBooksIndex();
       final response = await index.deleteAllDocuments().waitFor();
-      expect(response.status, 'processed');
+      expect(response.status, 'succeeded');
       final docs = await index.getDocuments();
       expect(docs, isEmpty);
     });
