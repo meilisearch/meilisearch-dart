@@ -23,6 +23,14 @@ Future<void> deleteAllIndexes() async {
   }
 }
 
+Future<void> deleteAllKeys() async {
+  var keys = await client.getKeys();
+
+  for (var item in keys) {
+    await client.deleteKey(item);
+  }
+}
+
 Future<void> setUpClient() async {
   setUp(() {
     final String server = testServer;
@@ -35,6 +43,7 @@ Future<void> setUpClient() async {
 
   tearDown(() async {
     await deleteAllIndexes();
+    await deleteAllKeys();
   });
 }
 
