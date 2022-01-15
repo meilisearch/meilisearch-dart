@@ -1,9 +1,9 @@
 import 'package:meilisearch/src/client_impl.dart';
-import 'package:meilisearch/src/update_status.dart';
+import 'package:meilisearch/src/task.dart';
 
-import 'pending_update.dart';
+import 'task_info.dart';
 
-class ClientTaskImpl implements PendingUpdate {
+class ClientTaskImpl implements TaskInfo {
   final int updateId;
   final MeiliSearchClientImpl client;
 
@@ -16,9 +16,9 @@ class ClientTaskImpl implements PendingUpdate {
       ClientTaskImpl(client, map['uid'] as int);
 
   @override
-  Future<UpdateStatus> getStatus() async {
+  Future<Task> getStatus() async {
     final response = await client.http.getMethod(('/tasks/${this.updateId}'));
 
-    return UpdateStatus.fromMap(response.data);
+    return Task.fromMap(response.data);
   }
 }

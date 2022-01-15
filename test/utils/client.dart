@@ -4,8 +4,8 @@ import 'dart:math';
 import 'package:meilisearch/src/http_request_impl.dart';
 import 'package:meilisearch/src/http_request.dart';
 import 'package:meilisearch/meilisearch.dart';
-import 'package:meilisearch/src/pending_update.dart';
-import 'package:meilisearch/src/update_status.dart';
+import 'package:meilisearch/src/task_info.dart';
+import 'package:meilisearch/src/task.dart';
 import 'package:test/test.dart';
 
 late HttpRequest http;
@@ -71,8 +71,8 @@ String randomUid([String prefix = 'index']) {
   return '${prefix}_${random.nextInt(9999)}';
 }
 
-extension PendingUpdateX on PendingUpdate {
-  Future<UpdateStatus> waitFor({
+extension TaskWaiter on TaskInfo {
+  Future<Task> waitFor({
     Duration timeout = const Duration(seconds: 5),
     Duration interval = const Duration(milliseconds: 50),
   }) async {
@@ -90,8 +90,8 @@ extension PendingUpdateX on PendingUpdate {
   }
 }
 
-extension PendingUpdateFutureX on Future<PendingUpdate> {
-  Future<UpdateStatus> waitFor({
+extension TaskWaiterForFutures on Future<TaskInfo> {
+  Future<Task> waitFor({
     Duration timeout = const Duration(seconds: 5),
     Duration interval = const Duration(milliseconds: 50),
   }) async {

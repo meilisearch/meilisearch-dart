@@ -1,6 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:meilisearch/src/client_task_impl.dart';
-import 'package:meilisearch/src/pending_update.dart';
+import 'package:meilisearch/src/task_info.dart';
 
 import 'http_request.dart';
 import 'http_request_impl.dart';
@@ -31,14 +31,14 @@ class MeiliSearchClientImpl implements MeiliSearchClient {
     return new MeiliSearchIndexImpl(this, uid);
   }
 
-  Future<PendingUpdate> _update(Future<Response> future) async {
+  Future<TaskInfo> _update(Future<Response> future) async {
     final response = await future;
 
     return ClientTaskImpl.fromMap(this, response.data);
   }
 
   @override
-  Future<PendingUpdate> createIndex(String uid, {String? primaryKey}) async {
+  Future<TaskInfo> createIndex(String uid, {String? primaryKey}) async {
     final data = <String, dynamic>{
       'uid': uid,
       if (primaryKey != null) 'primaryKey': primaryKey,
@@ -68,14 +68,14 @@ class MeiliSearchClientImpl implements MeiliSearchClient {
   }
 
   @override
-  Future<PendingUpdate> deleteIndex(String uid) async {
+  Future<TaskInfo> deleteIndex(String uid) async {
     final index = this.index(uid);
 
     return await index.delete();
   }
 
   @override
-  Future<PendingUpdate> updateIndex(String uid, String primaryKey) async {
+  Future<TaskInfo> updateIndex(String uid, String primaryKey) async {
     final index = this.index(uid);
 
     return index.update(primaryKey: primaryKey);
