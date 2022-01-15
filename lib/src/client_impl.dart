@@ -1,3 +1,7 @@
+import 'package:dio/dio.dart';
+import 'package:meilisearch/src/client_task_impl.dart';
+import 'package:meilisearch/src/pending_update.dart';
+
 import 'http_request.dart';
 import 'http_request_impl.dart';
 
@@ -26,19 +30,22 @@ class MeiliSearchClientImpl implements MeiliSearchClient {
     return new MeiliSearchIndexImpl(this, uid);
   }
 
+  Future<PendingUpdate> _update(Future<Response> future) async {
+    final response = await future;
+
+    return ClientTaskImpl.fromMap(this, response.data);
+  }
+
   @override
-  Future<MeiliSearchIndex> createIndex(String uid, {String? primaryKey}) async {
+  Future<PendingUpdate> createIndex(String uid, {String? primaryKey}) async {
     final data = <String, dynamic>{
       'uid': uid,
       if (primaryKey != null) 'primaryKey': primaryKey,
     };
     data.removeWhere((k, v) => v == null);
-    final response = await http.postMethod<Map<String, dynamic>>(
-      '/indexes',
-      data: data,
-    );
 
-    return MeiliSearchIndexImpl.fromMap(this, response.data!);
+    return await _update(
+        http.postMethod<Map<String, dynamic>>('/indexes', data: data));
   }
 
   @override
@@ -60,15 +67,17 @@ class MeiliSearchClientImpl implements MeiliSearchClient {
   }
 
   @override
-  Future<void> deleteIndex(String uid) async {
+  Future<PendingUpdate> deleteIndex(String uid) async {
     final index = this.index(uid);
-    await index.delete();
+
+    return await index.delete();
   }
 
   @override
-  Future<void> updateIndex(String uid, String primaryKey) async {
+  Future<PendingUpdate> updateIndex(String uid, String primaryKey) async {
     final index = this.index(uid);
-    await index.update(primaryKey: primaryKey);
+
+    return index.update(primaryKey: primaryKey);
   }
 
   @override

@@ -1,3 +1,5 @@
+import 'package:meilisearch/src/pending_update.dart';
+
 import 'http_request.dart';
 import 'index.dart';
 import 'client_impl.dart';
@@ -30,13 +32,13 @@ abstract class MeiliSearchClient {
 
   /// Create a new index by given [uid] and optional [primaryKey] parameter.
   /// Throws an error if index is already exists.
-  Future<MeiliSearchIndex> createIndex(String uid, {String primaryKey});
+  Future<PendingUpdate> createIndex(String uid, {String primaryKey});
 
   /// Delete the index by matching [uid].
-  Future<void> deleteIndex(String uid);
+  Future<PendingUpdate> deleteIndex(String uid);
 
   /// Update the primary Key of the index by matching [uid].
-  Future<void> updateIndex(String uid, String primaryKey);
+  Future<PendingUpdate> updateIndex(String uid, String primaryKey);
 
   /// Return health of the MeiliSearch server.
   /// Throws an error if containing details if MeiliSearch can't process your request.
