@@ -69,6 +69,19 @@ void main() {
       expect(index.primaryKey, null);
     });
 
+    test('gets raw information about an index', () async {
+      final uid = randomUid();
+      await client.createIndex(uid).waitFor();
+
+      final index = await client.getRawIndex(uid);
+      final keys = ['uid', 'name', 'primaryKey', 'createdAt', 'updatedAt'];
+
+      expect(index.keys, containsAll(keys));
+      expect(index.keys.length, keys.length);
+      expect(index['primaryKey'], isNull);
+      expect(index['name'], equals(uid));
+    });
+
     test('throws exception with a non-existing index', () async {
       expect(client.getIndex(randomUid('loremIpsum')),
           throwsA(isA<MeiliSearchApiException>()));

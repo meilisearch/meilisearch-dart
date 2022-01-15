@@ -32,6 +32,10 @@ abstract class MeiliSearchClient {
   /// Find index by matching [uid]. Throws error if index is not exists.
   Future<MeiliSearchIndex> getIndex(String uid);
 
+  /// Find index by matching [uid] and responds with raw information from API.
+  /// Throws error if index is not exists.
+  Future<Map<String, dynamic>> getRawIndex(String uid);
+
   /// Create a new index by given [uid] and optional [primaryKey] parameter.
   /// Throws an error if index is already exists.
   Future<TaskInfo> createIndex(String uid, {String primaryKey});
