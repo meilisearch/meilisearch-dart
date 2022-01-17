@@ -1,5 +1,5 @@
-class UpdateStatus {
-  UpdateStatus({
+class Task {
+  Task({
     this.status,
     this.updateId,
     this.type,
@@ -17,7 +17,7 @@ class UpdateStatus {
   final DateTime? processedAt;
   final UpdateError? error;
 
-  factory UpdateStatus.fromMap(Map<String, dynamic> map) => UpdateStatus(
+  factory Task.fromMap(Map<String, dynamic> map) => Task(
       status: map['status'] as String?,
       updateId: map['uid'] as int?,
       duration: map['duration'] as String?,

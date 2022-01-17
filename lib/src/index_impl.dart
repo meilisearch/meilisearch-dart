@@ -4,11 +4,11 @@ import 'client.dart';
 import 'index.dart';
 import 'http_request.dart';
 import 'index_settings.dart';
-import 'pending_update.dart';
-import 'pending_update_impl.dart';
+import 'task_info.dart';
+import 'task_impl.dart';
 import 'search_result.dart';
 import 'stats.dart' show IndexStats;
-import 'update_status.dart';
+import 'task.dart';
 
 class MeiliSearchIndexImpl implements MeiliSearchIndex {
   MeiliSearchIndexImpl(
@@ -69,7 +69,7 @@ class MeiliSearchIndexImpl implements MeiliSearchIndex {
   //
 
   @override
-  Future<PendingUpdateImpl> update({String? primaryKey}) async {
+  Future<TaskImpl> update({String? primaryKey}) async {
     final data = <String, dynamic>{
       'primaryKey': primaryKey,
     };
@@ -79,7 +79,7 @@ class MeiliSearchIndexImpl implements MeiliSearchIndex {
   }
 
   @override
-  Future<PendingUpdateImpl> delete() async {
+  Future<TaskImpl> delete() async {
     return await _update(http.deleteMethod('/indexes/$uid'));
   }
 
@@ -139,13 +139,13 @@ class MeiliSearchIndexImpl implements MeiliSearchIndex {
   // Document endpoints
   //
 
-  Future<PendingUpdateImpl> _update(Future<Response> future) async {
+  Future<TaskImpl> _update(Future<Response> future) async {
     final response = await future;
-    return PendingUpdateImpl.fromMap(this, response.data);
+    return TaskImpl.fromMap(this, response.data);
   }
 
   @override
-  Future<PendingUpdateImpl> addDocuments(
+  Future<TaskImpl> addDocuments(
     documents, {
     String? primaryKey,
   }) async {
@@ -159,7 +159,7 @@ class MeiliSearchIndexImpl implements MeiliSearchIndex {
   }
 
   @override
-  Future<PendingUpdateImpl> updateDocuments(
+  Future<TaskImpl> updateDocuments(
     documents, {
     String? primaryKey,
   }) async {
@@ -173,17 +173,17 @@ class MeiliSearchIndexImpl implements MeiliSearchIndex {
   }
 
   @override
-  Future<PendingUpdateImpl> deleteAllDocuments() async {
+  Future<TaskImpl> deleteAllDocuments() async {
     return await _update(http.deleteMethod('/indexes/$uid/documents'));
   }
 
   @override
-  Future<PendingUpdateImpl> deleteDocument(dynamic id) async {
+  Future<TaskImpl> deleteDocument(dynamic id) async {
     return await _update(http.deleteMethod('/indexes/$uid/documents/$id'));
   }
 
   @override
-  Future<PendingUpdateImpl> deleteDocuments(List ids) async {
+  Future<TaskImpl> deleteDocuments(List ids) async {
     return await _update(http.postMethod(
       '/indexes/$uid/documents/delete-batch',
       data: ids,
@@ -230,12 +230,12 @@ class MeiliSearchIndexImpl implements MeiliSearchIndex {
   }
 
   @override
-  Future<PendingUpdate> resetSettings() async {
+  Future<TaskInfo> resetSettings() async {
     return await _update(http.deleteMethod('/indexes/$uid/settings'));
   }
 
   @override
-  Future<PendingUpdate> updateSettings(IndexSettings settings) async {
+  Future<TaskInfo> updateSettings(IndexSettings settings) async {
     return await _update(http.postMethod(
       '/indexes/$uid/settings',
       data: settings.toMap(),
@@ -251,13 +251,13 @@ class MeiliSearchIndexImpl implements MeiliSearchIndex {
   }
 
   @override
-  Future<PendingUpdate> resetFilterableAttributes() async {
+  Future<TaskInfo> resetFilterableAttributes() async {
     return await _update(
         http.deleteMethod('/indexes/$uid/settings/filterable-attributes'));
   }
 
   @override
-  Future<PendingUpdate> updateFilterableAttributes(
+  Future<TaskInfo> updateFilterableAttributes(
       List<String> filterableAttributes) async {
     return await _update(http.postMethod(
         '/indexes/$uid/settings/filterable-attributes',
@@ -273,13 +273,13 @@ class MeiliSearchIndexImpl implements MeiliSearchIndex {
   }
 
   @override
-  Future<PendingUpdate> resetDisplayedAttributes() async {
+  Future<TaskInfo> resetDisplayedAttributes() async {
     return await _update(
         http.deleteMethod('/indexes/$uid/settings/displayed-attributes'));
   }
 
   @override
-  Future<PendingUpdate> updateDisplayedAttributes(
+  Future<TaskInfo> updateDisplayedAttributes(
       List<String> displayedAttributes) async {
     return await _update(http.postMethod(
         '/indexes/$uid/settings/displayed-attributes',
@@ -295,14 +295,13 @@ class MeiliSearchIndexImpl implements MeiliSearchIndex {
   }
 
   @override
-  Future<PendingUpdate> resetDistinctAttribute() async {
+  Future<TaskInfo> resetDistinctAttribute() async {
     return await _update(
         http.deleteMethod('/indexes/$uid/settings/distinct-attribute'));
   }
 
   @override
-  Future<PendingUpdate> updateDistinctAttribute(
-      String distinctAttribute) async {
+  Future<TaskInfo> updateDistinctAttribute(String distinctAttribute) async {
     return await _update(http.postMethod(
         '/indexes/$uid/settings/distinct-attribute',
         data: '"$distinctAttribute"'));
@@ -317,13 +316,13 @@ class MeiliSearchIndexImpl implements MeiliSearchIndex {
   }
 
   @override
-  Future<PendingUpdate> resetRankingRules() async {
+  Future<TaskInfo> resetRankingRules() async {
     return await _update(
         http.deleteMethod('/indexes/$uid/settings/ranking-rules'));
   }
 
   @override
-  Future<PendingUpdate> updateRankingRules(List<String> rankingRules) async {
+  Future<TaskInfo> updateRankingRules(List<String> rankingRules) async {
     return await _update(http.postMethod('/indexes/$uid/settings/ranking-rules',
         data: rankingRules));
   }
@@ -336,7 +335,7 @@ class MeiliSearchIndexImpl implements MeiliSearchIndex {
   }
 
   @override
-  Future<PendingUpdate> resetStopWords() async {
+  Future<TaskInfo> resetStopWords() async {
     return await _update(
         http.deleteMethod('/indexes/$uid/settings/stop-words'));
   }
@@ -350,13 +349,13 @@ class MeiliSearchIndexImpl implements MeiliSearchIndex {
   }
 
   @override
-  Future<PendingUpdate> resetSearchableAttributes() async {
+  Future<TaskInfo> resetSearchableAttributes() async {
     return await _update(
         http.deleteMethod('/indexes/$uid/settings/searchable-attributes'));
   }
 
   @override
-  Future<PendingUpdate> updateSearchableAttributes(
+  Future<TaskInfo> updateSearchableAttributes(
       List<String> searchableAttributes) async {
     return await _update(http.postMethod(
         '/indexes/$uid/settings/searchable-attributes',
@@ -364,7 +363,7 @@ class MeiliSearchIndexImpl implements MeiliSearchIndex {
   }
 
   @override
-  Future<PendingUpdate> updateStopWords(List<String> stopWords) async {
+  Future<TaskInfo> updateStopWords(List<String> stopWords) async {
     return await _update(
         http.postMethod('/indexes/$uid/settings/stop-words', data: stopWords));
   }
@@ -379,13 +378,12 @@ class MeiliSearchIndexImpl implements MeiliSearchIndex {
   }
 
   @override
-  Future<PendingUpdate> resetSynonyms() async {
+  Future<TaskInfo> resetSynonyms() async {
     return await _update(http.deleteMethod('/indexes/$uid/settings/synonyms'));
   }
 
   @override
-  Future<PendingUpdate> updateSynonyms(
-      Map<String, List<String>> synonyms) async {
+  Future<TaskInfo> updateSynonyms(Map<String, List<String>> synonyms) async {
     return await _update(
         http.postMethod('/indexes/$uid/settings/synonyms', data: synonyms));
   }
@@ -399,13 +397,13 @@ class MeiliSearchIndexImpl implements MeiliSearchIndex {
   }
 
   @override
-  Future<PendingUpdate> resetSortableAttributes() async {
+  Future<TaskInfo> resetSortableAttributes() async {
     return await _update(
         http.deleteMethod('/indexes/$uid/settings/sortable-attributes'));
   }
 
   @override
-  Future<PendingUpdate> updateSortableAttributes(
+  Future<TaskInfo> updateSortableAttributes(
       List<String> sortableAttributes) async {
     return _update(http.postMethod('/indexes/$uid/settings/sortable-attributes',
         data: sortableAttributes));
@@ -426,17 +424,17 @@ class MeiliSearchIndexImpl implements MeiliSearchIndex {
   /// Update status endpoints
   ///
 
-  Future<List<UpdateStatus>?> getAllUpdateStatus() async {
+  Future<List<Task>?> getAllUpdateStatus() async {
     final response = await http.getMethod('/indexes/$uid/tasks');
 
     return (response.data['results'] as List)
-        .map((update) => UpdateStatus.fromMap(update))
+        .map((update) => Task.fromMap(update))
         .toList();
   }
 
-  Future<UpdateStatus> getUpdateStatus(int updateId) async {
+  Future<Task> getUpdateStatus(int updateId) async {
     final response = await http.getMethod(('/tasks/$updateId'));
 
-    return UpdateStatus.fromMap(response.data);
+    return Task.fromMap(response.data);
   }
 }
