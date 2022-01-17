@@ -7,6 +7,7 @@ class Task {
     this.enqueuedAt,
     this.processedAt,
     this.error,
+    this.details,
   });
 
   final String? status;
@@ -16,21 +17,24 @@ class Task {
   final DateTime? enqueuedAt;
   final DateTime? processedAt;
   final UpdateError? error;
+  final Map<String, dynamic>? details;
 
   factory Task.fromMap(Map<String, dynamic> map) => Task(
-      status: map['status'] as String?,
-      updateId: map['uid'] as int?,
-      duration: map['duration'] as String?,
-      enqueuedAt: map['enqueuedAt'] != null
-          ? DateTime.tryParse(map['enqueuedAt'] as String)
-          : null,
-      processedAt: map['processedAt'] != null
-          ? DateTime.tryParse(map['processedAt'] as String)
-          : null,
-      type: map['type'] as String?,
-      error: map['error'] != null
-          ? UpdateError.fromMap(map['error'] as Map<String, dynamic>)
-          : null);
+        status: map['status'] as String?,
+        updateId: map['uid'] as int?,
+        duration: map['duration'] as String?,
+        enqueuedAt: map['enqueuedAt'] != null
+            ? DateTime.tryParse(map['enqueuedAt'] as String)
+            : null,
+        processedAt: map['processedAt'] != null
+            ? DateTime.tryParse(map['processedAt'] as String)
+            : null,
+        type: map['type'] as String?,
+        error: map['error'] != null
+            ? UpdateError.fromMap(map['error'] as Map<String, dynamic>)
+            : null,
+        details: map['details'],
+      );
 }
 
 class UpdateError {

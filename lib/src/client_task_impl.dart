@@ -17,8 +17,6 @@ class ClientTaskImpl implements TaskInfo {
 
   @override
   Future<Task> getStatus() async {
-    final response = await client.http.getMethod(('/tasks/${this.updateId}'));
-
-    return Task.fromMap(response.data);
+    return await client.getTask(this.updateId);
   }
 }

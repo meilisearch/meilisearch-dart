@@ -421,10 +421,10 @@ class MeiliSearchIndexImpl implements MeiliSearchIndex {
   }
 
   ///
-  /// Update status endpoints
+  /// Tasks endpoints
   ///
 
-  Future<List<Task>?> getAllUpdateStatus() async {
+  Future<List<Task>> getTasks() async {
     final response = await http.getMethod('/indexes/$uid/tasks');
 
     return (response.data['results'] as List)
@@ -432,9 +432,7 @@ class MeiliSearchIndexImpl implements MeiliSearchIndex {
         .toList();
   }
 
-  Future<Task> getUpdateStatus(int updateId) async {
-    final response = await http.getMethod(('/tasks/$updateId'));
-
-    return Task.fromMap(response.data);
+  Future<Task> getTask(int updateId) async {
+    return await client.getTask(updateId);
   }
 }
