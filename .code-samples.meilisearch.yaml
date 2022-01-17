@@ -45,10 +45,14 @@ delete_documents_1: |-
   await client.index('movies').deleteDocuments([23488, 153738, 437035, 363869]);
 search_post_1: |-
   await client.index('movies').search('American ninja');
-get_update_1: |-
-  await client.index('movies').getUpdateStatus(1);
-get_all_updates_1: |-
-  await client.index('movies').getAllUpdateStatus();
+get_task_by_index_1: |-
+  await client.index('movies').getTask(1);
+get_all_tasks_by_index_1: |-
+  await client.index('movies').getTasks();
+get_task_1: |-
+  await client.getTask(1);
+get_all_tasks_1: |-
+  await client.getTasks();
 get_keys_1: |-
   await client.getKeys();
 get_settings_1: |-
@@ -267,7 +271,7 @@ getting_started_add_documents_md: |-
   import 'dart:io';
   import 'dart:convert';
 
-  var client = MeiliSearchClient('http://localhost:7700', 'masterKey');
+  var client = MeiliSearchClient('http://127.0.0.1:7700', 'masterKey');
 
   final jsonFile = await File('movies.json').readAsString();
   final movies = json.decode(jsonFile);
@@ -351,3 +355,47 @@ geosearch_guide_sort_usage_1: |-
   await client.index('restaurants').search('', sort: ['_geoPoint(48.8583701,2.2922926):asc']);
 geosearch_guide_sort_usage_2: |-
   await client.index('restaurants').search('', sort: ['_geoPoint(48.8583701,2.2922926):asc', 'rating:desc']);
+authorization_header_1: |-
+  var client = MeiliSearchClient('http://127.0.0.1:7700', 'masterKey');
+  await client.getKeys();
+get_one_key_1: |-
+  await client.getKey('d0552b41536279a0ad88bd595327b96f01176a60c2243e906c52ac02375f9bc4');
+get_all_keys_1: |-
+  await client.getKeys();
+create_a_key_1: |-
+  await client.createKey(
+    description: 'Add documents: Products API key',
+    actions: ['documents.add'],
+    indexes: ['products'],
+    expiresAt: DateTime(2042, 04, 02)
+  );
+update_a_key_1: |-
+  await client.updateKey(
+    'd0552b41536279a0ad88bd595327b96f01176a60c2243e906c52ac02375f9bc4',
+    description: 'Manage documents: Products/Reviews API key',
+    actions: ['documents.add', 'documents.delete'],
+    indexes: ['products', 'reviews'],
+    expiresAt: DateTime(2042, 04, 02),
+  );
+delete_a_key_1: |-
+  await client.deleteKey('d0552b41536279a0ad88bd595327b96f01176a60c2243e906c52ac02375f9bc4');
+security_guide_search_key_1: |-
+  var client = MeiliSearchClient('http://127.0.0.1:7700', 'apiKey');
+  await client.index('patient_medical_records').search();
+security_guide_update_key_1: |-
+  var client = MeiliSearchClient('http://127.0.0.1:7700', 'masterKey');
+  await client.updateKey('d0552b41536279a0ad88bd595327b96f01176a60c2243e906c52ac02375f9bc4', indexes: ['doctors']);
+security_guide_create_key_1: |-
+  var client = MeiliSearchClient('http://127.0.0.1:7700', 'masterKey');
+  await client.createKey(
+    description: 'Search patient records key',
+    actions: ['search'],
+    indexes: ['patient_medical_records'],
+    expires_at: DateTime(2023, 01, 01),
+  );
+security_guide_list_keys_1: |-
+  var client = MeiliSearchClient('http://127.0.0.1:7700', 'masterKey');
+  await client.getKeys();
+security_guide_delete_key_1: |-
+  var client = MeiliSearchClient('http://127.0.0.1:7700', 'masterKey');
+  await client.deleteKey('d0552b41536279a0ad88bd595327b96f01176a60c2243e906c52ac02375f9bc4');
