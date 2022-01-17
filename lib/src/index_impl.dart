@@ -69,21 +69,18 @@ class MeiliSearchIndexImpl implements MeiliSearchIndex {
   //
 
   @override
-  Future<void> update({String? primaryKey}) async {
+  Future<PendingUpdateImpl> update({String? primaryKey}) async {
     final data = <String, dynamic>{
       'primaryKey': primaryKey,
     };
     data.removeWhere((k, v) => v == null);
-    final response = await http.putMethod('/indexes/$uid', data: data);
 
-    _primaryKey = response.data['primaryKey'] as String?;
-    _createdAt = DateTime.parse(response.data['createdAt'] as String);
-    _updatedAt = DateTime.parse(response.data['updatedAt'] as String);
+    return await _update(http.putMethod('/indexes/$uid', data: data));
   }
 
   @override
-  Future<void> delete() async {
-    await http.deleteMethod('/indexes/$uid');
+  Future<PendingUpdateImpl> delete() async {
+    return await _update(http.deleteMethod('/indexes/$uid'));
   }
 
   @override
@@ -430,15 +427,15 @@ class MeiliSearchIndexImpl implements MeiliSearchIndex {
   ///
 
   Future<List<UpdateStatus>?> getAllUpdateStatus() async {
-    final response = await http.getMethod('/indexes/$uid/updates');
+    final response = await http.getMethod('/indexes/$uid/tasks');
 
-    return (response.data as List)
+    return (response.data['results'] as List)
         .map((update) => UpdateStatus.fromMap(update))
         .toList();
   }
 
   Future<UpdateStatus> getUpdateStatus(int updateId) async {
-    final response = await http.getMethod(('/indexes/$uid/updates/$updateId'));
+    final response = await http.getMethod(('/tasks/$updateId'));
 
     return UpdateStatus.fromMap(response.data);
   }

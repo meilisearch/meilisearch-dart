@@ -16,10 +16,10 @@ abstract class MeiliSearchIndex {
   set primaryKey(String? primaryKey);
 
   /// Update the primary Key of the index.
-  Future<void> update({String primaryKey});
+  Future<PendingUpdate> update({String primaryKey});
 
   /// Delete the index.
-  Future<void> delete();
+  Future<PendingUpdate> delete();
 
   /// Search for documents matching a specific query in the index.
   Future<SearchResult> search<T>(
