@@ -77,7 +77,7 @@ abstract class MeiliSearchClient {
       List<String>? actions});
 
   /// Delete a key
-  Future<bool> deleteKey(Key key);
+  Future<bool> deleteKey(String key);
 
   /// Get the MeiliSearch version
   Future<Map<String, String>> getVersion();

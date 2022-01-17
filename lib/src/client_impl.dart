@@ -180,8 +180,8 @@ class MeiliSearchClientImpl implements MeiliSearchClient {
   }
 
   @override
-  Future<bool> deleteKey(Key key) async {
-    final response = await http.deleteMethod('/keys/${key.key}');
+  Future<bool> deleteKey(String key) async {
+    final response = await http.deleteMethod('/keys/${key}');
 
     return response.statusCode == 204;
   }
