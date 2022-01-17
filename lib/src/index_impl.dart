@@ -301,8 +301,7 @@ class MeiliSearchIndexImpl implements MeiliSearchIndex {
   }
 
   @override
-  Future<TaskInfo> updateDistinctAttribute(
-      String distinctAttribute) async {
+  Future<TaskInfo> updateDistinctAttribute(String distinctAttribute) async {
     return await _update(http.postMethod(
         '/indexes/$uid/settings/distinct-attribute',
         data: '"$distinctAttribute"'));
@@ -384,8 +383,7 @@ class MeiliSearchIndexImpl implements MeiliSearchIndex {
   }
 
   @override
-  Future<TaskInfo> updateSynonyms(
-      Map<String, List<String>> synonyms) async {
+  Future<TaskInfo> updateSynonyms(Map<String, List<String>> synonyms) async {
     return await _update(
         http.postMethod('/indexes/$uid/settings/synonyms', data: synonyms));
   }

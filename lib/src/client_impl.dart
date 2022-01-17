@@ -172,8 +172,8 @@ class MeiliSearchClientImpl implements MeiliSearchClient {
       if (actions != null) 'actions': actions,
     };
 
-    final response =
-        await http.patchMethod<Map<String, dynamic>>('/keys/${key}', data: data);
+    final response = await http
+        .patchMethod<Map<String, dynamic>>('/keys/${key}', data: data);
 
     return Key.fromJson(response.data!);
   }

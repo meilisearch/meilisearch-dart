@@ -87,8 +87,7 @@ abstract class MeiliSearchIndex {
   Future<TaskInfo> resetDisplayedAttributes();
 
   /// Update the displayed attributes of the index.
-  Future<TaskInfo> updateDisplayedAttributes(
-      List<String> displayedAttributes);
+  Future<TaskInfo> updateDisplayedAttributes(List<String> displayedAttributes);
 
   /// Get the distinct attribute for the index.
   Future<String?> getDistinctAttribute();
@@ -143,8 +142,7 @@ abstract class MeiliSearchIndex {
   Future<TaskInfo> resetSortableAttributes();
 
   /// Update sortable attributes of the index.
-  Future<TaskInfo> updateSortableAttributes(
-      List<String> sortableAttributes);
+  Future<TaskInfo> updateSortableAttributes(List<String> sortableAttributes);
 
   /// Reset the settings of the index.
   /// All settings will be reset to their default value.
