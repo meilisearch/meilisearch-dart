@@ -160,9 +160,9 @@ abstract class MeiliSearchIndex {
   /// Get stats of the index.
   Future<IndexStats> getStats();
 
-  /// Get all update status.
-  Future<List<Task>?> getAllUpdateStatus();
+  /// Get all tasks from the index.
+  Future<List<Task>> getTasks();
 
-  /// Gets an update status based on the update id.
-  Future<Task> getUpdateStatus(int updateId);
+  /// Get a task based on the update id.
+  Future<Task> getTask(int updateId);
 }

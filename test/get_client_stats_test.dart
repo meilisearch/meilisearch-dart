@@ -1,3 +1,4 @@
+import 'package:meilisearch/src/task.dart';
 import 'package:test/test.dart';
 
 import 'utils/client.dart';
@@ -23,6 +24,25 @@ void main() {
       final stats = await client.getStats();
       expect(stats.indexes!.length, 2);
       expect(stats.indexes!.keys, containsAll([uid1, uid2]));
+    });
+
+    test('gets all tasks', () async {
+      final uid = randomUid();
+      await client.createIndex(uid);
+
+      final tasks = await client.getTasks();
+
+      expect(tasks.length, greaterThan(0));
+    });
+
+    test('gets a task by taskId', () async {
+      final uid = randomUid();
+      final info = await client.createIndex(uid);
+
+      final task = await client.getTask(info.updateId);
+
+      expect(task, isA<Task>());
+      expect(task.updateId, equals(info.updateId));
     });
   });
 }

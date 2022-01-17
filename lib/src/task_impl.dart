@@ -17,6 +17,6 @@ class TaskImpl implements TaskInfo {
 
   @override
   Future<Task> getStatus() async {
-    return index.getUpdateStatus(updateId);
+    return index.getTask(updateId);
   }
 }

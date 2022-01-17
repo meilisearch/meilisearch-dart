@@ -27,7 +27,7 @@ Future<void> deleteAllKeys() async {
   var keys = await client.getKeys();
 
   for (var item in keys) {
-    await client.deleteKey(item);
+    await client.deleteKey(item.key);
   }
 }
 

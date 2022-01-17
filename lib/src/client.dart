@@ -1,4 +1,5 @@
 import 'package:meilisearch/src/key.dart';
+import 'package:meilisearch/src/task.dart';
 import 'package:meilisearch/src/task_info.dart';
 
 import 'http_request.dart';
@@ -76,11 +77,17 @@ abstract class MeiliSearchClient {
       List<String>? actions});
 
   /// Delete a key
-  Future<bool> deleteKey(Key key);
+  Future<bool> deleteKey(String key);
 
   /// Get the MeiliSearch version
   Future<Map<String, String>> getVersion();
 
   /// Get all index stats.
   Future<AllStats> getStats();
+
+  /// Get all tasks.
+  Future<List<Task>> getTasks();
+
+  /// Get a task based on the update id.
+  Future<Task> getTask(int updateId);
 }

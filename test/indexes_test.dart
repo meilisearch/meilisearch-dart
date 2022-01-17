@@ -119,7 +119,7 @@ void main() {
       expect(stats.numberOfDocuments, 2);
     });
 
-    test('Getting all update statuses', () async {
+    test('gets all tasks by index', () async {
       final uid = randomUid();
       await client.createIndex(uid).waitFor();
       final index = await client.getIndex(uid);
@@ -130,20 +130,24 @@ void main() {
       await index.addDocuments([
         {'book_id': 5678}
       ]);
-      final update_status = await index.getAllUpdateStatus();
-      expect(update_status!.length, 3);
+
+      final tasks = await index.getTasks();
+
+      expect(tasks.length, 3);
     });
 
-    test('Getting update status', () async {
+    test('gets a task from a index by taskId', () async {
       final index = client.index(randomUid());
       final response = await index.addDocuments([
         {'book_id': 1234, 'title': 'Pride and Prejudice'}
       ]);
-      final update_status = await index.getUpdateStatus(response.updateId);
-      expect(update_status.updateId, response.updateId);
+
+      final task = await index.getTask(response.updateId);
+
+      expect(task.updateId, response.updateId);
     });
 
-    test('Getting a failing update status', () async {
+    test('gets a task with a failure', () async {
       final index = client.index(randomUid());
       final response =
           await index.updateRankingRules(['wrong_ranking_rules']).waitFor();
@@ -156,7 +160,7 @@ void main() {
       await client.createIndex(uid).waitFor();
       final index = await client.getIndex(uid);
 
-      expect(() async => await index.getUpdateStatus(9999),
+      expect(() async => await index.getTask(9999),
           throwsA(isA<MeiliSearchApiException>()));
     });
   });

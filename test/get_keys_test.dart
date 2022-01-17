@@ -86,7 +86,7 @@ void main() {
       test('deletes a key', () async {
         final key = await client.createKey(actions: ["*"], indexes: ["*"]);
 
-        expect(await client.deleteKey(key), isTrue);
+        expect(await client.deleteKey(key.key), isTrue);
       });
     });
 

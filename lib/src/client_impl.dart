@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:meilisearch/src/client_task_impl.dart';
+import 'package:meilisearch/src/task.dart';
 import 'package:meilisearch/src/task_info.dart';
 
 import 'http_request.dart';
@@ -179,9 +180,29 @@ class MeiliSearchClientImpl implements MeiliSearchClient {
   }
 
   @override
-  Future<bool> deleteKey(Key key) async {
-    final response = await http.deleteMethod('/keys/${key.key}');
+  Future<bool> deleteKey(String key) async {
+    final response = await http.deleteMethod('/keys/${key}');
 
     return response.statusCode == 204;
+  }
+
+  ///
+  /// Tasks endpoints
+  ///
+
+  @override
+  Future<List<Task>> getTasks() async {
+    final response = await http.getMethod('/tasks');
+
+    return (response.data['results'] as List)
+        .map((update) => Task.fromMap(update))
+        .toList();
+  }
+
+  @override
+  Future<Task> getTask(int updateId) async {
+    final response = await http.getMethod(('/tasks/$updateId'));
+
+    return Task.fromMap(response.data);
   }
 }
