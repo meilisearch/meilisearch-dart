@@ -22,7 +22,7 @@ var booksDoc = [
 Future<MeiliSearchIndex> createBooksIndex() async {
   final index = client.index(randomUid());
   final response = await index.addDocuments(booksDoc).waitFor();
-  if (response.status != 'processed') {
+  if (response.status != 'succeeded') {
     throw Exception(
         'Impossible to process test suite, the documents were not added into the index.');
   }
