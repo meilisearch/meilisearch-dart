@@ -1,4 +1,5 @@
 import 'package:meilisearch/src/pending_update.dart';
+import 'package:meilisearch/src/key.dart';
 
 import 'http_request.dart';
 import 'index.dart';
@@ -55,7 +56,27 @@ abstract class MeiliSearchClient {
   Future<Map<String, String>> getDumpStatus(String uid);
 
   /// Get the public and private keys.
-  Future<Map<String, String>> getKeys();
+  Future<List<Key>> getKeys();
+
+  /// Get a specific key by key.
+  Future<Key> getKey(String key);
+
+  /// Create a new key.
+  Future<Key> createKey(
+      {DateTime? expiresAt,
+      String? description,
+      required List<String> indexes,
+      required List<String> actions});
+
+  /// Update a key.
+  Future<Key> updateKey(String key,
+      {DateTime? expiresAt,
+      String? description,
+      List<String>? indexes,
+      List<String>? actions});
+
+  /// Delete a key
+  Future<bool> deleteKey(Key key);
 
   /// Get the MeiliSearch version
   Future<Map<String, String>> getVersion();

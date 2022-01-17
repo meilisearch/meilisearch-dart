@@ -8,6 +8,7 @@ import 'http_request_impl.dart';
 import 'client.dart';
 import 'index.dart';
 import 'index_impl.dart';
+import 'key.dart';
 import 'stats.dart' show AllStats;
 
 class MeiliSearchClientImpl implements MeiliSearchClient {
@@ -111,9 +112,18 @@ class MeiliSearchClientImpl implements MeiliSearchClient {
   }
 
   @override
-  Future<Map<String, String>> getKeys() async {
+  Future<List<Key>> getKeys() async {
     final response = await http.getMethod<Map<String, dynamic>>('/keys');
-    return response.data!.map((k, v) => MapEntry(k, v.toString()));
+
+    return List<Key>.from(
+        response.data!['results'].map((model) => Key.fromJson(model)));
+  }
+
+  @override
+  Future<Key> getKey(String key) async {
+    final response = await http.getMethod<Map<String, dynamic>>('/keys/${key}');
+
+    return Key.fromJson(response.data!);
   }
 
   @override
@@ -127,5 +137,51 @@ class MeiliSearchClientImpl implements MeiliSearchClient {
     final response = await http.getMethod('/stats');
 
     return AllStats.fromMap(response.data);
+  }
+
+  @override
+  Future<Key> createKey(
+      {DateTime? expiresAt,
+      String? description,
+      required List<String> indexes,
+      required List<String> actions}) async {
+    final data = <String, dynamic>{
+      'expiresAt': expiresAt?.toIso8601String().split('.').first,
+      if (description != null) 'description': description,
+      'indexes': indexes,
+      'actions': actions,
+    };
+
+    final response =
+        await http.postMethod<Map<String, dynamic>>('/keys', data: data);
+
+    return Key.fromJson(response.data!);
+  }
+
+  @override
+  Future<Key> updateKey(String key,
+      {DateTime? expiresAt,
+      String? description,
+      List<String>? indexes,
+      List<String>? actions}) async {
+    final data = <String, dynamic>{
+      if (expiresAt != null)
+        'expiresAt': expiresAt.toIso8601String().split('.').first,
+      if (description != null) 'description': description,
+      if (indexes != null) 'indexes': indexes,
+      if (actions != null) 'actions': actions,
+    };
+
+    final response =
+        await http.patchMethod<Map<String, dynamic>>('/keys/${key}', data: data);
+
+    return Key.fromJson(response.data!);
+  }
+
+  @override
+  Future<bool> deleteKey(Key key) async {
+    final response = await http.deleteMethod('/keys/${key.key}');
+
+    return response.statusCode == 204;
   }
 }
