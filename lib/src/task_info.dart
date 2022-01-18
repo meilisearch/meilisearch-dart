@@ -1,7 +1,7 @@
 import 'task.dart';
 
 abstract class TaskInfo {
-  int get updateId;
+  int get uid;
 
   Future<Task> getStatus();
 }

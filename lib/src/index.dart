@@ -164,5 +164,5 @@ abstract class MeiliSearchIndex {
   Future<List<Task>> getTasks();
 
   /// Get a task based on the update id.
-  Future<Task> getTask(int updateId);
+  Future<Task> getTask(int uid);
 }

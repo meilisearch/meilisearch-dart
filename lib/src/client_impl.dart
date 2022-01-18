@@ -200,8 +200,8 @@ class MeiliSearchClientImpl implements MeiliSearchClient {
   }
 
   @override
-  Future<Task> getTask(int updateId) async {
-    final response = await http.getMethod(('/tasks/$updateId'));
+  Future<Task> getTask(int uid) async {
+    final response = await http.getMethod(('/tasks/$uid'));
 
     return Task.fromMap(response.data);
   }

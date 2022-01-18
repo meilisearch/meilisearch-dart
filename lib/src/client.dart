@@ -85,9 +85,9 @@ abstract class MeiliSearchClient {
   /// Get all index stats.
   Future<AllStats> getStats();
 
-  /// Get all tasks.
+  /// Get a list of tasks from the client.
   Future<List<Task>> getTasks();
 
-  /// Get a task based on the update id.
-  Future<Task> getTask(int updateId);
+  /// Get a task from an index specified by uid with the specified uid.
+  Future<Task> getTask(int uid);
 }
