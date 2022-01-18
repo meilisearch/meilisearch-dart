@@ -93,11 +93,11 @@ void main() async {
   ]
 
   // If the index 'movies' does not exist, MeiliSearch creates it when you first add the documents.
-  var update = await index.addDocuments(documents); // => { "updateId": 0 }
+  var task = await index.addDocuments(documents); // => { "uid": 0 }
 }
 ```
 
-With the `updateId`, you can check the status (`enqueued`, `processing`, `processed` or `failed`) of your documents addition using the [update endpoint](https://docs.meilisearch.com/reference/api/updates.html#get-an-update-status).
+With the `uid`, you can check the status (`enqueued`, `processing`, `succeeded` or `failed`) of your documents addition using the [task](https://docs.meilisearch.com/reference/api/tasks.html#get-task).
 
 #### Basic Search <!-- omit in toc -->
 
