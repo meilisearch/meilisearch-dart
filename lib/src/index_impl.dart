@@ -432,7 +432,7 @@ class MeiliSearchIndexImpl implements MeiliSearchIndex {
         .toList();
   }
 
-  Future<Task> getTask(int updateId) async {
-    return await client.getTask(updateId);
+  Future<Task> getTask(int uid) async {
+    return await client.getTask(uid);
   }
 }

@@ -142,16 +142,16 @@ void main() {
         {'book_id': 1234, 'title': 'Pride and Prejudice'}
       ]);
 
-      final task = await index.getTask(response.updateId);
+      final task = await index.getTask(response.uid);
 
-      expect(task.updateId, response.updateId);
+      expect(task.uid, response.uid);
     });
 
     test('gets a task with a failure', () async {
       final index = client.index(randomUid());
       final response =
           await index.updateRankingRules(['wrong_ranking_rules']).waitFor();
-      expect(response.updateId, response.updateId);
+      expect(response.uid, response.uid);
       expect(response.error!.type, 'invalid_request');
     });
 
