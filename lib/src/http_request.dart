@@ -14,6 +14,9 @@ abstract class HttpRequest {
   /// Timeout in milliseconds for opening a url.
   int? get connectTimeout;
 
+  /// Retrieve all headers used when Http calls are made.
+  Map<String, dynamic> headers();
+
   /// GET method
   Future<Response<T>> getMethod<T>(
     String path, {

@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:meilisearch/src/version.dart';
 import 'http_request.dart';
 import 'exception.dart';
 
@@ -24,6 +25,11 @@ class HttpRequestImpl implements HttpRequest {
   final int? connectTimeout;
 
   final Dio dio;
+
+  @override
+  Map<String, dynamic> headers() {
+    return this.dio.options.headers;
+  }
 
   @override
   Future<Response<T>> getMethod<T>(
