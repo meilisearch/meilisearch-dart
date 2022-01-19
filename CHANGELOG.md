@@ -1,3 +1,33 @@
+# 0.5.0
+This version makes this package compatible with MeiliSearch v0.25.0 and newer
+## Changes
+- Add method to responds with raw information from API `client.getRawIndex` (#124) @brunoocasali
+- Run a `pub upgrade` in dependencies (#128) @brunoocasali
+- Add support to keys (according to v0.25.0 spec) [more](https://docs.meilisearch.com/reference/api/keys.html#keys) (#121) @brunoocasali
+  - Create a new resource class `Key` to represent keys
+  - Create methods to support keys:
+    - `client.getKeys`
+    - `client.getKey`
+    - `client.createKey`
+    - `client.updateKey`
+    - `client.deleteKey`
+- Add PATCH method support (#121) @brunoocasali
+- Updates regarding code samples:
+  - setting guide sortable (#117) @alallema
+  - added all the changed methods based on the new version v0.25.0 (#126) @brunoocasali
+
+### Breaking changes
+- Remove `getOrCreate` from `MeiliSearchClient` (#119) @brunoocasali
+- Rename `PendingUpdate` to `TaskInfo` (#123) @brunoocasali
+- MeiliSearch v0.25.0 uses `Authorization` header instead of `X-Meili-API-Key` (#121) @brunoocasali
+- Multiple naming changes regarding the v0.25.0 upgrade (#119, #120, #125, #127) @brunoocasali:
+  - `client.getUpdateStatus` to `client.getTask`
+  - `client.getAllUpdateStatus` to `client.getTasks`
+  - `client.getKeys` responds with a `Future<List<Key>>` not `Future<Map<String, String>>`
+  - `index.update`, `index.delete`, `client.createIndex`, `client.deleteIndex` and `client.updateIndex` now responds with `Future<TaskInfo>`
+  - `index.getAllUpdateStatus` to `index.getTasks`
+  - `index.getUpdateStatus` to `index.getTask`
+
 # 0.4.0
 - Rename `errorCode`, `errorType` and `errorLink` into `code`, `type` and `link` in the error handler (#110) @curquiza
 - Changes related to the next MeiliSearch release (v0.24.0) (#109)
