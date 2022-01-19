@@ -20,6 +20,13 @@ abstract class HttpRequest {
     Map<String, dynamic>? queryParameters,
   });
 
+  /// PATCH method
+  Future<Response<T>> patchMethod<T>(
+    String path, {
+    dynamic data,
+    Map<String, dynamic>? queryParameters,
+  });
+
   /// POST method
   Future<Response<T>> postMethod<T>(
     String path, {

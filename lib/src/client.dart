@@ -1,3 +1,7 @@
+import 'package:meilisearch/src/key.dart';
+import 'package:meilisearch/src/task.dart';
+import 'package:meilisearch/src/task_info.dart';
+
 import 'http_request.dart';
 import 'index.dart';
 import 'client_impl.dart';
@@ -30,17 +34,13 @@ abstract class MeiliSearchClient {
 
   /// Create a new index by given [uid] and optional [primaryKey] parameter.
   /// Throws an error if index is already exists.
-  Future<MeiliSearchIndex> createIndex(String uid, {String primaryKey});
-
-  /// Find index by matching [uid]. If index is not exists tries to create a
-  /// new index.
-  Future<MeiliSearchIndex> getOrCreateIndex(String uid, {String primaryKey});
+  Future<TaskInfo> createIndex(String uid, {String primaryKey});
 
   /// Delete the index by matching [uid].
-  Future<void> deleteIndex(String uid);
+  Future<TaskInfo> deleteIndex(String uid);
 
   /// Update the primary Key of the index by matching [uid].
-  Future<void> updateIndex(String uid, String primaryKey);
+  Future<TaskInfo> updateIndex(String uid, String primaryKey);
 
   /// Return health of the MeiliSearch server.
   /// Throws an error if containing details if MeiliSearch can't process your request.
@@ -57,11 +57,37 @@ abstract class MeiliSearchClient {
   Future<Map<String, String>> getDumpStatus(String uid);
 
   /// Get the public and private keys.
-  Future<Map<String, String>> getKeys();
+  Future<List<Key>> getKeys();
+
+  /// Get a specific key by key.
+  Future<Key> getKey(String key);
+
+  /// Create a new key.
+  Future<Key> createKey(
+      {DateTime? expiresAt,
+      String? description,
+      required List<String> indexes,
+      required List<String> actions});
+
+  /// Update a key.
+  Future<Key> updateKey(String key,
+      {DateTime? expiresAt,
+      String? description,
+      List<String>? indexes,
+      List<String>? actions});
+
+  /// Delete a key
+  Future<bool> deleteKey(String key);
 
   /// Get the MeiliSearch version
   Future<Map<String, String>> getVersion();
 
   /// Get all index stats.
   Future<AllStats> getStats();
+
+  /// Get a list of tasks from the client.
+  Future<List<Task>> getTasks();
+
+  /// Get a task from an index specified by uid with the specified uid.
+  Future<Task> getTask(int uid);
 }

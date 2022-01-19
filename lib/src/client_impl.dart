@@ -1,10 +1,15 @@
+import 'package:dio/dio.dart';
+import 'package:meilisearch/src/client_task_impl.dart';
+import 'package:meilisearch/src/task.dart';
+import 'package:meilisearch/src/task_info.dart';
+
 import 'http_request.dart';
 import 'http_request_impl.dart';
 
 import 'client.dart';
 import 'index.dart';
 import 'index_impl.dart';
-import 'exception.dart';
+import 'key.dart';
 import 'stats.dart' show AllStats;
 
 class MeiliSearchClientImpl implements MeiliSearchClient {
@@ -27,19 +32,22 @@ class MeiliSearchClientImpl implements MeiliSearchClient {
     return new MeiliSearchIndexImpl(this, uid);
   }
 
+  Future<TaskInfo> _update(Future<Response> future) async {
+    final response = await future;
+
+    return ClientTaskImpl.fromMap(this, response.data);
+  }
+
   @override
-  Future<MeiliSearchIndex> createIndex(String uid, {String? primaryKey}) async {
+  Future<TaskInfo> createIndex(String uid, {String? primaryKey}) async {
     final data = <String, dynamic>{
       'uid': uid,
       if (primaryKey != null) 'primaryKey': primaryKey,
     };
     data.removeWhere((k, v) => v == null);
-    final response = await http.postMethod<Map<String, dynamic>>(
-      '/indexes',
-      data: data,
-    );
 
-    return MeiliSearchIndexImpl.fromMap(this, response.data!);
+    return await _update(
+        http.postMethod<Map<String, dynamic>>('/indexes', data: data));
   }
 
   @override
@@ -61,30 +69,17 @@ class MeiliSearchClientImpl implements MeiliSearchClient {
   }
 
   @override
-  Future<MeiliSearchIndex> getOrCreateIndex(
-    String uid, {
-    String? primaryKey,
-  }) async {
-    try {
-      return await getIndex(uid);
-    } on MeiliSearchApiException catch (e) {
-      if (e.code != 'index_not_found') {
-        throw (e);
-      }
-      return await createIndex(uid, primaryKey: primaryKey);
-    }
+  Future<TaskInfo> deleteIndex(String uid) async {
+    final index = this.index(uid);
+
+    return await index.delete();
   }
 
   @override
-  Future<void> deleteIndex(String uid) async {
+  Future<TaskInfo> updateIndex(String uid, String primaryKey) async {
     final index = this.index(uid);
-    await index.delete();
-  }
 
-  @override
-  Future<void> updateIndex(String uid, String primaryKey) async {
-    final index = this.index(uid);
-    await index.update(primaryKey: primaryKey);
+    return index.update(primaryKey: primaryKey);
   }
 
   @override
@@ -118,9 +113,18 @@ class MeiliSearchClientImpl implements MeiliSearchClient {
   }
 
   @override
-  Future<Map<String, String>> getKeys() async {
+  Future<List<Key>> getKeys() async {
     final response = await http.getMethod<Map<String, dynamic>>('/keys');
-    return response.data!.map((k, v) => MapEntry(k, v.toString()));
+
+    return List<Key>.from(
+        response.data!['results'].map((model) => Key.fromJson(model)));
+  }
+
+  @override
+  Future<Key> getKey(String key) async {
+    final response = await http.getMethod<Map<String, dynamic>>('/keys/${key}');
+
+    return Key.fromJson(response.data!);
   }
 
   @override
@@ -134,5 +138,71 @@ class MeiliSearchClientImpl implements MeiliSearchClient {
     final response = await http.getMethod('/stats');
 
     return AllStats.fromMap(response.data);
+  }
+
+  @override
+  Future<Key> createKey(
+      {DateTime? expiresAt,
+      String? description,
+      required List<String> indexes,
+      required List<String> actions}) async {
+    final data = <String, dynamic>{
+      'expiresAt': expiresAt?.toIso8601String().split('.').first,
+      if (description != null) 'description': description,
+      'indexes': indexes,
+      'actions': actions,
+    };
+
+    final response =
+        await http.postMethod<Map<String, dynamic>>('/keys', data: data);
+
+    return Key.fromJson(response.data!);
+  }
+
+  @override
+  Future<Key> updateKey(String key,
+      {DateTime? expiresAt,
+      String? description,
+      List<String>? indexes,
+      List<String>? actions}) async {
+    final data = <String, dynamic>{
+      if (expiresAt != null)
+        'expiresAt': expiresAt.toIso8601String().split('.').first,
+      if (description != null) 'description': description,
+      if (indexes != null) 'indexes': indexes,
+      if (actions != null) 'actions': actions,
+    };
+
+    final response = await http
+        .patchMethod<Map<String, dynamic>>('/keys/${key}', data: data);
+
+    return Key.fromJson(response.data!);
+  }
+
+  @override
+  Future<bool> deleteKey(String key) async {
+    final response = await http.deleteMethod('/keys/${key}');
+
+    return response.statusCode == 204;
+  }
+
+  ///
+  /// Tasks endpoints
+  ///
+
+  @override
+  Future<List<Task>> getTasks() async {
+    final response = await http.getMethod('/tasks');
+
+    return (response.data['results'] as List)
+        .map((update) => Task.fromMap(update))
+        .toList();
+  }
+
+  @override
+  Future<Task> getTask(int uid) async {
+    final response = await http.getMethod(('/tasks/$uid'));
+
+    return Task.fromMap(response.data);
   }
 }

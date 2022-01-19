@@ -59,7 +59,7 @@ void main() {
               filterableAttributes: ['tag'],
             ))
             .waitFor();
-        expect(response.status, 'processed');
+        expect(response.status, 'succeeded');
         var result = await index.search('prince', filter: 'tag = Tale');
         expect(result.hits, hasLength(1));
       });
@@ -71,7 +71,7 @@ void main() {
               filterableAttributes: ['tag', 'book_id'],
             ))
             .waitFor();
-        expect(response.status, 'processed');
+        expect(response.status, 'succeeded');
         var result =
             await index.search('', filter: 'book_id < 100 AND tag = Tale');
         expect(result.hits, hasLength(1));
@@ -84,7 +84,7 @@ void main() {
               filterableAttributes: ['tag'],
             ))
             .waitFor();
-        expect(response.status, 'processed');
+        expect(response.status, 'succeeded');
         var result = await index.search('prince', filter: ['tag = Tale']);
         expect(result.hits, hasLength(1));
       });
@@ -96,7 +96,7 @@ void main() {
               filterableAttributes: ['tag'],
             ))
             .waitFor();
-        expect(response.status, 'processed');
+        expect(response.status, 'succeeded');
         var result = await index.search('prince', filter: [
           ['tag = Tale', 'tag = Tale'],
           'tag = Tale'
@@ -111,7 +111,7 @@ void main() {
               filterableAttributes: ['tag'],
             ))
             .waitFor();
-        expect(response.status, 'processed');
+        expect(response.status, 'succeeded');
         var result = await index.search('prince', facetsDistribution: ['*']);
         expect(result.hits, hasLength(2));
       });
@@ -130,7 +130,7 @@ void main() {
               'exactness'
             ]))
             .waitFor();
-        expect(response.status, 'processed');
+        expect(response.status, 'succeeded');
         var result = await index.search('prince', sort: ['title:asc']);
         expect(result.hits, hasLength(2));
         expect(result.hits![0]['book_id'], 4);

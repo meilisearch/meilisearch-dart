@@ -7,7 +7,7 @@ class HttpRequestImpl implements HttpRequest {
       : dio = Dio(BaseOptions(
           baseUrl: serverUrl,
           headers: <String, dynamic>{
-            if (apiKey != null) 'X-Meili-API-Key': apiKey,
+            if (apiKey != null) 'Authorization': 'Bearer ${apiKey}',
             'Content-Type': 'application/json',
           },
           responseType: ResponseType.json,
@@ -51,6 +51,25 @@ class HttpRequestImpl implements HttpRequest {
     var response;
     try {
       response = await dio.post<T>(
+        path,
+        data: data,
+        queryParameters: queryParameters,
+      );
+    } on DioError catch (e) {
+      throwException(e);
+    }
+    return await response;
+  }
+
+  @override
+  Future<Response<T>> patchMethod<T>(
+    String path, {
+    dynamic data,
+    Map<String, dynamic>? queryParameters,
+  }) async {
+    var response;
+    try {
+      response = await dio.patch<T>(
         path,
         data: data,
         queryParameters: queryParameters,
