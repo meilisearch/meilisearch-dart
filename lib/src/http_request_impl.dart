@@ -10,6 +10,7 @@ class HttpRequestImpl implements HttpRequest {
           headers: <String, dynamic>{
             if (apiKey != null) 'Authorization': 'Bearer ${apiKey}',
             'Content-Type': 'application/json',
+            'User-Agent': Version.qualifiedVersion,
           },
           responseType: ResponseType.json,
           connectTimeout: connectTimeout ?? 0,
