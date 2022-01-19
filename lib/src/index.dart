@@ -163,6 +163,6 @@ abstract class MeiliSearchIndex {
   /// Get all tasks from the index.
   Future<List<Task>> getTasks();
 
-  /// Get a task based on the update id.
+  /// Get a task from an index specified by uid.
   Future<Task> getTask(int uid);
 }
