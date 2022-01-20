@@ -1,3 +1,6 @@
+# 0.5.1
+- Add `User-Agent` header to have analytics in every http request (#129) @brunoocasali
+
 # 0.5.0
 This version makes this package compatible with MeiliSearch v0.25.0 and newer
 ## Changes
