@@ -105,6 +105,12 @@ _[Read more about this](https://github.com/meilisearch/integration-guides/blob/m
 
 Make a PR modifying the version in:
 
+- the file [`lib/src/version.dart:2`](./lib/src/version.dart).
+
+```dart
+static const String current = 'X.X.X';
+```
+
 - the file [`pubspec.yaml`](./pubspec.yaml).
 
 ```yaml

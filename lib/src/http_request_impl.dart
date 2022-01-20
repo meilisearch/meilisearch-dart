@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:meilisearch/src/version.dart';
 import 'http_request.dart';
 import 'exception.dart';
 
@@ -9,6 +10,7 @@ class HttpRequestImpl implements HttpRequest {
           headers: <String, dynamic>{
             if (apiKey != null) 'Authorization': 'Bearer ${apiKey}',
             'Content-Type': 'application/json',
+            'User-Agent': Version.qualifiedVersion,
           },
           responseType: ResponseType.json,
           connectTimeout: connectTimeout ?? 0,
@@ -24,6 +26,11 @@ class HttpRequestImpl implements HttpRequest {
   final int? connectTimeout;
 
   final Dio dio;
+
+  @override
+  Map<String, dynamic> headers() {
+    return this.dio.options.headers;
+  }
 
   @override
   Future<Response<T>> getMethod<T>(
