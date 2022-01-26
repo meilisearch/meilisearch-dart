@@ -5,10 +5,10 @@ abstract class HttpRequest {
   factory HttpRequest(String serverUrl, String apiKey, [int connectTimeout]) =
       HttpRequestImpl;
 
-  /// MeiliSearch server URL.
+  /// Meilisearch server URL.
   String get serverUrl;
 
-  /// API key for authenticating with MeiliSearch server.
+  /// API key for authenticating with Meilisearch server.
   String? get apiKey;
 
   /// Timeout in milliseconds for opening a url.

@@ -5,7 +5,7 @@
 <h1 align="center">Meilisearch Dart</h1>
 
 <h4 align="center">
-  <a href="https://github.com/meilisearch/Meilisearch">Meilisearch</a> |
+  <a href="https://github.com/meilisearch/meilisearch">Meilisearch</a> |
   <a href="https://docs.meilisearch.com">Documentation</a> |
   <a href="https://slack.meilisearch.com">Slack</a> |
   <a href="https://roadmap.meilisearch.com/tabs/1-under-consideration">Roadmap</a> |
@@ -24,7 +24,7 @@
 
 **Meilisearch Dart** is the Meilisearch API client for Dart and Flutter developers.
 
-**Meilisearch** is an open-source search engine. [Discover what Meilisearch is!](https://github.com/meilisearch/Meilisearch)
+**Meilisearch** is an open-source search engine. [Discover what Meilisearch is!](https://github.com/meilisearch/meilisearch)
 
 ## Table of Contents <!-- omit in toc -->
 
@@ -78,7 +78,7 @@ NB: you can also download Meilisearch from **Homebrew** or **APT** or even run i
 import 'package:meilisearch/meilisearch.dart';
 
 void main() async {
-  var client = MeilisearchClient('http://127.0.0.1:7700', 'masterKey');
+  var client = MeiliSearchClient('http://127.0.0.1:7700', 'masterKey');
 
   // An index is where the documents are stored.
   var index = client.index('movies');
@@ -154,7 +154,7 @@ JSON output:
 
 ## 🤖 Compatibility with Meilisearch
 
-This package only guarantees the compatibility with the [version v0.25.0 of Meilisearch](https://github.com/meilisearch/Meilisearch/releases/tag/v0.25.0).
+This package only guarantees the compatibility with the [version v0.25.0 of Meilisearch](https://github.com/meilisearch/meilisearch/releases/tag/v0.25.0).
 
 ## 💡 Learn More
 

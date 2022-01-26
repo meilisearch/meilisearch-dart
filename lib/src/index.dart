@@ -151,7 +151,7 @@ abstract class MeiliSearchIndex {
   /// Update the settings of the index. Any parameters not provided in the body will be left unchanged.
   Future<TaskInfo> updateSettings(IndexSettings settings);
 
-  /// Get the information of the index from the MeiliSearch server and return it.
+  /// Get the information of the index from the Meilisearch server and return it.
   Future<MeiliSearchIndex> fetchInfo();
 
   /// Update the primaryKey of the index and return it.

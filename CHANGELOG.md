@@ -2,7 +2,7 @@
 - Add `User-Agent` header to have analytics in every http request (#129) @brunoocasali
 
 # 0.5.0
-This version makes this package compatible with MeiliSearch v0.25.0 and newer
+This version makes this package compatible with Meilisearch v0.25.0 and newer
 ## Changes
 - Add method to responds with raw information from API `client.getRawIndex` (#124) @brunoocasali
 - Run a `pub upgrade` in dependencies (#128) @brunoocasali
@@ -22,7 +22,7 @@ This version makes this package compatible with MeiliSearch v0.25.0 and newer
 ### Breaking changes
 - Remove `getOrCreate` from `MeiliSearchClient` (#119) @brunoocasali
 - Rename `PendingUpdate` to `TaskInfo` (#123) @brunoocasali
-- MeiliSearch v0.25.0 uses `Authorization` header instead of `X-Meili-API-Key` (#121) @brunoocasali
+- Meilisearch v0.25.0 uses `Authorization` header instead of `X-Meili-API-Key` (#121) @brunoocasali
 - Multiple naming changes regarding the v0.25.0 upgrade (#119, #120, #125, #127) @brunoocasali:
   - `client.getUpdateStatus` to `client.getTask`
   - `client.getAllUpdateStatus` to `client.getTasks`
@@ -33,20 +33,20 @@ This version makes this package compatible with MeiliSearch v0.25.0 and newer
 
 # 0.4.0
 - Rename `errorCode`, `errorType` and `errorLink` into `code`, `type` and `link` in the error handler (#110) @curquiza
-- Changes related to the next MeiliSearch release (v0.24.0) (#109)
+- Changes related to the next Meilisearch release (v0.24.0) (#109)
 
 # 0.3.2
-- Add json content type by default as header to make it compatible with MeiliSearch v0.23.0 (#89) @curquiza
+- Add json content type by default as header to make it compatible with Meilisearch v0.23.0 (#89) @curquiza
 
 # 0.3.1
 - Fixed cropLength type (#79) @sanders41
 - Fix distinctAttribute in settings (#77) @sanders41
-- Changes related to the next MeiliSearch release (v0.22.0) (#82)
+- Changes related to the next Meilisearch release (v0.22.0) (#82)
   - Added sortable attributes (#83) @sanders41
   - Add `sort` parameter (#84) @curquiza
 
 # 0.3.0
-This version makes this package compatible with MeiliSearch v0.21.0
+This version makes this package compatible with Meilisearch v0.21.0
 ### Changes
 - Update PendingUpdateX (#62) @alallema
 - Adding option to specify a connectTimeout duration (#59) @sanders41
@@ -60,7 +60,7 @@ This version makes this package compatible with MeiliSearch v0.21.0
 - Rename attributes_for_faceting into filterable_attributes (#61) @alallema
 - Rename Filters into Filter (#63) @alallema
 - Rename attributes for faceting into filterable attributes (#71) @curquiza
-- Changes related to the next MeiliSearch release (v0.21.0) (#40)
+- Changes related to the next Meilisearch release (v0.21.0) (#40)
 
 # 0.2.1
 - Changes due to the implicit index creation (#48) @alallema

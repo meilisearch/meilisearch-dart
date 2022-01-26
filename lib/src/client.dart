@@ -14,7 +14,7 @@ abstract class MeiliSearchClient {
   /// Http client instance.
   HttpRequest get http;
 
-  /// MeiliSearch server URL.
+  /// Meilisearch server URL.
   String get serverUrl;
 
   /// Master key for authenticating with meilisearch server.
@@ -46,11 +46,11 @@ abstract class MeiliSearchClient {
   /// Update the primary Key of the index by matching [uid].
   Future<TaskInfo> updateIndex(String uid, String primaryKey);
 
-  /// Return health of the MeiliSearch server.
-  /// Throws an error if containing details if MeiliSearch can't process your request.
+  /// Return health of the Meilisearch server.
+  /// Throws an error if containing details if Meilisearch can't process your request.
   Future<Map<String, dynamic>> health();
 
-  /// Get health of the MeiliSearch server.
+  /// Get health of the Meilisearch server.
   /// Return true or false.
   Future<bool> isHealthy();
 
@@ -83,7 +83,7 @@ abstract class MeiliSearchClient {
   /// Delete a key
   Future<bool> deleteKey(String key);
 
-  /// Get the MeiliSearch version
+  /// Get the Meilisearch version
   Future<Map<String, String>> getVersion();
 
   /// Get all index stats.
