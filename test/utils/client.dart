@@ -35,7 +35,7 @@ Future<void> setUpClient() async {
   setUp(() {
     final String server = testServer;
 
-    print('Using MeiliSearch server on $server for running tests.');
+    print('Using Meilisearch server on $server for running tests.');
 
     client = MeiliSearchClient(server, 'masterKey');
     random = Random();

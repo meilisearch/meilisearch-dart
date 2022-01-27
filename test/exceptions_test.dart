@@ -8,7 +8,7 @@ void main() {
   setUpHttp();
   setUpClient();
   group('Exceptions', () {
-    test('Throw exception with the detailed information from MeiliSearch',
+    test('Throw exception with the detailed information from Meilisearch',
         () async {
       expect(
           () async => await client.getIndex('wrongUID'),

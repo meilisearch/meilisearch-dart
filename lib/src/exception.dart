@@ -50,6 +50,6 @@ class CommunicationException implements Exception {
 
   @override
   String toString() {
-    return 'An error occurred while trying to connect to the MeiliSearch instance: $message';
+    return 'An error occurred while trying to connect to the Meilisearch instance: $message';
   }
 }

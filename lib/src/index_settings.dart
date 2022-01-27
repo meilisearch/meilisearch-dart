@@ -15,7 +15,7 @@ class IndexSettings {
   /// List of associated words treated similarly
   Map<String, List<String>>? synonyms;
 
-  /// List of words ignored by MeiliSearch when present in search queries
+  /// List of words ignored by Meilisearch when present in search queries
   List<String>? stopWords;
 
   /// List of ranking rules sorted by order of importance
