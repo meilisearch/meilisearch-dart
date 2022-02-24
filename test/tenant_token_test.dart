@@ -84,7 +84,7 @@ void main() {
 
       test('generates a signed token with a given expiration', () {
         final key = sha1RandomString();
-        final tomorrow = DateTime.now().add(new Duration(days: 1));
+        final tomorrow = DateTime.now().add(new Duration(days: 1)).toUtc();
         final token = generateToken(_searchRules, key, expiresAt: tomorrow);
 
         expect(() => JWT.verify(token, SecretKey(key), checkExpiresIn: true),
@@ -108,6 +108,13 @@ void main() {
             throwsA(isA<ExpiredSignatureException>()));
       });
 
+      test('throws NotUTCException if expiresAt are in localDate', () {
+        final key = sha1RandomString();
+        final localDate = DateTime(2300, 1, 20);
+
+        expect(() => generateToken(_searchRules, key, expiresAt: localDate),
+            throwsA(isA<NotUTCException>()));
+      });
       test('contains apiKeyPrefix claim', () {
         final key = sha1RandomString();
         final token = generateToken(_searchRules, key);

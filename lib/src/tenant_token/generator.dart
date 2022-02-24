@@ -5,9 +5,10 @@ final _jsonEncoder = json.fuse(utf8.fuse(base64Url));
 final _HEADER = {"typ": 'JWT', "alg": 'HS256'};
 
 int? _getTimestamp(DateTime? time) {
-  final now = DateTime.now();
+  final now = DateTime.now().toUtc();
 
   if (time == null) return null;
+  if (!time.isUtc) throw NotUTCException();
   if (time.isBefore(now)) throw ExpiredSignatureException();
 
   return time.millisecondsSinceEpoch;
