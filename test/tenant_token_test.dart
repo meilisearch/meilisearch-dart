@@ -12,6 +12,61 @@ void main() {
   group('Tenant Tokens', () {
     setUpClient();
 
+    final List<dynamic> possibleRules = [
+      {'*': {}},
+      {'*': null},
+      ['*'],
+      {
+        '*': {"filter": 'tag = Tale'}
+      },
+      {"books": {}},
+      {"books": null},
+      ['books'],
+      {
+        "books": {"filter": 'tag = comedy AND book_id = 1'}
+      }
+    ];
+
+    group('client.generateTenantToken', () {
+      test('decodes successfully using apiKey from instance', () {
+        final token = client.generateTenantToken(_searchRules);
+
+        expect(() => JWT.verify(token, SecretKey(client.apiKey!)),
+            returnsNormally);
+      });
+
+      test('decodes successfully using apiKey from param', () {
+        final key = sha1RandomString();
+        final token = client.generateTenantToken(_searchRules, apiKey: key);
+
+        expect(() => JWT.verify(token, SecretKey(key)), returnsNormally);
+      });
+
+      test('throws InvalidApiKeyException if all given keys are invalid', () {
+        final custom = MeiliSearchClient(testServer, null);
+
+        expect(() => custom.generateTenantToken(_searchRules),
+            throwsA(isA<InvalidApiKeyException>()));
+      });
+
+      test('invokes search successfully with the new token', () async {
+        final admKey = await client.createKey(indexes: ["*"], actions: ["*"]);
+        final admClient = MeiliSearchClient(testServer, admKey.key);
+        await createBooksIndex(uid: 'books');
+        await admClient
+            .index('books')
+            .updateFilterableAttributes(['tag', 'book_id']).waitFor();
+
+        possibleRules.forEach((data) async {
+          final token = admClient.generateTenantToken(data);
+          final custom = MeiliSearchClient(testServer, token);
+
+          expect(() async => await custom.index('books').search(''),
+              returnsNormally);
+        });
+      });
+    });
+
     group('tenant_token.generateToken', () {
       test('generates a signed token with given key', () {
         final key = sha1RandomString();
