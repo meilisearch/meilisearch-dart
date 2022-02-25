@@ -34,9 +34,6 @@ Future<void> deleteAllKeys() async {
 Future<void> setUpClient() async {
   setUp(() {
     final String server = testServer;
-
-    print('Using Meilisearch server on $server for running tests.');
-
     client = MeiliSearchClient(server, 'masterKey');
     random = Random();
   });
