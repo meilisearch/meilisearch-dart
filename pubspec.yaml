@@ -8,6 +8,8 @@ environment:
 
 dependencies:
   dio: ^4.0.0
+  crypto: ^3.0.1
 
 dev_dependencies:
   test: ^1.0.0
+  dart_jsonwebtoken: ^2.3.2
