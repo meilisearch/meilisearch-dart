@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:meilisearch/src/client_task_impl.dart';
 import 'package:meilisearch/src/task.dart';
 import 'package:meilisearch/src/task_info.dart';
+import 'package:meilisearch/src/tenant_token.dart';
 
 import 'http_request.dart';
 import 'http_request_impl.dart';
@@ -194,6 +195,13 @@ class MeiliSearchClientImpl implements MeiliSearchClient {
     final response = await http.deleteMethod('/keys/${key}');
 
     return response.statusCode == 204;
+  }
+
+  @override
+  String generateTenantToken(dynamic searchRules,
+      {String? apiKey, DateTime? expiresAt}) {
+    return generateToken(searchRules, apiKey ?? this.apiKey ?? '',
+        expiresAt: expiresAt);
   }
 
   ///

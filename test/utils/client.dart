@@ -1,6 +1,8 @@
+import 'dart:convert';
 import 'dart:io';
 import 'dart:math';
 
+import 'package:crypto/crypto.dart';
 import 'package:meilisearch/src/http_request_impl.dart';
 import 'package:meilisearch/src/http_request.dart';
 import 'package:meilisearch/meilisearch.dart';
@@ -69,6 +71,14 @@ Future<void> setUpClientWithWrongUrl() async {
 
 String randomUid([String prefix = 'index']) {
   return '${prefix}_${random.nextInt(9999)}';
+}
+
+// Stolen from: https://www.kindacode.com/article/flutter-dart-ways-to-generate-random-strings/
+String sha1RandomString() {
+  final randomNumber = random.nextDouble();
+  final randomBytes = utf8.encode(randomNumber.toString());
+
+  return sha1.convert(randomBytes).toString();
 }
 
 extension TaskWaiter on TaskInfo {

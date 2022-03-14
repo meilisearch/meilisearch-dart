@@ -19,8 +19,8 @@ var booksDoc = [
   }
 ];
 
-Future<MeiliSearchIndex> createBooksIndex() async {
-  final index = client.index(randomUid());
+Future<MeiliSearchIndex> createBooksIndex({String? uid}) async {
+  final index = client.index(uid ?? randomUid());
   final response = await index.addDocuments(booksDoc).waitFor();
   if (response.status != 'succeeded') {
     throw Exception(
