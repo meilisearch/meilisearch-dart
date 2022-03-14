@@ -1,3 +1,7 @@
+# 0.5.2
+- * Added new method `generateTenantToken()` as a result of the addition of the multi-tenant functionality.
+This method creates a JWT tenant token that will allow the user to have multi-tenant indexes and thus restrict access to documents based on the end-user making the search request. (#139) @brunoocasali
+
 # 0.5.1
 - Add `User-Agent` header to have analytics in every http request (#129) @brunoocasali
 
