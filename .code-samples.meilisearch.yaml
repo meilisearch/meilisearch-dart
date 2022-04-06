@@ -8,7 +8,7 @@ get_one_index_1: |-
 list_all_indexes_1: |-
   await client.getIndexes();
 create_an_index_1: |-
-  await client.createIndex('movies', primaryKey: 'movie_id');
+  await client.createIndex('movies');
 update_an_index_1: |-
   await client.index('movies').update(primaryKey: 'movie_review_id');
 delete_an_index_1: |-
