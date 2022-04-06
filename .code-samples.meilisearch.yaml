@@ -70,8 +70,8 @@ update_settings_1: |-
           'rank:desc'
         ],
         distinctAttribute: 'movie_id',
-        searchableAttributes: ['title', 'description', 'genre'],
-        displayedAttributes: ['title', 'description', 'genre', 'release_date'],
+        searchableAttributes: ['title', 'overview', 'genres'],
+        displayedAttributes: ['title', 'overview', 'genres', 'release_date'],
         stopWords: ['the', 'a', 'an'],
         sortableAttributes: ['title', 'release_date'],
         synonyms: {
@@ -134,8 +134,8 @@ get_searchable_attributes_1: |-
 update_searchable_attributes_1: |-
   await client.index('movies').updateSearchableAttributes([
     'title',
-    'description',
-    'uid'
+    'overview',
+    'genres'
   ]);
 reset_searchable_attributes_1: |-
   await client.index('movies').resetSearchable_Attributes();
@@ -144,8 +144,8 @@ get_displayed_attributes_1: |-
 update_displayed_attributes_1: |-
   await client.index('movies').updateDisplayedAttributes([
     'title',
-    'description',
-    'genre',
+    'overview',
+    'genres',
     'release_date'
   ]);
 reset_displayed_attributes_1: |-
@@ -164,10 +164,10 @@ distinct_attribute_guide_1: |-
       .updateSettings(IndexSettings(distinctAttribute: 'product_id'));
 field_properties_guide_searchable_1: |-
   await client.index('movies').updateSettings(
-      IndexSettings(searchableAttributes: ['title', 'description', 'genre']));
+      IndexSettings(searchableAttributes: ['title', 'overview', 'genres']));
 field_properties_guide_displayed_1: |-
   await client.index('movies').updateSettings(IndexSettings(
-      displayedAttributes: ['title', 'description', 'genre', 'release_date']));
+      displayedAttributes: ['title', 'overview', 'genres', 'release_date']));
 filtering_guide_1: |-
   await await client
       .index('movies')
@@ -235,10 +235,10 @@ settings_guide_distinct_1: |-
       .updateSettings(IndexSettings(distinctAttribute: 'product_id'));
 settings_guide_searchable_1: |-
   await client.index('movies').updateSettings(
-      IndexSettings(searchableAttributes: ['title', 'description', 'genre']));
+      IndexSettings(searchableAttributes: ['title', 'overview', 'genres']));
 settings_guide_displayed_1: |-
   await client.index('movies').updateSettings(IndexSettings(
-      displayedAttributes: ['title', 'description', 'genre', 'release_date']));
+      displayedAttributes: ['title', 'overview', 'genres', 'release_date']));
 settings_guide_sortable_1: |-
   await client
       .index('books')
