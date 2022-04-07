@@ -8,9 +8,9 @@ get_one_index_1: |-
 list_all_indexes_1: |-
   await client.getIndexes();
 create_an_index_1: |-
-  await client.createIndex('movies', primaryKey: 'movie_id');
+  await client.createIndex('movies', primaryKey: 'id');
 update_an_index_1: |-
-  await client.index('movies').update(primaryKey: 'movie_review_id');
+  await client.index('movies').update(primaryKey: 'id');
 delete_an_index_1: |-
   await client.index('movies').delete();
 get_one_document_1: |-
@@ -70,8 +70,8 @@ update_settings_1: |-
           'rank:desc'
         ],
         distinctAttribute: 'movie_id',
-        searchableAttributes: ['title', 'description', 'genre'],
-        displayedAttributes: ['title', 'description', 'genre', 'release_date'],
+        searchableAttributes: ['title', 'overview', 'genres'],
+        displayedAttributes: ['title', 'overview', 'genres', 'release_date'],
         stopWords: ['the', 'a', 'an'],
         sortableAttributes: ['title', 'release_date'],
         synonyms: {
@@ -134,8 +134,8 @@ get_searchable_attributes_1: |-
 update_searchable_attributes_1: |-
   await client.index('movies').updateSearchableAttributes([
     'title',
-    'description',
-    'uid'
+    'overview',
+    'genres'
   ]);
 reset_searchable_attributes_1: |-
   await client.index('movies').resetSearchable_Attributes();
@@ -144,8 +144,8 @@ get_displayed_attributes_1: |-
 update_displayed_attributes_1: |-
   await client.index('movies').updateDisplayedAttributes([
     'title',
-    'description',
-    'genre',
+    'overview',
+    'genres',
     'release_date'
   ]);
 reset_displayed_attributes_1: |-
@@ -164,10 +164,10 @@ distinct_attribute_guide_1: |-
       .updateSettings(IndexSettings(distinctAttribute: 'product_id'));
 field_properties_guide_searchable_1: |-
   await client.index('movies').updateSettings(
-      IndexSettings(searchableAttributes: ['title', 'description', 'genre']));
+      IndexSettings(searchableAttributes: ['title', 'overview', 'genres']));
 field_properties_guide_displayed_1: |-
   await client.index('movies').updateSettings(IndexSettings(
-      displayedAttributes: ['title', 'description', 'genre', 'release_date']));
+      displayedAttributes: ['title', 'overview', 'genres', 'release_date']));
 filtering_guide_1: |-
   await await client
       .index('movies')
@@ -177,10 +177,6 @@ filtering_guide_2: |-
       filter:
           'release_date > 795484800 AND (director = "Tim Burton" OR director = "Christopher Nolan")');
 filtering_guide_3: |-
-  await client
-      .index('movies')
-      .search('horror', filter: 'director = "Jordan Peele"');
-filtering_guide_4: |-
   await client.index('movies').search('Planet of the Apes',
       filter: 'rating >= 3 AND (NOT director = "Tim Burton")');
 search_parameter_guide_query_1: |-
@@ -201,12 +197,6 @@ search_parameter_guide_highlight_1: |-
   await client
       .index('movies')
       .search('winter feast', attributesToHighlight: ['overview']);
-search_parameter_guide_filter_1: |-
-  await client.index('movies').search('n', filter: 'title = Nightshift');
-search_parameter_guide_filter_2: |-
-  await client
-      .index('movies')
-      .search('shifu', filter: 'title = "Kung Fu Panda"');
 search_parameter_guide_matches_1: |-
   await client.index('movies').search('winter feast', matches: true);
 settings_guide_synonyms_1: |-
@@ -235,10 +225,10 @@ settings_guide_distinct_1: |-
       .updateSettings(IndexSettings(distinctAttribute: 'product_id'));
 settings_guide_searchable_1: |-
   await client.index('movies').updateSettings(
-      IndexSettings(searchableAttributes: ['title', 'description', 'genre']));
+      IndexSettings(searchableAttributes: ['title', 'overview', 'genres']));
 settings_guide_displayed_1: |-
   await client.index('movies').updateSettings(IndexSettings(
-      displayedAttributes: ['title', 'description', 'genre', 'release_date']));
+      displayedAttributes: ['title', 'overview', 'genres', 'release_date']));
 settings_guide_sortable_1: |-
   await client
       .index('books')
@@ -254,12 +244,18 @@ documents_guide_add_movie_1: |-
   await client.index('movies').addDocuments([
     {'movie_id': '123sq178', 'title': 'Amélie Poulain'}
   ]);
-search_guide_1: |-
-  await client.index('movies').search('shifu', limit: 5, offset: 10);
-search_guide_2: |-
-  await client
-      .index('movies')
-      .search('Avengers', filter: 'release_date > 795484800');
+document_guide_create_index_primary_key: |-
+  await client.createIndex('movies', primaryKey: 'reference_number');
+document_guide_add_document_primary_key: |-
+  await client.index('movies').addDocuments([
+    {
+      reference_number: 287947,
+      title: 'Shazam',
+      poster: 'https://image.tmdb.org/t/p/w1280/xnopI5Xtky18MPhK40cZAGAOVeV.jpg',
+      overview: 'A boy is given the ability to become an adult superhero in times of need with a single magic word.',
+      release_date: '2019-03-23'
+    }
+  ], primaryKey: 'reference_number')
 getting_started_add_documents_md: |-
   ```yaml
   dependencies:
@@ -285,6 +281,57 @@ getting_started_search_md: |-
   ```
 
   [About this SDK](https://github.com/meilisearch/meilisearch-dart/)
+getting_started_update_rankingRules: |-
+  await client.index('movies').updateRankingRules([
+    'exactness',
+    'words',
+    'typo',
+    'proximity',
+    'attribute',
+    'sort',
+    'release_date:asc',
+    'rank:desc'
+  ])
+getting_started_update_searchableAttributes: |-
+  await client.index('movies').updateSearchableAttributes([
+    'title'
+  ])
+getting_started_update_stop_words: |-
+  await client.index('movies').updateStopWords(['the'])
+getting_started_check_task_status: |-
+  await client.index('movies').getTask(0)
+getting_started_synonyms: |-
+  await client.index('movies').updateSynonyms({
+    winnie: ['piglet'],
+    piglet: ['winnie']
+  })
+getting_started_update_displayedAttributes: |-
+  await client.index('movies').updateDisplayedAttributes([
+    'title',
+    'overview',
+    'poster'
+  ])
+getting_started_communicating_with_a_protected_instance: |-
+  var client = MeiliSearchClient('http://127.0.0.1:7700', 'apiKey');
+  await client.index('movies').search()
+getting_started_add_meteorites: |-
+  final jsonFile = await File('meteorites.json').readAsString();
+  final meteorites = json.decode(jsonFile);
+
+  await client.index('meteorites').addDocuments(meteorites)
+getting_started_configure_settings: |-
+  await client.index('meteorites').updateSettings(IndexSettings(
+    filterableAttributes: ['mass', '_geo'],
+    sortableAttributes: ['mass', '_geo']
+  ))
+getting_started_geoRadius: |-
+  await client.index('meteorites').search('', filter: '_geoRadius(46.9480, 7.4474, 210000)')
+getting_started_geoPoint: |-
+  await client.index('meteorites').search('', sort: ['_geoPoint(48.8583701, 2.2922926):asc'])
+getting_started_sorting: |-
+  await client.index('meteorites').search('', sort: ['mass:asc'], filter: 'mass < 200')
+getting_started_filtering: |-
+  await client.index('meteorites').search('', filter: 'mass < 200')
 faceted_search_update_settings_1: |-
   await client.index('movies').updateFilterableAttributes([
     'director',
@@ -297,16 +344,11 @@ faceted_search_filter_1: |-
   ]);
 faceted_search_facets_distribution_1: |-
   await client.index('movies').search('Batman', facetsDistribution: ['genres']);
-faceted_search_walkthrough_filterable_attributes_1: |-
-  await client.index('movies').updateFilterableAttributes(
-      ['director', 'producer', 'genres', 'production_companies']);
 faceted_search_walkthrough_filter_1: |-
   await client.index('movies').search('thriller', filter: [
     ['genres = Horror', 'genres = Mystery'],
     'director = "Jordan Peele"'
   ]);
-faceted_search_walkthrough_facets_distribution_1: |-
-  await client.index('movies').search('Batman', facetsDistribution: ['genres']);
 post_dump_1: |-
   await client.createDump();
 get_dump_status_1: |-
@@ -344,17 +386,17 @@ geosearch_guide_filter_settings_1: |-
 geosearch_guide_filter_usage_1: |-
   await await client
       .index('restaurants')
-      .search('', filter: '_geoRadius(45.4628328, 9.1076931, 2000)');
+      .search('', filter: '_geoRadius(45.472735, 9.184019, 2000)');
 geosearch_guide_filter_usage_2: |-
   await await client
       .index('restaurants')
-      .search('', filter: '_geoRadius(45.4628328, 9.1076931, 2000) AND type = pizza');
+      .search('', filter: '_geoRadius(45.472735, 9.184019, 2000) AND type = pizza');
 geosearch_guide_sort_settings_1: |-
   await client.index('restaurants').updateSortableAttributes(['_geo']);
 geosearch_guide_sort_usage_1: |-
-  await client.index('restaurants').search('', sort: ['_geoPoint(48.8583701,2.2922926):asc']);
+  await client.index('restaurants').search('', sort: ['_geoPoint(48.8561446, 2.2978204):asc']);
 geosearch_guide_sort_usage_2: |-
-  await client.index('restaurants').search('', sort: ['_geoPoint(48.8583701,2.2922926):asc', 'rating:desc']);
+  await client.index('restaurants').search('', sort: ['_geoPoint(48.8561446, 2.2978204):asc', 'rating:desc']);
 authorization_header_1: |-
   var client = MeiliSearchClient('http://127.0.0.1:7700', 'masterKey');
   await client.getKeys();
@@ -416,3 +458,14 @@ tenant_token_guide_generate_sdk_1: |-
 tenant_token_guide_search_sdk_1: |-
   final frontEndClient = MeiliSearchClient('http://127.0.0.1:7700', token);
   await frontEndClient.index('patient_medical_records').search('blood test');
+landing_getting_started_1: |-
+  var client = MeiliSearchClient('http://127.0.0.1:7700', 'masterKey')
+
+  await client.index('movies').addDocuments([
+    { 'id': 1, 'title': 'Carol' },
+    { 'id': 2, 'title': 'Wonder Woman' },
+    { 'id': 3, 'title': 'Life of Pi' },
+    { 'id': 4, 'title': 'Mad Max: Fury Road' },
+    { 'id': 5, 'title': 'Moana' },
+    { 'id': 6, 'title': 'Philadelphia'}
+  ])
