@@ -52,6 +52,33 @@ void main() {
         expect(result.hits![0]['_formatted']['title'], equals('Alice In…'));
       });
 
+      test('searches with default cropping parameters', () async {
+        var index = await createBooksIndex();
+        var result = await index.search('prince',
+            attributesToCrop: ['*'], cropLength: 2);
+
+        expect(result.hits![0]['_formatted']['title'], equals('…Petit Prince'));
+      });
+
+      test('searches with custom cropMarker', () async {
+        var index = await createBooksIndex();
+        var result = await index.search('prince',
+            attributesToCrop: ['*'], cropLength: 1, cropMarker: '[…] ');
+
+        expect(result.hits![0]['_formatted']['title'], equals('[…] Prince'));
+      });
+
+      test('searches with custom highlight tags', () async {
+        var index = await createBooksIndex();
+        var result = await index.search('blood',
+            attributesToHighlight: ['*'],
+            highlightPreTag: '<mark>',
+            highlightPostTag: '</mark>');
+
+        expect(result.hits![0]['_formatted']['title'],
+            equals('Harry Potter and the Half-<mark>Blood</mark> Prince'));
+      });
+
       test('filter parameter', () async {
         var index = await createBooksIndex();
         var response = await index

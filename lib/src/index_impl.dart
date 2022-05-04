@@ -115,6 +115,9 @@ class MeiliSearchIndexImpl implements MeiliSearchIndex {
     int? cropLength,
     List<String>? attributesToHighlight,
     bool? matches,
+    String? cropMarker,
+    String? highlightPreTag,
+    String? highlightPostTag,
   }) async {
     final data = <String, dynamic>{
       'q': query,
@@ -128,6 +131,9 @@ class MeiliSearchIndexImpl implements MeiliSearchIndex {
       'cropLength': cropLength,
       'attributesToHighlight': attributesToHighlight,
       'matches': matches,
+      'cropMarker': cropMarker,
+      'highlightPreTag': highlightPreTag,
+      'highlightPostTag': highlightPostTag,
     };
     data.removeWhere((k, v) => v == null);
     final response = await http.postMethod('/indexes/$uid/search', data: data);
