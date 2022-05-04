@@ -49,7 +49,7 @@ void main() {
         var index = await createBooksIndex();
         var result = await index.search('Alice In Wonderland',
             attributesToCrop: ["title"], cropLength: 2);
-        expect(result.hits![0]['_formatted']['title'], equals('Alice In'));
+        expect(result.hits![0]['_formatted']['title'], equals('Alice In…'));
       });
 
       test('filter parameter', () async {
