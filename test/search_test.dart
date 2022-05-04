@@ -136,5 +136,59 @@ void main() {
         expect(result.hits![0]['book_id'], 4);
       });
     });
+
+    test('searches within nested content with no parameters', () async {
+      var index = await createNestedBooksIndex();
+      var response = await index.search('An awesome');
+
+      expect(response.hits![0], {
+        "id": 5,
+        "title": 'The Hobbit',
+        "info": {
+          "comment": 'An awesome book',
+          "reviewNb": 900,
+        },
+      });
+    });
+
+    test('searches on nested content with searchable on specific nested field',
+        () async {
+      var index = await createNestedBooksIndex();
+      await index
+          .updateSettings(
+              IndexSettings(searchableAttributes: ['title', 'info.comment']))
+          .waitFor();
+
+      var response = await index.search('An awesome');
+
+      expect(response.hits![0], {
+        "id": 5,
+        "title": 'The Hobbit',
+        "info": {
+          "comment": 'An awesome book',
+          "reviewNb": 900,
+        },
+      });
+    });
+
+    test('searches on nested content with content with sort', () async {
+      var index = await createNestedBooksIndex();
+      await index
+          .updateSettings(IndexSettings(
+              searchableAttributes: ['title', 'info.comment'],
+              sortableAttributes: ['info.reviewNb']))
+          .waitFor();
+
+      var response = await index.search('', sort: ['info.reviewNb:desc']);
+
+      expect(response.hits![0], {
+        "id": 6,
+        "title": 'Harry Potter and the Half-Blood Prince',
+        "info": {
+          "comment": 'The best book',
+          "reviewNb": 1000,
+        },
+      });
+    });
   });
 }
