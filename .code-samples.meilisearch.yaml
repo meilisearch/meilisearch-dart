@@ -192,7 +192,7 @@ search_parameter_guide_retrieve_1: |-
 search_parameter_guide_crop_1: |-
   await client
       .index('movies')
-      .search('shifu', attributesToCrop: ['overview'], cropLength: 10);
+      .search('shifu', attributesToCrop: ['overview'], cropLength: 5);
 search_parameter_guide_highlight_1: |-
   await client
       .index('movies')
@@ -469,3 +469,15 @@ landing_getting_started_1: |-
     { 'id': 5, 'title': 'Moana' },
     { 'id': 6, 'title': 'Philadelphia'}
   ])
+search_parameter_guide_crop_marker_1: |-
+  await client
+      .index('movies')
+      .search('shifu', attributesToCrop: ['overview'], cropMarker: "[…]");
+search_parameter_guide_highlight_tag_1: |-
+  await client
+      .index('movies')
+      .search('winter feast',
+        attributesToHighlight: ['overview'],
+        highlightPreTag: '<span class="highlight">',
+        highlightPostTag: '</span>',
+      );
