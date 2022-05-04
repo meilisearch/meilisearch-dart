@@ -468,7 +468,7 @@ landing_getting_started_1: |-
     { 'id': 4, 'title': 'Mad Max: Fury Road' },
     { 'id': 5, 'title': 'Moana' },
     { 'id': 6, 'title': 'Philadelphia'}
-  ])
+  ]);
 search_parameter_guide_crop_marker_1: |-
   await client
       .index('movies')
