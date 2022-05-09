@@ -32,6 +32,9 @@ abstract class MeiliSearchIndex {
     int? cropLength,
     List<String>? attributesToHighlight,
     bool? matches,
+    String? cropMarker,
+    String? highlightPreTag,
+    String? highlightPostTag,
   });
 
   /// Return the document in the index by given [id].
