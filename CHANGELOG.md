@@ -1,3 +1,10 @@
+# 0.5.3
+This version makes this package compatible with Meilisearch v0.27.0 and newer
+## Changes
+- Ensure nested field support (#157) @brunoocasali
+- Add `highlightPreTag`, `highlightPostTag`, `cropMarker`, parameters in the search request (#156) @brunoocasali
+- Fix syntax issue in the README (#162) @mafreud
+
 # 0.5.2
 - * Added new method `generateTenantToken()` as a result of the addition of the multi-tenant functionality.
 This method creates a JWT tenant token that will allow the user to have multi-tenant indexes and thus restrict access to documents based on the end-user making the search request. (#139) @brunoocasali
