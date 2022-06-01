@@ -29,5 +29,5 @@ jobs:
       - name: Meilisearch (${{ env.MEILISEARCH_VERSION }}) setup with Docker
         run: docker run -d -p 7700:7700 getmeili/meilisearch:${{ env.MEILISEARCH_VERSION }} meilisearch --master-key=masterKey --no-analytics
       - name: Run integration tests
-        run: docker run --net="host" -v $PWD:/package -w /package google/dart:${{ matrix.version }} /bin/sh -c 'pub get && pub run test'
+        run: docker run --net="host" -v $PWD:/package -w /package dart:${{ matrix.version }} /bin/sh -c 'pub get && pub run test'
 
