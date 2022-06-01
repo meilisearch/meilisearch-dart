@@ -41,7 +41,7 @@ jobs:
       - name: Run integration tests
         run: pub run test
         env:
-          MEILI_SERVER: http://meilisearch:7700
+          MEILISEARCH_HOST: http://meilisearch:7700
 
   linter:
     name: linter-check
