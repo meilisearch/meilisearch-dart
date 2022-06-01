@@ -18,7 +18,8 @@ jobs:
       fail-fast: false
       matrix:
         version: [
-          '2.12'
+          '2.12',
+          '2.17',
         ]
     name: integration-tests-against-rc (dart ${{ matrix.version }})
     steps:
@@ -30,4 +31,3 @@ jobs:
         run: docker run -d -p 7700:7700 getmeili/meilisearch:${{ env.MEILISEARCH_VERSION }} meilisearch --master-key=masterKey --no-analytics
       - name: Run integration tests
         run: docker run --net="host" -v $PWD:/package -w /package dart:${{ matrix.version }} /bin/sh -c 'pub get && pub run test'
-
