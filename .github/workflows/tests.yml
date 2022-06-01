@@ -24,7 +24,7 @@ jobs:
         ]
     name: integration-tests (dart ${{ matrix.version }})
     container:
-      image: google/dart:${{ matrix.version }}
+      image: dart:${{ matrix.version }}
     services:
       meilisearch:
         image: getmeili/meilisearch:latest
@@ -47,7 +47,7 @@ jobs:
     name: linter-check
     runs-on: ubuntu-latest
     container:
-      image: google/dart:2.12
+      image: dart:2.12
     steps:
       - name: Checkout
         uses: actions/checkout@v2
