@@ -49,7 +49,34 @@ void main() {
         var index = await createBooksIndex();
         var result = await index.search('Alice In Wonderland',
             attributesToCrop: ["title"], cropLength: 2);
-        expect(result.hits![0]['_formatted']['title'], equals('Alice In'));
+        expect(result.hits![0]['_formatted']['title'], equals('Alice In…'));
+      });
+
+      test('searches with default cropping parameters', () async {
+        var index = await createBooksIndex();
+        var result = await index.search('prince',
+            attributesToCrop: ['*'], cropLength: 2);
+
+        expect(result.hits![0]['_formatted']['title'], equals('…Petit Prince'));
+      });
+
+      test('searches with custom cropMarker', () async {
+        var index = await createBooksIndex();
+        var result = await index.search('prince',
+            attributesToCrop: ['*'], cropLength: 1, cropMarker: '[…] ');
+
+        expect(result.hits![0]['_formatted']['title'], equals('[…] Prince'));
+      });
+
+      test('searches with custom highlight tags', () async {
+        var index = await createBooksIndex();
+        var result = await index.search('blood',
+            attributesToHighlight: ['*'],
+            highlightPreTag: '<mark>',
+            highlightPostTag: '</mark>');
+
+        expect(result.hits![0]['_formatted']['title'],
+            equals('Harry Potter and the Half-<mark>Blood</mark> Prince'));
       });
 
       test('filter parameter', () async {
@@ -134,6 +161,60 @@ void main() {
         var result = await index.search('prince', sort: ['title:asc']);
         expect(result.hits, hasLength(2));
         expect(result.hits![0]['book_id'], 4);
+      });
+    });
+
+    test('searches within nested content with no parameters', () async {
+      var index = await createNestedBooksIndex();
+      var response = await index.search('An awesome');
+
+      expect(response.hits![0], {
+        "id": 5,
+        "title": 'The Hobbit',
+        "info": {
+          "comment": 'An awesome book',
+          "reviewNb": 900,
+        },
+      });
+    });
+
+    test('searches on nested content with searchable on specific nested field',
+        () async {
+      var index = await createNestedBooksIndex();
+      await index
+          .updateSettings(
+              IndexSettings(searchableAttributes: ['title', 'info.comment']))
+          .waitFor();
+
+      var response = await index.search('An awesome');
+
+      expect(response.hits![0], {
+        "id": 5,
+        "title": 'The Hobbit',
+        "info": {
+          "comment": 'An awesome book',
+          "reviewNb": 900,
+        },
+      });
+    });
+
+    test('searches on nested content with content with sort', () async {
+      var index = await createNestedBooksIndex();
+      await index
+          .updateSettings(IndexSettings(
+              searchableAttributes: ['title', 'info.comment'],
+              sortableAttributes: ['info.reviewNb']))
+          .waitFor();
+
+      var response = await index.search('', sort: ['info.reviewNb:desc']);
+
+      expect(response.hits![0], {
+        "id": 6,
+        "title": 'Harry Potter and the Half-Blood Prince',
+        "info": {
+          "comment": 'The best book',
+          "reviewNb": 1000,
+        },
       });
     });
   });
