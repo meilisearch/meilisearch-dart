@@ -1,6 +1,5 @@
 version: "3.8"
 
-# remove this line if you don't need a volume to map your dependencies
 volumes:
   pub:
 
