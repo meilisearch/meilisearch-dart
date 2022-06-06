@@ -32,7 +32,16 @@ Install the official [Dart SDK](https://dart.dev/get-dart) or the [Flutter SDK](
 
 Both of them include `pub`. But if you want to run the linter you need to install the Flutter SDK.
 
-### Set up <!-- omit in TOC -->
+### Setup <!-- omit in TOC -->
+
+You can set up your local environment natively or using `docker`, check out the [`docker-compose.yml`](/docker-compose.yml).
+
+Example of running all the checks with docker:
+```bash
+docker-compose run --rm package bash -c "dart pub get && dart run test --concurrency=1 && dart analyze && dart format . --set-exit-if-changed"
+```
+
+To install dependencies:
 
 ```bash
 pub get

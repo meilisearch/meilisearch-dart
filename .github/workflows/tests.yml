@@ -20,11 +20,12 @@ jobs:
       fail-fast: false
       matrix:
         version: [
-          '2.12'
+          '2.12',
+          '2.17',
         ]
     name: integration-tests (dart ${{ matrix.version }})
     container:
-      image: google/dart:${{ matrix.version }}
+      image: dart:${{ matrix.version }}
     services:
       meilisearch:
         image: getmeili/meilisearch:latest
@@ -37,23 +38,21 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
       - name: Install dependencies
-        run: pub get
+        run: dart pub get
       - name: Run integration tests
-        run: pub run test
+        run: dart run test
         env:
-          MEILI_SERVER: http://meilisearch:7700
+          MEILISEARCH_HOST: http://meilisearch:7700
 
   linter:
     name: linter-check
     runs-on: ubuntu-latest
     container:
-      image: google/dart:2.12
+      image: dart:2.17
     steps:
       - name: Checkout
         uses: actions/checkout@v2
       - name: Install dependencies
-        run: pub get
+        run: dart pub get
       - name: Run linter
-        uses: zgosalvez/github-actions-analyze-dart@v1
-        with:
-          fail-on-warnings: true
+        run: dart analyze && dart format . --set-exit-if-changed
