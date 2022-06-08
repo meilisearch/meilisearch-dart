@@ -82,7 +82,7 @@ update_settings_1: |-
 reset_settings_1: |-
   await client.index('movies').resetSettings();
 get_synonyms_1: |-
-  await client.index('movies').get_synonyms()
+  await client.index('movies').get_synonyms();
 update_synonyms_1: |-
   await client.index('movies').updateSynonyms(
     {
@@ -257,7 +257,7 @@ primary_field_guide_add_document_primary_key: |-
       genres: ['comedy', 'humor'],
       price: 5.00
     }
-  ], primaryKey: 'reference_number')
+  ], primaryKey: 'reference_number');
 getting_started_add_documents_md: |-
   ```yaml
   dependencies:
@@ -293,45 +293,45 @@ getting_started_update_ranking_rules: |-
     'sort',
     'release_date:asc',
     'rank:desc'
-  ])
+  ]);
 getting_started_update_searchable_attributes: |-
   await client.index('movies').updateSearchableAttributes([
     'title'
-  ])
+  ]);
 getting_started_update_stop_words: |-
-  await client.index('movies').updateStopWords(['the'])
+  await client.index('movies').updateStopWords(['the']);
 getting_started_check_task_status: |-
-  await client.index('movies').getTask(0)
+  await client.index('movies').getTask(0);
 getting_started_synonyms: |-
   await client.index('movies').updateSynonyms({
     winnie: ['piglet'],
     piglet: ['winnie']
-  })
+  });
 getting_started_update_displayed_attributes: |-
   await client.index('movies').updateDisplayedAttributes([
     'title',
     'overview',
     'poster'
-  ])
+  ]);
 getting_started_communicating_with_a_protected_instance: |-
   var client = MeiliSearchClient('http://127.0.0.1:7700', 'apiKey');
-  await client.index('movies').search()
+  await client.index('movies').search();
 getting_started_add_meteorites: |-
   final jsonFile = await File('meteorites.json').readAsString();
   final meteorites = json.decode(jsonFile);
 
-  await client.index('meteorites').addDocuments(meteorites)
+  await client.index('meteorites').addDocuments(meteorites);
 getting_started_configure_settings: |-
   await client.index('meteorites').updateSettings(IndexSettings(
     filterableAttributes: ['mass', '_geo'],
     sortableAttributes: ['mass', '_geo']
-  ))
+  ));
 getting_started_geo_radius: |-
-  await client.index('meteorites').search('', filter: '_geoRadius(46.9480, 7.4474, 210000)')
+  await client.index('meteorites').search('', filter: '_geoRadius(46.9480, 7.4474, 210000)');
 getting_started_geo_point: |-
-  await client.index('meteorites').search('', sort: ['_geoPoint(48.8583701, 2.2922926):asc'])
+  await client.index('meteorites').search('', sort: ['_geoPoint(48.8583701, 2.2922926):asc']);
 getting_started_sorting: |-
-  await client.index('meteorites').search('', sort: ['mass:asc'], filter: 'mass < 200')
+  await client.index('meteorites').search('', sort: ['mass:asc'], filter: 'mass < 200');
 getting_started_filtering: |-
   await client.index('meteorites').search('', filter: 'mass < 200')
 faceted_search_update_settings_1: |-
