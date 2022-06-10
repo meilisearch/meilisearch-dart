@@ -2,7 +2,7 @@ part of tenant_token;
 
 final _jsonEncoder = json.fuse(utf8.fuse(base64Url));
 
-final _HEADER = {"typ": 'JWT', "alg": 'HS256'};
+const _HEADER = {"typ": 'JWT', "alg": 'HS256'};
 
 int? _getTimestamp(DateTime? time) {
   final now = DateTime.now().toUtc();
