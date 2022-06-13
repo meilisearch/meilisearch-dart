@@ -75,7 +75,7 @@ class MeiliSearchIndexImpl implements MeiliSearchIndex {
     };
     data.removeWhere((k, v) => v == null);
 
-    return await _update(http.putMethod('/indexes/$uid', data: data));
+    return await _update(http.patchMethod('/indexes/$uid', data: data));
   }
 
   @override
@@ -242,7 +242,7 @@ class MeiliSearchIndexImpl implements MeiliSearchIndex {
 
   @override
   Future<TaskInfo> updateSettings(IndexSettings settings) async {
-    return await _update(http.postMethod(
+    return await _update(http.patchMethod(
       '/indexes/$uid/settings',
       data: settings.toMap(),
     ));
@@ -265,7 +265,7 @@ class MeiliSearchIndexImpl implements MeiliSearchIndex {
   @override
   Future<TaskInfo> updateFilterableAttributes(
       List<String> filterableAttributes) async {
-    return await _update(http.postMethod(
+    return await _update(http.putMethod(
         '/indexes/$uid/settings/filterable-attributes',
         data: filterableAttributes));
   }
@@ -287,7 +287,7 @@ class MeiliSearchIndexImpl implements MeiliSearchIndex {
   @override
   Future<TaskInfo> updateDisplayedAttributes(
       List<String> displayedAttributes) async {
-    return await _update(http.postMethod(
+    return await _update(http.putMethod(
         '/indexes/$uid/settings/displayed-attributes',
         data: displayedAttributes));
   }
@@ -308,7 +308,7 @@ class MeiliSearchIndexImpl implements MeiliSearchIndex {
 
   @override
   Future<TaskInfo> updateDistinctAttribute(String distinctAttribute) async {
-    return await _update(http.postMethod(
+    return await _update(http.putMethod(
         '/indexes/$uid/settings/distinct-attribute',
         data: '"$distinctAttribute"'));
   }
@@ -329,7 +329,7 @@ class MeiliSearchIndexImpl implements MeiliSearchIndex {
 
   @override
   Future<TaskInfo> updateRankingRules(List<String> rankingRules) async {
-    return await _update(http.postMethod('/indexes/$uid/settings/ranking-rules',
+    return await _update(http.putMethod('/indexes/$uid/settings/ranking-rules',
         data: rankingRules));
   }
 
@@ -363,7 +363,7 @@ class MeiliSearchIndexImpl implements MeiliSearchIndex {
   @override
   Future<TaskInfo> updateSearchableAttributes(
       List<String> searchableAttributes) async {
-    return await _update(http.postMethod(
+    return await _update(http.putMethod(
         '/indexes/$uid/settings/searchable-attributes',
         data: searchableAttributes));
   }
@@ -371,7 +371,7 @@ class MeiliSearchIndexImpl implements MeiliSearchIndex {
   @override
   Future<TaskInfo> updateStopWords(List<String> stopWords) async {
     return await _update(
-        http.postMethod('/indexes/$uid/settings/stop-words', data: stopWords));
+        http.putMethod('/indexes/$uid/settings/stop-words', data: stopWords));
   }
 
   @override
@@ -391,7 +391,7 @@ class MeiliSearchIndexImpl implements MeiliSearchIndex {
   @override
   Future<TaskInfo> updateSynonyms(Map<String, List<String>> synonyms) async {
     return await _update(
-        http.postMethod('/indexes/$uid/settings/synonyms', data: synonyms));
+        http.putMethod('/indexes/$uid/settings/synonyms', data: synonyms));
   }
 
   @override
@@ -411,7 +411,7 @@ class MeiliSearchIndexImpl implements MeiliSearchIndex {
   @override
   Future<TaskInfo> updateSortableAttributes(
       List<String> sortableAttributes) async {
-    return _update(http.postMethod('/indexes/$uid/settings/sortable-attributes',
+    return _update(http.putMethod('/indexes/$uid/settings/sortable-attributes',
         data: sortableAttributes));
   }
 
