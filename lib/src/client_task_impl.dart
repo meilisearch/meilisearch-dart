@@ -4,19 +4,19 @@ import 'package:meilisearch/src/task.dart';
 import 'task_info.dart';
 
 class ClientTaskImpl implements TaskInfo {
-  final int uid;
+  final int taskUid;
   final MeiliSearchClientImpl client;
 
-  ClientTaskImpl(this.client, this.uid);
+  ClientTaskImpl(this.client, this.taskUid);
 
   factory ClientTaskImpl.fromMap(
     MeiliSearchClientImpl client,
     Map<String, dynamic> map,
   ) =>
-      ClientTaskImpl(client, map['uid'] as int);
+      ClientTaskImpl(client, map['taskUid'] as int);
 
   @override
   Future<Task> getStatus() async {
-    return await client.getTask(this.uid);
+    return await client.getTask(this.taskUid);
   }
 }

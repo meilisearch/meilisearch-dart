@@ -4,19 +4,19 @@ import 'index_impl.dart';
 import 'task_info.dart';
 
 class TaskImpl implements TaskInfo {
-  final int uid;
+  final int taskUid;
   final MeiliSearchIndexImpl index;
 
-  TaskImpl(this.index, this.uid);
+  TaskImpl(this.index, this.taskUid);
 
   factory TaskImpl.fromMap(
     MeiliSearchIndexImpl index,
     Map<String, dynamic> map,
   ) =>
-      TaskImpl(index, map['uid'] as int);
+      TaskImpl(index, map['taskUid'] as int);
 
   @override
   Future<Task> getStatus() async {
-    return index.getTask(uid);
+    return index.getTask(taskUid);
   }
 }
