@@ -96,7 +96,7 @@ extension TaskWaiter on TaskInfo {
       await Future.delayed(interval);
     }
 
-    throw Exception('The task ${uid} timed out.');
+    throw Exception('The task ${taskUid} timed out.');
   }
 }
 
