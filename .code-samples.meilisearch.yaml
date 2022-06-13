@@ -353,8 +353,6 @@ faceted_search_walkthrough_filter_1: |-
   ]);
 post_dump_1: |-
   await client.createDump();
-get_dump_status_1: |-
-  await client.getDumpStatus('20201101-110357260');
 phrase_search_1: |-
   await client.index('movies').search('"african american" horror');
 sorting_guide_update_sortable_attributes_1: |-
