@@ -7,6 +7,7 @@ import 'utils/client.dart';
 void main() {
   setUpHttp();
   setUpClient();
+
   group('Exceptions', () {
     test('Throw exception with the detailed information from Meilisearch',
         () async {
@@ -29,8 +30,9 @@ void main() {
     });
 
     test('Throw a CommunicationException', () async {
-      final wrong_client = MeiliSearchClient('http://wrongURL', 'masterKey');
-      expect(() async => await wrong_client.getIndex('test'),
+      final wrongClient = MeiliSearchClient('http://wrongURL', 'masterKey');
+
+      expect(() async => await wrongClient.getIndex('test'),
           throwsA(isA<CommunicationException>()));
     });
   });

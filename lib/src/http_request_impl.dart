@@ -37,16 +37,14 @@ class HttpRequestImpl implements HttpRequest {
     String path, {
     Map<String, dynamic>? queryParameters,
   }) async {
-    var response;
     try {
-      response = await dio.get<T>(
+      return await dio.get<T>(
         path,
         queryParameters: queryParameters,
       );
     } on DioError catch (e) {
-      throwException(e);
+      return throwException(e);
     }
-    return await response;
   }
 
   @override
@@ -55,17 +53,15 @@ class HttpRequestImpl implements HttpRequest {
     dynamic data,
     Map<String, dynamic>? queryParameters,
   }) async {
-    var response;
     try {
-      response = await dio.post<T>(
+      return await dio.post<T>(
         path,
         data: data,
         queryParameters: queryParameters,
       );
     } on DioError catch (e) {
-      throwException(e);
+      return throwException(e);
     }
-    return await response;
   }
 
   @override
@@ -74,17 +70,15 @@ class HttpRequestImpl implements HttpRequest {
     dynamic data,
     Map<String, dynamic>? queryParameters,
   }) async {
-    var response;
     try {
-      response = await dio.patch<T>(
+      return await dio.patch<T>(
         path,
         data: data,
         queryParameters: queryParameters,
       );
     } on DioError catch (e) {
-      throwException(e);
+      return throwException(e);
     }
-    return await response;
   }
 
   @override
@@ -93,31 +87,27 @@ class HttpRequestImpl implements HttpRequest {
     dynamic data,
     Map<String, dynamic>? queryParameters,
   }) async {
-    var response;
     try {
-      response = await dio.put<T>(
+      return await dio.put<T>(
         path,
         data: data,
         queryParameters: queryParameters,
       );
     } on DioError catch (e) {
-      throwException(e);
+      return throwException(e);
     }
-    return await response;
   }
 
   @override
   Future<Response<T>> deleteMethod<T>(String path, {dynamic data}) async {
-    var response;
     try {
-      response = await dio.delete<T>(
+      return await dio.delete<T>(
         path,
         data: data,
       );
     } on DioError catch (e) {
-      throwException(e);
+      return throwException(e);
     }
-    return await response;
   }
 
   throwException(DioError e) {
