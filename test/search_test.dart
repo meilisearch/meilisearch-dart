@@ -139,7 +139,7 @@ void main() {
             ))
             .waitFor();
         expect(response.status, 'succeeded');
-        var result = await index.search('prince', facetsDistribution: ['*']);
+        var result = await index.search('prince', facets: ['*']);
         expect(result.hits, hasLength(2));
       });
 
