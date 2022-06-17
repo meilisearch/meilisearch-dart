@@ -103,7 +103,7 @@ class MeiliSearchIndexImpl implements MeiliSearchIndex {
   //
 
   @override
-  Future<SearchResult> search<T>(
+  Future<SearchResult> search(
     String? query, {
     int? offset,
     int? limit,
