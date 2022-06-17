@@ -91,6 +91,19 @@ void main() {
         expect(result.hits, hasLength(1));
       });
 
+      test('filter parameter with spaces', () async {
+        var index = await createBooksIndex();
+        var response = await index
+            .updateSettings(IndexSettings(
+              filterableAttributes: ['tag'],
+            ))
+            .waitFor();
+        expect(response.status, 'succeeded');
+        var result =
+            await index.search('prince', filter: 'tag = "Epic fantasy"');
+        expect(result.hits, hasLength(1));
+      });
+
       test('filter parameter with number', () async {
         var index = await createBooksIndex();
         var response = await index
