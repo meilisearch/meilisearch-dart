@@ -186,6 +186,7 @@ await index.search('wonder', filter: ['id > 1 AND genres = Action']);
   "processingTimeMs": 0,
   "query": "wonder"
 }
+```
 
 ## 🤖 Compatibility with Meilisearch
 
