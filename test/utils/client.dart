@@ -6,7 +6,6 @@ import 'package:crypto/crypto.dart';
 import 'package:meilisearch/src/http_request_impl.dart';
 import 'package:meilisearch/src/http_request.dart';
 import 'package:meilisearch/meilisearch.dart';
-import 'package:meilisearch/src/task_info.dart';
 import 'package:meilisearch/src/task.dart';
 import 'package:test/test.dart';
 
@@ -80,7 +79,7 @@ String sha1RandomString() {
   return sha1.convert(randomBytes).toString();
 }
 
-extension TaskWaiter on TaskInfo {
+extension TaskWaiter on Task {
   Future<Task> waitFor({
     Duration timeout = const Duration(seconds: 5),
     Duration interval = const Duration(milliseconds: 50),
@@ -88,7 +87,7 @@ extension TaskWaiter on TaskInfo {
     var endingTime = DateTime.now().add(timeout);
 
     while (DateTime.now().isBefore(endingTime)) {
-      var task = await client.getTask(this.taskUid);
+      var task = await client.getTask(this.uid!);
 
       if (task.status != 'enqueued' && task.status != 'processing') {
         return task;
@@ -97,11 +96,11 @@ extension TaskWaiter on TaskInfo {
       await Future.delayed(interval);
     }
 
-    throw Exception('The task ${taskUid} timed out.');
+    throw Exception('The task ${this.uid!} timed out.');
   }
 }
 
-extension TaskWaiterForFutures on Future<TaskInfo> {
+extension TaskWaiterForFutures on Future<Task> {
   Future<Task> waitFor({
     Duration timeout = const Duration(seconds: 5),
     Duration interval = const Duration(milliseconds: 50),

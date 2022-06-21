@@ -40,10 +40,10 @@ void main() {
       final uid = randomUid();
       final info = await client.createIndex(uid);
 
-      final task = await client.getTask(info.taskUid);
+      final task = await client.getTask(info.uid!);
 
       expect(task, isA<Task>());
-      expect(task.uid, equals(info.taskUid));
+      expect(task.uid, equals(info.uid));
     });
   });
 }

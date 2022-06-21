@@ -21,7 +21,7 @@ class Task {
 
   factory Task.fromMap(Map<String, dynamic> map) => Task(
         status: map['status'] as String?,
-        uid: map['uid'] as int?,
+        uid: (map['uid'] ?? map['taskUid']) as int,
         duration: map['duration'] as String?,
         enqueuedAt: map['enqueuedAt'] != null
             ? DateTime.tryParse(map['enqueuedAt'] as String)
