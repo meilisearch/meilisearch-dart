@@ -1,4 +1,5 @@
 import 'package:meilisearch/src/key.dart';
+import 'package:meilisearch/src/query_parameters/indexes_query.dart';
 import 'package:meilisearch/src/query_parameters/keys_query.dart';
 import 'package:meilisearch/src/query_parameters/tasks_query.dart';
 import 'package:meilisearch/src/result.dart';
@@ -34,7 +35,7 @@ abstract class MeiliSearchClient {
   MeiliSearchIndex index(String uid);
 
   /// Return list of all existing indexes.
-  Future<List<MeiliSearchIndex>> getIndexes();
+  Future<Result<MeiliSearchIndex>> getIndexes({IndexesQuery? params});
 
   /// Find index by matching [uid]. Throws error if index is not exists.
   Future<MeiliSearchIndex> getIndex(String uid);

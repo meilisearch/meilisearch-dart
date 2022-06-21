@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:meilisearch/src/client_task_impl.dart';
+import 'package:meilisearch/src/query_parameters/indexes_query.dart';
 import 'package:meilisearch/src/query_parameters/keys_query.dart';
 import 'package:meilisearch/src/query_parameters/tasks_query.dart';
 import 'package:meilisearch/src/result.dart';
@@ -74,13 +75,12 @@ class MeiliSearchClientImpl implements MeiliSearchClient {
   }
 
   @override
-  Future<List<MeiliSearchIndex>> getIndexes() async {
-    final response = await http.getMethod<List<dynamic>>('/indexes');
+  Future<Result<MeiliSearchIndex>> getIndexes({IndexesQuery? params}) async {
+    final response = await http.getMethod<Map<String, dynamic>>('/indexes',
+        queryParameters: params?.toQuery());
 
-    return response.data!
-        .cast<Map<String, dynamic>>()
-        .map((item) => MeiliSearchIndexImpl.fromMap(this, item))
-        .toList();
+    return Result<MeiliSearchIndex>.fromMapWithType(
+        response.data!, (item) => MeiliSearchIndexImpl.fromMap(this, item));
   }
 
   @override
