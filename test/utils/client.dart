@@ -88,10 +88,12 @@ extension TaskWaiter on TaskInfo {
     var endingTime = DateTime.now().add(timeout);
 
     while (DateTime.now().isBefore(endingTime)) {
-      var response = await getStatus();
-      if (response.status != 'enqueued' && response.status != 'processing') {
-        return response;
+      var task = await client.getTask(this.taskUid);
+
+      if (task.status != 'enqueued' && task.status != 'processing') {
+        return task;
       }
+
       await Future.delayed(interval);
     }
 
