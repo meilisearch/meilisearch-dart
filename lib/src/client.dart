@@ -60,7 +60,7 @@ abstract class MeiliSearchClient {
   Future<bool> isHealthy();
 
   /// Trigger a dump creation process.
-  Future<Map<String, String>> createDump();
+  Future<Task> createDump();
 
   /// Get the public and private keys.
   Future<List<Key>> getKeys();
