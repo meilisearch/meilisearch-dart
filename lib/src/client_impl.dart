@@ -1,5 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:meilisearch/src/client_task_impl.dart';
+import 'package:meilisearch/src/query_parameters/tasks_query.dart';
+import 'package:meilisearch/src/result_task.dart';
 import 'package:meilisearch/src/task.dart';
 import 'package:meilisearch/src/task_info.dart';
 import 'package:meilisearch/src/tenant_token.dart';
@@ -202,12 +204,11 @@ class MeiliSearchClientImpl implements MeiliSearchClient {
   ///
 
   @override
-  Future<List<Task>> getTasks() async {
-    final response = await http.getMethod('/tasks');
+  Future<ResultTask> getTasks({TasksQuery? params}) async {
+    final response =
+        await http.getMethod('/tasks', queryParameters: params?.toQuery());
 
-    return (response.data['results'] as List)
-        .map((update) => Task.fromMap(update))
-        .toList();
+    return ResultTask.fromMap(response.data);
   }
 
   @override
