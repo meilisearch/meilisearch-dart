@@ -1,4 +1,6 @@
+import 'package:meilisearch/src/query_parameters/documents_query.dart';
 import 'package:meilisearch/src/query_parameters/tasks_query.dart';
+import 'package:meilisearch/src/result.dart';
 import 'package:meilisearch/src/result_task.dart';
 
 import 'index_settings.dart';
@@ -44,11 +46,7 @@ abstract class MeiliSearchIndex {
   Future<Map<String, dynamic>?> getDocument(dynamic id);
 
   /// Return a list of all existing documents in the index.
-  Future<List<Map<String, dynamic>>> getDocuments({
-    int? offset,
-    int? limit,
-    String? attributesToRetrieve,
-  });
+  Future<Result> getDocuments({DocumentsQuery? params});
 
   /// Add a list of documents by given [documents] and optional [primaryKey] parameter.
   /// If index is not exists tries to create a new index and adds documents.
