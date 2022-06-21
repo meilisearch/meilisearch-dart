@@ -1,7 +1,10 @@
-import 'task.dart';
+class TaskInfo {
+  final int taskUid;
 
-abstract class TaskInfo {
-  int get taskUid;
+  TaskInfo(this.taskUid);
 
-  Future<Task> getStatus();
+  factory TaskInfo.fromMap(
+    Map<String, dynamic> map,
+  ) =>
+      TaskInfo((map['uid'] ?? map['taskUid']) as int);
 }

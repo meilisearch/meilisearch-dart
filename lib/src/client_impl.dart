@@ -1,12 +1,11 @@
 import 'package:dio/dio.dart';
-import 'package:meilisearch/src/client_task_impl.dart';
+import 'package:meilisearch/src/task_info.dart';
 import 'package:meilisearch/src/query_parameters/indexes_query.dart';
 import 'package:meilisearch/src/query_parameters/keys_query.dart';
 import 'package:meilisearch/src/query_parameters/tasks_query.dart';
 import 'package:meilisearch/src/result.dart';
 import 'package:meilisearch/src/result_task.dart';
 import 'package:meilisearch/src/task.dart';
-import 'package:meilisearch/src/task_info.dart';
 import 'package:meilisearch/src/tenant_token.dart';
 
 import 'http_request.dart';
@@ -41,7 +40,7 @@ class MeiliSearchClientImpl implements MeiliSearchClient {
   Future<TaskInfo> _update(Future<Response> future) async {
     final response = await future;
 
-    return ClientTaskImpl.fromMap(this, response.data);
+    return TaskInfo.fromMap(response.data);
   }
 
   @override
@@ -132,7 +131,8 @@ class MeiliSearchClientImpl implements MeiliSearchClient {
 
   @override
   Future<Key> getKey(String keyOrUid) async {
-    final response = await http.getMethod<Map<String, dynamic>>('/keys/${keyOrUid}');
+    final response =
+        await http.getMethod<Map<String, dynamic>>('/keys/${keyOrUid}');
 
     return Key.fromJson(response.data!);
   }

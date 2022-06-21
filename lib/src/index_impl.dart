@@ -9,7 +9,6 @@ import 'index.dart';
 import 'http_request.dart';
 import 'index_settings.dart';
 import 'task_info.dart';
-import 'task_impl.dart';
 import 'search_result.dart';
 import 'stats.dart' show IndexStats;
 import 'task.dart';
@@ -73,7 +72,7 @@ class MeiliSearchIndexImpl implements MeiliSearchIndex {
   //
 
   @override
-  Future<TaskImpl> update({String? primaryKey}) async {
+  Future<TaskInfo> update({String? primaryKey}) async {
     final data = <String, dynamic>{
       'primaryKey': primaryKey,
     };
@@ -83,7 +82,7 @@ class MeiliSearchIndexImpl implements MeiliSearchIndex {
   }
 
   @override
-  Future<TaskImpl> delete() async {
+  Future<TaskInfo> delete() async {
     return await _update(http.deleteMethod('/indexes/$uid'));
   }
 
@@ -149,13 +148,13 @@ class MeiliSearchIndexImpl implements MeiliSearchIndex {
   // Document endpoints
   //
 
-  Future<TaskImpl> _update(Future<Response> future) async {
+  Future<TaskInfo> _update(Future<Response> future) async {
     final response = await future;
-    return TaskImpl.fromMap(this, response.data);
+    return TaskInfo.fromMap(response.data);
   }
 
   @override
-  Future<TaskImpl> addDocuments(
+  Future<TaskInfo> addDocuments(
     documents, {
     String? primaryKey,
   }) async {
@@ -169,7 +168,7 @@ class MeiliSearchIndexImpl implements MeiliSearchIndex {
   }
 
   @override
-  Future<TaskImpl> updateDocuments(
+  Future<TaskInfo> updateDocuments(
     documents, {
     String? primaryKey,
   }) async {
@@ -183,17 +182,17 @@ class MeiliSearchIndexImpl implements MeiliSearchIndex {
   }
 
   @override
-  Future<TaskImpl> deleteAllDocuments() async {
+  Future<TaskInfo> deleteAllDocuments() async {
     return await _update(http.deleteMethod('/indexes/$uid/documents'));
   }
 
   @override
-  Future<TaskImpl> deleteDocument(dynamic id) async {
+  Future<TaskInfo> deleteDocument(dynamic id) async {
     return await _update(http.deleteMethod('/indexes/$uid/documents/$id'));
   }
 
   @override
-  Future<TaskImpl> deleteDocuments(List ids) async {
+  Future<TaskInfo> deleteDocuments(List ids) async {
     return await _update(http.postMethod(
       '/indexes/$uid/documents/delete-batch',
       data: ids,
