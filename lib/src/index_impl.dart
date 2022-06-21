@@ -1,4 +1,6 @@
 import 'package:dio/dio.dart';
+import 'package:meilisearch/src/query_parameters/tasks_query.dart';
+import 'package:meilisearch/src/result_task.dart';
 
 import 'client.dart';
 import 'index.dart';
@@ -430,12 +432,15 @@ class MeiliSearchIndexImpl implements MeiliSearchIndex {
   /// Tasks endpoints
   ///
 
-  Future<List<Task>> getTasks() async {
-    final response = await http.getMethod('/indexes/$uid/tasks');
+  @override
+  Future<ResultTask> getTasks({TasksQuery? params}) async {
+    if (params == null) {
+      params = TasksQuery(indexUid: [this.uid]);
+    } else {
+      params.indexUid.add(this.uid);
+    }
 
-    return (response.data['results'] as List)
-        .map((update) => Task.fromMap(update))
-        .toList();
+    return await client.getTasks(params: params);
   }
 
   Future<Task> getTask(int uid) async {

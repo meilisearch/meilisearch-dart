@@ -13,7 +13,7 @@ class ClientTaskImpl implements TaskInfo {
     MeiliSearchClientImpl client,
     Map<String, dynamic> map,
   ) =>
-      ClientTaskImpl(client, map['taskUid'] as int);
+      ClientTaskImpl(client, (map['uid'] ?? map['taskUid']) as int);
 
   @override
   Future<Task> getStatus() async {

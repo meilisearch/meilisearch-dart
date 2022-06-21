@@ -1,3 +1,6 @@
+import 'package:meilisearch/src/query_parameters/tasks_query.dart';
+import 'package:meilisearch/src/result_task.dart';
+
 import 'index_settings.dart';
 
 import 'task_info.dart';
@@ -164,7 +167,7 @@ abstract class MeiliSearchIndex {
   Future<IndexStats> getStats();
 
   /// Get all tasks from the index.
-  Future<List<Task>> getTasks();
+  Future<ResultTask> getTasks({TasksQuery? params});
 
   /// Get a task from an index specified by uid.
   Future<Task> getTask(int uid);
