@@ -1,5 +1,7 @@
 import 'package:meilisearch/src/key.dart';
+import 'package:meilisearch/src/query_parameters/keys_query.dart';
 import 'package:meilisearch/src/query_parameters/tasks_query.dart';
+import 'package:meilisearch/src/result.dart';
 import 'package:meilisearch/src/result_task.dart';
 import 'package:meilisearch/src/task.dart';
 import 'package:meilisearch/src/task_info.dart';
@@ -25,8 +27,8 @@ abstract class MeiliSearchClient {
   /// Timeout in milliseconds for opening a url.
   int? get connectTimeout;
 
-  String generateTenantToken(dynamic searchRules,
-      {String? apiKey, DateTime? expiresAt});
+  String generateTenantToken(dynamic searchRules, String uid,
+      {DateTime? expiresAt});
 
   /// Create an index object by given [uid].
   MeiliSearchIndex index(String uid);
@@ -63,10 +65,10 @@ abstract class MeiliSearchClient {
   Future<Task> createDump();
 
   /// Get the public and private keys.
-  Future<List<Key>> getKeys();
+  Future<Result<Key>> getKeys({KeysQuery? params});
 
-  /// Get a specific key by key.
-  Future<Key> getKey(String key);
+  /// Get a specific key by key or uid.
+  Future<Key> getKey(String keyOrUid);
 
   /// Create a new key.
   Future<Key> createKey(
@@ -76,11 +78,7 @@ abstract class MeiliSearchClient {
       required List<String> actions});
 
   /// Update a key.
-  Future<Key> updateKey(String key,
-      {DateTime? expiresAt,
-      String? description,
-      List<String>? indexes,
-      List<String>? actions});
+  Future<Key> updateKey(String key, {String? description, String? name});
 
   /// Delete a key
   Future<bool> deleteKey(String key);

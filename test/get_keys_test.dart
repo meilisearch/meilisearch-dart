@@ -15,8 +15,9 @@ void main() {
 
         final allKeys = await client.getKeys();
 
-        expect(allKeys, isA<List<Key>>());
-        expect(allKeys.length, greaterThan(0));
+        expect(allKeys.results, isA<List>());
+        expect(allKeys.results.first, isA<Key>());
+        expect(allKeys.total, greaterThan(0));
       });
 
       test('gets a key from server by key/uid', () async {
@@ -64,23 +65,13 @@ void main() {
         final key = await client.createKey(
             actions: ["*"], indexes: ["*"], expiresAt: DateTime(2114));
 
-        final newKey = await client.updateKey(key.key, indexes: ['movies']);
+        final newKey = await client.updateKey(key.key, description: 'new desc');
 
-        expect(newKey.indexes, equals(['movies']));
+        expect(newKey.indexes, equals(['*']));
         expect(newKey.actions, equals(['*']));
         expect(newKey.expiresAt, isNotNull);
         expect(newKey.expiresAt, equals(key.expiresAt));
-        expect(newKey.description, equals(key.description));
-      });
-
-      test('updates key expiresAt', () async {
-        final key = await client.createKey(actions: ["*"], indexes: ["*"]);
-
-        final newKey = await client.updateKey(key.key,
-            expiresAt: DateTime.now().add(Duration(days: 1)));
-
-        expect(key.expiresAt, isNull);
-        expect(newKey.expiresAt, isNotNull);
+        expect(newKey.description, equals('new desc'));
       });
 
       test('deletes a key', () async {

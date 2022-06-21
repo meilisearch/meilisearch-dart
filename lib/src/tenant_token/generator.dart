@@ -14,12 +14,6 @@ int? _getTimestamp(DateTime? time) {
   return time.millisecondsSinceEpoch;
 }
 
-String _getApiKeyPrefix(String? key) {
-  if (key == null || key.isEmpty) throw InvalidApiKeyException();
-
-  return key.substring(0, 8);
-}
-
 Uint8List _sign(String secretKey, String msg) {
   final hmac = Hmac(sha256, utf8.encode(secretKey));
   final body = Uint8List.fromList(utf8.encode(msg));
@@ -31,20 +25,20 @@ String _tobase64(String value) {
   return value.replaceAll(RegExp('='), '');
 }
 
-String generateToken(dynamic searchRules, String apiKey,
-    {DateTime? expiresAt}) {
+String generateToken(dynamic searchRules, String uid, {DateTime? expiresAt}) {
+  if (uid.isEmpty) throw InvalidApiKeyException();
+
   final expiration = _getTimestamp(expiresAt);
-  final keyPrefix = _getApiKeyPrefix(apiKey);
   final payload = <String, dynamic>{
     "searchRules": searchRules,
-    "apiKeyPrefix": keyPrefix,
+    "apiKeyUid": uid,
     if (expiration != null) 'exp': expiration,
   };
 
   final encodedHeader = _tobase64(_jsonEncoder.encode(_HEADER));
   final encodedBody = _tobase64(_jsonEncoder.encode(payload));
   final unsignedBody = '$encodedHeader.$encodedBody';
-  final signature = _tobase64(base64Url.encode(_sign(apiKey, unsignedBody)));
+  final signature = _tobase64(base64Url.encode(_sign(uid, unsignedBody)));
 
   return '$unsignedBody.$signature';
 }
