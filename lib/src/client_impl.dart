@@ -1,6 +1,8 @@
 import 'package:dio/dio.dart';
 import 'package:meilisearch/src/client_task_impl.dart';
+import 'package:meilisearch/src/query_parameters/keys_query.dart';
 import 'package:meilisearch/src/query_parameters/tasks_query.dart';
+import 'package:meilisearch/src/result.dart';
 import 'package:meilisearch/src/result_task.dart';
 import 'package:meilisearch/src/task.dart';
 import 'package:meilisearch/src/task_info.dart';
@@ -120,16 +122,17 @@ class MeiliSearchClientImpl implements MeiliSearchClient {
   }
 
   @override
-  Future<List<Key>> getKeys() async {
-    final response = await http.getMethod<Map<String, dynamic>>('/keys');
+  Future<Result<Key>> getKeys({KeysQuery? params}) async {
+    final response = await http.getMethod<Map<String, dynamic>>('/keys',
+        queryParameters: params?.toQuery());
 
-    return List<Key>.from(
-        response.data!['results'].map((model) => Key.fromJson(model)));
+    return Result<Key>.fromMapWithType(
+        response.data!, (model) => Key.fromJson(model));
   }
 
   @override
-  Future<Key> getKey(String key) async {
-    final response = await http.getMethod<Map<String, dynamic>>('/keys/${key}');
+  Future<Key> getKey(String keyOrUid) async {
+    final response = await http.getMethod<Map<String, dynamic>>('/keys/${keyOrUid}');
 
     return Key.fromJson(response.data!);
   }
@@ -167,17 +170,10 @@ class MeiliSearchClientImpl implements MeiliSearchClient {
   }
 
   @override
-  Future<Key> updateKey(String key,
-      {DateTime? expiresAt,
-      String? description,
-      List<String>? indexes,
-      List<String>? actions}) async {
+  Future<Key> updateKey(String key, {String? name, String? description}) async {
     final data = <String, dynamic>{
-      if (expiresAt != null)
-        'expiresAt': expiresAt.toIso8601String().split('.').first,
       if (description != null) 'description': description,
-      if (indexes != null) 'indexes': indexes,
-      if (actions != null) 'actions': actions,
+      if (name != null) 'name': name,
     };
 
     final response = await http
@@ -194,10 +190,9 @@ class MeiliSearchClientImpl implements MeiliSearchClient {
   }
 
   @override
-  String generateTenantToken(dynamic searchRules,
-      {String? apiKey, DateTime? expiresAt}) {
-    return generateToken(searchRules, apiKey ?? this.apiKey ?? '',
-        expiresAt: expiresAt);
+  String generateTenantToken(dynamic searchRules, String uid,
+      {DateTime? expiresAt}) {
+    return generateToken(searchRules, uid, expiresAt: expiresAt);
   }
 
   ///
