@@ -28,7 +28,7 @@ abstract class MeiliSearchClient {
   int? get connectTimeout;
 
   String generateTenantToken(dynamic searchRules, String uid,
-      {DateTime? expiresAt});
+      {String? apiKey, DateTime? expiresAt});
 
   /// Create an index object by given [uid].
   MeiliSearchIndex index(String uid);

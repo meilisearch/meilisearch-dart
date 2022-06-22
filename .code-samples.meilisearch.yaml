@@ -442,6 +442,7 @@ security_guide_delete_key_1: |-
   var client = MeiliSearchClient('http://127.0.0.1:7700', 'masterKey');
   await client.deleteKey('d0552b41536279a0ad88bd595327b96f01176a60c2243e906c52ac02375f9bc4');
 tenant_token_guide_generate_sdk_1: |-
+  final uid = '85c3c2f9-bdd6-41f1-abd8-11fcf80e0f76';
   final apiKey = 'B5KdX2MY2jV6EXfUs6scSfmC...';
   final expiresAt = DateTime.utc(2025, 12, 20);
   final searchRules = {
@@ -452,6 +453,7 @@ tenant_token_guide_generate_sdk_1: |-
 
   final token = client.generateTenantToken(
     searchRules,
+    uid,
     apiKey: apiKey, // optional
     expiresAt: expiresAt // optional
   );
