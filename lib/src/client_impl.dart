@@ -1,12 +1,10 @@
 import 'package:dio/dio.dart';
-import 'package:meilisearch/src/client_task_impl.dart';
 import 'package:meilisearch/src/query_parameters/indexes_query.dart';
 import 'package:meilisearch/src/query_parameters/keys_query.dart';
 import 'package:meilisearch/src/query_parameters/tasks_query.dart';
 import 'package:meilisearch/src/result.dart';
 import 'package:meilisearch/src/result_task.dart';
 import 'package:meilisearch/src/task.dart';
-import 'package:meilisearch/src/task_info.dart';
 import 'package:meilisearch/src/tenant_token.dart';
 
 import 'http_request.dart';
@@ -38,14 +36,14 @@ class MeiliSearchClientImpl implements MeiliSearchClient {
     return new MeiliSearchIndexImpl(this, uid);
   }
 
-  Future<TaskInfo> _update(Future<Response> future) async {
+  Future<Task> _update(Future<Response> future) async {
     final response = await future;
 
-    return ClientTaskImpl.fromMap(this, response.data);
+    return Task.fromMap(response.data);
   }
 
   @override
-  Future<TaskInfo> createIndex(String uid, {String? primaryKey}) async {
+  Future<Task> createIndex(String uid, {String? primaryKey}) async {
     final data = <String, dynamic>{
       'uid': uid,
       if (primaryKey != null) 'primaryKey': primaryKey,
@@ -84,14 +82,14 @@ class MeiliSearchClientImpl implements MeiliSearchClient {
   }
 
   @override
-  Future<TaskInfo> deleteIndex(String uid) async {
+  Future<Task> deleteIndex(String uid) async {
     final index = this.index(uid);
 
     return await index.delete();
   }
 
   @override
-  Future<TaskInfo> updateIndex(String uid, String primaryKey) async {
+  Future<Task> updateIndex(String uid, String primaryKey) async {
     final index = this.index(uid);
 
     return index.update(primaryKey: primaryKey);
@@ -132,7 +130,8 @@ class MeiliSearchClientImpl implements MeiliSearchClient {
 
   @override
   Future<Key> getKey(String keyOrUid) async {
-    final response = await http.getMethod<Map<String, dynamic>>('/keys/${keyOrUid}');
+    final response =
+        await http.getMethod<Map<String, dynamic>>('/keys/${keyOrUid}');
 
     return Key.fromJson(response.data!);
   }

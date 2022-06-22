@@ -154,9 +154,9 @@ void main() {
         {'book_id': 1234, 'title': 'Pride and Prejudice'}
       ]);
 
-      final task = await index.getTask(response.taskUid);
+      final task = await index.getTask(response.uid!);
 
-      expect(task.uid, response.taskUid);
+      expect(task.uid, response.uid!);
     });
 
     test('gets a task with a failure', () async {
