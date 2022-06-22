@@ -37,7 +37,8 @@ void main() {
 
       test('decodes successfully using uid from param', () {
         final key = sha1RandomString();
-        final token = client.generateTenantToken(_searchRules, 'uid', apiKey: key);
+        final token =
+            client.generateTenantToken(_searchRules, 'uid', apiKey: key);
 
         expect(() => JWT.verify(token, SecretKey(key)), returnsNormally);
       });
@@ -87,7 +88,8 @@ void main() {
         final key = sha1RandomString();
         final uid = sha1RandomString();
         final tomorrow = DateTime.now().add(new Duration(days: 1)).toUtc();
-        final token = generateToken(_searchRules, key, uid, expiresAt: tomorrow);
+        final token =
+            generateToken(_searchRules, key, uid, expiresAt: tomorrow);
 
         expect(() => JWT.verify(token, SecretKey(key), checkExpiresIn: true),
             returnsNormally);
@@ -117,7 +119,8 @@ void main() {
         final uid = sha1RandomString();
         final localDate = DateTime(2300, 1, 20);
 
-        expect(() => generateToken(_searchRules, key, uid, expiresAt: localDate),
+        expect(
+            () => generateToken(_searchRules, key, uid, expiresAt: localDate),
             throwsA(isA<NotUTCException>()));
       });
       test('contains custom claims', () {
