@@ -46,6 +46,19 @@ void main() {
         expect(key.expiresAt, isNull);
       });
 
+      test('creates a new key with uid', () async {
+        Key key = await client.createKey(
+            description: "awesome-key",
+            uid: "8dbfeeee-65d4-4de2-b4cc-2b981d58d112",
+            actions: ["documents.add"],
+            indexes: ["movies"]);
+
+        expect(key.description, equals("awesome-key"));
+        expect(key.actions, equals(["documents.add"]));
+        expect(key.indexes, equals(["movies"]));
+        expect(key.expiresAt, isNull);
+      });
+
       test('creates a new key with expiresAt', () async {
         var dt = DateTime.now().add(const Duration(days: 50)).toUtc();
 

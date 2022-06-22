@@ -74,6 +74,7 @@ abstract class MeiliSearchClient {
   Future<Key> createKey(
       {DateTime? expiresAt,
       String? description,
+      String? uid,
       required List<String> indexes,
       required List<String> actions});
 

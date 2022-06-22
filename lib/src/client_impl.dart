@@ -153,6 +153,7 @@ class MeiliSearchClientImpl implements MeiliSearchClient {
   Future<Key> createKey(
       {DateTime? expiresAt,
       String? description,
+      String? uid: null,
       required List<String> indexes,
       required List<String> actions}) async {
     final data = <String, dynamic>{
