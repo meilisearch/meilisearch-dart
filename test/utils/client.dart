@@ -19,8 +19,8 @@ String get testServer {
 }
 
 Future<void> deleteAllIndexes() async {
-  var indexes = await client.getIndexes();
-  for (var item in indexes) {
+  var data = await client.getIndexes();
+  for (var item in data.results) {
     await item.delete();
   }
 }
