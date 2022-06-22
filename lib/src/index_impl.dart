@@ -1,5 +1,7 @@
 import 'package:dio/dio.dart';
+import 'package:meilisearch/src/query_parameters/documents_query.dart';
 import 'package:meilisearch/src/query_parameters/tasks_query.dart';
+import 'package:meilisearch/src/result.dart';
 import 'package:meilisearch/src/result_task.dart';
 
 import 'client.dart';
@@ -208,22 +210,12 @@ class MeiliSearchIndexImpl implements MeiliSearchIndex {
   }
 
   @override
-  Future<List<Map<String, dynamic>>> getDocuments({
-    int? offset,
-    int? limit,
-    String? attributesToRetrieve,
-  }) async {
-    final response = await http.getMethod<List<dynamic>>(
-      '/indexes/$uid/documents',
-      queryParameters: <String, dynamic>{
-        if (offset != null) 'offset': offset,
-        if (limit != null) 'limit': limit,
-        if (attributesToRetrieve != null)
-          'attributesToRetrieve': attributesToRetrieve,
-      },
-    );
+  Future<Result> getDocuments({DocumentsQuery? params: null}) async {
+    final response = await http.getMethod<Map<String, dynamic>>(
+        '/indexes/$uid/documents',
+        queryParameters: params?.toQuery());
 
-    return response.data!.cast<Map<String, dynamic>>();
+    return Result.fromMap(response.data!);
   }
 
   //
