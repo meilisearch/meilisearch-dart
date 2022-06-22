@@ -146,7 +146,7 @@ void main() {
 
       final tasks = await index.getTasks();
 
-      expect(tasks.length, 3);
+      expect(tasks.results.length, equals(3));
     });
 
     test('gets a task from a index by taskId', () async {
@@ -155,9 +155,9 @@ void main() {
         {'book_id': 1234, 'title': 'Pride and Prejudice'}
       ]);
 
-      final task = await index.getTask(response.uid);
+      final task = await index.getTask(response.taskUid);
 
-      expect(task.uid, response.uid);
+      expect(task.uid, response.taskUid);
     });
 
     test('gets a task with a failure', () async {
