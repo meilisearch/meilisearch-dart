@@ -25,8 +25,8 @@ String _tobase64(String value) {
   return value.replaceAll(RegExp('='), '');
 }
 
-String generateToken(dynamic searchRules, String uid, {DateTime? expiresAt}) {
-  if (uid.isEmpty) throw InvalidApiKeyException();
+String generateToken(dynamic searchRules, String apiKey, String uid, {DateTime? expiresAt}) {
+  if (uid.isEmpty || apiKey.isEmpty) throw InvalidApiKeyException();
 
   final expiration = _getTimestamp(expiresAt);
   final payload = <String, dynamic>{
@@ -38,7 +38,7 @@ String generateToken(dynamic searchRules, String uid, {DateTime? expiresAt}) {
   final encodedHeader = _tobase64(_jsonEncoder.encode(_HEADER));
   final encodedBody = _tobase64(_jsonEncoder.encode(payload));
   final unsignedBody = '$encodedHeader.$encodedBody';
-  final signature = _tobase64(base64Url.encode(_sign(uid, unsignedBody)));
+  final signature = _tobase64(base64Url.encode(_sign(apiKey, unsignedBody)));
 
   return '$unsignedBody.$signature';
 }
