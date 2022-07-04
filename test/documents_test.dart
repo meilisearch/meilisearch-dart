@@ -78,5 +78,13 @@ void main() {
       expect(docs.results[0]['book_id'], isNotNull);
       expect(docs.results[0]['title'], isNull);
     });
+
+    test('Get document with fields', () async {
+      final index = await createBooksIndex();
+      final doc = await index.getDocument(1, fields: ['book_id']);
+
+      expect(doc?['book_id'], isNotNull);
+      expect(doc?['title'], isNull);
+    });
   });
 }

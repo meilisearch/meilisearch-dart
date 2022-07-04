@@ -42,7 +42,7 @@ abstract class MeiliSearchIndex {
   });
 
   /// Return the document in the index by given [id].
-  Future<Map<String, dynamic>?> getDocument(dynamic id);
+  Future<Map<String, dynamic>?> getDocument(dynamic id, { List<String> fields });
 
   /// Return a list of all existing documents in the index.
   Future<Result> getDocuments({DocumentsQuery? params});
