@@ -4,9 +4,13 @@
 # You can read more on https://github.com/meilisearch/documentation/tree/master/.vuepress/code-samples
 ---
 get_all_tasks_filtering_1: |-
+  await client.getTasks(TasksQuery(indexUid: ['movies']);
 get_all_tasks_filtering_2: |-
+  await client.getTasks(TasksQuery(status: ['succeeded', 'failed'], type: ['documentAdditionOrUpdate']);
 get_all_tasks_paginating_1: |-
+  await client.getTasks(TasksQuery(limit: 2, from: 10);
 get_all_tasks_paginating_2: |-
+  await client.getTasks(TasksQuery(limit: 2, from: 8);
 get_pagination_settings_1: |-
 update_pagination_settings_1: |-
 reset_pagination_settings_1: |-
@@ -15,7 +19,6 @@ update_faceting_settings_1: |-
 reset_faceting_settings_1: |-
 settings_guide_faceting_1: |-
 settings_guide_pagination_1: |-
-
 get_one_index_1: |-
   await client.getIndex('movies');
 list_all_indexes_1: |-
