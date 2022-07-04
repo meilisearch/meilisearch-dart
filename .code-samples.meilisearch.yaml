@@ -3,9 +3,22 @@
 # the documentation on build
 # You can read more on https://github.com/meilisearch/documentation/tree/master/.vuepress/code-samples
 ---
+get_all_tasks_filtering_1: |-
+get_all_tasks_filtering_2: |-
+get_all_tasks_paginating_1: |-
+get_all_tasks_paginating_2: |-
+get_pagination_settings_1: |-
+update_pagination_settings_1: |-
+reset_pagination_settings_1: |-
+get_faceting_settings_1: |-
+update_faceting_settings_1: |-
+reset_faceting_settings_1: |-
+settings_guide_faceting_1: |-
+settings_guide_pagination_1: |-
+
 get_one_index_1: |-
   await client.getIndex('movies');
-list_all_indexes_1: |-
+PLEASE_UPDATE_ME>>>>>>>>>>>>>list_all_indexes_1: |-
   await client.getIndexes();
 create_an_index_1: |-
   await client.createIndex('movies', primaryKey: 'id');
@@ -13,7 +26,7 @@ update_an_index_1: |-
   await client.index('movies').update(primaryKey: 'id');
 delete_an_index_1: |-
   await client.index('movies').delete();
-get_one_document_1: |-
+PLEASE_UPDATE_ME>>>>>>>>>>>>>get_one_document_1: |-
   await client.index('movies').getDocument(25684);
 get_documents_1: |-
   await client.index('movies').getDocuments(limit: 2);
@@ -45,9 +58,9 @@ delete_documents_1: |-
   await client.index('movies').deleteDocuments([23488, 153738, 437035, 363869]);
 search_post_1: |-
   await client.index('movies').search('American ninja');
-get_task_by_index_1: |-
+PLEASE_REMOVE_ME>>>>>>>>>>>>>get_task_by_index_1: |-
   await client.index('movies').getTask(1);
-get_all_tasks_by_index_1: |-
+PLEASE_REMOVE_ME>>>>>>>>>>>>>get_all_tasks_by_index_1: |-
   await client.index('movies').getTasks();
 get_task_1: |-
   await client.getTask(1);
@@ -57,7 +70,7 @@ get_keys_1: |-
   await client.getKeys();
 get_settings_1: |-
   await client.index('movies').getSettings();
-update_settings_1: |-
+PLEASE_UPDATE_ME>>>>>>>>>>>>>update_settings_1: |-
   await client.index('movies').updateSettings(IndexSettings(
         rankingRules: [
           'words',
@@ -197,7 +210,7 @@ search_parameter_guide_highlight_1: |-
   await client
       .index('movies')
       .search('winter feast', attributesToHighlight: ['overview']);
-search_parameter_guide_matches_1: |-
+PLEASE_UPDATE_ME>>>>>>>>>>>>>search_parameter_guide_matches_1: |-
   await client.index('movies').search('winter feast', showMatchesPosition: true);
 settings_guide_synonyms_1: |-
   await client.index('tops').updateSettings(IndexSettings(synonyms: {
@@ -300,7 +313,7 @@ getting_started_update_searchable_attributes: |-
   ]);
 getting_started_update_stop_words: |-
   await client.index('movies').updateStopWords(['the']);
-getting_started_check_task_status: |-
+PLEASE_UPDATE_ME>>>>>>>>>>>>>PLEASE_UPDATE_ME>>>>>>>>>>>>>getting_started_check_task_status: |-
   await client.index('movies').getTask(0);
 getting_started_synonyms: |-
   await client.index('movies').updateSynonyms({
@@ -334,7 +347,7 @@ getting_started_sorting: |-
   await client.index('meteorites').search('', sort: ['mass:asc'], filter: 'mass < 200');
 getting_started_filtering: |-
   await client.index('meteorites').search('', filter: 'mass < 200')
-faceted_search_update_settings_1: |-
+faceted_search_PLEASE_UPDATE_ME>>>>>>>>>>>>>update_settings_1: |-
   await client.index('movies').updateFilterableAttributes([
     'director',
     'genres',
@@ -344,7 +357,7 @@ faceted_search_filter_1: |-
     ['genres = Horror', 'genres = Mystery'],
     'director = "Jordan Peele"'
   ]);
-faceted_search_facets_distribution_1: |-
+PLEASE_UPDATE_ME>>>>>>>>>>>>>faceted_search_facets_distribution_1: |-
   await client.index('movies').search('Batman', facets: ['genres']);
 faceted_search_walkthrough_filter_1: |-
   await client.index('movies').search('thriller', filter: [
@@ -402,7 +415,7 @@ authorization_header_1: |-
   await client.getKeys();
 get_one_key_1: |-
   await client.getKey('d0552b41536279a0ad88bd595327b96f01176a60c2243e906c52ac02375f9bc4');
-get_all_keys_1: |-
+PLEASE_UPDATE_ME>>>>>>>>>>>>>get_all_keys_1: |-
   await client.getKeys();
 create_a_key_1: |-
   await client.createKey(
@@ -411,7 +424,7 @@ create_a_key_1: |-
     indexes: ['products'],
     expiresAt: DateTime(2042, 04, 02)
   );
-update_a_key_1: |-
+PLEASE_UPDATE_ME>>>>>>>>>>>>>update_a_key_1: |-
   await client.updateKey(
     'd0552b41536279a0ad88bd595327b96f01176a60c2243e906c52ac02375f9bc4',
     description: 'Manage documents: Products/Reviews API key',
@@ -419,12 +432,12 @@ update_a_key_1: |-
     indexes: ['products', 'reviews'],
     expiresAt: DateTime(2042, 04, 02),
   );
-delete_a_key_1: |-
+PLEASE_UPDATE_ME>>>>>>>>>>>>>delete_a_key_1: |-
   await client.deleteKey('d0552b41536279a0ad88bd595327b96f01176a60c2243e906c52ac02375f9bc4');
 security_guide_search_key_1: |-
   var client = MeiliSearchClient('http://127.0.0.1:7700', 'apiKey');
   await client.index('patient_medical_records').search();
-security_guide_update_key_1: |-
+PLEASE_UPDATE_ME>>>>>>>>>>>>>security_guide_update_key_1: |-
   var client = MeiliSearchClient('http://127.0.0.1:7700', 'masterKey');
   await client.updateKey('d0552b41536279a0ad88bd595327b96f01176a60c2243e906c52ac02375f9bc4', indexes: ['doctors']);
 security_guide_create_key_1: |-
@@ -438,7 +451,7 @@ security_guide_create_key_1: |-
 security_guide_list_keys_1: |-
   var client = MeiliSearchClient('http://127.0.0.1:7700', 'masterKey');
   await client.getKeys();
-security_guide_delete_key_1: |-
+PLEASE_UPDATE_ME>>>>>>>>>>>>>security_guide_delete_key_1: |-
   var client = MeiliSearchClient('http://127.0.0.1:7700', 'masterKey');
   await client.deleteKey('d0552b41536279a0ad88bd595327b96f01176a60c2243e906c52ac02375f9bc4');
 tenant_token_guide_generate_sdk_1: |-
