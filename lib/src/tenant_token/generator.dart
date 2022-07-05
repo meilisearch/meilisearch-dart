@@ -25,7 +25,7 @@ String _tobase64(String value) {
   return value.replaceAll(RegExp('='), '');
 }
 
-String generateToken(dynamic searchRules, String apiKey, String uid,
+String generateToken(String uid, dynamic searchRules, String apiKey,
     {DateTime? expiresAt}) {
   if (uid.isEmpty || apiKey.isEmpty) throw InvalidApiKeyException();
 

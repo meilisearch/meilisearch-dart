@@ -190,9 +190,9 @@ class MeiliSearchClientImpl implements MeiliSearchClient {
   }
 
   @override
-  String generateTenantToken(dynamic searchRules, String uid,
+  String generateTenantToken(String uid, dynamic searchRules,
       {String? apiKey, DateTime? expiresAt}) {
-    return generateToken(searchRules, apiKey ?? this.apiKey ?? '', uid,
+    return generateToken(uid, searchRules, apiKey ?? this.apiKey ?? '',
         expiresAt: expiresAt);
   }
 
