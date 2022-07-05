@@ -199,9 +199,11 @@ class MeiliSearchIndexImpl implements MeiliSearchIndex {
   }
 
   @override
-  Future<Map<String, dynamic>?> getDocument(id) async {
+  Future<Map<String, dynamic>?> getDocument(id, { List<String> fields: const [] }) async {
+    final params = DocumentsQuery(fields: fields);
     final response = await http.getMethod<Map<String, dynamic>>(
       '/indexes/$uid/documents/$id',
+      queryParameters: params.toQuery()
     );
 
     return response.data;
