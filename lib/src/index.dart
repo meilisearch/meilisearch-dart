@@ -1,7 +1,7 @@
 import 'package:meilisearch/src/query_parameters/documents_query.dart';
 import 'package:meilisearch/src/query_parameters/tasks_query.dart';
 import 'package:meilisearch/src/result.dart';
-import 'package:meilisearch/src/result_task.dart';
+import 'package:meilisearch/src/tasks_results.dart';
 
 import 'index_settings.dart';
 
@@ -42,7 +42,7 @@ abstract class MeiliSearchIndex {
   });
 
   /// Return the document in the index by given [id].
-  Future<Map<String, dynamic>?> getDocument(dynamic id, { List<String> fields });
+  Future<Map<String, dynamic>?> getDocument(dynamic id, {List<String> fields});
 
   /// Return a list of all existing documents in the index.
   Future<Result> getDocuments({DocumentsQuery? params});
@@ -162,7 +162,7 @@ abstract class MeiliSearchIndex {
   Future<IndexStats> getStats();
 
   /// Get all tasks from the index.
-  Future<ResultTask> getTasks({TasksQuery? params});
+  Future<TasksResults> getTasks({TasksQuery? params});
 
   /// Get a task from an index specified by uid.
   Future<Task> getTask(int uid);

@@ -3,7 +3,7 @@ import 'package:meilisearch/src/query_parameters/indexes_query.dart';
 import 'package:meilisearch/src/query_parameters/keys_query.dart';
 import 'package:meilisearch/src/query_parameters/tasks_query.dart';
 import 'package:meilisearch/src/result.dart';
-import 'package:meilisearch/src/result_task.dart';
+import 'package:meilisearch/src/tasks_results.dart';
 import 'package:meilisearch/src/task.dart';
 
 import 'http_request.dart';
@@ -91,7 +91,7 @@ abstract class MeiliSearchClient {
   Future<AllStats> getStats();
 
   /// Get a list of tasks from the client.
-  Future<ResultTask> getTasks({TasksQuery? params});
+  Future<TasksResults> getTasks({TasksQuery? params});
 
   /// Get a task from an index specified by uid with the specified uid.
   Future<Task> getTask(int uid);
