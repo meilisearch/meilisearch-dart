@@ -3,7 +3,7 @@ import 'package:meilisearch/src/query_parameters/indexes_query.dart';
 import 'package:meilisearch/src/query_parameters/keys_query.dart';
 import 'package:meilisearch/src/query_parameters/tasks_query.dart';
 import 'package:meilisearch/src/result.dart';
-import 'package:meilisearch/src/result_task.dart';
+import 'package:meilisearch/src/tasks_results.dart';
 import 'package:meilisearch/src/task.dart';
 import 'package:meilisearch/src/tenant_token.dart';
 
@@ -201,11 +201,11 @@ class MeiliSearchClientImpl implements MeiliSearchClient {
   ///
 
   @override
-  Future<ResultTask> getTasks({TasksQuery? params}) async {
+  Future<TasksResults> getTasks({TasksQuery? params}) async {
     final response =
         await http.getMethod('/tasks', queryParameters: params?.toQuery());
 
-    return ResultTask.fromMap(response.data);
+    return TasksResults.fromMap(response.data);
   }
 
   @override

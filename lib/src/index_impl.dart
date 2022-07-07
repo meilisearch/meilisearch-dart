@@ -2,7 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:meilisearch/src/query_parameters/documents_query.dart';
 import 'package:meilisearch/src/query_parameters/tasks_query.dart';
 import 'package:meilisearch/src/result.dart';
-import 'package:meilisearch/src/result_task.dart';
+import 'package:meilisearch/src/tasks_results.dart';
 
 import 'client.dart';
 import 'index.dart';
@@ -199,12 +199,12 @@ class MeiliSearchIndexImpl implements MeiliSearchIndex {
   }
 
   @override
-  Future<Map<String, dynamic>?> getDocument(id, { List<String> fields: const [] }) async {
+  Future<Map<String, dynamic>?> getDocument(id,
+      {List<String> fields: const []}) async {
     final params = DocumentsQuery(fields: fields);
     final response = await http.getMethod<Map<String, dynamic>>(
-      '/indexes/$uid/documents/$id',
-      queryParameters: params.toQuery()
-    );
+        '/indexes/$uid/documents/$id',
+        queryParameters: params.toQuery());
 
     return response.data;
   }
@@ -424,7 +424,7 @@ class MeiliSearchIndexImpl implements MeiliSearchIndex {
   ///
 
   @override
-  Future<ResultTask> getTasks({TasksQuery? params}) async {
+  Future<TasksResults> getTasks({TasksQuery? params}) async {
     if (params == null) {
       params = TasksQuery(indexUid: [this.uid]);
     } else {
