@@ -10,6 +10,7 @@
 .svn/
 .vscode/
 pubspec.lock
+!example/pubspec.lock
 
 # IntelliJ related
 *.iml
