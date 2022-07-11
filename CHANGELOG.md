@@ -1,3 +1,36 @@
+# 0.6.0
+This version makes this package compatible with Meilisearch v0.28.0 and newer
+### Breaking changes
+- `MeiliSearchClient#getDumpStatus` method was removed.
+- `MeiliSearchClient#getIndexes` method now return a object type `Result<MeiliSearchIndex>`.
+- `TaskInfo`, `TaskImpl`, `ClientTaskImpl` are now just `Task`.
+  - The method `getStatus` was removed in the new class.
+- `MeiliSearchClient#generateTenantToken` now require a `String uid` which is the `uid` of the `Key` instance used to sign the token.
+- `MeiliSearchClient#createDump` now responds with `Task`.
+- `MeiliSearchClient#getKeys` method now return a object type `Future<Result<Key>>`.
+- `MeiliSearchClient#updateKey` now can just update a `description` and/or `name`.
+- `MeiliSearchClient#getTasks` method now return a object type `Future<TasksResults>`.
+- `MeiliSearchIndex#getTasks` method now return a object type `Future<TasksResults>`.
+- `MeiliSearchIndex#search` `facetsDistribution` is now `facets`
+- `MeiliSearchIndex#search` `matches` is now `showMatchesPosition`
+- `MeiliSearchIndex#getDocuments` method now return a object type `Future<Result>`.
+- `MeiliSearchIndex#getDocuments` method now accepts a object as a parameter and `offset`, `limit`, `attributesToRetrieve` were not longer accepted.
+- `nbHits`, `exhaustiveNbHits`, `facetsDistribution`, `exhaustiveFacetsCount` were removed from `SearchResult`.
+- Remove unused generic `T` in `MeiliSearchClient#search` method
+
+### Changes
+- `MeiliSearchClient#getIndexes` accepts a object `IndexesQuery` to filter and paginate the results.
+- `MeiliSearchClient#getKeys` accepts a object `KeysQuery` to filter and paginate the results.
+- `MeiliSearchClient#getKey` accepts both a `Key#uid` or `Key#key` value.
+- `MeiliSearchClient#getTasks` accepts a object `TasksQuery` to filter and paginate the results.
+- `MeiliSearchIndex#getTasks` accepts a object `TasksQuery` to filter and paginate the results.
+- `MeiliSearchClient#createKey` can specify a `uid` (optionally) to create a new `Key`.
+- `MeiliSearchIndex#getDocuments` accepts a object `DocumentsQuery` to filter and paginate the results.
+- `Key` has now a `name` and `uid` string fields.
+- `MeiliSearchIndex#getDocument` accepts a list of fields to reduce the final payload.
+- `estimatedTotalHits`, `facetDistribution` were added to `SearchResult`
+- Sending a invalid `uid` or `apiKey` will raise `InvalidApiKeyException` in the `generateTenantToken`.
+
 # 0.5.3
 This version makes this package compatible with Meilisearch v0.27.0 and newer
 ## Changes
