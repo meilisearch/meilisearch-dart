@@ -32,14 +32,15 @@ void main() {
 
       final tasks = await client.getTasks();
 
-      expect(tasks.length, greaterThan(0));
+      expect(tasks.results.length, greaterThan(0));
+      expect(tasks.results.first, isA<Task>());
     });
 
     test('gets a task by taskId', () async {
       final uid = randomUid();
       final info = await client.createIndex(uid);
 
-      final task = await client.getTask(info.uid);
+      final task = await client.getTask(info.uid!);
 
       expect(task, isA<Task>());
       expect(task.uid, equals(info.uid));

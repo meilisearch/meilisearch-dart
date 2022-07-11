@@ -1,6 +1,10 @@
 import 'package:meilisearch/src/key.dart';
+import 'package:meilisearch/src/query_parameters/indexes_query.dart';
+import 'package:meilisearch/src/query_parameters/keys_query.dart';
+import 'package:meilisearch/src/query_parameters/tasks_query.dart';
+import 'package:meilisearch/src/result.dart';
+import 'package:meilisearch/src/tasks_results.dart';
 import 'package:meilisearch/src/task.dart';
-import 'package:meilisearch/src/task_info.dart';
 
 import 'http_request.dart';
 import 'index.dart';
@@ -23,14 +27,14 @@ abstract class MeiliSearchClient {
   /// Timeout in milliseconds for opening a url.
   int? get connectTimeout;
 
-  String generateTenantToken(dynamic searchRules,
+  String generateTenantToken(String uid, dynamic searchRules,
       {String? apiKey, DateTime? expiresAt});
 
   /// Create an index object by given [uid].
   MeiliSearchIndex index(String uid);
 
   /// Return list of all existing indexes.
-  Future<List<MeiliSearchIndex>> getIndexes();
+  Future<Result<MeiliSearchIndex>> getIndexes({IndexesQuery? params});
 
   /// Find index by matching [uid]. Throws error if index is not exists.
   Future<MeiliSearchIndex> getIndex(String uid);
@@ -41,13 +45,13 @@ abstract class MeiliSearchClient {
 
   /// Create a new index by given [uid] and optional [primaryKey] parameter.
   /// Throws an error if index is already exists.
-  Future<TaskInfo> createIndex(String uid, {String primaryKey});
+  Future<Task> createIndex(String uid, {String primaryKey});
 
   /// Delete the index by matching [uid].
-  Future<TaskInfo> deleteIndex(String uid);
+  Future<Task> deleteIndex(String uid);
 
   /// Update the primary Key of the index by matching [uid].
-  Future<TaskInfo> updateIndex(String uid, String primaryKey);
+  Future<Task> updateIndex(String uid, String primaryKey);
 
   /// Return health of the Meilisearch server.
   /// Throws an error if containing details if Meilisearch can't process your request.
@@ -58,30 +62,24 @@ abstract class MeiliSearchClient {
   Future<bool> isHealthy();
 
   /// Trigger a dump creation process.
-  Future<Map<String, String>> createDump();
-
-  /// Get the status of a dump creation process.
-  Future<Map<String, String>> getDumpStatus(String uid);
+  Future<Task> createDump();
 
   /// Get the public and private keys.
-  Future<List<Key>> getKeys();
+  Future<Result<Key>> getKeys({KeysQuery? params});
 
-  /// Get a specific key by key.
-  Future<Key> getKey(String key);
+  /// Get a specific key by key or uid.
+  Future<Key> getKey(String keyOrUid);
 
   /// Create a new key.
   Future<Key> createKey(
       {DateTime? expiresAt,
       String? description,
+      String? uid,
       required List<String> indexes,
       required List<String> actions});
 
   /// Update a key.
-  Future<Key> updateKey(String key,
-      {DateTime? expiresAt,
-      String? description,
-      List<String>? indexes,
-      List<String>? actions});
+  Future<Key> updateKey(String key, {String? description, String? name});
 
   /// Delete a key
   Future<bool> deleteKey(String key);
@@ -93,7 +91,7 @@ abstract class MeiliSearchClient {
   Future<AllStats> getStats();
 
   /// Get a list of tasks from the client.
-  Future<List<Task>> getTasks();
+  Future<TasksResults> getTasks({TasksQuery? params});
 
   /// Get a task from an index specified by uid with the specified uid.
   Future<Task> getTask(int uid);

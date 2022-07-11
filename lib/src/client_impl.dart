@@ -1,7 +1,10 @@
 import 'package:dio/dio.dart';
-import 'package:meilisearch/src/client_task_impl.dart';
+import 'package:meilisearch/src/query_parameters/indexes_query.dart';
+import 'package:meilisearch/src/query_parameters/keys_query.dart';
+import 'package:meilisearch/src/query_parameters/tasks_query.dart';
+import 'package:meilisearch/src/result.dart';
+import 'package:meilisearch/src/tasks_results.dart';
 import 'package:meilisearch/src/task.dart';
-import 'package:meilisearch/src/task_info.dart';
 import 'package:meilisearch/src/tenant_token.dart';
 
 import 'http_request.dart';
@@ -33,14 +36,14 @@ class MeiliSearchClientImpl implements MeiliSearchClient {
     return new MeiliSearchIndexImpl(this, uid);
   }
 
-  Future<TaskInfo> _update(Future<Response> future) async {
+  Future<Task> _update(Future<Response> future) async {
     final response = await future;
 
-    return ClientTaskImpl.fromMap(this, response.data);
+    return Task.fromMap(response.data);
   }
 
   @override
-  Future<TaskInfo> createIndex(String uid, {String? primaryKey}) async {
+  Future<Task> createIndex(String uid, {String? primaryKey}) async {
     final data = <String, dynamic>{
       'uid': uid,
       if (primaryKey != null) 'primaryKey': primaryKey,
@@ -70,24 +73,23 @@ class MeiliSearchClientImpl implements MeiliSearchClient {
   }
 
   @override
-  Future<List<MeiliSearchIndex>> getIndexes() async {
-    final response = await http.getMethod<List<dynamic>>('/indexes');
+  Future<Result<MeiliSearchIndex>> getIndexes({IndexesQuery? params}) async {
+    final response = await http.getMethod<Map<String, dynamic>>('/indexes',
+        queryParameters: params?.toQuery());
 
-    return response.data!
-        .cast<Map<String, dynamic>>()
-        .map((item) => MeiliSearchIndexImpl.fromMap(this, item))
-        .toList();
+    return Result<MeiliSearchIndex>.fromMapWithType(
+        response.data!, (item) => MeiliSearchIndexImpl.fromMap(this, item));
   }
 
   @override
-  Future<TaskInfo> deleteIndex(String uid) async {
+  Future<Task> deleteIndex(String uid) async {
     final index = this.index(uid);
 
     return await index.delete();
   }
 
   @override
-  Future<TaskInfo> updateIndex(String uid, String primaryKey) async {
+  Future<Task> updateIndex(String uid, String primaryKey) async {
     final index = this.index(uid);
 
     return index.update(primaryKey: primaryKey);
@@ -111,29 +113,25 @@ class MeiliSearchClientImpl implements MeiliSearchClient {
   }
 
   @override
-  Future<Map<String, String>> createDump() async {
-    final response = await http.postMethod<Map<String, dynamic>>('/dumps');
-    return response.data!.map((k, v) => MapEntry(k, v.toString()));
+  Future<Task> createDump() async {
+    final response = await http.postMethod('/dumps');
+
+    return Task.fromMap(response.data);
   }
 
   @override
-  Future<Map<String, String>> getDumpStatus(String uid) async {
+  Future<Result<Key>> getKeys({KeysQuery? params}) async {
+    final response = await http.getMethod<Map<String, dynamic>>('/keys',
+        queryParameters: params?.toQuery());
+
+    return Result<Key>.fromMapWithType(
+        response.data!, (model) => Key.fromJson(model));
+  }
+
+  @override
+  Future<Key> getKey(String keyOrUid) async {
     final response =
-        await http.getMethod<Map<String, dynamic>>('/dumps/$uid/status');
-    return response.data!.map((k, v) => MapEntry(k, v.toString()));
-  }
-
-  @override
-  Future<List<Key>> getKeys() async {
-    final response = await http.getMethod<Map<String, dynamic>>('/keys');
-
-    return List<Key>.from(
-        response.data!['results'].map((model) => Key.fromJson(model)));
-  }
-
-  @override
-  Future<Key> getKey(String key) async {
-    final response = await http.getMethod<Map<String, dynamic>>('/keys/${key}');
+        await http.getMethod<Map<String, dynamic>>('/keys/${keyOrUid}');
 
     return Key.fromJson(response.data!);
   }
@@ -155,6 +153,7 @@ class MeiliSearchClientImpl implements MeiliSearchClient {
   Future<Key> createKey(
       {DateTime? expiresAt,
       String? description,
+      String? uid: null,
       required List<String> indexes,
       required List<String> actions}) async {
     final data = <String, dynamic>{
@@ -171,17 +170,10 @@ class MeiliSearchClientImpl implements MeiliSearchClient {
   }
 
   @override
-  Future<Key> updateKey(String key,
-      {DateTime? expiresAt,
-      String? description,
-      List<String>? indexes,
-      List<String>? actions}) async {
+  Future<Key> updateKey(String key, {String? name, String? description}) async {
     final data = <String, dynamic>{
-      if (expiresAt != null)
-        'expiresAt': expiresAt.toIso8601String().split('.').first,
       if (description != null) 'description': description,
-      if (indexes != null) 'indexes': indexes,
-      if (actions != null) 'actions': actions,
+      if (name != null) 'name': name,
     };
 
     final response = await http
@@ -198,9 +190,9 @@ class MeiliSearchClientImpl implements MeiliSearchClient {
   }
 
   @override
-  String generateTenantToken(dynamic searchRules,
+  String generateTenantToken(String uid, dynamic searchRules,
       {String? apiKey, DateTime? expiresAt}) {
-    return generateToken(searchRules, apiKey ?? this.apiKey ?? '',
+    return generateToken(uid, searchRules, apiKey ?? this.apiKey ?? '',
         expiresAt: expiresAt);
   }
 
@@ -209,12 +201,11 @@ class MeiliSearchClientImpl implements MeiliSearchClient {
   ///
 
   @override
-  Future<List<Task>> getTasks() async {
-    final response = await http.getMethod('/tasks');
+  Future<TasksResults> getTasks({TasksQuery? params}) async {
+    final response =
+        await http.getMethod('/tasks', queryParameters: params?.toQuery());
 
-    return (response.data['results'] as List)
-        .map((update) => Task.fromMap(update))
-        .toList();
+    return TasksResults.fromMap(response.data);
   }
 
   @override

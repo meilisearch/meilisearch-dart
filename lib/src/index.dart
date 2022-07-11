@@ -1,6 +1,10 @@
+import 'package:meilisearch/src/query_parameters/documents_query.dart';
+import 'package:meilisearch/src/query_parameters/tasks_query.dart';
+import 'package:meilisearch/src/result.dart';
+import 'package:meilisearch/src/tasks_results.dart';
+
 import 'index_settings.dart';
 
-import 'task_info.dart';
 import 'search_result.dart';
 import 'stats.dart' show IndexStats;
 import 'task.dart';
@@ -14,10 +18,10 @@ abstract class MeiliSearchIndex {
   set primaryKey(String? primaryKey);
 
   /// Update the primary Key of the index.
-  Future<TaskInfo> update({String primaryKey});
+  Future<Task> update({String primaryKey});
 
   /// Delete the index.
-  Future<TaskInfo> delete();
+  Future<Task> delete();
 
   /// Search for documents matching a specific query in the index.
   Future<SearchResult> search(
@@ -26,49 +30,45 @@ abstract class MeiliSearchIndex {
     int? limit,
     dynamic filter,
     List<String>? sort,
-    List<String>? facetsDistribution,
+    List<String>? facets,
     List<String>? attributesToRetrieve,
     List<String>? attributesToCrop,
     int? cropLength,
     List<String>? attributesToHighlight,
-    bool? matches,
+    bool? showMatchesPosition,
     String? cropMarker,
     String? highlightPreTag,
     String? highlightPostTag,
   });
 
   /// Return the document in the index by given [id].
-  Future<Map<String, dynamic>?> getDocument(dynamic id);
+  Future<Map<String, dynamic>?> getDocument(dynamic id, {List<String> fields});
 
   /// Return a list of all existing documents in the index.
-  Future<List<Map<String, dynamic>>> getDocuments({
-    int? offset,
-    int? limit,
-    String? attributesToRetrieve,
-  });
+  Future<Result> getDocuments({DocumentsQuery? params});
 
   /// Add a list of documents by given [documents] and optional [primaryKey] parameter.
   /// If index is not exists tries to create a new index and adds documents.
-  Future<TaskInfo> addDocuments(
+  Future<Task> addDocuments(
     List<Map<String, dynamic>> documents, {
     String? primaryKey,
   });
 
   /// Add a list of documents or update them if they already exist by given [documents] and optional [primaryKey] parameter.
   /// If index is not exists tries to create a new index and adds documents.
-  Future<TaskInfo> updateDocuments(
+  Future<Task> updateDocuments(
     List<Map<String, dynamic>> documents, {
     String? primaryKey,
   });
 
   /// Delete one document by given [id].
-  Future<TaskInfo> deleteDocument(dynamic id);
+  Future<Task> deleteDocument(dynamic id);
 
   /// Delete all documents in the specified index.
-  Future<TaskInfo> deleteAllDocuments();
+  Future<Task> deleteAllDocuments();
 
   /// Delete a selection of documents by given [ids].
-  Future<TaskInfo> deleteDocuments(List<dynamic> ids);
+  Future<Task> deleteDocuments(List<dynamic> ids);
 
   /// Get the settings of the index.
   Future<IndexSettings> getSettings();
@@ -77,82 +77,80 @@ abstract class MeiliSearchIndex {
   Future<List<String>> getFilterableAttributes();
 
   /// Reset filterable attributes of the index.
-  Future<TaskInfo> resetFilterableAttributes();
+  Future<Task> resetFilterableAttributes();
 
   /// Update filterable attributes of the index.
-  Future<TaskInfo> updateFilterableAttributes(
-      List<String> filterableAttributes);
+  Future<Task> updateFilterableAttributes(List<String> filterableAttributes);
 
   /// Get the displayed attributes of the index.
   Future<List<String>> getDisplayedAttributes();
 
   /// Reset the displayed attributes of the index.
-  Future<TaskInfo> resetDisplayedAttributes();
+  Future<Task> resetDisplayedAttributes();
 
   /// Update the displayed attributes of the index.
-  Future<TaskInfo> updateDisplayedAttributes(List<String> displayedAttributes);
+  Future<Task> updateDisplayedAttributes(List<String> displayedAttributes);
 
   /// Get the distinct attribute for the index.
   Future<String?> getDistinctAttribute();
 
   /// Reset the distinct attribute for the index.
-  Future<TaskInfo> resetDistinctAttribute();
+  Future<Task> resetDistinctAttribute();
 
   /// Update the distinct attribute for the index.
-  Future<TaskInfo> updateDistinctAttribute(String distinctAttribute);
+  Future<Task> updateDistinctAttribute(String distinctAttribute);
 
   /// Get ranking rules of the index.
   Future<List<String>> getRankingRules();
 
   /// Reset ranking rules of the index.
-  Future<TaskInfo> resetRankingRules();
+  Future<Task> resetRankingRules();
 
   /// Update ranking rules of the index.
-  Future<TaskInfo> updateRankingRules(List<String> rankingRules);
+  Future<Task> updateRankingRules(List<String> rankingRules);
 
   /// Get searchable attributes of the index.
   Future<List<String>> getSearchableAttributes();
 
   /// Reset searchable attributes of the index.
-  Future<TaskInfo> resetSearchableAttributes();
+  Future<Task> resetSearchableAttributes();
 
   /// Update the searchable attributes of the index.
-  Future<TaskInfo> updateSearchableAttributes(
-      List<String> searchableAttributes);
+  Future<Task> updateSearchableAttributes(List<String> searchableAttributes);
 
   /// Get stop words of the index.
   Future<List<String>> getStopWords();
 
   /// Reset stop words of the index.
-  Future<TaskInfo> resetStopWords();
+  Future<Task> resetStopWords();
 
   /// Update stop words of the index
-  Future<TaskInfo> updateStopWords(List<String> stopWords);
+  Future<Task> updateStopWords(List<String> stopWords);
 
   /// Get synonyms of the index.
   Future<Map<String, List<String>>> getSynonyms();
 
   /// Reset synonyms of the index.
-  Future<TaskInfo> resetSynonyms();
+  Future<Task> resetSynonyms();
 
   /// Update synonyms of the index
-  Future<TaskInfo> updateSynonyms(Map<String, List<String>> synonyms);
+  Future<Task> updateSynonyms(Map<String, List<String>> synonyms);
 
   /// Get sortable attributes of the index.
   Future<List<String>> getSortableAttributes();
 
   /// Reset sortable attributes of the index.
-  Future<TaskInfo> resetSortableAttributes();
+  Future<Task> resetSortableAttributes();
 
   /// Update sortable attributes of the index.
-  Future<TaskInfo> updateSortableAttributes(List<String> sortableAttributes);
+  Future<Task> updateSortableAttributes(List<String> sortableAttributes);
 
   /// Reset the settings of the index.
   /// All settings will be reset to their default value.
-  Future<TaskInfo> resetSettings();
+  Future<Task> resetSettings();
 
   /// Update the settings of the index. Any parameters not provided in the body will be left unchanged.
-  Future<TaskInfo> updateSettings(IndexSettings settings);
+  Future<Task> updateSettings(IndexSettings settings);
 
   /// Get the information of the index from the Meilisearch server and return it.
   Future<MeiliSearchIndex> fetchInfo();
@@ -164,7 +162,7 @@ abstract class MeiliSearchIndex {
   Future<IndexStats> getStats();
 
   /// Get all tasks from the index.
-  Future<List<Task>> getTasks();
+  Future<TasksResults> getTasks({TasksQuery? params});
 
   /// Get a task from an index specified by uid.
   Future<Task> getTask(int uid);

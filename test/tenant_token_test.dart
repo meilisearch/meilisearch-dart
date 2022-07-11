@@ -29,15 +29,16 @@ void main() {
 
     group('client.generateTenantToken', () {
       test('decodes successfully using apiKey from instance', () {
-        final token = client.generateTenantToken(_searchRules);
+        final token = client.generateTenantToken('uid', _searchRules);
 
         expect(() => JWT.verify(token, SecretKey(client.apiKey!)),
             returnsNormally);
       });
 
-      test('decodes successfully using apiKey from param', () {
+      test('decodes successfully using uid from param', () {
         final key = sha1RandomString();
-        final token = client.generateTenantToken(_searchRules, apiKey: key);
+        final token =
+            client.generateTenantToken('uid', _searchRules, apiKey: key);
 
         expect(() => JWT.verify(token, SecretKey(key)), returnsNormally);
       });
@@ -45,7 +46,7 @@ void main() {
       test('throws InvalidApiKeyException if all given keys are invalid', () {
         final custom = MeiliSearchClient(testServer, null);
 
-        expect(() => custom.generateTenantToken(_searchRules),
+        expect(() => custom.generateTenantToken('uid', _searchRules),
             throwsA(isA<InvalidApiKeyException>()));
       });
 
@@ -58,7 +59,7 @@ void main() {
             .updateFilterableAttributes(['tag', 'book_id']).waitFor();
 
         possibleRules.forEach((data) async {
-          final token = admClient.generateTenantToken(data);
+          final token = admClient.generateTenantToken(admKey.uid!, data);
           final custom = MeiliSearchClient(testServer, token);
 
           expect(() async => await custom.index('books').search(''),
@@ -70,7 +71,8 @@ void main() {
     group('tenant_token.generateToken', () {
       test('generates a signed token with given key', () {
         final key = sha1RandomString();
-        final token = generateToken(_searchRules, key);
+        final uid = sha1RandomString();
+        final token = generateToken(uid, _searchRules, key);
 
         expect(() => JWT.verify(token, SecretKey(key)), returnsNormally);
         expect(() => JWT.verify(token, SecretKey('not-the-same-key')),
@@ -78,14 +80,16 @@ void main() {
       });
 
       test('does not generate a signed token without a key', () {
-        expect(() => generateToken(_searchRules, ''),
+        expect(() => generateToken('', _searchRules, ''),
             throwsA(isA<InvalidApiKeyException>()));
       });
 
       test('generates a signed token with a given expiration', () {
         final key = sha1RandomString();
+        final uid = sha1RandomString();
         final tomorrow = DateTime.now().add(new Duration(days: 1)).toUtc();
-        final token = generateToken(_searchRules, key, expiresAt: tomorrow);
+        final token =
+            generateToken(uid, _searchRules, key, expiresAt: tomorrow);
 
         expect(() => JWT.verify(token, SecretKey(key), checkExpiresIn: true),
             returnsNormally);
@@ -93,7 +97,8 @@ void main() {
 
       test('generates a signed token without expiration', () {
         final key = sha1RandomString();
-        final token = generateToken(_searchRules, key, expiresAt: null);
+        final uid = sha1RandomString();
+        final token = generateToken(uid, _searchRules, key, expiresAt: null);
 
         expect(() => JWT.verify(token, SecretKey(key), checkExpiresIn: true),
             returnsNormally);
@@ -102,25 +107,30 @@ void main() {
       test('throws ExpiredSignatureException when expiresAt is in the past',
           () {
         final key = sha1RandomString();
+        final uid = sha1RandomString();
         final oldDate = DateTime.utc(1995, 12, 20);
 
-        expect(() => generateToken(_searchRules, key, expiresAt: oldDate),
+        expect(() => generateToken(uid, _searchRules, key, expiresAt: oldDate),
             throwsA(isA<ExpiredSignatureException>()));
       });
 
       test('throws NotUTCException if expiresAt are in localDate', () {
         final key = sha1RandomString();
+        final uid = sha1RandomString();
         final localDate = DateTime(2300, 1, 20);
 
-        expect(() => generateToken(_searchRules, key, expiresAt: localDate),
+        expect(
+            () => generateToken(uid, _searchRules, key, expiresAt: localDate),
             throwsA(isA<NotUTCException>()));
       });
-      test('contains apiKeyPrefix claim', () {
+      test('contains custom claims', () {
         final key = sha1RandomString();
-        final token = generateToken(_searchRules, key);
+        final uid = sha1RandomString();
+        final token = generateToken(uid, _searchRules, key);
         final claims = JWT.verify(token, SecretKey(key)).payload;
 
-        expect(claims['apiKeyPrefix'], contains(key.substring(0, 8)));
+        expect(claims['apiKeyUid'], equals(uid));
+        expect(claims['searchRules'], equals(_searchRules));
       });
     });
   });

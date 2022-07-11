@@ -74,12 +74,11 @@ void main() {
       await client.createIndex(uid).waitFor();
 
       final index = await client.getRawIndex(uid);
-      final keys = ['uid', 'name', 'primaryKey', 'createdAt', 'updatedAt'];
+      final keys = ['uid', 'primaryKey', 'createdAt', 'updatedAt'];
 
       expect(index.keys, containsAll(keys));
       expect(index.keys.length, keys.length);
       expect(index['primaryKey'], isNull);
-      expect(index['name'], equals(uid));
     });
 
     test('throws exception with a non-existing index', () async {
@@ -91,8 +90,8 @@ void main() {
       await client.createIndex(randomUid()).waitFor();
       await client.createIndex(randomUid()).waitFor();
       await client.createIndex(randomUid()).waitFor();
-      var indexes = await client.getIndexes();
-      expect(indexes.length, 3);
+      var response = await client.getIndexes();
+      expect(response.total, 3);
     });
 
     test('Create index object with UID', () async {
@@ -146,7 +145,7 @@ void main() {
 
       final tasks = await index.getTasks();
 
-      expect(tasks.length, 3);
+      expect(tasks.results.length, equals(3));
     });
 
     test('gets a task from a index by taskId', () async {
@@ -155,9 +154,9 @@ void main() {
         {'book_id': 1234, 'title': 'Pride and Prejudice'}
       ]);
 
-      final task = await index.getTask(response.uid);
+      final task = await index.getTask(response.uid!);
 
-      expect(task.uid, response.uid);
+      expect(task.uid, response.uid!);
     });
 
     test('gets a task with a failure', () async {
