@@ -4,7 +4,7 @@
 # You can read more on https://github.com/meilisearch/documentation/tree/master/.vuepress/code-samples
 ---
 get_all_tasks_filtering_1: |-
-  await client.getTasks(TasksQuery(indexUid: ['movies']);
+  await client.index('movies').getTasks();
 get_all_tasks_filtering_2: |-
   await client.getTasks(TasksQuery(status: ['succeeded', 'failed'], type: ['documentAdditionOrUpdate']);
 get_all_tasks_paginating_1: |-
