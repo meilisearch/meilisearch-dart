@@ -3,6 +3,8 @@
 # the documentation on build
 # You can read more on https://github.com/meilisearch/documentation/tree/master/.vuepress/code-samples
 ---
+getting_started_typo_tolerance: |-
+
 get_all_tasks_filtering_1: |-
   await client.index('movies').getTasks();
 get_all_tasks_filtering_2: |-
@@ -281,7 +283,7 @@ getting_started_add_documents_md: |-
   import 'dart:io';
   import 'dart:convert';
 
-  var client = MeiliSearchClient('http://127.0.0.1:7700', 'masterKey');
+  var client = MeiliSearchClient('http://localhost:7700', 'masterKey');
 
   final jsonFile = await File('movies.json').readAsString();
   final movies = json.decode(jsonFile);
@@ -326,7 +328,7 @@ getting_started_update_displayed_attributes: |-
     'poster'
   ]);
 getting_started_communicating_with_a_protected_instance: |-
-  var client = MeiliSearchClient('http://127.0.0.1:7700', 'apiKey');
+  var client = MeiliSearchClient('http://localhost:7700', 'apiKey');
   await client.index('movies').search();
 getting_started_add_meteorites: |-
   final jsonFile = await File('meteorites.json').readAsString();
@@ -410,7 +412,7 @@ geosearch_guide_sort_usage_1: |-
 geosearch_guide_sort_usage_2: |-
   await client.index('restaurants').search('', sort: ['_geoPoint(48.8561446, 2.2978204):asc', 'rating:desc']);
 authorization_header_1: |-
-  var client = MeiliSearchClient('http://127.0.0.1:7700', 'masterKey');
+  var client = MeiliSearchClient('http://localhost:7700', 'masterKey');
   await client.getKeys();
 get_one_key_1: |-
   await client.getKey('6062abda-a5aa-4414-ac91-ecd7944c0f8d');
@@ -432,13 +434,13 @@ update_a_key_1: |-
 delete_a_key_1: |-
   await client.deleteKey('6062abda-a5aa-4414-ac91-ecd7944c0f8d');
 security_guide_search_key_1: |-
-  var client = MeiliSearchClient('http://127.0.0.1:7700', 'apiKey');
+  var client = MeiliSearchClient('http://localhost:7700', 'apiKey');
   await client.index('patient_medical_records').search();
 security_guide_update_key_1: |-
-  var client = MeiliSearchClient('http://127.0.0.1:7700', 'masterKey');
+  var client = MeiliSearchClient('http://localhost:7700', 'masterKey');
   await client.updateKey('74c9c733-3368-4738-bbe5-1d18a5fecb37', description: 'Default Search API Key');
 security_guide_create_key_1: |-
-  var client = MeiliSearchClient('http://127.0.0.1:7700', 'masterKey');
+  var client = MeiliSearchClient('http://localhost:7700', 'masterKey');
   await client.createKey(
     description: 'Search patient records key',
     actions: ['search'],
@@ -446,10 +448,10 @@ security_guide_create_key_1: |-
     expiresAt: DateTime(2023, 01, 01),
   );
 security_guide_list_keys_1: |-
-  var client = MeiliSearchClient('http://127.0.0.1:7700', 'masterKey');
+  var client = MeiliSearchClient('http://localhost:7700', 'masterKey');
   await client.getKeys();
 security_guide_delete_key_1: |-
-  var client = MeiliSearchClient('http://127.0.0.1:7700', 'masterKey');
+  var client = MeiliSearchClient('http://localhost:7700', 'masterKey');
   await client.deleteKey('ac5cd97d-5a4b-4226-a868-2d0eb6d197ab');
 tenant_token_guide_generate_sdk_1: |-
   final uid = '85c3c2f9-bdd6-41f1-abd8-11fcf80e0f76';
@@ -468,10 +470,10 @@ tenant_token_guide_generate_sdk_1: |-
     expiresAt: expiresAt // optional
   );
 tenant_token_guide_search_sdk_1: |-
-  final frontEndClient = MeiliSearchClient('http://127.0.0.1:7700', token);
+  final frontEndClient = MeiliSearchClient('http://localhost:7700', token);
   await frontEndClient.index('patient_medical_records').search('blood test');
 landing_getting_started_1: |-
-  var client = MeiliSearchClient('http://127.0.0.1:7700', 'masterKey')
+  var client = MeiliSearchClient('http://localhost:7700', 'masterKey')
 
   await client.index('movies').addDocuments([
     { 'id': 1, 'title': 'Carol' },
