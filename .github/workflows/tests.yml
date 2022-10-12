@@ -19,10 +19,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        version: [
-          '2.12',
-          '2.17',
-        ]
+        version: ["2.12", "2.17"]
     name: integration-tests (dart ${{ matrix.version }})
     container:
       image: dart:${{ matrix.version }}
@@ -30,10 +27,10 @@ jobs:
       meilisearch:
         image: getmeili/meilisearch:latest
         env:
-          MEILI_MASTER_KEY: 'masterKey'
-          MEILI_NO_ANALYTICS: 'true'
+          MEILI_MASTER_KEY: "masterKey"
+          MEILI_NO_ANALYTICS: "true"
         ports:
-          - '7700:7700'
+          - "7700:7700"
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -42,7 +39,7 @@ jobs:
       - name: Run integration tests
         run: dart run test
         env:
-          MEILISEARCH_HOST: http://meilisearch:7700
+          MEILISEARCH_URL: http://meilisearch:7700
 
   linter:
     name: linter-check

@@ -14,7 +14,7 @@ late MeiliSearchClient client;
 Random random = Random();
 
 String get testServer {
-  return Platform.environment['MEILISEARCH_HOST'] ?? 'http://localhost:7700';
+  return Platform.environment['MEILISEARCH_URL'] ?? 'http://localhost:7700';
 }
 
 Future<void> deleteAllIndexes() async {
