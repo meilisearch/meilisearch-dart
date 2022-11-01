@@ -200,9 +200,13 @@ search_parameter_guide_offset_1: |-
 search_parameter_guide_limit_1: |-
   await client.index('movies').search('shifu', limit: 2);
 search_parameter_guide_matching_strategy_1: |-
-  await client.index('movies').search('big fat liar', matchingStrategy: 'last');
+  import 'package:meilisearch/src/matching_strategy_enum.dart';
+
+  await client.index('movies').search('big fat liar', matchingStrategy: MatchingStrategy.last);
 search_parameter_guide_matching_strategy_2: |-
-  await client.index('movies').search('big fat liar', matchingStrategy: 'all');
+  import 'package:meilisearch/src/matching_strategy_enum.dart';
+
+  await client.index('movies').search('big fat liar', matchingStrategy: MatchingStrategy.all);
 search_parameter_guide_retrieve_1: |-
   await client
       .index('movies')
