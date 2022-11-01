@@ -5,6 +5,7 @@ import 'package:meilisearch/src/tasks_results.dart';
 
 import 'index_settings.dart';
 
+import 'matching_strategy_enum.dart';
 import 'search_result.dart';
 import 'stats.dart' show IndexStats;
 import 'task.dart';
@@ -39,6 +40,7 @@ abstract class MeiliSearchIndex {
     String? cropMarker,
     String? highlightPreTag,
     String? highlightPostTag,
+    MatchingStrategy? matchingStrategy,
   });
 
   /// Return the document in the index by given [id].

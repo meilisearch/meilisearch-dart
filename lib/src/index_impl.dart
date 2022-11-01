@@ -8,6 +8,7 @@ import 'client.dart';
 import 'index.dart';
 import 'http_request.dart';
 import 'index_settings.dart';
+import 'matching_strategy_enum.dart';
 import 'search_result.dart';
 import 'stats.dart' show IndexStats;
 import 'task.dart';
@@ -120,6 +121,7 @@ class MeiliSearchIndexImpl implements MeiliSearchIndex {
     String? cropMarker,
     String? highlightPreTag,
     String? highlightPostTag,
+    MatchingStrategy? matchingStrategy,
   }) async {
     final data = <String, dynamic>{
       'q': query,
@@ -136,6 +138,7 @@ class MeiliSearchIndexImpl implements MeiliSearchIndex {
       'cropMarker': cropMarker,
       'highlightPreTag': highlightPreTag,
       'highlightPostTag': highlightPostTag,
+      'matchingStrategy': matchingStrategy?.name,
     };
     data.removeWhere((k, v) => v == null);
     final response = await http.postMethod('/indexes/$uid/search', data: data);

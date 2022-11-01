@@ -1,5 +1,6 @@
 import 'package:meilisearch/meilisearch.dart';
 import 'package:test/test.dart';
+import 'package:meilisearch/src/matching_strategy_enum.dart';
 
 import 'utils/books.dart';
 import 'utils/client.dart';
@@ -77,6 +78,38 @@ void main() {
 
         expect(result.hits![0]['_formatted']['title'],
             equals('Harry Potter and the Half-<mark>Blood</mark> Prince'));
+      });
+
+      test('searches with matching strategy last', () async {
+        var index = await createBooksIndex();
+        var result = await index.search(
+          'the to',
+          matchingStrategy: MatchingStrategy.last,
+        );
+
+        expect(result.hits!.last['title'],
+            equals('Harry Potter and the Half-Blood Prince'));
+      });
+
+      test('searches with matching strategy all', () async {
+        var index = await createBooksIndex();
+        var result = await index.search(
+          'the to',
+          matchingStrategy: MatchingStrategy.all,
+        );
+
+        expect(result.hits!.last['title'],
+            equals('The Hitchhiker\'s Guide to the Galaxy'));
+      });
+
+      test('searches with matching strategy as null if not set', () async {
+        var index = await createBooksIndex();
+        var result = await index.search(
+          'the to',
+        );
+
+        expect(result.hits!.last['title'],
+            equals('Harry Potter and the Half-Blood Prince'));
       });
 
       test('filter parameter', () async {
