@@ -1,12 +1,12 @@
 import 'package:meilisearch/src/query_parameters/documents_query.dart';
 import 'package:meilisearch/src/query_parameters/tasks_query.dart';
 import 'package:meilisearch/src/result.dart';
+import 'package:meilisearch/src/searchable.dart';
 import 'package:meilisearch/src/tasks_results.dart';
 
 import 'index_settings.dart';
 
 import 'matching_strategy_enum.dart';
-import 'search_result.dart';
 import 'stats.dart' show IndexStats;
 import 'task.dart';
 
@@ -25,10 +25,12 @@ abstract class MeiliSearchIndex {
   Future<Task> delete();
 
   /// Search for documents matching a specific query in the index.
-  Future<SearchResult> search(
+  Future<Searcheable> search(
     String? query, {
     int? offset,
     int? limit,
+    int? page,
+    int? hitsPerPage,
     dynamic filter,
     List<String>? sort,
     List<String>? facets,
