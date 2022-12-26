@@ -429,9 +429,9 @@ class MeiliSearchIndexImpl implements MeiliSearchIndex {
   @override
   Future<TasksResults> getTasks({TasksQuery? params}) async {
     if (params == null) {
-      params = TasksQuery(indexUid: [this.uid]);
+      params = TasksQuery(indexUids: [this.uid]);
     } else {
-      params.indexUid.add(this.uid);
+      params.indexUids.add(this.uid);
     }
 
     return await client.getTasks(params: params);
