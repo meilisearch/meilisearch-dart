@@ -1,4 +1,5 @@
 import 'package:meilisearch/src/key.dart';
+import 'package:meilisearch/src/query_parameters/cancel_tasks_query.dart';
 import 'package:meilisearch/src/query_parameters/indexes_query.dart';
 import 'package:meilisearch/src/query_parameters/keys_query.dart';
 import 'package:meilisearch/src/query_parameters/tasks_query.dart';
@@ -95,4 +96,7 @@ abstract class MeiliSearchClient {
 
   /// Get a task from an index specified by uid with the specified uid.
   Future<Task> getTask(int uid);
+
+  /// Cancel tasks based on the input query params
+  Future<Task> cancelTasks({CancelTasksQuery? params});
 }
