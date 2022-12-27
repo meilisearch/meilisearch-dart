@@ -99,11 +99,16 @@ class HttpRequestImpl implements HttpRequest {
   }
 
   @override
-  Future<Response<T>> deleteMethod<T>(String path, {dynamic data}) async {
+  Future<Response<T>> deleteMethod<T>(
+    String path, {
+    dynamic data,
+    Map<String, dynamic>? queryParameters,
+  }) async {
     try {
       return await dio.delete<T>(
         path,
         data: data,
+        queryParameters: queryParameters,
       );
     } on DioError catch (e) {
       return throwException(e);
