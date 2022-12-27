@@ -2,26 +2,26 @@ class TasksQuery {
   final int? from;
   final int? next;
   final int? limit;
-  List<String> status;
-  List<String> type;
-  List<String> indexUid;
+  List<String> statuses;
+  List<String> types;
+  List<String> indexUids;
 
   TasksQuery(
       {this.limit,
       this.from,
       this.next,
-      this.indexUid: const [],
-      this.status: const [],
-      this.type: const []});
+      this.indexUids: const [],
+      this.statuses: const [],
+      this.types: const []});
 
   Map<String, dynamic> toQuery() {
     return <String, dynamic>{
       'from': this.from,
       'next': this.next,
       'limit': this.limit,
-      'indexUid': this.indexUid,
-      'status': this.status,
-      'type': this.type,
+      'indexUids': this.indexUids,
+      'statuses': this.statuses,
+      'types': this.types,
     }
       ..removeWhere((key, val) => val == null || (val is List && val.isEmpty))
       ..updateAll((key, val) => val is List ? val.join(',') : val);
