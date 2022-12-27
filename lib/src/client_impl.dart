@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:meilisearch/src/query_parameters/cancel_tasks_query.dart';
+import 'package:meilisearch/src/query_parameters/delete_tasks_query.dart';
 import 'package:meilisearch/src/query_parameters/indexes_query.dart';
 import 'package:meilisearch/src/query_parameters/keys_query.dart';
 import 'package:meilisearch/src/query_parameters/tasks_query.dart';
@@ -213,6 +214,14 @@ class MeiliSearchClientImpl implements MeiliSearchClient {
   Future<Task> cancelTasks({CancelTasksQuery? params}) async {
     final response = await http.postMethod('/tasks/cancel',
         queryParameters: params?.toQuery());
+
+    return Task.fromMap(response.data);
+  }
+
+  @override
+  Future<Task> deleteTasks({DeleteTasksQuery? params}) async {
+    final response =
+        await http.deleteMethod('/tasks', queryParameters: params?.toQuery());
 
     return Task.fromMap(response.data);
   }
