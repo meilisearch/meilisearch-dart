@@ -5,6 +5,7 @@ import 'package:meilisearch/src/query_parameters/indexes_query.dart';
 import 'package:meilisearch/src/query_parameters/keys_query.dart';
 import 'package:meilisearch/src/query_parameters/tasks_query.dart';
 import 'package:meilisearch/src/result.dart';
+import 'package:meilisearch/src/swap_index.dart';
 import 'package:meilisearch/src/tasks_results.dart';
 import 'package:meilisearch/src/task.dart';
 import 'package:meilisearch/src/tenant_token.dart';
@@ -95,6 +96,16 @@ class MeiliSearchClientImpl implements MeiliSearchClient {
     final index = this.index(uid);
 
     return index.update(primaryKey: primaryKey);
+  }
+
+  @override
+  Future<Task> swapIndexes(List<SwapIndex> param) async {
+    var query = param.map((e) => e.toQuery()).toList();
+
+    final response = await http
+        .postMethod<Map<String, dynamic>>('/swap-indexes', data: query);
+
+    return Task.fromMap(response.data!);
   }
 
   @override

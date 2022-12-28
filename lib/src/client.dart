@@ -5,6 +5,7 @@ import 'package:meilisearch/src/query_parameters/indexes_query.dart';
 import 'package:meilisearch/src/query_parameters/keys_query.dart';
 import 'package:meilisearch/src/query_parameters/tasks_query.dart';
 import 'package:meilisearch/src/result.dart';
+import 'package:meilisearch/src/swap_index.dart';
 import 'package:meilisearch/src/tasks_results.dart';
 import 'package:meilisearch/src/task.dart';
 
@@ -51,6 +52,9 @@ abstract class MeiliSearchClient {
 
   /// Delete the index by matching [uid].
   Future<Task> deleteIndex(String uid);
+
+  /// Swap indexes
+  Future<Task> swapIndexes(List<SwapIndex> swaps);
 
   /// Update the primary Key of the index by matching [uid].
   Future<Task> updateIndex(String uid, String primaryKey);
