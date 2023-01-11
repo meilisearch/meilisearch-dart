@@ -1,3 +1,53 @@
+# 0.7.0
+### Changes
+
+- `SearchResult` now is returned from `search` requests when is a non-exhaustive pagination request. A instance of `PaginatedSearchResult` is returned when the request was made with finite pagination.
+- Add `Future<Task> swapIndexes(List<SwapIndex> swaps)` method to swap indexes.
+- Add `Future<Task> cancelTasks({CancelTasksQuery? params})` to cancel tasks based on the input query params.
+  - `CancelTasksQuery` has these fields:
+    - `int? next;`
+    - `DateTime? beforeEnqueuedAt;`
+    - `DateTime? afterEnqueuedAt;`
+    - `DateTime? beforeStartedAt;`
+    - `DateTime? afterStartedAt;`
+    - `DateTime? beforeFinishedAt;`
+    - `DateTime? afterFinishedAt;`
+    - `List<int> uids;`
+    - `List<String> statuses;`
+    - `List<String> types;`
+    - `List<String> indexUids;`
+- Add `Future<Task> deleteTasks({DeleteTasksQuery? params})` delete old processed tasks based on the input query params.
+  - `DeleteTasksQuery` has these fields:
+    - `int? next;`
+    - `DateTime? beforeEnqueuedAt;`
+    - `DateTime? afterEnqueuedAt;`
+    - `DateTime? beforeStartedAt;`
+    - `DateTime? afterStartedAt;`
+    - `DateTime? beforeFinishedAt;`
+    - `DateTime? afterFinishedAt;`
+    - `List<int> canceledBy;`
+    - `List<int> uids;`
+    - `List<String> statuses;`
+    - `List<String> types;`
+    - `List<String> indexUids;`
+
+### Breaking changes
+
+- `TasksQuery` has new fields, and some of them were renamed:
+  - those fields were added:
+    - `int? canceledBy;`
+    - `DateTime? beforeEnqueuedAt;`
+    - `DateTime? afterEnqueuedAt;`
+    - `DateTime? beforeStartedAt;`
+    - `DateTime? afterStartedAt;`
+    - `DateTime? beforeFinishedAt;`
+    - `DateTime? afterFinishedAt;`
+    - `List<int> uids;`
+  - those were renamed:
+    - `List<String> statuses;` from `List<String> status;`
+    - `List<String> types;` from `List<String> type;`
+    - `List<String> indexUids;` from `List<String> indexUid;`
+
 # 0.6.1
 ### Changes
 - Add support to `matchingStrategy` in the search `MeiliSearchIndex#search`.
