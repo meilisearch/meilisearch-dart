@@ -45,5 +45,9 @@ abstract class HttpRequest {
   });
 
   /// DELETE method
-  Future<Response<T>> deleteMethod<T>(String path, {dynamic data});
+  Future<Response<T>> deleteMethod<T>(
+    String path, {
+    dynamic data: null,
+    Map<String, dynamic>? queryParameters,
+  });
 }

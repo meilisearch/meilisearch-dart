@@ -1,10 +1,7 @@
 import 'package:meilisearch/src/query_parameters/queryable.dart';
 
-class TasksQuery extends Queryable {
-  final int? from;
+class CancelTasksQuery extends Queryable {
   final int? next;
-  final int? limit;
-  final int? canceledBy;
   final DateTime? beforeEnqueuedAt;
   final DateTime? afterEnqueuedAt;
   final DateTime? beforeStartedAt;
@@ -16,11 +13,8 @@ class TasksQuery extends Queryable {
   final List<String> types;
   final List<String> indexUids;
 
-  TasksQuery(
-      {this.limit,
-      this.from,
-      this.next,
-      this.canceledBy,
+  CancelTasksQuery(
+      {this.next,
       this.beforeEnqueuedAt,
       this.afterEnqueuedAt,
       this.beforeStartedAt,

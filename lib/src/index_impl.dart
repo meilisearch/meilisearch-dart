@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:meilisearch/src/query_parameters/documents_query.dart';
 import 'package:meilisearch/src/query_parameters/tasks_query.dart';
 import 'package:meilisearch/src/result.dart';
+import 'package:meilisearch/src/searchable.dart';
 import 'package:meilisearch/src/tasks_results.dart';
 
 import 'client.dart';
@@ -9,7 +10,6 @@ import 'index.dart';
 import 'http_request.dart';
 import 'index_settings.dart';
 import 'matching_strategy_enum.dart';
-import 'search_result.dart';
 import 'stats.dart' show IndexStats;
 import 'task.dart';
 
@@ -106,10 +106,12 @@ class MeiliSearchIndexImpl implements MeiliSearchIndex {
   //
 
   @override
-  Future<SearchResult> search(
+  Future<Searcheable> search(
     String? query, {
     int? offset,
     int? limit,
+    int? page,
+    int? hitsPerPage,
     dynamic filter,
     List<String>? sort,
     List<String>? facets,
@@ -127,6 +129,8 @@ class MeiliSearchIndexImpl implements MeiliSearchIndex {
       'q': query,
       'offset': offset,
       'limit': limit,
+      'page': page,
+      'hitsPerPage': hitsPerPage,
       'filter': filter,
       'sort': sort,
       'facets': facets,
@@ -143,7 +147,7 @@ class MeiliSearchIndexImpl implements MeiliSearchIndex {
     data.removeWhere((k, v) => v == null);
     final response = await http.postMethod('/indexes/$uid/search', data: data);
 
-    return SearchResult.fromMap(response.data);
+    return Searcheable.createSearchResult(response.data);
   }
 
   //
@@ -429,9 +433,9 @@ class MeiliSearchIndexImpl implements MeiliSearchIndex {
   @override
   Future<TasksResults> getTasks({TasksQuery? params}) async {
     if (params == null) {
-      params = TasksQuery(indexUid: [this.uid]);
+      params = TasksQuery(indexUids: [this.uid]);
     } else {
-      params.indexUid.add(this.uid);
+      params.indexUids.add(this.uid);
     }
 
     return await client.getTasks(params: params);

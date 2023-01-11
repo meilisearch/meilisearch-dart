@@ -1,4 +1,5 @@
 import 'package:meilisearch/meilisearch.dart';
+import 'package:meilisearch/src/paginated_search_result.dart';
 import 'package:test/test.dart';
 import 'package:meilisearch/src/matching_strategy_enum.dart';
 
@@ -262,6 +263,31 @@ void main() {
           "reviewNb": 1000,
         },
       });
+    });
+  });
+
+  group('with finite-pagination query params', () {
+    test('with basic query', () async {
+      var index = await createBooksIndex();
+      var result = await index.search('pri', page: 1) as PaginatedSearchResult;
+
+      expect(result.totalPages, 1);
+    });
+
+    test('accesses fields from Searchable', () async {
+      var index = await createBooksIndex();
+      var result = await index.search('pri', page: 1) as PaginatedSearchResult;
+
+      expect(result.hits!.length, greaterThanOrEqualTo(1));
+      expect(result.totalPages, 1);
+    });
+
+    test('with mixed pagination query params', () async {
+      var index = await createBooksIndex();
+      var result = await index.search('pri', page: 1, limit: 10)
+          as PaginatedSearchResult;
+
+      expect(result.totalPages, 1);
     });
   });
 }
