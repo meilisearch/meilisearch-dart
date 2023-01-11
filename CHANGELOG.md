@@ -1,3 +1,7 @@
+# 0.6.1
+### Changes
+- Add support to `matchingStrategy` in the search `MeiliSearchIndex#search`.
+
 # 0.6.0
 This version makes this package compatible with Meilisearch v0.28.0 and newer
 ### Breaking changes
