@@ -28,34 +28,34 @@ search_parameter_guide_hitsperpage_1: |-
 search_parameter_guide_page_1: |-
   await client.index('movies').search('', page: 2);
 getting_started_faceting: |-
-  client.index("movies").updateFaceting({ maxValuesPerFacet: 2 })
-getting_started_pagination: |-
-  client.index("movies").updatePagination({ maxTotalHits: 500 })
-synonyms_guide_1: |-
-  client.index('movies').updateSynonyms({
-    "great": ["fantastic"],
-    "fantastic": ["great"]
-  })
-date_guide_index_1: |-
-  const games = require('./games.json')
-  client.index('games').addDocuments(games).then((res) => console.log(res))
-date_guide_filterable_attributes_1: |-
-  client.index('games').updateFilterableAttributes({
-    filterableAttributes: ['release_timestamp']
-  })
-date_guide_filter_1: |-
-  client.index('games').search('', {
-    filter: 'release_timestamp >= 1514761200 AND release_timestamp < 1672527600'
-  })
-date_guide_sortable_attributes_1: |-
-  client.index('games').updateSortableAttributes({
-    sortableAttributes: ['release_timestamp']
-  })
-date_guide_sort_1: |-
-  client.index('games').search('', {
-    sort: ['release_timestamp:desc'],
-  })
 
+getting_started_pagination: |-
+
+synonyms_guide_1: |-
+  await client.index('movies').updateSynonyms({
+    'great': ['fantastic'],
+    'fantastic': ['great']
+  });
+date_guide_index_1: |-
+  import 'dart:io';
+  import 'dart:convert';
+
+  final json = await File('games.json').readAsString();
+  final games = json.decode(json);
+
+  await client.index('games').addDocuments(movies);
+date_guide_filterable_attributes_1: |-
+ await client.index('games').updateFilterableAttributes(['release_timestamp']);
+date_guide_filter_1: |-
+  await client.index('games').search('', {
+    filter: 'release_timestamp >= 1514761200 AND release_timestamp < 1672527600'
+  });
+date_guide_sortable_attributes_1: |-
+  await client.index('games').updateSortableAttributes(['release_timestamp']);
+date_guide_sort_1: |-
+  await client.index('games').search('', {
+    sort: ['release_timestamp:desc'],
+  });
 getting_started_typo_tolerance: |-
 
 get_all_tasks_paginating_1: |-
