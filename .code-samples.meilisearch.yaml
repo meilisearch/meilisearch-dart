@@ -28,9 +28,7 @@ search_parameter_guide_hitsperpage_1: |-
 search_parameter_guide_page_1: |-
   await client.index('movies').search('', page: 2);
 getting_started_faceting: |-
-
 getting_started_pagination: |-
-
 synonyms_guide_1: |-
   await client.index('movies').updateSynonyms({
     'great': ['fantastic'],
