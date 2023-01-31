@@ -5,6 +5,7 @@ import 'package:test/test.dart';
 
 import 'utils/books.dart';
 import 'utils/client.dart';
+import 'utils/wait_for.dart';
 
 void main() {
   final Map<String, dynamic> _searchRules = {"*": null};
@@ -54,9 +55,8 @@ void main() {
         final admKey = await client.createKey(indexes: ["*"], actions: ["*"]);
         final admClient = MeiliSearchClient(testServer, admKey.key);
         await createBooksIndex(uid: 'books');
-        await admClient
-            .index('books')
-            .updateFilterableAttributes(['tag', 'book_id']).waitFor();
+        await admClient.index('books').updateFilterableAttributes(
+            ['tag', 'book_id']).waitFor(client: admClient);
 
         possibleRules.forEach((data) async {
           final token = admClient.generateTenantToken(admKey.uid!, data);
@@ -87,7 +87,7 @@ void main() {
       test('generates a signed token with a given expiration', () {
         final key = sha1RandomString();
         final uid = sha1RandomString();
-        final tomorrow = DateTime.now().add(new Duration(days: 1)).toUtc();
+        final tomorrow = DateTime.now().add(Duration(days: 1)).toUtc();
         final token =
             generateToken(uid, _searchRules, key, expiresAt: tomorrow);
 

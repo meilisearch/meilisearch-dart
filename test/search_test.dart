@@ -4,7 +4,9 @@ import 'package:test/test.dart';
 import 'package:meilisearch/src/matching_strategy_enum.dart';
 
 import 'utils/books.dart';
+import 'utils/books_data.dart';
 import 'utils/client.dart';
+import 'utils/wait_for.dart';
 
 void main() {
   group('Search', () {
@@ -19,13 +21,13 @@ void main() {
     test('with basic query with no q', () async {
       var index = await createBooksIndex();
       var result = await index.search(null);
-      expect(result.hits, hasLength(booksDoc.length));
+      expect(result.hits, hasLength(books.length));
     });
 
     test('with basic query with an empty string q=""', () async {
       var index = await createBooksIndex();
       var result = await index.search('');
-      expect(result.hits, hasLength(booksDoc.length));
+      expect(result.hits, hasLength(books.length));
     });
 
     test('with basic query with phrase search', () async {
@@ -119,7 +121,7 @@ void main() {
             .updateSettings(IndexSettings(
               filterableAttributes: ['tag'],
             ))
-            .waitFor();
+            .waitFor(client: client);
         expect(response.status, 'succeeded');
         var result = await index.search('prince', filter: 'tag = Tale');
         expect(result.hits, hasLength(1));
@@ -131,7 +133,7 @@ void main() {
             .updateSettings(IndexSettings(
               filterableAttributes: ['tag'],
             ))
-            .waitFor();
+            .waitFor(client: client);
         expect(response.status, 'succeeded');
         var result =
             await index.search('prince', filter: 'tag = "Epic fantasy"');
@@ -144,7 +146,7 @@ void main() {
             .updateSettings(IndexSettings(
               filterableAttributes: ['tag', 'book_id'],
             ))
-            .waitFor();
+            .waitFor(client: client);
         expect(response.status, 'succeeded');
         var result =
             await index.search('', filter: 'book_id < 100 AND tag = Tale');
@@ -157,7 +159,7 @@ void main() {
             .updateSettings(IndexSettings(
               filterableAttributes: ['tag'],
             ))
-            .waitFor();
+            .waitFor(client: client);
         expect(response.status, 'succeeded');
         var result = await index.search('prince', filter: ['tag = Tale']);
         expect(result.hits, hasLength(1));
@@ -169,7 +171,7 @@ void main() {
             .updateSettings(IndexSettings(
               filterableAttributes: ['tag'],
             ))
-            .waitFor();
+            .waitFor(client: client);
         expect(response.status, 'succeeded');
         var result = await index.search('prince', filter: [
           ['tag = Tale', 'tag = Tale'],
@@ -184,7 +186,7 @@ void main() {
             .updateSettings(IndexSettings(
               filterableAttributes: ['tag'],
             ))
-            .waitFor();
+            .waitFor(client: client);
         expect(response.status, 'succeeded');
         var result = await index.search('prince', facets: ['*']);
         expect(result.hits, hasLength(2));
@@ -203,7 +205,7 @@ void main() {
               'attribute',
               'exactness'
             ]))
-            .waitFor();
+            .waitFor(client: client);
         expect(response.status, 'succeeded');
         var result = await index.search('prince', sort: ['title:asc']);
         expect(result.hits, hasLength(2));
@@ -231,7 +233,7 @@ void main() {
       await index
           .updateSettings(
               IndexSettings(searchableAttributes: ['title', 'info.comment']))
-          .waitFor();
+          .waitFor(client: client);
 
       var response = await index.search('An awesome');
 
@@ -251,7 +253,7 @@ void main() {
           .updateSettings(IndexSettings(
               searchableAttributes: ['title', 'info.comment'],
               sortableAttributes: ['info.reviewNb']))
-          .waitFor();
+          .waitFor(client: client);
 
       var response = await index.search('', sort: ['info.reviewNb:desc']);
 

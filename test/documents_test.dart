@@ -2,8 +2,10 @@ import 'package:meilisearch/src/query_parameters/documents_query.dart';
 import 'package:test/test.dart';
 import 'package:meilisearch/src/exception.dart';
 
-import 'utils/books.dart';
+import 'utils/books_data.dart';
+import 'utils/wait_for.dart';
 import 'utils/client.dart';
+import 'utils/books.dart';
 
 void main() {
   group('Documents', () {
@@ -11,14 +13,16 @@ void main() {
 
     test('Add documents', () async {
       final index = client.index(randomUid());
-      await index.addDocuments(booksDoc).waitFor();
+      await index.addDocuments(books).waitFor(client: client);
       final docs = await index.getDocuments();
       expect(docs.total, 6);
     });
 
     test('Add documents with primary key', () async {
       final index = client.index(randomUid());
-      await index.addDocuments(booksDoc, primaryKey: 'book_id').waitFor();
+      await index
+          .addDocuments(books, primaryKey: 'book_id')
+          .waitFor(client: client);
       final docs = await index.getDocuments();
       expect(docs.total, 6);
     });
@@ -27,7 +31,7 @@ void main() {
       final index = await createBooksIndex();
       await index.updateDocuments([
         {'book_id': 1344, 'title': 'The Hobbit 2'},
-      ]).waitFor();
+      ]).waitFor(client: client);
       final doc = await index.getDocument(1344);
       expect(doc, isNotNull);
       expect(doc?['book_id'], equals(1344));
@@ -39,7 +43,7 @@ void main() {
       var index = client.index(uid);
       await index.updateDocuments([
         {'the_book_id': 1344, 'title': 'The Hobbit 2'},
-      ], primaryKey: 'the_book_id').waitFor();
+      ], primaryKey: 'the_book_id').waitFor(client: client);
       index = await client.getIndex(uid);
       expect(index.primaryKey, 'the_book_id');
       final doc = await index.getDocument(1344);
@@ -50,20 +54,20 @@ void main() {
 
     test('Delete one document', () async {
       final index = await createBooksIndex();
-      await index.deleteDocument(456).waitFor();
+      await index.deleteDocument(456).waitFor(client: client);
       expect(index.getDocument(456), throwsA(isA<MeiliSearchApiException>()));
     });
 
     test('Delete multiple documents', () async {
       final index = await createBooksIndex();
-      await index.deleteDocuments([456, 4]).waitFor();
+      await index.deleteDocuments([456, 4]).waitFor(client: client);
       expect(index.getDocument(4), throwsA(isA<MeiliSearchApiException>()));
       expect(index.getDocument(456), throwsA(isA<MeiliSearchApiException>()));
     });
 
     test('Delete all documents', () async {
       final index = await createBooksIndex();
-      await index.deleteAllDocuments().waitFor();
+      await index.deleteAllDocuments().waitFor(client: client);
       final docs = await index.getDocuments();
       expect(docs.total, 0);
     });

@@ -4,6 +4,7 @@ import 'package:meilisearch/src/key.dart';
 import 'package:test/test.dart';
 
 import 'utils/client.dart';
+import 'utils/wait_for.dart';
 
 void main() {
   group('Keys', () {
@@ -97,7 +98,7 @@ void main() {
     group('When has a key with search scope only', () {
       setUp(() async {
         final key = await client.createKey(indexes: ['*'], actions: ['search']);
-        await client.createIndex('movies').waitFor();
+        await client.createIndex('movies').waitFor(client: client);
 
         client = MeiliSearchClient(testServer, key.key);
       });

@@ -2,6 +2,7 @@ import 'package:meilisearch/meilisearch.dart';
 import 'package:test/test.dart';
 
 import 'utils/client.dart';
+import 'utils/wait_for.dart';
 
 void main() {
   group('Settings', () {
@@ -9,7 +10,7 @@ void main() {
 
     test('Getting the default settings', () async {
       final uid = randomUid();
-      await client.createIndex(uid).waitFor();
+      await client.createIndex(uid).waitFor(client: client);
       var index = await client.getIndex(uid);
       var settings = await index.getSettings();
 
@@ -18,7 +19,7 @@ void main() {
 
     test('Update the settings', () async {
       final uid = randomUid();
-      await client.createIndex(uid).waitFor();
+      await client.createIndex(uid).waitFor(client: client);
       var index = await client.getIndex(uid);
 
       var response = await index
@@ -33,7 +34,7 @@ void main() {
             distinctAttribute: 'movie_id',
             sortableAttributes: ['genre', 'title'],
           ))
-          .waitFor();
+          .waitFor(client: client);
       expect(response.status, 'succeeded');
       final settings = await index.getSettings();
       expect(settings.displayedAttributes, equals(['name']));
@@ -51,14 +52,14 @@ void main() {
 
     test('Reseting the settings', () async {
       final uid = randomUid();
-      await client.createIndex(uid).waitFor();
+      await client.createIndex(uid).waitFor(client: client);
       var index = await client.getIndex(uid);
 
       var response = await index
           .updateSettings(IndexSettings(displayedAttributes: ['displayName']))
-          .waitFor();
+          .waitFor(client: client);
       expect(response.status, 'succeeded');
-      response = await index.resetSettings().waitFor();
+      response = await index.resetSettings().waitFor(client: client);
       expect(response.status, 'succeeded');
       final settings = await index.getSettings();
       expect(settings.displayedAttributes, equals(['*']));
@@ -66,17 +67,18 @@ void main() {
 
     test('Getting, setting, and deleting filterable attributes', () async {
       final uid = randomUid();
-      await client.createIndex(uid).waitFor();
+      await client.createIndex(uid).waitFor(client: client);
       var index = await client.getIndex(uid);
 
       final updatedFilterableAttributes = ['director'];
       var response = await index
           .updateFilterableAttributes(updatedFilterableAttributes)
-          .waitFor();
+          .waitFor(client: client);
       expect(response.status, 'succeeded');
       var filterableAttributes = await index.getFilterableAttributes();
       expect(filterableAttributes, updatedFilterableAttributes);
-      response = await index.resetFilterableAttributes().waitFor();
+      response =
+          await index.resetFilterableAttributes().waitFor(client: client);
       expect(response.status, 'succeeded');
       filterableAttributes = await index.getFilterableAttributes();
       expect(filterableAttributes, []);
@@ -84,17 +86,17 @@ void main() {
 
     test('Getting, setting, and deleting displayed attributes', () async {
       final uid = randomUid();
-      await client.createIndex(uid).waitFor();
+      await client.createIndex(uid).waitFor(client: client);
       var index = await client.getIndex(uid);
 
       final updatedDisplayedAttributes = ['genre', 'title'];
       var response = await index
           .updateDisplayedAttributes(updatedDisplayedAttributes)
-          .waitFor();
+          .waitFor(client: client);
       expect(response.status, 'succeeded');
       var displayedAttributes = await index.getDisplayedAttributes();
       expect(displayedAttributes, updatedDisplayedAttributes);
-      response = await index.resetDisplayedAttributes().waitFor();
+      response = await index.resetDisplayedAttributes().waitFor(client: client);
       expect(response.status, 'succeeded');
       displayedAttributes = await index.getDisplayedAttributes();
       expect(displayedAttributes, ['*']);
@@ -102,17 +104,17 @@ void main() {
 
     test('Getting, setting, and deleting distinct attribute', () async {
       final uid = randomUid();
-      await client.createIndex(uid).waitFor();
+      await client.createIndex(uid).waitFor(client: client);
       var index = await client.getIndex(uid);
 
       final updatedDistinctAttribute = 'movie_id';
       var response = await index
           .updateDistinctAttribute(updatedDistinctAttribute)
-          .waitFor();
+          .waitFor(client: client);
       expect(response.status, 'succeeded');
       var distinctAttribute = await index.getDistinctAttribute();
       expect(distinctAttribute, updatedDistinctAttribute);
-      response = await index.resetDistinctAttribute().waitFor();
+      response = await index.resetDistinctAttribute().waitFor(client: client);
       expect(response.status, 'succeeded');
       distinctAttribute = await index.getDistinctAttribute();
       expect(distinctAttribute, null);
@@ -120,7 +122,7 @@ void main() {
 
     test('Getting, setting, and deleting ranking rules', () async {
       final uid = randomUid();
-      await client.createIndex(uid).waitFor();
+      await client.createIndex(uid).waitFor(client: client);
       var index = await client.getIndex(uid);
 
       final defaultRankingRules = await index.getRankingRules();
@@ -130,12 +132,13 @@ void main() {
         'proximity',
         'typo'
       ];
-      var response =
-          await index.updateRankingRules(updatedRankingRules).waitFor();
+      var response = await index
+          .updateRankingRules(updatedRankingRules)
+          .waitFor(client: client);
       expect(response.status, 'succeeded');
       final updatedRules = await index.getRankingRules();
       expect(updatedRules, updatedRankingRules);
-      response = await index.resetRankingRules().waitFor();
+      response = await index.resetRankingRules().waitFor(client: client);
       expect(response.status, 'succeeded');
       final resetRules = await index.getRankingRules();
       expect(resetRules, defaultRankingRules);
@@ -143,17 +146,18 @@ void main() {
 
     test('Getting, setting, and deleting searchable attributes', () async {
       final uid = randomUid();
-      await client.createIndex(uid).waitFor();
+      await client.createIndex(uid).waitFor(client: client);
       var index = await client.getIndex(uid);
 
       final updatedSearchableAttributes = ['title', 'id'];
       var response = await index
           .updateSearchableAttributes(updatedSearchableAttributes)
-          .waitFor();
+          .waitFor(client: client);
       expect(response.status, 'succeeded');
       var searchableAttributes = await index.getSearchableAttributes();
       expect(searchableAttributes, updatedSearchableAttributes);
-      response = await index.resetSearchableAttributes().waitFor();
+      response =
+          await index.resetSearchableAttributes().waitFor(client: client);
       expect(response.status, 'succeeded');
       searchableAttributes = await index.getSearchableAttributes();
       expect(searchableAttributes, ['*']);
@@ -161,15 +165,16 @@ void main() {
 
     test('Getting, setting, and deleting stop words', () async {
       final uid = randomUid();
-      await client.createIndex(uid).waitFor();
+      await client.createIndex(uid).waitFor(client: client);
       var index = await client.getIndex(uid);
 
       final updatedStopWords = ['a', 'of', 'the'];
-      var response = await index.updateStopWords(updatedStopWords).waitFor();
+      var response =
+          await index.updateStopWords(updatedStopWords).waitFor(client: client);
       expect(response.status, 'succeeded');
       var stopWords = await index.getStopWords();
       expect(stopWords, updatedStopWords);
-      response = await index.resetStopWords().waitFor();
+      response = await index.resetStopWords().waitFor(client: client);
       expect(response.status, 'succeeded');
       stopWords = await index.getStopWords();
       expect(stopWords, []);
@@ -177,18 +182,19 @@ void main() {
 
     test('Getting, setting, and deleting synonyms', () async {
       final uid = randomUid();
-      await client.createIndex(uid).waitFor();
+      await client.createIndex(uid).waitFor(client: client);
       var index = await client.getIndex(uid);
 
       final updatedSynonyms = {
         'large': ['big'],
         'small': ['little']
       };
-      var response = await index.updateSynonyms(updatedSynonyms).waitFor();
+      var response =
+          await index.updateSynonyms(updatedSynonyms).waitFor(client: client);
       expect(response.status, 'succeeded');
       final synonyms = await index.getSynonyms();
       expect(synonyms, updatedSynonyms);
-      response = await index.resetSynonyms().waitFor();
+      response = await index.resetSynonyms().waitFor(client: client);
       expect(response.status, 'succeeded');
       final resetSynonyms = await index.getSynonyms();
       expect(resetSynonyms, {});
@@ -196,17 +202,17 @@ void main() {
 
     test('Getting, setting, and deleting sortable attributes', () async {
       final uid = randomUid();
-      await client.createIndex(uid).waitFor();
+      await client.createIndex(uid).waitFor(client: client);
       var index = await client.getIndex(uid);
 
       final updatedSortableAttributes = ['genre', 'title'];
       var response = await index
           .updateSortableAttributes(updatedSortableAttributes)
-          .waitFor();
+          .waitFor(client: client);
       expect(response.status, 'succeeded');
       final sortableAttributes = await index.getSortableAttributes();
       expect(sortableAttributes, updatedSortableAttributes);
-      response = await index.resetSortableAttributes().waitFor();
+      response = await index.resetSortableAttributes().waitFor(client: client);
       final resetSortablettributes = await index.getSortableAttributes();
       expect(resetSortablettributes, []);
     });
