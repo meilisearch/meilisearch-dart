@@ -25,4 +25,26 @@ class CancelTasksQuery extends Queryable {
       this.indexUids: const [],
       this.statuses: const [],
       this.types: const []});
+
+  Map<String, dynamic> buildMap() {
+    return {
+      'next': this.next,
+      'beforeEnqueuedAt': this.beforeEnqueuedAt,
+      'afterEnqueuedAt': this.afterEnqueuedAt,
+      'beforeStartedAt': this.beforeStartedAt,
+      'afterStartedAt': this.afterStartedAt,
+      'beforeFinishedAt': this.beforeFinishedAt,
+      'afterFinishedAt': this.afterFinishedAt,
+      'uids': this.uids,
+      'statuses': this.statuses,
+      'types': this.types,
+      'indexUids': this.indexUids,
+    };
+  }
+
+  Map<String, dynamic> toQuery() {
+    return this.buildMap()
+      ..removeWhere(removeEmptyOrNulls)
+      ..updateAll(toURIString);
+  }
 }
