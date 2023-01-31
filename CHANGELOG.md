@@ -1,5 +1,13 @@
-# 0.7.0
+# 0.7.1
 ### Changes
+
+- Remove `dart:mirrors` dependency. Enable `flutter` and `web` platforms again.
+
+# 0.7.0 [deprecated]
+### Changes
+
+⚠️ Don't use this version if you're using with Flutter or Web. It is not supported due to a mistake in the implementation of the `Queryable` class.
+Please use the next available version.
 
 - `SearchResult` now is returned from `search` requests when is a non-exhaustive pagination request. A instance of `PaginatedSearchResult` is returned when the request was made with finite pagination.
 - Add `Future<Task> swapIndexes(List<SwapIndex> swaps)` method to swap indexes.
