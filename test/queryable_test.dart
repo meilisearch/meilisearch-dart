@@ -8,7 +8,7 @@ class FakeQueryClass extends Queryable {
   final List<int> myList;
 
   FakeQueryClass(
-      {this.myInteger, this.myString, this.myDate, this.myList: const []});
+      {this.myInteger, this.myString, this.myDate, this.myList = const []});
 
   Map<String, dynamic> buildMap() {
     return {

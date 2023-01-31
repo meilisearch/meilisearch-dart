@@ -22,11 +22,11 @@ class DeleteTasksQuery extends Queryable {
       this.afterStartedAt,
       this.beforeFinishedAt,
       this.afterFinishedAt,
-      this.canceledBy: const [],
-      this.uids: const [],
-      this.indexUids: const [],
-      this.statuses: const [],
-      this.types: const []});
+      this.canceledBy = const [],
+      this.uids = const [],
+      this.indexUids = const [],
+      this.statuses = const [],
+      this.types = const []});
 
   Map<String, dynamic> buildMap() {
     return {

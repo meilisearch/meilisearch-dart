@@ -5,7 +5,10 @@ class Result<T> {
   final int offset;
 
   Result(
-      {this.results: const [], this.limit: 0, this.offset: 0, this.total: 0});
+      {this.results = const [],
+      this.limit = 0,
+      this.offset = 0,
+      this.total = 0});
 
   factory Result.fromMapWithType(Map<String, dynamic> map, fromMap) =>
       Result<T>(

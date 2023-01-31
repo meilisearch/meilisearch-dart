@@ -36,7 +36,7 @@ class MeiliSearchClientImpl implements MeiliSearchClient {
 
   @override
   MeiliSearchIndex index(String uid) {
-    return new MeiliSearchIndexImpl(this, uid);
+    return MeiliSearchIndexImpl(this, uid);
   }
 
   Future<Task> _update(Future<Response> future) async {
@@ -166,7 +166,7 @@ class MeiliSearchClientImpl implements MeiliSearchClient {
   Future<Key> createKey(
       {DateTime? expiresAt,
       String? description,
-      String? uid: null,
+      String? uid = null,
       required List<String> indexes,
       required List<String> actions}) async {
     final data = <String, dynamic>{

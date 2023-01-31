@@ -7,10 +7,10 @@ class TasksResults<T> {
   final int? from;
 
   TasksResults(
-      {this.results: const [],
-      this.limit: null,
-      this.from: null,
-      this.next: null});
+      {this.results = const [],
+      this.limit = null,
+      this.from = null,
+      this.next = null});
 
   factory TasksResults.fromMap(Map<String, dynamic> map) => TasksResults(
         results:
