@@ -3,8 +3,9 @@ import 'package:test/test.dart';
 import '../utils/books_data.dart';
 import '../utils/wait_for.dart';
 
+String serverUrl = String.fromEnvironment('MEILISEARCH_URL',
+    defaultValue: 'http://localhost:7700');
 final client = MeiliSearchClient(serverUrl, 'masterKey', 1000);
-String serverUrl = 'http://localhost:7700';
 
 Future<MeiliSearchIndex> _createIndex({String? uid}) async {
   final index = client.index(uid ?? 'index');
@@ -25,5 +26,5 @@ void main() {
 
       expect(result.hits, hasLength(2));
     });
-  });
+  }, tags: 'browser');
 }
