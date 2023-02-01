@@ -5,4 +5,14 @@ class IndexesQuery extends Queryable {
   final int? limit;
 
   IndexesQuery({this.limit, this.offset});
+
+  Map<String, dynamic> buildMap() {
+    return {'offset': this.offset, 'limit': this.limit};
+  }
+
+  Map<String, dynamic> toQuery() {
+    return this.buildMap()
+      ..removeWhere(removeEmptyOrNulls)
+      ..updateAll(toURIString);
+  }
 }
