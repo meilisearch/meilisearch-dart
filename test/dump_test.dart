@@ -7,10 +7,11 @@ void main() {
     setUpClient();
 
     test('creates a dump', () async {
-      final dump = await client.createDump();
+      final task = await client.createDump();
 
-      expect(dump.type, equals('dumpCreation'));
-      expect(dump.status, anyOf('succeeded', 'enqueued'));
+      expect(task.type, equals('dumpCreation'));
+      expect(task.status, anyOf('succeeded', 'enqueued'));
+      expect(task.indexUid, isNull);
     });
   });
 }

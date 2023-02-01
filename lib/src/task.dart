@@ -2,6 +2,7 @@ class Task {
   Task({
     this.status,
     this.uid,
+    this.indexUid,
     this.type,
     this.duration,
     this.enqueuedAt,
@@ -12,6 +13,7 @@ class Task {
 
   final String? status;
   final int? uid;
+  final String? indexUid;
   final String? type;
   final String? duration;
   final DateTime? enqueuedAt;
@@ -22,6 +24,7 @@ class Task {
   factory Task.fromMap(Map<String, dynamic> map) => Task(
         status: map['status'] as String?,
         uid: (map['uid'] ?? map['taskUid']) as int,
+        indexUid: map['indexUid'],
         duration: map['duration'] as String?,
         enqueuedAt: map['enqueuedAt'] != null
             ? DateTime.tryParse(map['enqueuedAt'] as String)
