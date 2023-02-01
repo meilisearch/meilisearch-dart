@@ -20,11 +20,11 @@ void main() {
       {
         '*': {"filter": 'tag = Tale'}
       },
-      {"books": {}},
-      {"books": null},
-      ['books'],
+      {"my_index": {}},
+      {"my_index": null},
+      ['my_index'],
       {
-        "books": {"filter": 'tag = comedy AND book_id = 1'}
+        "my_index": {"filter": 'tag = comedy AND book_id = 1'}
       }
     ];
 
@@ -54,15 +54,15 @@ void main() {
       test('invokes search successfully with the new token', () async {
         final admKey = await client.createKey(indexes: ["*"], actions: ["*"]);
         final admClient = MeiliSearchClient(testServer, admKey.key);
-        await createBooksIndex(uid: 'books');
-        await admClient.index('books').updateFilterableAttributes(
-            ['tag', 'book_id']).waitFor(client: admClient);
+        final index = await createBooksIndex(uid: 'my_index');
+        await index.updateFilterableAttributes(['tag', 'book_id']).waitFor(
+            client: client);
 
         possibleRules.forEach((data) async {
           final token = admClient.generateTenantToken(admKey.uid!, data);
           final custom = MeiliSearchClient(testServer, token);
 
-          expect(() async => await custom.index('books').search(''),
+          expect(() async => await custom.index('my_index').search(''),
               returnsNormally);
         });
       });

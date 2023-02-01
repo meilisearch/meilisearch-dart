@@ -1,6 +1,6 @@
 status = [
-    'integration-tests (dart 2.12)',
-    'integration-tests (dart 2.17)',
+    'integration-tests (dart 2.12.4)',
+    'integration-tests (dart 2.19.0)',
     'linter-check'
 ]
 # 1 hour timeout

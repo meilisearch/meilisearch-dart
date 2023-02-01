@@ -10,7 +10,7 @@ void main() {
 
     test('Create index with right UID without any primary passed', () async {
       final uid = randomUid();
-      await client.createIndex(uid);
+      await client.createIndex(uid).waitFor(client: client);
       final index = await client.getIndex(uid);
       expect(index.uid, uid);
       expect(index.primaryKey, null);
