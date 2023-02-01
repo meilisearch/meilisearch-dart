@@ -10,12 +10,12 @@ class Key {
   final DateTime? updatedAt;
 
   Key(
-      {this.uid: "",
-      this.key: "",
-      this.name: null,
+      {this.uid = "",
+      this.key = "",
+      this.name = null,
       this.description,
-      this.actions: const ['*'],
-      this.indexes: const ['*'],
+      this.actions = const ['*'],
+      this.indexes = const ['*'],
       this.expiresAt,
       this.createdAt,
       this.updatedAt});

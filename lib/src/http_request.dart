@@ -47,7 +47,7 @@ abstract class HttpRequest {
   /// DELETE method
   Future<Response<T>> deleteMethod<T>(
     String path, {
-    dynamic data: null,
+    dynamic data = null,
     Map<String, dynamic>? queryParameters,
   });
 }

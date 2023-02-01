@@ -6,13 +6,13 @@ import 'package:test/test.dart';
 import 'utils/client.dart';
 
 void main() {
-  final RegExp semVer = new RegExp(
+  final RegExp semVer = RegExp(
       r"version\:.(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(?:-((?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\+([0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?");
 
   group('Version', () {
     test('matches with the current package version in pubspec.yaml', () {
       final path = '${Directory.current.path}/pubspec.yaml';
-      String data = new File(path).readAsStringSync();
+      String data = File(path).readAsStringSync();
       String? version = semVer.stringMatch(data)?.replaceFirst('version: ', '');
 
       expect(version, isNotNull);

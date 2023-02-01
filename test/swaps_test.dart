@@ -2,6 +2,7 @@ import 'package:meilisearch/src/swap_index.dart';
 import 'package:test/test.dart';
 
 import 'utils/client.dart';
+import 'utils/wait_for.dart';
 
 void main() {
   group('Swaps indexes', () {
@@ -12,7 +13,7 @@ void main() {
       var movies = ['movies', 'movies_new'];
       var swaps = [SwapIndex(books), SwapIndex(movies)];
 
-      var response = await client.swapIndexes(swaps).waitFor();
+      var response = await client.swapIndexes(swaps).waitFor(client: client);
 
       expect(response.type, 'indexSwap');
       expect(response.details!['swaps'], [

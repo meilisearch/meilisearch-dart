@@ -2,6 +2,7 @@ import 'package:meilisearch/src/task.dart';
 import 'package:test/test.dart';
 
 import 'utils/client.dart';
+import 'utils/wait_for.dart';
 
 void main() {
   group('Stats', () {
@@ -13,13 +14,13 @@ void main() {
       var response = await index.addDocuments([
         {'book_id': 123, 'title': 'Pride and Prejudice'},
         {'book_id': 456, 'title': 'The Martin'},
-      ]).waitFor();
+      ]).waitFor(client: client);
       expect(response.status, 'succeeded');
       final uid2 = randomUid();
       index = client.index(uid2);
       response = await index.addDocuments([
         {'book_id': 789, 'title': 'Project Hail Mary'},
-      ]).waitFor();
+      ]).waitFor(client: client);
       expect(response.status, 'succeeded');
       final stats = await client.getStats();
       expect(stats.indexes!.length, 2);

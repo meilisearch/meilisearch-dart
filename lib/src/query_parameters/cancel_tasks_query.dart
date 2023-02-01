@@ -21,10 +21,10 @@ class CancelTasksQuery extends Queryable {
       this.afterStartedAt,
       this.beforeFinishedAt,
       this.afterFinishedAt,
-      this.uids: const [],
-      this.indexUids: const [],
-      this.statuses: const [],
-      this.types: const []});
+      this.uids = const [],
+      this.indexUids = const [],
+      this.statuses = const [],
+      this.types = const []});
 
   Map<String, dynamic> buildMap() {
     return {

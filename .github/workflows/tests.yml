@@ -9,6 +9,9 @@ on:
       - staging
       - main
 
+env:
+  MEILISEARCH_URL: http://localhost:7700
+
 jobs:
   integration-tests:
     # Will not run if the event is a PR to bump-meilisearch-v* (so a pre-release PR)
@@ -19,10 +22,9 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        version: ["2.12", "2.17"]
+        version: ["2.12.4", "2.19.0"]
     name: integration-tests (dart ${{ matrix.version }})
-    container:
-      image: dart:${{ matrix.version }}
+
     services:
       meilisearch:
         image: getmeili/meilisearch:latest
@@ -30,26 +32,29 @@ jobs:
           MEILI_MASTER_KEY: "masterKey"
           MEILI_NO_ANALYTICS: "true"
         ports:
-          - "7700:7700"
+          - 7700:7700
+
     steps:
-      - name: Checkout
-        uses: actions/checkout@v3
+      - uses: actions/checkout@v3
+      - uses: dart-lang/setup-dart@v1
+        with:
+          sdk: ${{ matrix.version }}
       - name: Install dependencies
         run: dart pub get
       - name: Run integration tests
-        run: dart run test
-        env:
-          MEILISEARCH_URL: http://meilisearch:7700
+        run: dart test --exclude-tags=browser --concurrency=1
+      #  TODO: Add Chrome to this CI action
+      # - name: Run Chrome tests
+      #   run: dart run test --platform=chrome --tags=browser
 
   linter:
     name: linter-check
     runs-on: ubuntu-latest
     container:
-      image: dart:2.17
+      image: dart:latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v3
+      - uses: actions/checkout@v3
       - name: Install dependencies
         run: dart pub get
       - name: Run linter
-        run: dart analyze && dart format . --set-exit-if-changed
+        run: dart analyze --fatal-infos && dart format . --set-exit-if-changed

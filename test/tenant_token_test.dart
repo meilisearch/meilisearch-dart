@@ -5,6 +5,7 @@ import 'package:test/test.dart';
 
 import 'utils/books.dart';
 import 'utils/client.dart';
+import 'utils/wait_for.dart';
 
 void main() {
   final Map<String, dynamic> _searchRules = {"*": null};
@@ -19,11 +20,11 @@ void main() {
       {
         '*': {"filter": 'tag = Tale'}
       },
-      {"books": {}},
-      {"books": null},
-      ['books'],
+      {"my_index": {}},
+      {"my_index": null},
+      ['my_index'],
       {
-        "books": {"filter": 'tag = comedy AND book_id = 1'}
+        "my_index": {"filter": 'tag = comedy AND book_id = 1'}
       }
     ];
 
@@ -53,16 +54,15 @@ void main() {
       test('invokes search successfully with the new token', () async {
         final admKey = await client.createKey(indexes: ["*"], actions: ["*"]);
         final admClient = MeiliSearchClient(testServer, admKey.key);
-        await createBooksIndex(uid: 'books');
-        await admClient
-            .index('books')
-            .updateFilterableAttributes(['tag', 'book_id']).waitFor();
+        final index = await createBooksIndex(uid: 'my_index');
+        await index.updateFilterableAttributes(['tag', 'book_id']).waitFor(
+            client: client);
 
         possibleRules.forEach((data) async {
           final token = admClient.generateTenantToken(admKey.uid!, data);
           final custom = MeiliSearchClient(testServer, token);
 
-          expect(() async => await custom.index('books').search(''),
+          expect(() async => await custom.index('my_index').search(''),
               returnsNormally);
         });
       });
@@ -87,7 +87,7 @@ void main() {
       test('generates a signed token with a given expiration', () {
         final key = sha1RandomString();
         final uid = sha1RandomString();
-        final tomorrow = DateTime.now().add(new Duration(days: 1)).toUtc();
+        final tomorrow = DateTime.now().add(Duration(days: 1)).toUtc();
         final token =
             generateToken(uid, _searchRules, key, expiresAt: tomorrow);
 
