@@ -2,7 +2,6 @@ import 'package:meilisearch/src/query_parameters/queryable.dart';
 
 class TasksQuery extends Queryable {
   final int? from;
-  final int? next;
   final int? limit;
   final int? canceledBy;
   final DateTime? beforeEnqueuedAt;
@@ -19,7 +18,6 @@ class TasksQuery extends Queryable {
   TasksQuery(
       {this.limit,
       this.from,
-      this.next,
       this.canceledBy,
       this.beforeEnqueuedAt,
       this.afterEnqueuedAt,
@@ -35,7 +33,6 @@ class TasksQuery extends Queryable {
   Map<String, dynamic> buildMap() {
     return {
       'from': this.from,
-      'next': this.next,
       'limit': this.limit,
       'canceledBy': this.canceledBy,
       'beforeEnqueuedAt': this.beforeEnqueuedAt,

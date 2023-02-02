@@ -176,5 +176,14 @@ void main() {
       expect(() async => await index.getTask(9999),
           throwsA(isA<MeiliSearchApiException>()));
     });
+
+    test('extracts all possible properties from task', () async {
+      final uid = randomUid();
+      final task = await client.createIndex(uid);
+
+      expect(task.uid, greaterThan(0));
+      expect(task.indexUid, equals(uid));
+      expect(task.type, equals("indexCreation"));
+    });
   });
 }
