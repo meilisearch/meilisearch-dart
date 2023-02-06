@@ -43,9 +43,6 @@ jobs:
         run: dart pub get
       - name: Run integration tests
         run: dart test --exclude-tags=browser --concurrency=1
-      #  TODO: Add Chrome to this CI action
-      # - name: Run Chrome tests
-      #   run: dart run test --platform=chrome --tags=browser
 
   linter:
     name: linter-check
@@ -58,3 +55,22 @@ jobs:
         run: dart pub get
       - name: Run linter
         run: dart analyze --fatal-infos && dart format . --set-exit-if-changed
+
+  pana:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    container:
+      image: dart:latest
+    steps:
+      - uses: actions/checkout@v3
+      - run: dart pub global activate pana
+      - name: Run pana
+        id: pana-run
+        run: |
+          echo "PANA_OUTPUT<<EOF" >> $GITHUB_ENV
+          dart pub global run pana --no-warning --exit-code-threshold 130 >> $GITHUB_ENV
+          echo "EOF" >> $GITHUB_ENV
+      - name: Analyze pana output
+        run: |
+          echo "$PANA_OUTPUT" | grep "Supports 6 of 6 possible platforms"
+
