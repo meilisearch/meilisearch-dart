@@ -162,10 +162,9 @@ void main() {
 
     test('gets a task with a failure', () async {
       final index = client.index(randomUid());
-      final response = await index
-          .updateRankingRules(['wrong_ranking_rules']).waitFor(client: client);
-      expect(response.uid, response.uid);
-      expect(response.error!.type, 'invalid_request');
+
+      expect(() async => await index.updateRankingRules(['invalid-rule']),
+          throwsA(isA<MeiliSearchApiException>()));
     });
 
     test('Getting non-existant update status', () async {
