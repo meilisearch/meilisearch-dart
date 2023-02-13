@@ -1,5 +1,4 @@
 import 'package:meilisearch/meilisearch.dart';
-import 'package:meilisearch/src/paginated_search_result.dart';
 
 abstract class Searcheable {
   /// Query originating the response

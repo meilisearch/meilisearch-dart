@@ -1,5 +1,4 @@
-import 'package:meilisearch/src/query_parameters/cancel_tasks_query.dart';
-import 'package:meilisearch/src/query_parameters/delete_tasks_query.dart';
+import 'package:meilisearch/meilisearch.dart';
 import 'package:test/test.dart';
 
 import 'utils/client.dart';

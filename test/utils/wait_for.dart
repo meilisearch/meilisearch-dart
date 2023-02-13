@@ -1,5 +1,4 @@
 import 'package:meilisearch/meilisearch.dart';
-import 'package:meilisearch/src/task.dart';
 
 extension TaskWaiter on Task {
   Future<Task> waitFor({

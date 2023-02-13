@@ -1,6 +1,4 @@
 import 'package:meilisearch/meilisearch.dart';
-import 'package:meilisearch/src/exception.dart';
-import 'package:meilisearch/src/key.dart';
 import 'package:test/test.dart';
 
 import 'utils/client.dart';
