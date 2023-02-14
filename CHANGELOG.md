@@ -2,6 +2,7 @@
 ### Breaking changes
 
 - `TasksQuery#canceledBy` field is now a `List<int>` and not an `int?` anymore.
+- Add `indexUid` to `Task`
 
 ### Changes
 
