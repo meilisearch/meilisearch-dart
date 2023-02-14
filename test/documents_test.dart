@@ -1,6 +1,5 @@
-import 'package:meilisearch/src/query_parameters/documents_query.dart';
+import 'package:meilisearch/meilisearch.dart';
 import 'package:test/test.dart';
-import 'package:meilisearch/src/exception.dart';
 
 import 'utils/books_data.dart';
 import 'utils/wait_for.dart';

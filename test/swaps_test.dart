@@ -1,4 +1,4 @@
-import 'package:meilisearch/src/swap_index.dart';
+import 'package:meilisearch/meilisearch.dart';
 import 'package:test/test.dart';
 
 import 'utils/client.dart';

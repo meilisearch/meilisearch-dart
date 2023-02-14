@@ -1,7 +1,5 @@
 import 'package:meilisearch/meilisearch.dart';
-import 'package:meilisearch/src/paginated_search_result.dart';
 import 'package:test/test.dart';
-import 'package:meilisearch/src/matching_strategy_enum.dart';
 
 import 'utils/books.dart';
 import 'utils/books_data.dart';

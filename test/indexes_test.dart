@@ -1,8 +1,8 @@
+import 'package:meilisearch/meilisearch.dart';
 import 'package:test/test.dart';
 
 import 'utils/client.dart';
 import 'utils/wait_for.dart';
-import 'package:meilisearch/src/exception.dart';
 
 void main() {
   group('Indexes', () {
