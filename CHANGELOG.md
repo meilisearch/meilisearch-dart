@@ -1,3 +1,23 @@
+# 0.8.0
+### Breaking changes
+
+- `TasksQuery#canceledBy` field is now a `List<int>` and not an `int?` anymore.
+
+### Changes
+
+- Expose these classes:
+  - `PaginatedSearchResult`
+  - `DocumentsQuery`
+  - `TasksQuery`
+  - `CancelTasksQuery`
+  - `DeleteTasksQuery`
+  - `KeysTasksQuery`
+  - `IndexesTasksQuery`
+  - `MatchingStrategy` enum
+  - `MeiliSearchApiException` and `CommunicationException`
+  - `Task` and `TaskError`
+  - `SwapIndex`
+
 # 0.7.1
 ### Changes
 
