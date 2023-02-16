@@ -193,7 +193,7 @@ await index.search('wonder', filter: ['id > 1 AND genres = Action']);
 
 ## 🤖 Compatibility with Meilisearch
 
-This package only guarantees compatibility with the [version v1.0.0 of Meilisearch](https://github.com/meilisearch/meilisearch/releases/tag/v1.0.0).
+This package guarantees compatibility with the [version v1.x of Meilisearch](https://github.com/meilisearch/meilisearch/releases/tag/latest), but some of the features may not be present. Please check the [issues](https://github.com/meilisearch/meilisearch-dart/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22+label%3Aenhancement) for more info.
 
 :warning: This package also can work with the [version v0.29.0 of Meilisearch](https://github.com/meilisearch/meilisearch/releases/tag/v1.0.0), but you may notice some missing features. Check [the issues page](https://github.com/meilisearch/meilisearch-dart/issues) for more information.
 
