@@ -27,20 +27,21 @@ class CancelTasksQuery extends Queryable {
 
   Map<String, Object?> buildMap() {
     return {
-      'beforeEnqueuedAt': this.beforeEnqueuedAt,
-      'afterEnqueuedAt': this.afterEnqueuedAt,
-      'beforeStartedAt': this.beforeStartedAt,
-      'afterStartedAt': this.afterStartedAt,
-      'beforeFinishedAt': this.beforeFinishedAt,
-      'afterFinishedAt': this.afterFinishedAt,
-      'uids': this.uids,
-      'statuses': this.statuses,
-      'types': this.types,
-      'indexUids': this.indexUids,
+      'beforeEnqueuedAt': beforeEnqueuedAt,
+      'afterEnqueuedAt': afterEnqueuedAt,
+      'beforeStartedAt': beforeStartedAt,
+      'afterStartedAt': afterStartedAt,
+      'beforeFinishedAt': beforeFinishedAt,
+      'afterFinishedAt': afterFinishedAt,
+      'uids': uids,
+      'statuses': statuses,
+      'types': types,
+      'indexUids': indexUids,
     };
   }
 
+  @override
   Map<String, Object> toQuery() {
-    return this.buildMap().removeEmptyOrNullsFromMap()..updateAll(toURIString);
+    return buildMap().removeEmptyOrNullsFromMap()..updateAll(toURIString);
   }
 }

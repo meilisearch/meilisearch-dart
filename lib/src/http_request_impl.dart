@@ -9,7 +9,7 @@ class HttpRequestImpl implements HttpRequest {
           BaseOptions(
             baseUrl: serverUrl,
             headers: <String, Object>{
-              if (apiKey != null) 'Authorization': 'Bearer ${apiKey}',
+              if (apiKey != null) 'Authorization': 'Bearer $apiKey',
               'User-Agent': Version.qualifiedVersion,
             },
             contentType: 'application/json',
@@ -31,7 +31,7 @@ class HttpRequestImpl implements HttpRequest {
 
   @override
   Map<String, Object?> headers() {
-    return this.dio.options.headers;
+    return dio.options.headers;
   }
 
   @override

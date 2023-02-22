@@ -15,40 +15,42 @@ class TasksQuery extends Queryable {
   final List<String> types;
   final List<String> indexUids;
 
-  TasksQuery(
-      {this.limit,
-      this.from,
-      this.beforeEnqueuedAt,
-      this.afterEnqueuedAt,
-      this.beforeStartedAt,
-      this.afterStartedAt,
-      this.beforeFinishedAt,
-      this.afterFinishedAt,
-      this.canceledBy = const [],
-      this.uids = const [],
-      this.indexUids = const [],
-      this.statuses = const [],
-      this.types = const []});
+  const TasksQuery({
+    this.limit,
+    this.from,
+    this.beforeEnqueuedAt,
+    this.afterEnqueuedAt,
+    this.beforeStartedAt,
+    this.afterStartedAt,
+    this.beforeFinishedAt,
+    this.afterFinishedAt,
+    this.canceledBy = const [],
+    this.uids = const [],
+    this.indexUids = const [],
+    this.statuses = const [],
+    this.types = const [],
+  });
 
   Map<String, Object?> buildMap() {
     return {
-      'from': this.from,
-      'limit': this.limit,
-      'canceledBy': this.canceledBy,
-      'beforeEnqueuedAt': this.beforeEnqueuedAt,
-      'afterEnqueuedAt': this.afterEnqueuedAt,
-      'beforeStartedAt': this.beforeStartedAt,
-      'afterStartedAt': this.afterStartedAt,
-      'beforeFinishedAt': this.beforeFinishedAt,
-      'afterFinishedAt': this.afterFinishedAt,
-      'uids': this.uids,
-      'statuses': this.statuses,
-      'types': this.types,
-      'indexUids': this.indexUids,
+      'from': from,
+      'limit': limit,
+      'canceledBy': canceledBy,
+      'beforeEnqueuedAt': beforeEnqueuedAt,
+      'afterEnqueuedAt': afterEnqueuedAt,
+      'beforeStartedAt': beforeStartedAt,
+      'afterStartedAt': afterStartedAt,
+      'beforeFinishedAt': beforeFinishedAt,
+      'afterFinishedAt': afterFinishedAt,
+      'uids': uids,
+      'statuses': statuses,
+      'types': types,
+      'indexUids': indexUids,
     };
   }
 
+  @override
   Map<String, Object> toQuery() {
-    return this.buildMap().removeEmptyOrNullsFromMap()..updateAll(toURIString);
+    return buildMap().removeEmptyOrNullsFromMap()..updateAll(toURIString);
   }
 }

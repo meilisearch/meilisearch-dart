@@ -12,15 +12,16 @@ class FakeQueryClass extends Queryable {
 
   Map<String, Object?> buildMap() {
     return {
-      'myInteger': this.myInteger,
-      'myString': this.myString,
-      'myDate': this.myDate,
-      'myList': this.myList,
+      'myInteger': myInteger,
+      'myString': myString,
+      'myDate': myDate,
+      'myList': myList,
     };
   }
 
+  @override
   Map<String, Object> toQuery() {
-    return this.buildMap().removeEmptyOrNullsFromMap()..updateAll(toURIString);
+    return buildMap().removeEmptyOrNullsFromMap()..updateAll(toURIString);
   }
 }
 

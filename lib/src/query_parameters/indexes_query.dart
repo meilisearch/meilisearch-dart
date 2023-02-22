@@ -4,13 +4,20 @@ class IndexesQuery extends Queryable {
   final int? offset;
   final int? limit;
 
-  IndexesQuery({this.limit, this.offset});
+  const IndexesQuery({
+    this.limit,
+    this.offset,
+  });
 
   Map<String, Object?> buildMap() {
-    return {'offset': this.offset, 'limit': this.limit};
+    return {
+      'offset': offset,
+      'limit': limit,
+    };
   }
 
+  @override
   Map<String, Object> toQuery() {
-    return this.buildMap().removeEmptyOrNullsFromMap()..updateAll(toURIString);
+    return buildMap().removeEmptyOrNullsFromMap()..updateAll(toURIString);
   }
 }

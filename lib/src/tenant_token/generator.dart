@@ -2,13 +2,13 @@ part of tenant_token;
 
 final _jsonEncoder = json.fuse(utf8.fuse(base64Url));
 
-const _HEADER = {"typ": 'JWT', "alg": 'HS256'};
+const _headers = {"typ": 'JWT', "alg": 'HS256'};
 
 int? _getTimestamp(DateTime? time) {
   final now = DateTime.now().toUtc();
 
   if (time == null) return null;
-  if (!time.isUtc) throw NotUTCException();
+  if (!time.isUtc) throw const NotUTCException();
   if (time.isBefore(now)) throw ExpiredSignatureException();
 
   return time.millisecondsSinceEpoch;
@@ -36,7 +36,7 @@ String generateToken(String uid, Object? searchRules, String apiKey,
     if (expiration != null) 'exp': expiration,
   };
 
-  final encodedHeader = _tobase64(_jsonEncoder.encode(_HEADER));
+  final encodedHeader = _tobase64(_jsonEncoder.encode(_headers));
   final encodedBody = _tobase64(_jsonEncoder.encode(payload));
   final unsignedBody = '$encodedHeader.$encodedBody';
   final signature = _tobase64(base64Url.encode(_sign(apiKey, unsignedBody)));

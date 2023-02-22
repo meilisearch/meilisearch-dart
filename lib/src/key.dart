@@ -12,7 +12,7 @@ class Key {
   const Key({
     this.uid = "",
     this.key = "",
-    this.name = null,
+    this.name,
     this.description,
     this.actions = const ['*'],
     this.indexes = const ['*'],

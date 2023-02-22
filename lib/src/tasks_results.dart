@@ -1,6 +1,6 @@
 import 'package:meilisearch/src/task.dart';
 
-class TasksResults<T> {
+class TasksResults {
   final List<Task> results;
   final int? next;
   final int? limit;
@@ -8,9 +8,9 @@ class TasksResults<T> {
 
   const TasksResults({
     this.results = const [],
-    this.limit = null,
-    this.from = null,
-    this.next = null,
+    this.limit,
+    this.from,
+    this.next,
   });
 
   factory TasksResults.fromMap(Map<String, Object?> map) => TasksResults(

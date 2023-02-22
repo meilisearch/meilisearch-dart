@@ -4,7 +4,7 @@ class Result<T> {
   final int limit;
   final int offset;
 
-  Result({
+  const Result({
     this.results = const [],
     this.limit = 0,
     this.offset = 0,
@@ -32,4 +32,13 @@ class Result<T> {
         offset: map['offset'] as int,
         limit: map['limit'] as int,
       );
+
+  Result<TTarget> map<TTarget>(TTarget Function(T item) converter) {
+    return Result(
+      total: total,
+      limit: limit,
+      offset: offset,
+      results: results.map(converter).toList(),
+    );
+  }
 }

@@ -4,6 +4,6 @@ class SwapIndex {
   SwapIndex(this.indexes);
 
   Map<String, Object> toQuery() {
-    return {'indexes': this.indexes};
+    return {'indexes': indexes};
   }
 }

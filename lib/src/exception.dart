@@ -34,10 +34,9 @@ class MeiliSearchApiException implements Exception {
 
   @override
   String toString() {
-    var output = 'MeiliSearchApiError - message: ${this.message}';
-    if (this.code != null && this.link != null && this.type != null) {
-      output +=
-          ' - code: ${this.code} - type: ${this.type} - link: ${this.link}';
+    var output = 'MeiliSearchApiError - message: $message';
+    if (code != null && link != null && type != null) {
+      output += ' - code: $code - type: $type - link: $link';
     }
     return output;
   }

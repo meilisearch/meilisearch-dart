@@ -32,10 +32,11 @@ class AllStats {
     final Object? lastUpdateRaw = json['lastUpdate'];
     final DateTime? lastUpdate =
         lastUpdateRaw is String ? DateTime.tryParse(lastUpdateRaw) : null;
-    final Map<String, IndexStats>? indexes =
-        (json['indexes'] as Map<String, Object?>)
-            .cast<String, Map<String, Object?>>()
-            .map((k, v) => MapEntry(k, IndexStats.fromMap(v)));
+    final Map<String, IndexStats> indexes =
+        (json['indexes'] as Map<String, Object?>?)
+                ?.cast<String, Map<String, Object?>>()
+                .map((k, v) => MapEntry(k, IndexStats.fromMap(v))) ??
+            {};
 
     return AllStats(
       databaseSize: json['databaseSize'] as int?,

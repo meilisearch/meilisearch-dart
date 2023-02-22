@@ -51,7 +51,7 @@ abstract class MeiliSearchIndex {
   Future<Map<String, Object?>?> getDocument(Object id, {List<String> fields});
 
   /// Return a list of all existing documents in the index.
-  Future<Result> getDocuments({DocumentsQuery? params});
+  Future<Result<Map<String, Object?>>> getDocuments({DocumentsQuery? params});
 
   /// Add a list of documents by given [documents] and optional [primaryKey] parameter.
   /// If index is not exists tries to create a new index and adds documents.

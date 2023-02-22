@@ -32,6 +32,7 @@ class MeiliSearchClientImpl implements MeiliSearchClient {
   @override
   final Duration? connectTimeout;
 
+  @override
   final HttpRequest http;
 
   @override
@@ -39,10 +40,10 @@ class MeiliSearchClientImpl implements MeiliSearchClient {
     return MeiliSearchIndexImpl(this, uid);
   }
 
-  Future<Task> _update(Future<Response> future) async {
+  Future<Task> _update(Future<Response<Map<String, Object?>>> future) async {
     final response = await future;
 
-    return Task.fromMap(response.data);
+    return Task.fromMap(response.data!);
   }
 
   @override
@@ -126,9 +127,9 @@ class MeiliSearchClientImpl implements MeiliSearchClient {
 
   @override
   Future<Task> createDump() async {
-    final response = await http.postMethod('/dumps');
+    final response = await http.postMethod<Map<String, Object?>>('/dumps');
 
-    return Task.fromMap(response.data);
+    return Task.fromMap(response.data!);
   }
 
   @override
@@ -143,7 +144,7 @@ class MeiliSearchClientImpl implements MeiliSearchClient {
   @override
   Future<Key> getKey(String keyOrUid) async {
     final response =
-        await http.getMethod<Map<String, Object?>>('/keys/${keyOrUid}');
+        await http.getMethod<Map<String, Object?>>('/keys/$keyOrUid');
 
     return Key.fromJson(response.data!);
   }
@@ -156,18 +157,19 @@ class MeiliSearchClientImpl implements MeiliSearchClient {
 
   @override
   Future<AllStats> getStats() async {
-    final response = await http.getMethod('/stats');
+    final response = await http.getMethod<Map<String, Object?>>('/stats');
 
-    return AllStats.fromMap(response.data);
+    return AllStats.fromMap(response.data!);
   }
 
   @override
-  Future<Key> createKey(
-      {DateTime? expiresAt,
-      String? description,
-      String? uid = null,
-      required List<String> indexes,
-      required List<String> actions}) async {
+  Future<Key> createKey({
+    DateTime? expiresAt,
+    String? description,
+    String? uid,
+    required List<String> indexes,
+    required List<String> actions,
+  }) async {
     final data = <String, Object?>{
       'expiresAt': expiresAt?.toIso8601String().split('.').first,
       if (description != null) 'description': description,
@@ -188,15 +190,15 @@ class MeiliSearchClientImpl implements MeiliSearchClient {
       if (name != null) 'name': name,
     };
 
-    final response = await http
-        .patchMethod<Map<String, Object?>>('/keys/${key}', data: data);
+    final response =
+        await http.patchMethod<Map<String, Object?>>('/keys/$key', data: data);
 
     return Key.fromJson(response.data!);
   }
 
   @override
   Future<bool> deleteKey(String key) async {
-    final response = await http.deleteMethod('/keys/${key}');
+    final response = await http.deleteMethod<void>('/keys/$key');
 
     return response.statusCode == 204;
   }
@@ -214,32 +216,34 @@ class MeiliSearchClientImpl implements MeiliSearchClient {
 
   @override
   Future<TasksResults> getTasks({TasksQuery? params}) async {
-    final response =
-        await http.getMethod('/tasks', queryParameters: params?.toQuery());
+    final response = await http.getMethod<Map<String, Object?>>('/tasks',
+        queryParameters: params?.toQuery());
 
-    return TasksResults.fromMap(response.data);
+    return TasksResults.fromMap(response.data!);
   }
 
   @override
   Future<Task> cancelTasks({CancelTasksQuery? params}) async {
-    final response = await http.postMethod('/tasks/cancel',
+    final response = await http.postMethod<Map<String, Object?>>(
+        '/tasks/cancel',
         queryParameters: params?.toQuery());
 
-    return Task.fromMap(response.data);
+    return Task.fromMap(response.data!);
   }
 
   @override
   Future<Task> deleteTasks({DeleteTasksQuery? params}) async {
-    final response =
-        await http.deleteMethod('/tasks', queryParameters: params?.toQuery());
+    final response = await http.deleteMethod<Map<String, Object?>>('/tasks',
+        queryParameters: params?.toQuery());
 
-    return Task.fromMap(response.data);
+    return Task.fromMap(response.data!);
   }
 
   @override
   Future<Task> getTask(int uid) async {
-    final response = await http.getMethod(('/tasks/$uid'));
+    final response =
+        await http.getMethod<Map<String, Object?>>(('/tasks/$uid'));
 
-    return Task.fromMap(response.data);
+    return Task.fromMap(response.data!);
   }
 }

@@ -49,8 +49,8 @@ class IndexSettings {
 
   factory IndexSettings.fromMap(Map<String, Object?> map) => IndexSettings(
         synonyms: (map['synonyms'] as Map?)
-            ?.cast<String, List>()
-            .map((key, value) => MapEntry(key, value.cast<String>())),
+            ?.cast<String, Object?>()
+            .map((key, value) => MapEntry(key, (value as List).cast<String>())),
         stopWords: (map['stopWords'] as Iterable?)?.cast<String>().toList(),
         rankingRules: (map['rankingRules'] as List?)?.cast<String>(),
         filterableAttributes:
