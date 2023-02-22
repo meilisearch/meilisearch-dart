@@ -12,19 +12,20 @@ class CancelTasksQuery extends Queryable {
   final List<String> types;
   final List<String> indexUids;
 
-  CancelTasksQuery(
-      {this.beforeEnqueuedAt,
-      this.afterEnqueuedAt,
-      this.beforeStartedAt,
-      this.afterStartedAt,
-      this.beforeFinishedAt,
-      this.afterFinishedAt,
-      this.uids = const [],
-      this.indexUids = const [],
-      this.statuses = const [],
-      this.types = const []});
+  const CancelTasksQuery({
+    this.beforeEnqueuedAt,
+    this.afterEnqueuedAt,
+    this.beforeStartedAt,
+    this.afterStartedAt,
+    this.beforeFinishedAt,
+    this.afterFinishedAt,
+    this.uids = const [],
+    this.indexUids = const [],
+    this.statuses = const [],
+    this.types = const [],
+  });
 
-  Map<String, dynamic> buildMap() {
+  Map<String, Object?> buildMap() {
     return {
       'beforeEnqueuedAt': this.beforeEnqueuedAt,
       'afterEnqueuedAt': this.afterEnqueuedAt,
@@ -39,9 +40,7 @@ class CancelTasksQuery extends Queryable {
     };
   }
 
-  Map<String, dynamic> toQuery() {
-    return this.buildMap()
-      ..removeWhere(removeEmptyOrNulls)
-      ..updateAll(toURIString);
+  Map<String, Object> toQuery() {
+    return this.buildMap().removeEmptyOrNullsFromMap()..updateAll(toURIString);
   }
 }

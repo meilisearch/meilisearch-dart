@@ -6,13 +6,11 @@ class IndexesQuery extends Queryable {
 
   IndexesQuery({this.limit, this.offset});
 
-  Map<String, dynamic> buildMap() {
+  Map<String, Object?> buildMap() {
     return {'offset': this.offset, 'limit': this.limit};
   }
 
-  Map<String, dynamic> toQuery() {
-    return this.buildMap()
-      ..removeWhere(removeEmptyOrNulls)
-      ..updateAll(toURIString);
+  Map<String, Object> toQuery() {
+    return this.buildMap().removeEmptyOrNullsFromMap()..updateAll(toURIString);
   }
 }

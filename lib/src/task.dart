@@ -19,24 +19,24 @@ class Task {
   final DateTime? enqueuedAt;
   final DateTime? processedAt;
   final TaskError? error;
-  final Map<String, dynamic>? details;
+  final Map<String, Object?>? details;
 
-  factory Task.fromMap(Map<String, dynamic> map) => Task(
+  factory Task.fromMap(Map<String, Object?> map) => Task(
         status: map['status'] as String?,
-        uid: (map['uid'] ?? map['taskUid']) as int,
-        indexUid: map['indexUid'],
+        uid: (map['uid'] ?? map['taskUid']) as int?,
+        indexUid: map['indexUid'] as String?,
         duration: map['duration'] as String?,
-        enqueuedAt: map['enqueuedAt'] != null
+        enqueuedAt: map['enqueuedAt'] is String
             ? DateTime.tryParse(map['enqueuedAt'] as String)
             : null,
-        processedAt: map['processedAt'] != null
+        processedAt: map['processedAt'] is String
             ? DateTime.tryParse(map['processedAt'] as String)
             : null,
         type: map['type'] as String?,
-        error: map['error'] != null
-            ? TaskError.fromMap(map['error'] as Map<String, dynamic>)
+        error: map['error'] is Map<String, Object?>
+            ? TaskError.fromMap(map['error'] as Map<String, Object?>)
             : null,
-        details: map['details'],
+        details: map['details'] as Map<String, Object?>?,
       );
 }
 
@@ -53,7 +53,7 @@ class TaskError {
   final String? type;
   final String? link;
 
-  factory TaskError.fromMap(Map<String, dynamic> map) => TaskError(
+  factory TaskError.fromMap(Map<String, Object?> map) => TaskError(
         message: map['message'] as String?,
         code: map['code'] as String?,
         type: map['type'] as String?,

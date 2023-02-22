@@ -7,13 +7,11 @@ class DocumentsQuery extends Queryable {
 
   DocumentsQuery({this.limit, this.offset, this.fields = const []});
 
-  Map<String, dynamic> buildMap() {
+  Map<String, Object?> buildMap() {
     return {'offset': this.offset, 'limit': this.limit, 'fields': this.fields};
   }
 
-  Map<String, dynamic> toQuery() {
-    return this.buildMap()
-      ..removeWhere(removeEmptyOrNulls)
-      ..updateAll(toURIString);
+  Map<String, Object> toQuery() {
+    return this.buildMap().removeEmptyOrNullsFromMap()..updateAll(toURIString);
   }
 }

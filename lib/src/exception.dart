@@ -8,19 +8,19 @@ class MeiliSearchApiException implements Exception {
 
   factory MeiliSearchApiException.fromHttpBody(
     String message,
-    dynamic httpBody,
+    Object? httpBody,
   ) {
     if (httpBody != null &&
-        httpBody.runtimeType != String &&
+        httpBody is Map<String, Object?> &&
         httpBody.containsKey('message') &&
         httpBody.containsKey('code') &&
         httpBody.containsKey('link') &&
         httpBody.containsKey('type')) {
       return MeiliSearchApiException(
-        httpBody['message'],
-        code: httpBody['code'],
-        link: httpBody['link'],
-        type: httpBody['type'],
+        httpBody['message'] as String? ?? "",
+        code: httpBody['code'] as String?,
+        link: httpBody['link'] as String?,
+        type: httpBody['type'] as String?,
       );
     } else {
       return MeiliSearchApiException(message);

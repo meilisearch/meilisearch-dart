@@ -8,12 +8,12 @@ import 'utils/client.dart';
 import 'utils/wait_for.dart';
 
 void main() {
-  final Map<String, dynamic> _searchRules = {"*": null};
+  final Map<String, Object?> _searchRules = {"*": null};
 
   group('Tenant Tokens', () {
     setUpClient();
 
-    final List<dynamic> possibleRules = [
+    final List<Object> possibleRules = [
       {'*': {}},
       {'*': null},
       ['*'],

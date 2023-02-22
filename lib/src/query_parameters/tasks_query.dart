@@ -30,7 +30,7 @@ class TasksQuery extends Queryable {
       this.statuses = const [],
       this.types = const []});
 
-  Map<String, dynamic> buildMap() {
+  Map<String, Object?> buildMap() {
     return {
       'from': this.from,
       'limit': this.limit,
@@ -48,9 +48,7 @@ class TasksQuery extends Queryable {
     };
   }
 
-  Map<String, dynamic> toQuery() {
-    return this.buildMap()
-      ..removeWhere(removeEmptyOrNulls)
-      ..updateAll(toURIString);
+  Map<String, Object> toQuery() {
+    return this.buildMap().removeEmptyOrNullsFromMap()..updateAll(toURIString);
   }
 }

@@ -3,7 +3,7 @@ class SwapIndex {
 
   SwapIndex(this.indexes);
 
-  Map<String, dynamic> toQuery() {
+  Map<String, Object> toQuery() {
     return {'indexes': this.indexes};
   }
 }

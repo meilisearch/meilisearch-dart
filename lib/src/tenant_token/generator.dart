@@ -25,12 +25,12 @@ String _tobase64(String value) {
   return value.replaceAll(RegExp('='), '');
 }
 
-String generateToken(String uid, dynamic searchRules, String apiKey,
+String generateToken(String uid, Object? searchRules, String apiKey,
     {DateTime? expiresAt}) {
   if (uid.isEmpty || apiKey.isEmpty) throw InvalidApiKeyException();
 
   final expiration = _getTimestamp(expiresAt);
-  final payload = <String, dynamic>{
+  final payload = <String, Object?>{
     "searchRules": searchRules,
     "apiKeyUid": uid,
     if (expiration != null) 'exp': expiration,

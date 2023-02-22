@@ -55,7 +55,7 @@ Future<void> setUpHttp() async {
 Future<void> setUpClientWithWrongUrl() async {
   setUp(() {
     final String server = 'http://wrongurl:1234';
-    final int connectTimeout = 1000;
+    final connectTimeout = Duration(milliseconds: 1000);
 
     client = MeiliSearchClient(server, 'masterKey', connectTimeout);
   });

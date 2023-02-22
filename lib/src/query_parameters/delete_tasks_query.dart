@@ -26,7 +26,7 @@ class DeleteTasksQuery extends Queryable {
       this.statuses = const [],
       this.types = const []});
 
-  Map<String, dynamic> buildMap() {
+  Map<String, Object?> buildMap() {
     return {
       'beforeEnqueuedAt': this.beforeEnqueuedAt,
       'afterEnqueuedAt': this.afterEnqueuedAt,
@@ -42,9 +42,7 @@ class DeleteTasksQuery extends Queryable {
     };
   }
 
-  Map<String, dynamic> toQuery() {
-    return this.buildMap()
-      ..removeWhere(removeEmptyOrNulls)
-      ..updateAll(toURIString);
+  Map<String, Object> toQuery() {
+    return this.buildMap().removeEmptyOrNullsFromMap()..updateAll(toURIString);
   }
 }

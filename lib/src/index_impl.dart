@@ -53,17 +53,17 @@ class MeiliSearchIndexImpl implements MeiliSearchIndex {
 
   factory MeiliSearchIndexImpl.fromMap(
     MeiliSearchClient client,
-    Map<String, dynamic>? map,
+    Map<String, Object?>? map,
   ) =>
       MeiliSearchIndexImpl(
         client,
         map?['uid'] as String,
         primaryKey: map?['primaryKey'] as String?,
-        createdAt: map?['createdAt'] != null
-            ? DateTime.tryParse(map?['createdAt'] as String)
+        createdAt: map?['createdAt'] is String
+            ? DateTime.tryParse(map!['createdAt'] as String)
             : null,
-        updatedAt: map?['updatedAt'] != null
-            ? DateTime.tryParse(map?['updatedAt'] as String)
+        updatedAt: map?['updatedAt'] is String
+            ? DateTime.tryParse(map!['updatedAt'] as String)
             : null,
       );
 
@@ -73,10 +73,9 @@ class MeiliSearchIndexImpl implements MeiliSearchIndex {
 
   @override
   Future<Task> update({String? primaryKey}) async {
-    final data = <String, dynamic>{
-      'primaryKey': primaryKey,
+    final data = <String, Object?>{
+      if (primaryKey != null) 'primaryKey': primaryKey,
     };
-    data.removeWhere((k, v) => v == null);
 
     return await _update(http.patchMethod('/indexes/$uid', data: data));
   }
@@ -112,7 +111,7 @@ class MeiliSearchIndexImpl implements MeiliSearchIndex {
     int? limit,
     int? page,
     int? hitsPerPage,
-    dynamic filter,
+    Object? filter,
     List<String>? sort,
     List<String>? facets,
     List<String>? attributesToRetrieve,
@@ -125,7 +124,7 @@ class MeiliSearchIndexImpl implements MeiliSearchIndex {
     String? highlightPostTag,
     MatchingStrategy? matchingStrategy,
   }) async {
-    final data = <String, dynamic>{
+    final data = <String, Object?>{
       'q': query,
       'offset': offset,
       'limit': limit,
@@ -167,7 +166,7 @@ class MeiliSearchIndexImpl implements MeiliSearchIndex {
     return await _update(http.postMethod(
       '/indexes/$uid/documents',
       data: documents,
-      queryParameters: <String, dynamic>{
+      queryParameters: <String, Object?>{
         if (primaryKey != null) 'primaryKey': primaryKey,
       },
     ));
@@ -181,7 +180,7 @@ class MeiliSearchIndexImpl implements MeiliSearchIndex {
     return await _update(http.putMethod(
       '/indexes/$uid/documents',
       data: documents,
-      queryParameters: <String, dynamic>{
+      queryParameters: {
         if (primaryKey != null) 'primaryKey': primaryKey,
       },
     ));
@@ -193,7 +192,7 @@ class MeiliSearchIndexImpl implements MeiliSearchIndex {
   }
 
   @override
-  Future<Task> deleteDocument(dynamic id) async {
+  Future<Task> deleteDocument(Object? id) async {
     return await _update(http.deleteMethod('/indexes/$uid/documents/$id'));
   }
 
@@ -206,10 +205,10 @@ class MeiliSearchIndexImpl implements MeiliSearchIndex {
   }
 
   @override
-  Future<Map<String, dynamic>?> getDocument(id,
+  Future<Map<String, Object?>?> getDocument(Object id,
       {List<String> fields = const []}) async {
     final params = DocumentsQuery(fields: fields);
-    final response = await http.getMethod<Map<String, dynamic>>(
+    final response = await http.getMethod<Map<String, Object?>>(
         '/indexes/$uid/documents/$id',
         queryParameters: params.toQuery());
 
@@ -218,7 +217,7 @@ class MeiliSearchIndexImpl implements MeiliSearchIndex {
 
   @override
   Future<Result> getDocuments({DocumentsQuery? params = null}) async {
-    final response = await http.getMethod<Map<String, dynamic>>(
+    final response = await http.getMethod<Map<String, Object?>>(
         '/indexes/$uid/documents',
         queryParameters: params?.toQuery());
 

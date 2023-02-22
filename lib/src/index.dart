@@ -31,7 +31,9 @@ abstract class MeiliSearchIndex {
     int? limit,
     int? page,
     int? hitsPerPage,
-    dynamic filter,
+
+    /// filter is either a list or a string
+    Object? filter,
     List<String>? sort,
     List<String>? facets,
     List<String>? attributesToRetrieve,
@@ -46,7 +48,7 @@ abstract class MeiliSearchIndex {
   });
 
   /// Return the document in the index by given [id].
-  Future<Map<String, dynamic>?> getDocument(dynamic id, {List<String> fields});
+  Future<Map<String, Object?>?> getDocument(Object id, {List<String> fields});
 
   /// Return a list of all existing documents in the index.
   Future<Result> getDocuments({DocumentsQuery? params});
@@ -54,25 +56,25 @@ abstract class MeiliSearchIndex {
   /// Add a list of documents by given [documents] and optional [primaryKey] parameter.
   /// If index is not exists tries to create a new index and adds documents.
   Future<Task> addDocuments(
-    List<Map<String, dynamic>> documents, {
+    List<Map<String, Object?>> documents, {
     String? primaryKey,
   });
 
   /// Add a list of documents or update them if they already exist by given [documents] and optional [primaryKey] parameter.
   /// If index is not exists tries to create a new index and adds documents.
   Future<Task> updateDocuments(
-    List<Map<String, dynamic>> documents, {
+    List<Map<String, Object?>> documents, {
     String? primaryKey,
   });
 
   /// Delete one document by given [id].
-  Future<Task> deleteDocument(dynamic id);
+  Future<Task> deleteDocument(Object id);
 
   /// Delete all documents in the specified index.
   Future<Task> deleteAllDocuments();
 
   /// Delete a selection of documents by given [ids].
-  Future<Task> deleteDocuments(List<dynamic> ids);
+  Future<Task> deleteDocuments(List<Object> ids);
 
   /// Get the settings of the index.
   Future<IndexSettings> getSettings();
