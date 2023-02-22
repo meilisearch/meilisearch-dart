@@ -258,7 +258,7 @@ class MeiliSearchIndexImpl implements MeiliSearchIndex {
     final response = await http.getMethod<List<Object?>>(
         '/indexes/$uid/settings/filterable-attributes');
 
-    return (response.data!).cast<String>();
+    return response.data!.cast<String>();
   }
 
   @override
@@ -280,7 +280,7 @@ class MeiliSearchIndexImpl implements MeiliSearchIndex {
     final response = await http.getMethod<List<Object?>>(
         '/indexes/$uid/settings/displayed-attributes');
 
-    return (response.data!).cast<String>();
+    return response.data!.cast<String>();
   }
 
   @override
