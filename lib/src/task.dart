@@ -25,6 +25,7 @@ class Task {
     final enqueuedAtRaw = map['enqueuedAt'];
     final processedAtRaw = map['processedAt'];
     final errorRaw = map['error'];
+
     return Task(
       status: map['status'] as String?,
       uid: (map['uid'] ?? map['taskUid']) as int?,
