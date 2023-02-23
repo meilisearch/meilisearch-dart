@@ -7,8 +7,7 @@ class FakeQueryClass extends Queryable {
   final DateTime? myDate;
   final List<int> myList;
 
-  FakeQueryClass(
-      {this.myInteger, this.myString, this.myDate, this.myList = const []});
+  FakeQueryClass({this.myInteger, this.myString, this.myDate, this.myList = const []});
 
   Map<String, Object?> buildMap() {
     return {
@@ -21,7 +20,7 @@ class FakeQueryClass extends Queryable {
 
   @override
   Map<String, Object> toQuery() {
-    return buildMap().removeEmptyOrNullsFromMap()..updateAll(toURIString);
+    return removeEmptyOrNullsFromMap(buildMap())..updateAll(toURIString);
   }
 }
 
@@ -37,8 +36,7 @@ void main() {
 
   test('supports all main types', () {
     var date = DateTime.now();
-    var query = FakeQueryClass(
-        myList: [1, 2], myInteger: 99, myString: 'foo', myDate: date);
+    var query = FakeQueryClass(myList: [1, 2], myInteger: 99, myString: 'foo', myDate: date);
 
     expect(query.toQuery(), {
       'myDate': date.toUtc().toIso8601String(),

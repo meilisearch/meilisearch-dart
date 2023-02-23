@@ -1,4 +1,6 @@
 class Key {
+  static const defaultActions = ["*"];
+  static const defaultIndexes = ["*"];
   final String? uid;
   final String key;
   final String? name;
@@ -14,31 +16,28 @@ class Key {
     this.key = "",
     this.name,
     this.description,
-    this.actions = const ['*'],
-    this.indexes = const ['*'],
+    this.actions = defaultActions,
+    this.indexes = defaultIndexes,
     this.expiresAt,
     this.createdAt,
     this.updatedAt,
   });
 
-  factory Key.fromJson(Map<String, Object?> json) => Key(
-        description: json["description"] as String?,
-        key: json["key"] as String? ?? "",
-        uid: json["uid"] as String?,
-        actions: json["actions"] is Iterable
-            ? List<String>.from((json["actions"] as Iterable).cast<String>())
-            : [],
-        indexes: json["indexes"] is Iterable
-            ? List<String>.from((json["indexes"] as Iterable).cast<String>())
-            : [],
-        expiresAt: json["expiresAt"] is String
-            ? DateTime.tryParse(json["expiresAt"] as String)
-            : null,
-        createdAt: json["createdAt"] is String
-            ? DateTime.parse(json["createdAt"] as String)
-            : null,
-        updatedAt: json["updatedAt"] is String
-            ? DateTime.parse(json["updatedAt"] as String)
-            : null,
-      );
+  factory Key.fromJson(Map<String, Object?> json) {
+    final actionsRaw = json["actions"];
+    final indexesRaw = json["indexes"];
+    final expiresAtRaw = json["expiresAt"];
+    final createdAtRaw = json["createdAt"];
+    final updatedAtRaw = json["updatedAt"];
+    return Key(
+      description: json["description"] as String?,
+      key: json["key"] as String? ?? "",
+      uid: json["uid"] as String?,
+      actions: actionsRaw is Iterable ? List<String>.from(actionsRaw) : defaultActions,
+      indexes: indexesRaw is Iterable ? List<String>.from(indexesRaw) : defaultIndexes,
+      expiresAt: expiresAtRaw is String ? DateTime.tryParse(expiresAtRaw) : null,
+      createdAt: createdAtRaw is String ? DateTime.parse(createdAtRaw) : null,
+      updatedAt: updatedAtRaw is String ? DateTime.parse(updatedAtRaw) : null,
+    );
+  }
 }

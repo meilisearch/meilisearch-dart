@@ -18,6 +18,6 @@ class IndexesQuery extends Queryable {
 
   @override
   Map<String, Object> toQuery() {
-    return buildMap().removeEmptyOrNullsFromMap()..updateAll(toURIString);
+    return removeEmptyOrNullsFromMap(buildMap())..updateAll(toURIString);
   }
 }
