@@ -33,9 +33,14 @@ class Key {
       description: json["description"] as String?,
       key: json["key"] as String? ?? "",
       uid: json["uid"] as String?,
-      actions: actionsRaw is Iterable ? List<String>.from(actionsRaw) : defaultActions,
-      indexes: indexesRaw is Iterable ? List<String>.from(indexesRaw) : defaultIndexes,
-      expiresAt: expiresAtRaw is String ? DateTime.tryParse(expiresAtRaw) : null,
+      actions: actionsRaw is Iterable
+          ? List<String>.from(actionsRaw)
+          : defaultActions,
+      indexes: indexesRaw is Iterable
+          ? List<String>.from(indexesRaw)
+          : defaultIndexes,
+      expiresAt:
+          expiresAtRaw is String ? DateTime.tryParse(expiresAtRaw) : null,
       createdAt: createdAtRaw is String ? DateTime.parse(createdAtRaw) : null,
       updatedAt: updatedAtRaw is String ? DateTime.parse(updatedAtRaw) : null,
     );

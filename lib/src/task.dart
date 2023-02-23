@@ -30,10 +30,13 @@ class Task {
       uid: (map['uid'] ?? map['taskUid']) as int?,
       indexUid: map['indexUid'] as String?,
       duration: map['duration'] as String?,
-      enqueuedAt: enqueuedAtRaw is String ? DateTime.tryParse(enqueuedAtRaw) : null,
-      processedAt: processedAtRaw is String ? DateTime.tryParse(processedAtRaw) : null,
+      enqueuedAt:
+          enqueuedAtRaw is String ? DateTime.tryParse(enqueuedAtRaw) : null,
+      processedAt:
+          processedAtRaw is String ? DateTime.tryParse(processedAtRaw) : null,
       type: map['type'] as String?,
-      error: errorRaw is Map<String, Object?> ? TaskError.fromMap(errorRaw) : null,
+      error:
+          errorRaw is Map<String, Object?> ? TaskError.fromMap(errorRaw) : null,
       details: map['details'] as Map<String, Object?>?,
     );
   }
