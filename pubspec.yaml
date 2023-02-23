@@ -15,4 +15,4 @@ dependencies:
 dev_dependencies:
   test: ^1.0.0
   dart_jsonwebtoken: ^2.3.2
-  lints: ^2.0.1
+  lints: ^1.0.1

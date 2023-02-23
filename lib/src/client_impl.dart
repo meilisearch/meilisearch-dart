@@ -20,7 +20,8 @@ import 'key.dart';
 import 'stats.dart' show AllStats;
 
 class MeiliSearchClientImpl implements MeiliSearchClient {
-  MeiliSearchClientImpl(this.serverUrl, [this.apiKey, this.connectTimeout]) : http = HttpRequestImpl(serverUrl, apiKey, connectTimeout);
+  MeiliSearchClientImpl(this.serverUrl, [this.apiKey, this.connectTimeout])
+      : http = HttpRequestImpl(serverUrl, apiKey, connectTimeout);
 
   @override
   final String serverUrl;
@@ -52,7 +53,8 @@ class MeiliSearchClientImpl implements MeiliSearchClient {
       if (primaryKey != null) 'primaryKey': primaryKey,
     };
 
-    return await _update(http.postMethod<Map<String, Object?>>('/indexes', data: data));
+    return await _update(
+        http.postMethod<Map<String, Object?>>('/indexes', data: data));
   }
 
   @override
@@ -75,9 +77,11 @@ class MeiliSearchClientImpl implements MeiliSearchClient {
 
   @override
   Future<Result<MeiliSearchIndex>> getIndexes({IndexesQuery? params}) async {
-    final response = await http.getMethod<Map<String, Object?>>('/indexes', queryParameters: params?.toQuery());
+    final response = await http.getMethod<Map<String, Object?>>('/indexes',
+        queryParameters: params?.toQuery());
 
-    return Result<MeiliSearchIndex>.fromMapWithType(response.data!, (item) => MeiliSearchIndexImpl.fromMap(this, item));
+    return Result<MeiliSearchIndex>.fromMapWithType(
+        response.data!, (item) => MeiliSearchIndexImpl.fromMap(this, item));
   }
 
   @override
@@ -98,7 +102,8 @@ class MeiliSearchClientImpl implements MeiliSearchClient {
   Future<Task> swapIndexes(List<SwapIndex> param) async {
     var query = param.map((e) => e.toQuery()).toList();
 
-    final response = await http.postMethod<Map<String, Object?>>('/swap-indexes', data: query);
+    final response = await http
+        .postMethod<Map<String, Object?>>('/swap-indexes', data: query);
 
     return Task.fromMap(response.data!);
   }
@@ -129,14 +134,17 @@ class MeiliSearchClientImpl implements MeiliSearchClient {
 
   @override
   Future<Result<Key>> getKeys({KeysQuery? params}) async {
-    final response = await http.getMethod<Map<String, Object?>>('/keys', queryParameters: params?.toQuery());
+    final response = await http.getMethod<Map<String, Object?>>('/keys',
+        queryParameters: params?.toQuery());
 
-    return Result<Key>.fromMapWithType(response.data!, (model) => Key.fromJson(model));
+    return Result<Key>.fromMapWithType(
+        response.data!, (model) => Key.fromJson(model));
   }
 
   @override
   Future<Key> getKey(String keyOrUid) async {
-    final response = await http.getMethod<Map<String, Object?>>('/keys/$keyOrUid');
+    final response =
+        await http.getMethod<Map<String, Object?>>('/keys/$keyOrUid');
 
     return Key.fromJson(response.data!);
   }
@@ -170,7 +178,8 @@ class MeiliSearchClientImpl implements MeiliSearchClient {
       'actions': actions,
     };
 
-    final response = await http.postMethod<Map<String, Object?>>('/keys', data: data);
+    final response =
+        await http.postMethod<Map<String, Object?>>('/keys', data: data);
 
     return Key.fromJson(response.data!);
   }
@@ -182,7 +191,8 @@ class MeiliSearchClientImpl implements MeiliSearchClient {
       if (name != null) 'name': name,
     };
 
-    final response = await http.patchMethod<Map<String, Object?>>('/keys/$key', data: data);
+    final response =
+        await http.patchMethod<Map<String, Object?>>('/keys/$key', data: data);
 
     return Key.fromJson(response.data!);
   }
@@ -195,8 +205,10 @@ class MeiliSearchClientImpl implements MeiliSearchClient {
   }
 
   @override
-  String generateTenantToken(String uid, Object? searchRules, {String? apiKey, DateTime? expiresAt}) {
-    return generateToken(uid, searchRules, apiKey ?? this.apiKey ?? '', expiresAt: expiresAt);
+  String generateTenantToken(String uid, Object? searchRules,
+      {String? apiKey, DateTime? expiresAt}) {
+    return generateToken(uid, searchRules, apiKey ?? this.apiKey ?? '',
+        expiresAt: expiresAt);
   }
 
   ///
@@ -205,28 +217,33 @@ class MeiliSearchClientImpl implements MeiliSearchClient {
 
   @override
   Future<TasksResults> getTasks({TasksQuery? params}) async {
-    final response = await http.getMethod<Map<String, Object?>>('/tasks', queryParameters: params?.toQuery());
+    final response = await http.getMethod<Map<String, Object?>>('/tasks',
+        queryParameters: params?.toQuery());
 
     return TasksResults.fromMap(response.data!);
   }
 
   @override
   Future<Task> cancelTasks({CancelTasksQuery? params}) async {
-    final response = await http.postMethod<Map<String, Object?>>('/tasks/cancel', queryParameters: params?.toQuery());
+    final response = await http.postMethod<Map<String, Object?>>(
+        '/tasks/cancel',
+        queryParameters: params?.toQuery());
 
     return Task.fromMap(response.data!);
   }
 
   @override
   Future<Task> deleteTasks({DeleteTasksQuery? params}) async {
-    final response = await http.deleteMethod<Map<String, Object?>>('/tasks', queryParameters: params?.toQuery());
+    final response = await http.deleteMethod<Map<String, Object?>>('/tasks',
+        queryParameters: params?.toQuery());
 
     return Task.fromMap(response.data!);
   }
 
   @override
   Future<Task> getTask(int uid) async {
-    final response = await http.getMethod<Map<String, Object?>>(('/tasks/$uid'));
+    final response =
+        await http.getMethod<Map<String, Object?>>(('/tasks/$uid'));
 
     return Task.fromMap(response.data!);
   }
