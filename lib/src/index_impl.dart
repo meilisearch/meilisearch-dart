@@ -56,8 +56,10 @@ class MeiliSearchIndexImpl implements MeiliSearchIndex {
       client,
       map['uid'] as String,
       primaryKey: primaryKeyRaw is String ? primaryKeyRaw : null,
-      createdAt: createdAtRaw is String ? DateTime.tryParse(createdAtRaw) : null,
-      updatedAt: updatedAtRaw is String ? DateTime.tryParse(updatedAtRaw) : null,
+      createdAt:
+          createdAtRaw is String ? DateTime.tryParse(createdAtRaw) : null,
+      updatedAt:
+          updatedAtRaw is String ? DateTime.tryParse(updatedAtRaw) : null,
     );
   }
 
@@ -139,7 +141,8 @@ class MeiliSearchIndexImpl implements MeiliSearchIndex {
       'matchingStrategy': matchingStrategy?.name,
     };
     data.removeWhere((k, v) => v == null);
-    final response = await http.postMethod<Map<String, Object?>>('/indexes/$uid/search', data: data);
+    final response = await http
+        .postMethod<Map<String, Object?>>('/indexes/$uid/search', data: data);
 
     return Searcheable.createSearchResult(response.data!);
   }
@@ -202,16 +205,22 @@ class MeiliSearchIndexImpl implements MeiliSearchIndex {
   }
 
   @override
-  Future<Map<String, Object?>?> getDocument(Object id, {List<String> fields = const []}) async {
+  Future<Map<String, Object?>?> getDocument(Object id,
+      {List<String> fields = const []}) async {
     final params = DocumentsQuery(fields: fields);
-    final response = await http.getMethod<Map<String, Object?>>('/indexes/$uid/documents/$id', queryParameters: params.toQuery());
+    final response = await http.getMethod<Map<String, Object?>>(
+        '/indexes/$uid/documents/$id',
+        queryParameters: params.toQuery());
 
     return response.data;
   }
 
   @override
-  Future<Result<Map<String, Object?>>> getDocuments({DocumentsQuery? params}) async {
-    final response = await http.getMethod<Map<String, Object?>>('/indexes/$uid/documents', queryParameters: params?.toQuery());
+  Future<Result<Map<String, Object?>>> getDocuments(
+      {DocumentsQuery? params}) async {
+    final response = await http.getMethod<Map<String, Object?>>(
+        '/indexes/$uid/documents',
+        queryParameters: params?.toQuery());
 
     return Result.fromMap(response.data!);
   }
@@ -222,7 +231,8 @@ class MeiliSearchIndexImpl implements MeiliSearchIndex {
 
   @override
   Future<IndexSettings> getSettings() async {
-    final response = await http.getMethod<Map<String, Object?>>('/indexes/$uid/settings');
+    final response =
+        await http.getMethod<Map<String, Object?>>('/indexes/$uid/settings');
 
     return IndexSettings.fromMap(response.data!);
   }
@@ -242,111 +252,138 @@ class MeiliSearchIndexImpl implements MeiliSearchIndex {
 
   @override
   Future<List<String>> getFilterableAttributes() async {
-    final response = await http.getMethod<List<Object?>>('/indexes/$uid/settings/filterable-attributes');
+    final response = await http.getMethod<List<Object?>>(
+        '/indexes/$uid/settings/filterable-attributes');
 
     return response.data!.cast<String>();
   }
 
   @override
   Future<Task> resetFilterableAttributes() async {
-    return await _update(http.deleteMethod('/indexes/$uid/settings/filterable-attributes'));
+    return await _update(
+        http.deleteMethod('/indexes/$uid/settings/filterable-attributes'));
   }
 
   @override
-  Future<Task> updateFilterableAttributes(List<String> filterableAttributes) async {
-    return await _update(http.putMethod('/indexes/$uid/settings/filterable-attributes', data: filterableAttributes));
+  Future<Task> updateFilterableAttributes(
+      List<String> filterableAttributes) async {
+    return await _update(http.putMethod(
+        '/indexes/$uid/settings/filterable-attributes',
+        data: filterableAttributes));
   }
 
   @override
   Future<List<String>> getDisplayedAttributes() async {
-    final response = await http.getMethod<List<Object?>>('/indexes/$uid/settings/displayed-attributes');
+    final response = await http.getMethod<List<Object?>>(
+        '/indexes/$uid/settings/displayed-attributes');
 
     return response.data!.cast<String>();
   }
 
   @override
   Future<Task> resetDisplayedAttributes() async {
-    return await _update(http.deleteMethod('/indexes/$uid/settings/displayed-attributes'));
+    return await _update(
+        http.deleteMethod('/indexes/$uid/settings/displayed-attributes'));
   }
 
   @override
-  Future<Task> updateDisplayedAttributes(List<String> displayedAttributes) async {
-    return await _update(http.putMethod('/indexes/$uid/settings/displayed-attributes', data: displayedAttributes));
+  Future<Task> updateDisplayedAttributes(
+      List<String> displayedAttributes) async {
+    return await _update(http.putMethod(
+        '/indexes/$uid/settings/displayed-attributes',
+        data: displayedAttributes));
   }
 
   @override
   Future<String?> getDistinctAttribute() async {
-    final response = await http.getMethod<String?>('/indexes/$uid/settings/distinct-attribute');
+    final response = await http
+        .getMethod<String?>('/indexes/$uid/settings/distinct-attribute');
 
     return response.data;
   }
 
   @override
   Future<Task> resetDistinctAttribute() async {
-    return await _update(http.deleteMethod('/indexes/$uid/settings/distinct-attribute'));
+    return await _update(
+        http.deleteMethod('/indexes/$uid/settings/distinct-attribute'));
   }
 
   @override
   Future<Task> updateDistinctAttribute(String distinctAttribute) async {
-    return await _update(http.putMethod('/indexes/$uid/settings/distinct-attribute', data: '"$distinctAttribute"'));
+    return await _update(http.putMethod(
+        '/indexes/$uid/settings/distinct-attribute',
+        data: '"$distinctAttribute"'));
   }
 
   @override
   Future<List<String>> getRankingRules() async {
-    final response = await http.getMethod<List<Object?>>('/indexes/$uid/settings/ranking-rules');
+    final response = await http
+        .getMethod<List<Object?>>('/indexes/$uid/settings/ranking-rules');
 
     return response.data!.cast<String>();
   }
 
   @override
   Future<Task> resetRankingRules() async {
-    return await _update(http.deleteMethod('/indexes/$uid/settings/ranking-rules'));
+    return await _update(
+        http.deleteMethod('/indexes/$uid/settings/ranking-rules'));
   }
 
   @override
   Future<Task> updateRankingRules(List<String> rankingRules) async {
-    return await _update(http.putMethod('/indexes/$uid/settings/ranking-rules', data: rankingRules));
+    return await _update(http.putMethod('/indexes/$uid/settings/ranking-rules',
+        data: rankingRules));
   }
 
   @override
   Future<List<String>> getStopWords() async {
-    final response = await http.getMethod<List<Object?>>('/indexes/$uid/settings/stop-words');
+    final response = await http
+        .getMethod<List<Object?>>('/indexes/$uid/settings/stop-words');
 
     return response.data!.cast<String>();
   }
 
   @override
   Future<Task> resetStopWords() async {
-    return await _update(http.deleteMethod('/indexes/$uid/settings/stop-words'));
+    return await _update(
+        http.deleteMethod('/indexes/$uid/settings/stop-words'));
   }
 
   @override
   Future<List<String>> getSearchableAttributes() async {
-    final response = await http.getMethod<List<Object?>>('/indexes/$uid/settings/searchable-attributes');
+    final response = await http.getMethod<List<Object?>>(
+        '/indexes/$uid/settings/searchable-attributes');
 
     return response.data!.cast<String>();
   }
 
   @override
   Future<Task> resetSearchableAttributes() async {
-    return await _update(http.deleteMethod('/indexes/$uid/settings/searchable-attributes'));
+    return await _update(
+        http.deleteMethod('/indexes/$uid/settings/searchable-attributes'));
   }
 
   @override
-  Future<Task> updateSearchableAttributes(List<String> searchableAttributes) async {
-    return await _update(http.putMethod('/indexes/$uid/settings/searchable-attributes', data: searchableAttributes));
+  Future<Task> updateSearchableAttributes(
+      List<String> searchableAttributes) async {
+    return await _update(http.putMethod(
+        '/indexes/$uid/settings/searchable-attributes',
+        data: searchableAttributes));
   }
 
   @override
   Future<Task> updateStopWords(List<String> stopWords) async {
-    return await _update(http.putMethod('/indexes/$uid/settings/stop-words', data: stopWords));
+    return await _update(
+        http.putMethod('/indexes/$uid/settings/stop-words', data: stopWords));
   }
 
   @override
   Future<Map<String, List<String>>> getSynonyms() async {
-    final response = await http.getMethod<Map<String, Object?>>('/indexes/$uid/settings/synonyms');
+    final response = await http
+        .getMethod<Map<String, Object?>>('/indexes/$uid/settings/synonyms');
 
-    return response.data!.map((key, value) => MapEntry(key, (value as List).cast<String>()));
+    return response.data!
+        .map((key, value) => MapEntry(key, (value as List).cast<String>()));
   }
 
   @override
@@ -356,24 +393,28 @@ class MeiliSearchIndexImpl implements MeiliSearchIndex {
 
   @override
   Future<Task> updateSynonyms(Map<String, List<String>> synonyms) async {
-    return await _update(http.putMethod('/indexes/$uid/settings/synonyms', data: synonyms));
+    return await _update(
+        http.putMethod('/indexes/$uid/settings/synonyms', data: synonyms));
   }
 
   @override
   Future<List<String>> getSortableAttributes() async {
-    final response = await http.getMethod<List<Object?>>('/indexes/$uid/settings/sortable-attributes');
+    final response = await http
+        .getMethod<List<Object?>>('/indexes/$uid/settings/sortable-attributes');
 
     return response.data!.cast<String>();
   }
 
   @override
   Future<Task> resetSortableAttributes() async {
-    return await _update(http.deleteMethod('/indexes/$uid/settings/sortable-attributes'));
+    return await _update(
+        http.deleteMethod('/indexes/$uid/settings/sortable-attributes'));
   }
 
   @override
   Future<Task> updateSortableAttributes(List<String> sortableAttributes) async {
-    return _update(http.putMethod('/indexes/$uid/settings/sortable-attributes', data: sortableAttributes));
+    return _update(http.putMethod('/indexes/$uid/settings/sortable-attributes',
+        data: sortableAttributes));
   }
 
   ///
@@ -382,7 +423,8 @@ class MeiliSearchIndexImpl implements MeiliSearchIndex {
 
   @override
   Future<IndexStats> getStats() async {
-    final response = await http.getMethod<Map<String, Object?>>('/indexes/$uid/stats');
+    final response =
+        await http.getMethod<Map<String, Object?>>('/indexes/$uid/stats');
 
     return IndexStats.fromMap(response.data!);
   }
