@@ -52,6 +52,7 @@ void main() {
             actions: ["documents.add"],
             indexes: ["movies"]);
 
+        expect(key.uid, equals("8dbfeeee-65d4-4de2-b4cc-2b981d58d112"));
         expect(key.description, equals("awesome-key"));
         expect(key.actions, equals(["documents.add"]));
         expect(key.indexes, equals(["movies"]));

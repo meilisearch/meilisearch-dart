@@ -170,6 +170,7 @@ class MeiliSearchClientImpl implements MeiliSearchClient {
       required List<String> indexes,
       required List<String> actions}) async {
     final data = <String, dynamic>{
+      if (uid != null) 'uid': uid,
       'expiresAt': expiresAt?.toIso8601String().split('.').first,
       if (description != null) 'description': description,
       'indexes': indexes,
