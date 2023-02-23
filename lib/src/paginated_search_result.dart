@@ -20,7 +20,7 @@ class PaginatedSearchResult extends Searcheable {
   /// Total number of pages
   final int? totalPages;
 
-  factory PaginatedSearchResult.fromMap(Map<String, dynamic> map) {
+  factory PaginatedSearchResult.fromMap(Map<String, Object?> map) {
     var result = PaginatedSearchResult(
       page: map['page'] as int?,
       hitsPerPage: map['hitsPerPage'] as int?,
@@ -28,11 +28,11 @@ class PaginatedSearchResult extends Searcheable {
       totalPages: map['totalPages'] as int?,
     );
 
-    result.hits = (map['hits'] as List?)?.cast<Map<String, dynamic>>();
+    result.hits = (map['hits'] as List?)?.cast<Map<String, Object?>>();
     result.query = map['query'] as String?;
     result.processingTimeMs = map['processingTimeMs'] as int?;
-    result.facetDistribution = map['facetDistribution'] as dynamic;
-    result.matchesPosition = map['_matchesPosition'] as dynamic;
+    result.facetDistribution = map['facetDistribution'];
+    result.matchesPosition = map['_matchesPosition'];
 
     return result;
   }

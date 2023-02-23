@@ -10,19 +10,18 @@ class FakeQueryClass extends Queryable {
   FakeQueryClass(
       {this.myInteger, this.myString, this.myDate, this.myList = const []});
 
-  Map<String, dynamic> buildMap() {
+  Map<String, Object?> buildMap() {
     return {
-      'myInteger': this.myInteger,
-      'myString': this.myString,
-      'myDate': this.myDate,
-      'myList': this.myList,
+      'myInteger': myInteger,
+      'myString': myString,
+      'myDate': myDate,
+      'myList': myList,
     };
   }
 
-  Map<String, dynamic> toQuery() {
-    return this.buildMap()
-      ..removeWhere(removeEmptyOrNulls)
-      ..updateAll(toURIString);
+  @override
+  Map<String, Object> toQuery() {
+    return removeEmptyOrNullsFromMap(buildMap())..updateAll(toURIString);
   }
 }
 

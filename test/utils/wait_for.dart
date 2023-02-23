@@ -9,16 +9,16 @@ extension TaskWaiter on Task {
     var endingTime = DateTime.now().add(timeout);
 
     while (DateTime.now().isBefore(endingTime)) {
-      var task = await client.getTask(this.uid!);
+      var task = await client.getTask(uid!);
 
       if (task.status != 'enqueued' && task.status != 'processing') {
         return task;
       }
 
-      await Future.delayed(interval);
+      await Future<void>.delayed(interval);
     }
 
-    throw Exception('The task ${this.uid!} timed out.');
+    throw Exception('The task $uid timed out.');
   }
 }
 

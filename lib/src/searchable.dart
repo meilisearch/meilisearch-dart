@@ -5,18 +5,18 @@ abstract class Searcheable {
   String? query;
 
   /// Results of the query
-  List<Map<String, dynamic>>? hits;
+  List<Map<String, Object?>>? hits;
 
   /// Distribution of the given facets
-  dynamic facetDistribution;
+  Object? facetDistribution;
 
   /// Contains the location of each occurrence of queried terms across all fields
-  dynamic matchesPosition;
+  Object? matchesPosition;
 
   /// Processing time of the query
   int? processingTimeMs;
 
-  static Searcheable createSearchResult(Map<String, dynamic> map) {
+  static Searcheable createSearchResult(Map<String, Object?> map) {
     if (map['totalHits'] != null) {
       return PaginatedSearchResult.fromMap(map);
     } else {

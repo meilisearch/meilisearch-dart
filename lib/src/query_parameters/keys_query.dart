@@ -4,15 +4,20 @@ class KeysQuery extends Queryable {
   final int? offset;
   final int? limit;
 
-  KeysQuery({this.limit, this.offset});
+  const KeysQuery({
+    this.limit,
+    this.offset,
+  });
 
-  Map<String, dynamic> buildMap() {
-    return {'offset': this.offset, 'limit': this.limit};
+  Map<String, Object?> buildMap() {
+    return {
+      'offset': offset,
+      'limit': limit,
+    };
   }
 
-  Map<String, dynamic> toQuery() {
-    return this.buildMap()
-      ..removeWhere(removeEmptyOrNulls)
-      ..updateAll(toURIString);
+  @override
+  Map<String, Object> toQuery() {
+    return removeEmptyOrNullsFromMap(buildMap())..updateAll(toURIString);
   }
 }

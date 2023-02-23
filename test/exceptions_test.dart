@@ -20,11 +20,11 @@ void main() {
     });
     test('Throw basic 404 exception', () async {
       expect(
-          () async => await http.getMethod<Map<String, dynamic>>('/wrong-path'),
+          () async => await http.getMethod<Map<String, Object?>>('/wrong-path'),
           throwsA(isA<MeiliSearchApiException>().having(
             (error) => error.toString(), // Actual
             'toString() method', // Description of the check
-            'MeiliSearchApiError - message: Http status error [404]', // Expected
+            'MeiliSearchApiError - message: The request returned an invalid status code of 404.', // Expected
           )));
     });
 

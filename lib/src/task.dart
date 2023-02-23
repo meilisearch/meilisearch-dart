@@ -19,25 +19,28 @@ class Task {
   final DateTime? enqueuedAt;
   final DateTime? processedAt;
   final TaskError? error;
-  final Map<String, dynamic>? details;
+  final Map<String, Object?>? details;
 
-  factory Task.fromMap(Map<String, dynamic> map) => Task(
-        status: map['status'] as String?,
-        uid: (map['uid'] ?? map['taskUid']) as int,
-        indexUid: map['indexUid'],
-        duration: map['duration'] as String?,
-        enqueuedAt: map['enqueuedAt'] != null
-            ? DateTime.tryParse(map['enqueuedAt'] as String)
-            : null,
-        processedAt: map['processedAt'] != null
-            ? DateTime.tryParse(map['processedAt'] as String)
-            : null,
-        type: map['type'] as String?,
-        error: map['error'] != null
-            ? TaskError.fromMap(map['error'] as Map<String, dynamic>)
-            : null,
-        details: map['details'],
-      );
+  factory Task.fromMap(Map<String, Object?> map) {
+    final enqueuedAtRaw = map['enqueuedAt'];
+    final processedAtRaw = map['processedAt'];
+    final errorRaw = map['error'];
+
+    return Task(
+      status: map['status'] as String?,
+      uid: (map['uid'] ?? map['taskUid']) as int?,
+      indexUid: map['indexUid'] as String?,
+      duration: map['duration'] as String?,
+      enqueuedAt:
+          enqueuedAtRaw is String ? DateTime.tryParse(enqueuedAtRaw) : null,
+      processedAt:
+          processedAtRaw is String ? DateTime.tryParse(processedAtRaw) : null,
+      type: map['type'] as String?,
+      error:
+          errorRaw is Map<String, Object?> ? TaskError.fromMap(errorRaw) : null,
+      details: map['details'] as Map<String, Object?>?,
+    );
+  }
 }
 
 class TaskError {
@@ -53,7 +56,7 @@ class TaskError {
   final String? type;
   final String? link;
 
-  factory TaskError.fromMap(Map<String, dynamic> map) => TaskError(
+  factory TaskError.fromMap(Map<String, Object?> map) => TaskError(
         message: map['message'] as String?,
         code: map['code'] as String?,
         type: map['type'] as String?,

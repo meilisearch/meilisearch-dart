@@ -8,19 +8,19 @@ class MeiliSearchApiException implements Exception {
 
   factory MeiliSearchApiException.fromHttpBody(
     String message,
-    dynamic httpBody,
+    Object? httpBody,
   ) {
     if (httpBody != null &&
-        httpBody.runtimeType != String &&
+        httpBody is Map<String, Object?> &&
         httpBody.containsKey('message') &&
         httpBody.containsKey('code') &&
         httpBody.containsKey('link') &&
         httpBody.containsKey('type')) {
       return MeiliSearchApiException(
-        httpBody['message'],
-        code: httpBody['code'],
-        link: httpBody['link'],
-        type: httpBody['type'],
+        httpBody['message'] as String? ?? "",
+        code: httpBody['code'] as String?,
+        link: httpBody['link'] as String?,
+        type: httpBody['type'] as String?,
       );
     } else {
       return MeiliSearchApiException(message);
@@ -34,10 +34,9 @@ class MeiliSearchApiException implements Exception {
 
   @override
   String toString() {
-    var output = 'MeiliSearchApiError - message: ${this.message}';
-    if (this.code != null && this.link != null && this.type != null) {
-      output +=
-          ' - code: ${this.code} - type: ${this.type} - link: ${this.link}';
+    var output = 'MeiliSearchApiError - message: $message';
+    if (code != null && link != null && type != null) {
+      output += ' - code: $code - type: $type - link: $link';
     }
     return output;
   }

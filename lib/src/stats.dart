@@ -9,7 +9,7 @@ class IndexStats {
   final bool? isIndexing;
   final Map<String, int>? fieldsDistribution;
 
-  factory IndexStats.fromMap(Map<String, dynamic> map) => IndexStats(
+  factory IndexStats.fromMap(Map<String, Object?> map) => IndexStats(
         numberOfDocuments: map['numberOfDocuments'] as int?,
         isIndexing: map['isIndexing'] as bool?,
         fieldsDistribution:
@@ -28,16 +28,19 @@ class AllStats {
   final DateTime? lastUpdate;
   final Map<String, IndexStats>? indexes;
 
-  factory AllStats.fromMap(Map<String, dynamic> json) {
-    final DateTime? lastUpdate = DateTime.tryParse(json['lastUpdate']);
-    final Map<String, IndexStats>? indexes =
-        (json['indexes'] as Map<String, dynamic>)
-            .map((k, v) => MapEntry(k, IndexStats.fromMap(v)));
+  factory AllStats.fromMap(Map<String, Object?> json) {
+    final lastUpdateRaw = json['lastUpdate'];
+    final indexesRaw = json['indexes'];
 
     return AllStats(
       databaseSize: json['databaseSize'] as int?,
-      lastUpdate: lastUpdate,
-      indexes: indexes,
+      lastUpdate:
+          lastUpdateRaw is String ? DateTime.tryParse(lastUpdateRaw) : null,
+      indexes: indexesRaw is Map<String, Object?>
+          ? indexesRaw
+              .cast<String, Map<String, Object?>>()
+              .map((k, v) => MapEntry(k, IndexStats.fromMap(v)))
+          : null,
     );
   }
 }

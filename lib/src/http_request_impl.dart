@@ -5,16 +5,18 @@ import 'exception.dart';
 
 class HttpRequestImpl implements HttpRequest {
   HttpRequestImpl(this.serverUrl, this.apiKey, [this.connectTimeout])
-      : dio = Dio(BaseOptions(
-          baseUrl: serverUrl,
-          headers: <String, dynamic>{
-            if (apiKey != null) 'Authorization': 'Bearer ${apiKey}',
-            'Content-Type': 'application/json',
-            'User-Agent': Version.qualifiedVersion,
-          },
-          responseType: ResponseType.json,
-          connectTimeout: connectTimeout ?? 0,
-        ));
+      : dio = Dio(
+          BaseOptions(
+            baseUrl: serverUrl,
+            headers: <String, Object>{
+              if (apiKey != null) 'Authorization': 'Bearer $apiKey',
+              'User-Agent': Version.qualifiedVersion,
+            },
+            contentType: 'application/json',
+            responseType: ResponseType.json,
+            connectTimeout: connectTimeout ?? Duration(seconds: 5),
+          ),
+        );
 
   @override
   final String serverUrl;
@@ -23,24 +25,26 @@ class HttpRequestImpl implements HttpRequest {
   final String? apiKey;
 
   @override
-  final int? connectTimeout;
+  final Duration? connectTimeout;
 
   final Dio dio;
 
   @override
-  Map<String, dynamic> headers() {
-    return this.dio.options.headers;
+  Map<String, Object?> headers() {
+    return dio.options.headers;
   }
 
   @override
   Future<Response<T>> getMethod<T>(
     String path, {
-    Map<String, dynamic>? queryParameters,
+    Object? data,
+    Map<String, Object?>? queryParameters,
   }) async {
     try {
       return await dio.get<T>(
         path,
         queryParameters: queryParameters,
+        data: data,
       );
     } on DioError catch (e) {
       return throwException(e);
@@ -50,8 +54,8 @@ class HttpRequestImpl implements HttpRequest {
   @override
   Future<Response<T>> postMethod<T>(
     String path, {
-    dynamic data,
-    Map<String, dynamic>? queryParameters,
+    Object? data,
+    Map<String, Object?>? queryParameters,
   }) async {
     try {
       return await dio.post<T>(
@@ -67,8 +71,8 @@ class HttpRequestImpl implements HttpRequest {
   @override
   Future<Response<T>> patchMethod<T>(
     String path, {
-    dynamic data,
-    Map<String, dynamic>? queryParameters,
+    Object? data,
+    Map<String, Object?>? queryParameters,
   }) async {
     try {
       return await dio.patch<T>(
@@ -84,8 +88,8 @@ class HttpRequestImpl implements HttpRequest {
   @override
   Future<Response<T>> putMethod<T>(
     String path, {
-    dynamic data,
-    Map<String, dynamic>? queryParameters,
+    Object? data,
+    Map<String, Object?>? queryParameters,
   }) async {
     try {
       return await dio.put<T>(
@@ -101,8 +105,8 @@ class HttpRequestImpl implements HttpRequest {
   @override
   Future<Response<T>> deleteMethod<T>(
     String path, {
-    dynamic data,
-    Map<String, dynamic>? queryParameters,
+    Object? data,
+    Map<String, Object?>? queryParameters,
   }) async {
     try {
       return await dio.delete<T>(
@@ -115,11 +119,12 @@ class HttpRequestImpl implements HttpRequest {
     }
   }
 
-  throwException(DioError e) {
-    if (e.type == DioErrorType.response) {
-      throw MeiliSearchApiException.fromHttpBody(e.message, e.response?.data);
+  Never throwException(DioError e) {
+    final message = e.message ?? '';
+    if (e.type == DioErrorType.badResponse) {
+      throw MeiliSearchApiException.fromHttpBody(message, e.response?.data);
     } else {
-      throw CommunicationException(e.message);
+      throw CommunicationException(message);
     }
   }
 }

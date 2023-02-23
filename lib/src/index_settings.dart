@@ -36,7 +36,7 @@ class IndexSettings {
   /// List of attributes by which to sort results
   List<String>? sortableAttributes;
 
-  Map<String, dynamic> toMap() => <String, dynamic>{
+  Map<String, Object?> toMap() => <String, Object?>{
         'synonyms': synonyms,
         'stopWords': stopWords,
         'rankingRules': rankingRules,
@@ -47,11 +47,11 @@ class IndexSettings {
         'sortableAttributes': sortableAttributes,
       };
 
-  factory IndexSettings.fromMap(Map<String, dynamic> map) => IndexSettings(
+  factory IndexSettings.fromMap(Map<String, Object?> map) => IndexSettings(
         synonyms: (map['synonyms'] as Map?)
-            ?.cast<String, List>()
+            ?.cast<String, List<Object?>>()
             .map((key, value) => MapEntry(key, value.cast<String>())),
-        stopWords: (map['stopWords'] as List?)?.cast<String>(),
+        stopWords: (map['stopWords'] as Iterable?)?.cast<String>().toList(),
         rankingRules: (map['rankingRules'] as List?)?.cast<String>(),
         filterableAttributes:
             (map['filterableAttributes'] as List?)?.cast<String>(),

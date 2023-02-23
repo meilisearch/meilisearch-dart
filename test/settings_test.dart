@@ -81,7 +81,7 @@ void main() {
           await index.resetFilterableAttributes().waitFor(client: client);
       expect(response.status, 'succeeded');
       filterableAttributes = await index.getFilterableAttributes();
-      expect(filterableAttributes, []);
+      expect(filterableAttributes, <String>[]);
     });
 
     test('Getting, setting, and deleting displayed attributes', () async {
@@ -177,7 +177,7 @@ void main() {
       response = await index.resetStopWords().waitFor(client: client);
       expect(response.status, 'succeeded');
       stopWords = await index.getStopWords();
-      expect(stopWords, []);
+      expect(stopWords, <String>[]);
     });
 
     test('Getting, setting, and deleting synonyms', () async {
@@ -197,7 +197,7 @@ void main() {
       response = await index.resetSynonyms().waitFor(client: client);
       expect(response.status, 'succeeded');
       final resetSynonyms = await index.getSynonyms();
-      expect(resetSynonyms, {});
+      expect(resetSynonyms, <String, List<String>>{});
     });
 
     test('Getting, setting, and deleting sortable attributes', () async {
@@ -214,7 +214,7 @@ void main() {
       expect(sortableAttributes, updatedSortableAttributes);
       response = await index.resetSortableAttributes().waitFor(client: client);
       final resetSortablettributes = await index.getSortableAttributes();
-      expect(resetSortablettributes, []);
+      expect(resetSortablettributes, <String>[]);
     });
   });
 }

@@ -51,7 +51,8 @@ void main() {
         var index = await createBooksIndex();
         var result = await index.search('Alice In Wonderland',
             attributesToCrop: ["title"], cropLength: 2);
-        expect(result.hits![0]['_formatted']['title'], equals('Alice In…'));
+        expect((result.hits![0]['_formatted'] as Map<String, Object?>)['title'],
+            equals('Alice In…'));
       });
 
       test('searches with default cropping parameters', () async {
@@ -59,7 +60,8 @@ void main() {
         var result = await index.search('prince',
             attributesToCrop: ['*'], cropLength: 2);
 
-        expect(result.hits![0]['_formatted']['title'], equals('…Petit Prince'));
+        expect((result.hits![0]['_formatted'] as Map<String, Object?>)['title'],
+            equals('…Petit Prince'));
       });
 
       test('searches with custom cropMarker', () async {
@@ -67,7 +69,8 @@ void main() {
         var result = await index.search('prince',
             attributesToCrop: ['*'], cropLength: 1, cropMarker: '[…] ');
 
-        expect(result.hits![0]['_formatted']['title'], equals('[…] Prince'));
+        expect((result.hits![0]['_formatted'] as Map<String, Object?>)['title'],
+            equals('[…] Prince'));
       });
 
       test('searches with custom highlight tags', () async {
@@ -77,7 +80,7 @@ void main() {
             highlightPreTag: '<mark>',
             highlightPostTag: '</mark>');
 
-        expect(result.hits![0]['_formatted']['title'],
+        expect((result.hits![0]['_formatted'] as Map<String, Object?>)['title'],
             equals('Harry Potter and the Half-<mark>Blood</mark> Prince'));
       });
 

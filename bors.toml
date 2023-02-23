@@ -1,5 +1,5 @@
 status = [
-    'integration-tests (dart 2.12.4)',
+    'integration-tests (dart 2.15.1)',
     'integration-tests (dart 2.19.0)',
     'linter-check',
     'pana'

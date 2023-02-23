@@ -13,24 +13,22 @@ void main() {
         await client.createKey(indexes: ['movies'], actions: ['*']);
 
         final allKeys = await client.getKeys();
-
-        expect(allKeys.results, isA<List>());
-        expect(allKeys.results.first, isA<Key>());
         expect(allKeys.total, greaterThan(0));
       });
 
       test('gets a key from server by key/uid', () async {
-        final _key = await client.createKey(indexes: ['*'], actions: ['*']);
+        final createdKey =
+            await client.createKey(indexes: ['*'], actions: ['*']);
 
-        Key key = await client.getKey(_key.key);
+        Key key = await client.getKey(createdKey.key);
 
-        expect(key.description, equals(_key.description));
+        expect(key.description, equals(createdKey.description));
         expect(key.actions, equals(['*']));
         expect(key.indexes, equals(['*']));
-        expect(key.key, _key.key);
+        expect(key.key, createdKey.key);
         expect(key.expiresAt, isNull);
-        expect(key.createdAt, _key.createdAt);
-        expect(key.updatedAt, _key.updatedAt);
+        expect(key.createdAt, createdKey.createdAt);
+        expect(key.updatedAt, createdKey.updatedAt);
       });
 
       test('creates a new key', () async {

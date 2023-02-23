@@ -12,36 +12,36 @@ class CancelTasksQuery extends Queryable {
   final List<String> types;
   final List<String> indexUids;
 
-  CancelTasksQuery(
-      {this.beforeEnqueuedAt,
-      this.afterEnqueuedAt,
-      this.beforeStartedAt,
-      this.afterStartedAt,
-      this.beforeFinishedAt,
-      this.afterFinishedAt,
-      this.uids = const [],
-      this.indexUids = const [],
-      this.statuses = const [],
-      this.types = const []});
+  const CancelTasksQuery({
+    this.beforeEnqueuedAt,
+    this.afterEnqueuedAt,
+    this.beforeStartedAt,
+    this.afterStartedAt,
+    this.beforeFinishedAt,
+    this.afterFinishedAt,
+    this.uids = const [],
+    this.indexUids = const [],
+    this.statuses = const [],
+    this.types = const [],
+  });
 
-  Map<String, dynamic> buildMap() {
+  Map<String, Object?> buildMap() {
     return {
-      'beforeEnqueuedAt': this.beforeEnqueuedAt,
-      'afterEnqueuedAt': this.afterEnqueuedAt,
-      'beforeStartedAt': this.beforeStartedAt,
-      'afterStartedAt': this.afterStartedAt,
-      'beforeFinishedAt': this.beforeFinishedAt,
-      'afterFinishedAt': this.afterFinishedAt,
-      'uids': this.uids,
-      'statuses': this.statuses,
-      'types': this.types,
-      'indexUids': this.indexUids,
+      'beforeEnqueuedAt': beforeEnqueuedAt,
+      'afterEnqueuedAt': afterEnqueuedAt,
+      'beforeStartedAt': beforeStartedAt,
+      'afterStartedAt': afterStartedAt,
+      'beforeFinishedAt': beforeFinishedAt,
+      'afterFinishedAt': afterFinishedAt,
+      'uids': uids,
+      'statuses': statuses,
+      'types': types,
+      'indexUids': indexUids,
     };
   }
 
-  Map<String, dynamic> toQuery() {
-    return this.buildMap()
-      ..removeWhere(removeEmptyOrNulls)
-      ..updateAll(toURIString);
+  @override
+  Map<String, Object> toQuery() {
+    return removeEmptyOrNullsFromMap(buildMap())..updateAll(toURIString);
   }
 }
