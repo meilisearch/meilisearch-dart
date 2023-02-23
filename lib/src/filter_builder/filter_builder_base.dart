@@ -1,8 +1,11 @@
 class Meili {
-  static PropertyPathFilterExpression path(String path) => PropertyPathFilterExpression(path);
-  static PropertyPathFilterExpression pathFromParts(List<String> parts) => PropertyPathFilterExpression.fromParts(parts);
+  static PropertyPathFilterExpression path(String path) =>
+      PropertyPathFilterExpression(path);
+  static PropertyPathFilterExpression pathFromParts(List<String> parts) =>
+      PropertyPathFilterExpression.fromParts(parts);
 
-  static FilterExpressionOperatorBase eq(PropertyPathFilterExpression path, FilterExpressionValueBase value) =>
+  static FilterExpressionOperatorBase eq(
+          PropertyPathFilterExpression path, FilterExpressionValueBase value) =>
       EqualsFilterBuilder(property: path, value: value);
 
   static FilterExpressionValueBase value(Object? v) {
@@ -19,16 +22,23 @@ class Meili {
     return StringFilterExpression(v.toString());
   }
 
-  static FilterExpressionOperatorBase or(List<FilterExpressionBase> operands) => OrFilterBuilder.fromList(operands);
-  static FilterExpressionOperatorBase and(List<FilterExpressionBase> operands) => AndFilterBuilder.fromList(operands);
+  static FilterExpressionOperatorBase or(List<FilterExpressionBase> operands) =>
+      OrFilterBuilder.fromList(operands);
+  static FilterExpressionOperatorBase and(
+          List<FilterExpressionBase> operands) =>
+      AndFilterBuilder.fromList(operands);
 }
 
 extension MeiliFiltersExt on FilterExpressionBase {
-  FilterExpressionOperatorBase or(FilterExpressionBase other) => OrFilterBuilder(first: this, second: other);
-  FilterExpressionOperatorBase orList(List<FilterExpressionBase> others) => OrFilterBuilder.fromList([this, ...others]);
+  FilterExpressionOperatorBase or(FilterExpressionBase other) =>
+      OrFilterBuilder(first: this, second: other);
+  FilterExpressionOperatorBase orList(List<FilterExpressionBase> others) =>
+      OrFilterBuilder.fromList([this, ...others]);
 
-  FilterExpressionOperatorBase and(FilterExpressionBase other) => AndFilterBuilder(first: this, second: other);
-  FilterExpressionOperatorBase andList(List<FilterExpressionBase> others) => AndFilterBuilder.fromList([this, ...others]);
+  FilterExpressionOperatorBase and(FilterExpressionBase other) =>
+      AndFilterBuilder(first: this, second: other);
+  FilterExpressionOperatorBase andList(List<FilterExpressionBase> others) =>
+      AndFilterBuilder.fromList([this, ...others]);
 }
 
 abstract class FilterExpressionBase {
@@ -143,6 +153,6 @@ class EqualsFilterBuilder extends FilterExpressionOperatorBase {
 
   @override
   String transform() {
-    return '${property.transform()} = (${value.transform()})';
+    return '${property.transform()} = ${value.transform()}';
   }
 }
