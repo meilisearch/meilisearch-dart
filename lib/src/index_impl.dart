@@ -50,6 +50,7 @@ class MeiliSearchIndexImpl implements MeiliSearchIndex {
     final createdAtRaw = map['createdAt'];
     final primaryKeyRaw = map['primaryKey'];
     final updatedAtRaw = map['updatedAt'];
+
     return MeiliSearchIndexImpl(
       client,
       map['uid'] as String,
