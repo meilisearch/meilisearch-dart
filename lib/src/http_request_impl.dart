@@ -14,7 +14,7 @@ class HttpRequestImpl implements HttpRequest {
             },
             contentType: 'application/json',
             responseType: ResponseType.json,
-            connectTimeout: connectTimeout,
+            connectTimeout: connectTimeout ?? Duration(seconds: 5),
           ),
         );
 
@@ -41,8 +41,11 @@ class HttpRequestImpl implements HttpRequest {
     Map<String, Object?>? queryParameters,
   }) async {
     try {
-      return await dio.get<T>(path,
-          queryParameters: queryParameters, data: data);
+      return await dio.get<T>(
+        path,
+        queryParameters: queryParameters,
+        data: data,
+      );
     } on DioError catch (e) {
       return throwException(e);
     }
