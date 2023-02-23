@@ -6,6 +6,7 @@ import 'package:meilisearch/src/searchable.dart';
 import 'package:meilisearch/src/tasks_results.dart';
 
 import 'client.dart';
+import 'filter_builder/filter_builder_base.dart';
 import 'index.dart';
 import 'http_request.dart';
 import 'index_settings.dart';
@@ -104,6 +105,7 @@ class MeiliSearchIndexImpl implements MeiliSearchIndex {
     int? page,
     int? hitsPerPage,
     Object? filter,
+    FilterExpressionOperatorBase? filterExpression,
     List<String>? sort,
     List<String>? facets,
     List<String>? attributesToRetrieve,
@@ -122,7 +124,7 @@ class MeiliSearchIndexImpl implements MeiliSearchIndex {
       'limit': limit,
       'page': page,
       'hitsPerPage': hitsPerPage,
-      'filter': filter,
+      'filter': filter ?? filterExpression?.transform(),
       'sort': sort,
       'facets': facets,
       'attributesToRetrieve': attributesToRetrieve,

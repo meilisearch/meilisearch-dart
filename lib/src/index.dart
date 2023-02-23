@@ -4,6 +4,7 @@ import 'package:meilisearch/src/result.dart';
 import 'package:meilisearch/src/searchable.dart';
 import 'package:meilisearch/src/tasks_results.dart';
 
+import 'filter_builder/filter_builder_base.dart';
 import 'index_settings.dart';
 
 import 'matching_strategy_enum.dart';
@@ -34,6 +35,7 @@ abstract class MeiliSearchIndex {
 
     /// filter is either a list or a string
     Object? filter,
+    FilterExpressionOperatorBase? filterExpression,
     List<String>? sort,
     List<String>? facets,
     List<String>? attributesToRetrieve,
