@@ -6,7 +6,7 @@ environment:
   sdk: ">=2.12.0 <3.0.0"
 
 dependencies:
-  meilisearch: "0.8.0"
+  meilisearch: "0.9.0"
 
 dependency_overrides:
   meilisearch:
