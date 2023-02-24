@@ -1,5 +1,33 @@
 [comment]: <> (All notable changes to this project will be documented in this file.)
 
+# 0.9.0
+### Breaking Changes:
+
+- The minimum supported Dart runtime is now `2.15`.
+- Updated `dio` dependency from `v4` to `v5`.
+
+- `MeiliSearchClientImpl.connectTimeout`, `MeiliSearchClient.connectTimeout` is now a `Duration` instead of `int`, and the default is `Duration(seconds: 5)`.
+- From `Future<Response<T>> getMethod<T>(String path, {Map<String, dynamic>? queryParameters,});` to `Future<Response<T>> getMethod<T>(String path, { Object? data, Map<String, Object?>? queryParameters })`
+- Reduce usage of `dynamic` keyword by replacing it with `Object?`.
+  - `Queryable.toQuery` was promoted from `Map<String, dynamic>` to `Map<String, Object>` due to the use of `removeEmptyOrNulls`
+  - `Result<T>` had argument type `T` that was never used, so it was changed from `List<dynamic> results;` to `List<T> results;` and introduced a new helper function `Result<TTarget> map<TTarget>(TTarget Function(T item) converter)`.
+  - `getDocuments` changed signature from `Future<Result> getDocuments({DocumentsQuery? params});` to `Future<Result<Map<String, Object?>>> getDocuments({DocumentsQuery? params});`, and now end users can call `.map` on the result to use their own DTO classes (using `fromJson` for example).
+  - `Future<Task> deleteDocuments(List<dynamic> ids);` to  `Future<Task> deleteDocuments(List<Object> ids);` since deleting a `null` id was an illegal operation.
+  - `Future<Task> deleteDocument(dynamic id);` to `Future<Task> deleteDocument(Object id);`
+  - `Future<Task> updateDocuments(List<Map<String, dynamic>> documents, {String? primaryKey});` to `Future<Task> updateDocuments(List<Map<String, Object?>> documents, {String? primaryKey});`
+  - `Future<Task> addDocuments(List<Map<String, dynamic>> documents, {String? primaryKey});` to `Future<Task> addDocuments(List<Map<String, Object?>> documents, {String? primaryKey});`
+  - `Future<Task> deleteDocument(dynamic id);` to `Future<Task> deleteDocument(Object id);`
+  - `Future<Map<String, dynamic>?> getDocument(dynamic id, {List<String> fields});` to `Future<Map<String, Object?>?> getDocument(Object id, {List<String> fields});`
+  - `Future<Searcheable> search(String? query, {...dynamic filter...})` is now a `Object? filter`
+  - `Future<Map<String, dynamic>> getRawIndex(String uid);` to `Future<Map<String, Object?>> getRawIndex(String uid);`
+  - `Future<Map<String, dynamic>> health();` to `Future<Map<String, Object?>> health();`
+  - `String generateTenantToken(String uid, dynamic searchRules,...` to `String generateTenantToken(String uid, Object? searchRules,...`
+  - `class TasksResults<T> { ... }` to `class TasksResults { ... }`
+
+### Changes
+
+- Fix a bug in the creation of keys with a existing `uid`.
+
 # 0.8.0
 ### Breaking changes
 
