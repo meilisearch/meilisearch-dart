@@ -31,7 +31,7 @@ abstract class FilterExpressionValueBase extends FilterExpressionBase {
 }
 
 /// Represents an empty filter
-class EmptyFilterExpression extends FilterExpressionBase {
+class EmptyFilterExpression extends FilterExpressionOperatorBase {
   const EmptyFilterExpression();
   @override
   String transform() => "";
@@ -41,15 +41,10 @@ class EmptyFilterExpression extends FilterExpressionBase {
 class AttributeFilterExpression extends FilterExpressionBase {
   final List<String> parts;
 
-  AttributeFilterExpression(String path)
-      : parts = _normalizeParts(path.split('.'));
-  AttributeFilterExpression.fromParts(List<String> parts)
-      : parts = _normalizeParts(parts);
+  AttributeFilterExpression(String path) : parts = _normalizeParts(path.split('.'));
+  AttributeFilterExpression.fromParts(List<String> parts) : parts = _normalizeParts(parts);
   static List<String> _normalizeParts(List<String> parts) {
-    return parts
-        .map((e) => e.trim())
-        .where((element) => element.isNotEmpty)
-        .toList();
+    return parts.map((e) => e.trim()).where((element) => element.isNotEmpty).toList();
   }
 
   @override
