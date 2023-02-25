@@ -15,7 +15,7 @@ class AndFilterBuilder extends FilterExpressionOperatorBase {
   @override
   String transform() {
     //space is mandatory
-    return operands.whereNot((element) => element is EmptyFilterExpression).map((e) => e.transform()).map((e) => '($e)').join(" AND ");
+    return operands.map((e) => e.transform()).where((element) => element.isNotEmpty).map((e) => '($e)').join(" AND ");
   }
 
   @override
@@ -60,7 +60,7 @@ class OrFilterBuilder extends FilterExpressionOperatorBase {
 
   @override
   String transform() {
-    return operands.whereNot((element) => element is EmptyFilterExpression).map((e) => e.transform()).map((e) => '($e)').join(" OR ");
+    return operands.map((e) => e.transform()).where((element) => element.isNotEmpty).map((e) => '($e)').join(" OR ");
   }
 
   @override
