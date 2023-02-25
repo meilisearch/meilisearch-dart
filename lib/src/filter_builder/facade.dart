@@ -96,6 +96,8 @@ class Meili {
       OrFilterBuilder.fromList(operands);
   static AndFilterBuilder and(List<FilterExpressionOperatorBase> operands) =>
       AndFilterBuilder.fromList(operands);
+
+  static EmptyFilterExpression empty() => EmptyFilterExpression();
 }
 
 extension MeiliFiltersOperatorsExt on FilterExpressionOperatorBase {

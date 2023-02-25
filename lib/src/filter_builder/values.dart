@@ -20,6 +20,16 @@ class NumberFilterExpression extends FilterExpressionValueBase {
     //TODO(ahmednfwela): what is the proper way to handle decimals ?
     return value.toString();
   }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+
+    return other is NumberFilterExpression && other.value == value;
+  }
+
+  @override
+  int get hashCode => value.hashCode;
 }
 
 class StringFilterExpression extends FilterExpressionValueBase {
@@ -28,7 +38,7 @@ class StringFilterExpression extends FilterExpressionValueBase {
   const StringFilterExpression(this.value);
   String escapeValue(String value) {
     //TODO(ahmednfwela): write a proper escape algorithm, maybe using regex
-    return value;
+    return value.replaceAll(r'\', r'\\').replaceAll(r"'", r"\'");
   }
 
   @override
@@ -39,4 +49,14 @@ class StringFilterExpression extends FilterExpressionValueBase {
     sb.write("'");
     return sb.toString();
   }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+
+    return other is StringFilterExpression && other.value == value;
+  }
+
+  @override
+  int get hashCode => value.hashCode;
 }

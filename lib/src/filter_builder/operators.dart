@@ -1,3 +1,5 @@
+import 'package:collection/collection.dart';
+
 import 'package:meilisearch/meilisearch.dart';
 
 class AndFilterBuilder extends FilterExpressionOperatorBase {
@@ -15,6 +17,18 @@ class AndFilterBuilder extends FilterExpressionOperatorBase {
     //space is mandatory
     return operands.map((e) => e.transform()).map((e) => '($e)').join(" AND ");
   }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    final listEquals = const DeepCollectionEquality().equals;
+
+    return other is AndFilterBuilder && listEquals(other.operands, operands);
+  }
+
+  @override
+  int get hashCode =>
+      Object.hash("AND", const DeepCollectionEquality().hash(operands));
 }
 
 class ToFilterBuilder extends FilterExpressionOperatorBase {
@@ -49,6 +63,18 @@ class OrFilterBuilder extends FilterExpressionOperatorBase {
   String transform() {
     return operands.map((e) => e.transform()).map((e) => '($e)').join(" OR ");
   }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    final listEquals = const DeepCollectionEquality().equals;
+
+    return other is OrFilterBuilder && listEquals(other.operands, operands);
+  }
+
+  @override
+  int get hashCode =>
+      Object.hash("OR", const DeepCollectionEquality().hash(operands));
 }
 
 class GeoRadiusFilterBuilder extends FilterExpressionOperatorBase {

@@ -169,12 +169,15 @@ void main() {
           '',
           filter: 'book_id < 100 AND tag = Tale',
         );
+        final exp1 = 'book_id'.toMeiliAttribute().lt(100.toMeiliValue()).and(
+              'tag'.toMeiliAttribute().eq("Tale".toMeiliValue()),
+            );
+        final exp2 = (Meili.attribute('book_id') < Meili.value(100)) &
+            (Meili.attribute("tag").eq(Meili.value("Tale")));
+        expect(exp1.transform(), equals(exp2.transform()));
         var resultExpr = await index.search(
           '',
-          filterExpression:
-              'book_id'.toMeiliAttribute().lt(100.toMeiliValue()).and(
-                    'tag'.toMeiliAttribute().eq("Tale".toMeiliValue()),
-                  ),
+          filterExpression: exp1,
         );
         expect(result.hits, hasLength(1));
         expect(resultExpr.hits, hasLength(1));
