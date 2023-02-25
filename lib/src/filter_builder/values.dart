@@ -32,6 +32,27 @@ class NumberFilterExpression extends FilterExpressionValueBase {
   int get hashCode => value.hashCode;
 }
 
+class BooleanFilterExpression extends FilterExpressionValueBase {
+  final bool value;
+
+  const BooleanFilterExpression(this.value);
+
+  @override
+  String transform() {
+    return value.toString();
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+
+    return other is BooleanFilterExpression && other.value == value;
+  }
+
+  @override
+  int get hashCode => value.hashCode;
+}
+
 class StringFilterExpression extends FilterExpressionValueBase {
   final String value;
 

@@ -15,7 +15,11 @@ class AndFilterBuilder extends FilterExpressionOperatorBase {
   @override
   String transform() {
     //space is mandatory
-    return operands.map((e) => e.transform()).where((element) => element.isNotEmpty).map((e) => '($e)').join(" AND ");
+    return operands
+        .map((e) => e.transform())
+        .where((element) => element.isNotEmpty)
+        .map((e) => '($e)')
+        .join(" AND ");
   }
 
   @override
@@ -27,7 +31,8 @@ class AndFilterBuilder extends FilterExpressionOperatorBase {
   }
 
   @override
-  int get hashCode => Object.hash("AND", const DeepCollectionEquality().hash(operands));
+  int get hashCode =>
+      Object.hash("AND", const DeepCollectionEquality().hash(operands));
 }
 
 class ToFilterBuilder extends FilterExpressionOperatorBase {
@@ -60,7 +65,11 @@ class OrFilterBuilder extends FilterExpressionOperatorBase {
 
   @override
   String transform() {
-    return operands.map((e) => e.transform()).where((element) => element.isNotEmpty).map((e) => '($e)').join(" OR ");
+    return operands
+        .map((e) => e.transform())
+        .where((element) => element.isNotEmpty)
+        .map((e) => '($e)')
+        .join(" OR ");
   }
 
   @override
@@ -72,7 +81,8 @@ class OrFilterBuilder extends FilterExpressionOperatorBase {
   }
 
   @override
-  int get hashCode => Object.hash("OR", const DeepCollectionEquality().hash(operands));
+  int get hashCode =>
+      Object.hash("OR", const DeepCollectionEquality().hash(operands));
 }
 
 class GeoRadiusFilterBuilder extends FilterExpressionOperatorBase {
@@ -102,7 +112,9 @@ class ExistsFilterBuilder extends FilterExpressionOperatorBase {
 class NotFilterBuilder extends FilterExpressionOperatorBase {
   final FilterExpressionOperatorBase operator;
 
-  const NotFilterBuilder(this.operator) : assert(operator is! EmptyFilterExpression, "Cannot negate (NOT) an empty operator");
+  const NotFilterBuilder(this.operator)
+      : assert(operator is! EmptyFilterExpression,
+            "Cannot negate (NOT) an empty operator");
 
   @override
   String transform() {

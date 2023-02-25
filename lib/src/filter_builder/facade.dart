@@ -84,6 +84,9 @@ class Meili {
     if (v is num) {
       return NumberFilterExpression(v);
     }
+    if (v is bool) {
+      return BooleanFilterExpression(v);
+    }
     //Dates are converted to unix epoch time in Meili
     if (v is DateTime) {
       return NumberFilterExpression(v.millisecondsSinceEpoch);
@@ -148,4 +151,8 @@ extension NumMeiliValueExt on num {
 extension DateMeiliValueExt on DateTime {
   NumberFilterExpression toMeiliValue() =>
       NumberFilterExpression(millisecondsSinceEpoch);
+}
+
+extension BoolMeiliValueExt on bool {
+  BooleanFilterExpression toMeiliValue() => BooleanFilterExpression(this);
 }
