@@ -56,9 +56,9 @@ void main() {
       test("Arbitrary", () {});
     });
     group('[AND]', () {
-      final exp1 = 'book_id'.toMeiliAttribute().lt(100.toMeiliValue()).and(
-            'tag'.toMeiliAttribute().eq("Tale".toMeiliValue()),
-          );
+      // final exp1 = 'book_id'.toMeiliAttribute().lt(100.toMeiliValue()).and(
+      //       'tag'.toMeiliAttribute().eq("Tale".toMeiliValue()),
+      //     );
     });
     group('[OR]', () {});
   });

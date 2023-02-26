@@ -15,11 +15,16 @@ class AndFilterBuilder extends FilterExpressionOperatorBase {
   @override
   String transform() {
     //space is mandatory
-    return operands
+    final filteredOperands = operands
         .map((e) => e.transform())
-        .where((element) => element.isNotEmpty)
-        .map((e) => '($e)')
-        .join(" AND ");
+        .where((element) => element.isNotEmpty);
+    if (filteredOperands.isEmpty) {
+      return '';
+    } else if (filteredOperands.length == 1) {
+      return filteredOperands.first;
+    } else {
+      return filteredOperands.map((e) => '($e)').join(" AND ");
+    }
   }
 
   @override
@@ -65,11 +70,16 @@ class OrFilterBuilder extends FilterExpressionOperatorBase {
 
   @override
   String transform() {
-    return operands
+    final filteredOperands = operands
         .map((e) => e.transform())
-        .where((element) => element.isNotEmpty)
-        .map((e) => '($e)')
-        .join(" OR ");
+        .where((element) => element.isNotEmpty);
+    if (filteredOperands.isEmpty) {
+      return '';
+    } else if (filteredOperands.length == 1) {
+      return filteredOperands.first;
+    } else {
+      return filteredOperands.map((e) => '($e)').join(" OR ");
+    }
   }
 
   @override
