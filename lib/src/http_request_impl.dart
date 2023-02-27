@@ -3,6 +3,8 @@ import 'package:meilisearch/src/version.dart';
 import 'http_request.dart';
 import 'exception.dart';
 
+const bool _kIsWeb = bool.fromEnvironment('dart.library.js_util');
+
 class HttpRequestImpl implements HttpRequest {
   HttpRequestImpl(this.serverUrl, this.apiKey, [this.connectTimeout])
       : dio = Dio(
@@ -10,7 +12,7 @@ class HttpRequestImpl implements HttpRequest {
             baseUrl: serverUrl,
             headers: <String, Object>{
               if (apiKey != null) 'Authorization': 'Bearer $apiKey',
-              'User-Agent': Version.qualifiedVersion,
+              if (!kIsWeb) 'User-Agent': Version.qualifiedVersion,
             },
             contentType: 'application/json',
             responseType: ResponseType.json,
