@@ -12,7 +12,10 @@ class HttpRequestImpl implements HttpRequest {
             baseUrl: serverUrl,
             headers: <String, Object>{
               if (apiKey != null) 'Authorization': 'Bearer $apiKey',
-                'X-Meilisearch-Client': [Version.qualifiedVersion, if (_kIsWeb) Version.qualifiedVersionWeb].join(',')
+              'X-Meilisearch-Client': [
+                Version.qualifiedVersion,
+                if (_kIsWeb) Version.qualifiedVersionWeb
+              ].join(',')
             },
             contentType: 'application/json',
             responseType: ResponseType.json,
