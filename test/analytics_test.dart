@@ -27,14 +27,14 @@ void main() {
     test('sends the User-Agent header in every call', () {
       final headers = client.http.headers();
 
-      expect(headers.keys, contains('User-Agent'));
-      expect(headers['User-Agent'], isNotNull);
+      expect(headers.keys, contains('X-Meilisearch-Client'));
+      expect(headers['X-Meilisearch-Client'], isNotNull);
     });
 
     test('has current version data from Version class', () {
       final headers = client.http.headers();
 
-      expect(headers['User-Agent'], equals(Version.qualifiedVersion));
+      expect(headers['X-Meilisearch-Client'], equals(Version.qualifiedVersion));
     });
   });
 }
