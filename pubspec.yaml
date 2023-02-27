@@ -11,7 +11,7 @@ environment:
 dependencies:
   dio: ^5.0.0
   crypto: ^3.0.1
-  collection: ^1.17.1
+  collection: ^1.17.0
 
 dev_dependencies:
   test: ^1.0.0
