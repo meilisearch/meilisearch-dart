@@ -4,4 +4,8 @@ class Version {
   static String get qualifiedVersion {
     return "Meilisearch Dart (v$current)";
   }
+
+  static String get qualifiedVersionWeb {
+    return "[\"$qualifiedVersion\", \"Meilisearch Dart Web (v$current)\"]";
+  }
 }
