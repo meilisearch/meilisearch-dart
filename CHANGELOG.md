@@ -26,7 +26,7 @@
 
 ### Changes
 
-- Fix a bug in the creation of keys with a existing `uid`.
+- Fix a bug in the creation of keys with an existing `uid`.
 
 # 0.8.0
 ### Breaking changes
