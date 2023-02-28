@@ -108,7 +108,7 @@ class MeiliSearchIndexImpl implements MeiliSearchIndex {
     int? page,
     int? hitsPerPage,
     Object? filter,
-    FilterExpressionOperatorBase? filterExpression,
+    MeiliOperatorExpressionBase? filterExpression,
     List<String>? sort,
     List<String>? facets,
     List<String>? attributesToRetrieve,

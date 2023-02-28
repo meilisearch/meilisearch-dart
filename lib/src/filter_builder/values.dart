@@ -1,19 +1,9 @@
 import 'filter_builder_base.dart';
 
-//null is not a valid value, use EXISTS operator instead
-// class NullFilterExpression extends FilterExpressionValueBase {
-//   const NullFilterExpression();
-
-//   @override
-//   String transform() {
-//     return "null";
-//   }
-// }
-
-class NumberFilterExpression extends FilterExpressionValueBase {
+class MeiliNumberValueExpression extends MeiliValueExpressionBase {
   final num value;
 
-  const NumberFilterExpression(this.value);
+  const MeiliNumberValueExpression(this.value);
 
   @override
   String transform() {
@@ -25,17 +15,36 @@ class NumberFilterExpression extends FilterExpressionValueBase {
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
 
-    return other is NumberFilterExpression && other.value == value;
+    return other is MeiliNumberValueExpression && other.value == value;
   }
 
   @override
   int get hashCode => value.hashCode;
 }
 
-class BooleanFilterExpression extends FilterExpressionValueBase {
+class MeiliDateTimeValueExpression extends MeiliValueExpressionBase {
+  final DateTime value;
+  MeiliDateTimeValueExpression(this.value)
+      : assert(value.isUtc, "DateTime passed to Meili must be in UTC to avoid inconsistency accross multiple devices");
+
+  @override
+  String transform() => value.millisecondsSinceEpoch.toString();
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+
+    return other is MeiliDateTimeValueExpression && other.value == value;
+  }
+
+  @override
+  int get hashCode => value.hashCode;
+}
+
+class MeiliBooleanValueExpression extends MeiliValueExpressionBase {
   final bool value;
 
-  const BooleanFilterExpression(this.value);
+  const MeiliBooleanValueExpression(this.value);
 
   @override
   String transform() {
@@ -46,17 +55,17 @@ class BooleanFilterExpression extends FilterExpressionValueBase {
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
 
-    return other is BooleanFilterExpression && other.value == value;
+    return other is MeiliBooleanValueExpression && other.value == value;
   }
 
   @override
   int get hashCode => value.hashCode;
 }
 
-class StringFilterExpression extends FilterExpressionValueBase {
+class MeiliStringValueExpression extends MeiliValueExpressionBase {
   final String value;
 
-  const StringFilterExpression(this.value);
+  const MeiliStringValueExpression(this.value);
   String escapeValue(String value) {
     //TODO(ahmednfwela): write a proper escape algorithm, maybe using regex
     return value.replaceAll(r'\', r'\\').replaceAll(r"'", r"\'");
@@ -75,7 +84,7 @@ class StringFilterExpression extends FilterExpressionValueBase {
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
 
-    return other is StringFilterExpression && other.value == value;
+    return other is MeiliStringValueExpression && other.value == value;
   }
 
   @override

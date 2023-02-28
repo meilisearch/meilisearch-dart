@@ -1,16 +1,15 @@
 import 'package:collection/collection.dart';
-
 import 'package:meilisearch/meilisearch.dart';
 
-class AndFilterBuilder extends FilterExpressionOperatorBase {
-  final List<FilterExpressionOperatorBase> operands;
+class MeiliAndOperatorExpression extends MeiliOperatorExpressionBase {
+  final List<MeiliOperatorExpressionBase> operands;
 
-  AndFilterBuilder({
-    required FilterExpressionOperatorBase first,
-    required FilterExpressionOperatorBase second,
+  MeiliAndOperatorExpression({
+    required MeiliOperatorExpressionBase first,
+    required MeiliOperatorExpressionBase second,
   }) : this.fromList([first, second]);
 
-  const AndFilterBuilder.fromList(this.operands);
+  const MeiliAndOperatorExpression.fromList(this.operands);
 
   @override
   String transform() {
@@ -32,7 +31,8 @@ class AndFilterBuilder extends FilterExpressionOperatorBase {
     if (identical(this, other)) return true;
     final listEquals = const DeepCollectionEquality().equals;
 
-    return other is AndFilterBuilder && listEquals(other.operands, operands);
+    return other is MeiliAndOperatorExpression &&
+        listEquals(other.operands, operands);
   }
 
   @override
@@ -40,33 +40,15 @@ class AndFilterBuilder extends FilterExpressionOperatorBase {
       Object.hash("AND", const DeepCollectionEquality().hash(operands));
 }
 
-class ToFilterBuilder extends FilterExpressionOperatorBase {
-  final AttributeFilterExpression attribute;
-  final FilterExpressionValueBase min;
-  final FilterExpressionValueBase max;
+class MeiliOrOperatorExpression extends MeiliOperatorExpressionBase {
+  final List<MeiliOperatorExpressionBase> operands;
 
-  const ToFilterBuilder({
-    required this.min,
-    required this.max,
-    required this.attribute,
-  });
-
-  @override
-  String transform() {
-    final attributeTransformed = attribute.transform();
-    return "$attributeTransformed ${min.transform()} TO $attributeTransformed ${max.transform()}";
-  }
-}
-
-class OrFilterBuilder extends FilterExpressionOperatorBase {
-  final List<FilterExpressionOperatorBase> operands;
-
-  OrFilterBuilder({
-    required FilterExpressionOperatorBase first,
-    required FilterExpressionOperatorBase second,
+  MeiliOrOperatorExpression({
+    required MeiliOperatorExpressionBase first,
+    required MeiliOperatorExpressionBase second,
   }) : this.fromList([first, second]);
 
-  const OrFilterBuilder.fromList(this.operands);
+  const MeiliOrOperatorExpression.fromList(this.operands);
 
   @override
   String transform() {
@@ -87,7 +69,8 @@ class OrFilterBuilder extends FilterExpressionOperatorBase {
     if (identical(this, other)) return true;
     final listEquals = const DeepCollectionEquality().equals;
 
-    return other is OrFilterBuilder && listEquals(other.operands, operands);
+    return other is MeiliOrOperatorExpression &&
+        listEquals(other.operands, operands);
   }
 
   @override
@@ -95,12 +78,31 @@ class OrFilterBuilder extends FilterExpressionOperatorBase {
       Object.hash("OR", const DeepCollectionEquality().hash(operands));
 }
 
-class GeoRadiusFilterBuilder extends FilterExpressionOperatorBase {
+class MeiliToOperatorExpression extends MeiliOperatorExpressionBase {
+  final MeiliAttributeExpression attribute;
+  final MeiliValueExpressionBase min;
+  final MeiliValueExpressionBase max;
+
+  const MeiliToOperatorExpression({
+    required this.min,
+    required this.max,
+    required this.attribute,
+  });
+
+  @override
+  String transform() {
+    final attributeTransformed = attribute.transform();
+    return "$attributeTransformed ${min.transform()} TO $attributeTransformed ${max.transform()}";
+  }
+}
+
+class MeiliGeoRadiusOperatorExpression extends MeiliOperatorExpressionBase {
   final double lat;
   final double lng;
   final double distanceInMeters;
 
-  const GeoRadiusFilterBuilder(this.lat, this.lng, this.distanceInMeters);
+  const MeiliGeoRadiusOperatorExpression(
+      this.lat, this.lng, this.distanceInMeters);
 
   @override
   String transform() {
@@ -108,10 +110,10 @@ class GeoRadiusFilterBuilder extends FilterExpressionOperatorBase {
   }
 }
 
-class ExistsFilterBuilder extends FilterExpressionOperatorBase {
-  final AttributeFilterExpression attribute;
+class MeiliExistsOperatorExpression extends MeiliOperatorExpressionBase {
+  final MeiliAttributeExpression attribute;
 
-  const ExistsFilterBuilder(this.attribute);
+  const MeiliExistsOperatorExpression(this.attribute);
 
   @override
   String transform() {
@@ -119,11 +121,11 @@ class ExistsFilterBuilder extends FilterExpressionOperatorBase {
   }
 }
 
-class NotFilterBuilder extends FilterExpressionOperatorBase {
-  final FilterExpressionOperatorBase operator;
+class MeiliNotOperatorExpression extends MeiliOperatorExpressionBase {
+  final MeiliOperatorExpressionBase operator;
 
-  const NotFilterBuilder(this.operator)
-      : assert(operator is! EmptyFilterExpression,
+  const MeiliNotOperatorExpression(this.operator)
+      : assert(operator is! MeiliEmptyExpression,
             "Cannot negate (NOT) an empty operator");
 
   @override
@@ -132,11 +134,11 @@ class NotFilterBuilder extends FilterExpressionOperatorBase {
   }
 }
 
-class InFilterBuilder extends FilterExpressionOperatorBase {
-  final AttributeFilterExpression attribute;
-  final List<FilterExpressionValueBase> values;
+class MeiliInOperatorExpression extends MeiliOperatorExpressionBase {
+  final MeiliAttributeExpression attribute;
+  final List<MeiliValueExpressionBase> values;
 
-  const InFilterBuilder({
+  const MeiliInOperatorExpression({
     required this.attribute,
     required this.values,
   });
@@ -149,11 +151,12 @@ class InFilterBuilder extends FilterExpressionOperatorBase {
 }
 
 /// Represents an operator that has a value as an operand
-abstract class ValueOperandFilterBuilder extends FilterExpressionOperatorBase {
-  final AttributeFilterExpression property;
-  final FilterExpressionValueBase value;
+abstract class MeiliValueOperandOperatorExpressionBase
+    extends MeiliOperatorExpressionBase {
+  final MeiliAttributeExpression property;
+  final MeiliValueExpressionBase value;
 
-  const ValueOperandFilterBuilder({
+  const MeiliValueOperandOperatorExpressionBase({
     required this.property,
     required this.value,
   });
@@ -166,60 +169,66 @@ abstract class ValueOperandFilterBuilder extends FilterExpressionOperatorBase {
   }
 }
 
-class EqualsFilterBuilder extends ValueOperandFilterBuilder {
-  const EqualsFilterBuilder({
-    required AttributeFilterExpression property,
-    required FilterExpressionValueBase value,
+class MeiliEqualsOperatorExpression
+    extends MeiliValueOperandOperatorExpressionBase {
+  const MeiliEqualsOperatorExpression({
+    required MeiliAttributeExpression property,
+    required MeiliValueExpressionBase value,
   }) : super(property: property, value: value);
 
   @override
   final String operator = "=";
 }
 
-class NotEqualsFilterBuilder extends ValueOperandFilterBuilder {
-  const NotEqualsFilterBuilder({
-    required AttributeFilterExpression property,
-    required FilterExpressionValueBase value,
+class MeiliNotEqualsOperatorExpression
+    extends MeiliValueOperandOperatorExpressionBase {
+  const MeiliNotEqualsOperatorExpression({
+    required MeiliAttributeExpression property,
+    required MeiliValueExpressionBase value,
   }) : super(property: property, value: value);
 
   @override
   final String operator = "!=";
 }
 
-class GreaterThanFilterBuilder extends ValueOperandFilterBuilder {
-  const GreaterThanFilterBuilder({
-    required AttributeFilterExpression property,
-    required FilterExpressionValueBase value,
+class MeiliGreaterThanOperatorExpression
+    extends MeiliValueOperandOperatorExpressionBase {
+  const MeiliGreaterThanOperatorExpression({
+    required MeiliAttributeExpression property,
+    required MeiliValueExpressionBase value,
   }) : super(property: property, value: value);
 
   @override
   final String operator = ">";
 }
 
-class GreaterThanEqualsFilterBuilder extends ValueOperandFilterBuilder {
-  const GreaterThanEqualsFilterBuilder({
-    required AttributeFilterExpression property,
-    required FilterExpressionValueBase value,
+class MeiliGreaterThanEqualsOperatorExpression
+    extends MeiliValueOperandOperatorExpressionBase {
+  const MeiliGreaterThanEqualsOperatorExpression({
+    required MeiliAttributeExpression property,
+    required MeiliValueExpressionBase value,
   }) : super(property: property, value: value);
 
   @override
   final String operator = ">=";
 }
 
-class LessThanFilterBuilder extends ValueOperandFilterBuilder {
-  const LessThanFilterBuilder({
-    required AttributeFilterExpression property,
-    required FilterExpressionValueBase value,
+class MeiliLessThanOperatorExpression
+    extends MeiliValueOperandOperatorExpressionBase {
+  const MeiliLessThanOperatorExpression({
+    required MeiliAttributeExpression property,
+    required MeiliValueExpressionBase value,
   }) : super(property: property, value: value);
 
   @override
   final String operator = "<";
 }
 
-class LessThanEqualsFilterBuilder extends ValueOperandFilterBuilder {
-  const LessThanEqualsFilterBuilder({
-    required AttributeFilterExpression property,
-    required FilterExpressionValueBase value,
+class MeiliLessThanEqualsOperatorExpression
+    extends MeiliValueOperandOperatorExpressionBase {
+  const MeiliLessThanEqualsOperatorExpression({
+    required MeiliAttributeExpression property,
+    required MeiliValueExpressionBase value,
   }) : super(property: property, value: value);
 
   @override

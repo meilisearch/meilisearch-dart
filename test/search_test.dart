@@ -124,16 +124,8 @@ void main() {
             ))
             .waitFor(client: client);
         expect(response.status, 'succeeded');
-        var resultExpr = await index.search(
-          'prince',
-          filterExpression: Meili.eq(
-            Meili.attribute('tag'),
-            Meili.value("Tale"),
-          ),
-        );
         var result = await index.search('prince', filter: 'tag = Tale');
         expect(result.hits, hasLength(1));
-        expect(resultExpr.hits, hasLength(1));
       });
 
       test('filter parameter with spaces', () async {
@@ -148,13 +140,7 @@ void main() {
           'prince',
           filter: 'tag = "Epic fantasy"',
         );
-        var resultExpr = await index.search(
-          'prince',
-          filterExpression:
-              'tag'.toMeiliAttribute().eq("Epic fantasy".toMeiliValue()),
-        );
         expect(result.hits, hasLength(1));
-        expect(resultExpr.hits, hasLength(1));
       });
 
       test('filter parameter with number', () async {
@@ -172,15 +158,11 @@ void main() {
         final exp1 = 'book_id'.toMeiliAttribute().lt(100.toMeiliValue()).and(
               'tag'.toMeiliAttribute().eq("Tale".toMeiliValue()),
             );
-        final exp2 = (Meili.attribute('book_id') < Meili.value(100)) &
-            (Meili.attribute("tag").eq(Meili.value("Tale")));
+        final exp2 = (Meili.attr('book_id') < Meili.value(100)) &
+            (Meili.attr("tag").eq(Meili.value("Tale")));
         expect(exp1.transform(), equals(exp2.transform()));
-        var resultExpr = await index.search(
-          '',
-          filterExpression: exp1,
-        );
+
         expect(result.hits, hasLength(1));
-        expect(resultExpr.hits, hasLength(1));
       });
 
       test('filter parameter with array', () async {

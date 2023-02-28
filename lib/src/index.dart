@@ -35,7 +35,7 @@ abstract class MeiliSearchIndex {
 
     /// filter is either a list or a string
     Object? filter,
-    FilterExpressionOperatorBase? filterExpression,
+    MeiliOperatorExpressionBase? filterExpression,
     List<String>? sort,
     List<String>? facets,
     List<String>? attributesToRetrieve,

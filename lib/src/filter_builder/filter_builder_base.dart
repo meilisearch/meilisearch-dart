@@ -1,49 +1,51 @@
 import 'operators.dart';
 
 /// Represents an arbitrary filter expression
-abstract class FilterExpressionBase {
-  const FilterExpressionBase();
+abstract class MeiliExpressionBase {
+  const MeiliExpressionBase();
   String transform();
   @override
   String toString() => transform();
 }
 
 /// Represents a filter operator with either at least one operand
-abstract class FilterExpressionOperatorBase extends FilterExpressionBase {
-  const FilterExpressionOperatorBase();
+abstract class MeiliOperatorExpressionBase extends MeiliExpressionBase {
+  const MeiliOperatorExpressionBase();
 
-  AndFilterBuilder operator &(FilterExpressionOperatorBase other) {
-    return AndFilterBuilder(first: this, second: other);
+  MeiliAndOperatorExpression operator &(MeiliOperatorExpressionBase other) {
+    return MeiliAndOperatorExpression(first: this, second: other);
   }
 
-  OrFilterBuilder operator |(FilterExpressionOperatorBase other) {
-    return OrFilterBuilder(first: this, second: other);
+  MeiliOrOperatorExpression operator |(MeiliOperatorExpressionBase other) {
+    return MeiliOrOperatorExpression(first: this, second: other);
   }
 
-  NotFilterBuilder operator ~() {
-    return NotFilterBuilder(this);
+  MeiliNotOperatorExpression operator ~() {
+    return MeiliNotOperatorExpression(this);
   }
 }
 
 /// Represents a value in a filter expression
-abstract class FilterExpressionValueBase extends FilterExpressionBase {
-  const FilterExpressionValueBase();
+abstract class MeiliValueExpressionBase extends MeiliExpressionBase {
+  const MeiliValueExpressionBase();
 }
 
 /// Represents an empty filter
-class EmptyFilterExpression extends FilterExpressionOperatorBase {
-  const EmptyFilterExpression();
+///
+/// works as a starting point for filter builders
+class MeiliEmptyExpression extends MeiliOperatorExpressionBase {
+  const MeiliEmptyExpression();
   @override
   String transform() => "";
 }
 
 /// Represents an attribute path in a filter expression
-class AttributeFilterExpression extends FilterExpressionBase {
+class MeiliAttributeExpression extends MeiliExpressionBase {
   final List<String> parts;
 
-  AttributeFilterExpression(String path)
+  MeiliAttributeExpression(String path)
       : parts = _normalizeParts(path.split('.'));
-  AttributeFilterExpression.fromParts(List<String> parts)
+  MeiliAttributeExpression.fromParts(List<String> parts)
       : parts = _normalizeParts(parts);
   static List<String> _normalizeParts(List<String> parts) {
     return parts
@@ -57,19 +59,23 @@ class AttributeFilterExpression extends FilterExpressionBase {
     return parts.join('.');
   }
 
-  LessThanFilterBuilder operator <(FilterExpressionValueBase value) {
-    return LessThanFilterBuilder(property: this, value: value);
+  MeiliLessThanOperatorExpression operator <(MeiliValueExpressionBase value) {
+    return MeiliLessThanOperatorExpression(property: this, value: value);
   }
 
-  GreaterThanFilterBuilder operator >(FilterExpressionValueBase value) {
-    return GreaterThanFilterBuilder(property: this, value: value);
+  MeiliGreaterThanOperatorExpression operator >(
+      MeiliValueExpressionBase value) {
+    return MeiliGreaterThanOperatorExpression(property: this, value: value);
   }
 
-  GreaterThanEqualsFilterBuilder operator >=(FilterExpressionValueBase value) {
-    return GreaterThanEqualsFilterBuilder(property: this, value: value);
+  MeiliGreaterThanEqualsOperatorExpression operator >=(
+      MeiliValueExpressionBase value) {
+    return MeiliGreaterThanEqualsOperatorExpression(
+        property: this, value: value);
   }
 
-  LessThanEqualsFilterBuilder operator <=(FilterExpressionValueBase value) {
-    return LessThanEqualsFilterBuilder(property: this, value: value);
+  MeiliLessThanEqualsOperatorExpression operator <=(
+      MeiliValueExpressionBase value) {
+    return MeiliLessThanEqualsOperatorExpression(property: this, value: value);
   }
 }
