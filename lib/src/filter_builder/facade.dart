@@ -7,12 +7,14 @@ class Meili {
   Meili._();
 
   /// Creates an attribute from string
-  static MeiliAttributeExpression attr(String path) => MeiliAttributeExpression(path);
+  static MeiliAttributeExpression attr(String path) =>
+      MeiliAttributeExpression(path);
 
   /// Creates an attribute from parts to represent object nesting
   ///
   /// `Meili.attrFromParts(['contact','phone'])` is equivalent to `Meili.attr('contact.phone')`
-  static MeiliAttributeExpression attrFromParts(List<String> parts) => MeiliAttributeExpression.fromParts(parts);
+  static MeiliAttributeExpression attrFromParts(List<String> parts) =>
+      MeiliAttributeExpression.fromParts(parts);
 
   /// Creates an `ATTR = VALUE` filter operator
   static MeiliEqualsOperatorExpression eq(
@@ -73,9 +75,14 @@ class Meili {
         distanceInMeters,
       );
 
-  static MeiliExistsOperatorExpression exists(MeiliAttributeExpression attribute) => MeiliExistsOperatorExpression(attribute);
-  static MeiliNotOperatorExpression not(MeiliOperatorExpressionBase operator) => MeiliNotOperatorExpression(operator);
-  static MeiliInOperatorExpression $in(MeiliAttributeExpression attribute, List<MeiliValueExpressionBase> values) => MeiliInOperatorExpression(
+  static MeiliExistsOperatorExpression exists(
+          MeiliAttributeExpression attribute) =>
+      MeiliExistsOperatorExpression(attribute);
+  static MeiliNotOperatorExpression not(MeiliOperatorExpressionBase operator) =>
+      MeiliNotOperatorExpression(operator);
+  static MeiliInOperatorExpression $in(MeiliAttributeExpression attribute,
+          List<MeiliValueExpressionBase> values) =>
+      MeiliInOperatorExpression(
         attribute: attribute,
         values: values,
       );
@@ -97,32 +104,51 @@ class Meili {
     return MeiliStringValueExpression(v.toString());
   }
 
-  static MeiliOrOperatorExpression or(List<MeiliOperatorExpressionBase> operands) => MeiliOrOperatorExpression.fromList(operands);
-  static MeiliAndOperatorExpression and(List<MeiliOperatorExpressionBase> operands) => MeiliAndOperatorExpression.fromList(operands);
+  static MeiliOrOperatorExpression or(
+          List<MeiliOperatorExpressionBase> operands) =>
+      MeiliOrOperatorExpression.fromList(operands);
+  static MeiliAndOperatorExpression and(
+          List<MeiliOperatorExpressionBase> operands) =>
+      MeiliAndOperatorExpression.fromList(operands);
 
   static MeiliEmptyExpression empty() => MeiliEmptyExpression();
 }
 
 extension MeiliFiltersOperatorsExt on MeiliOperatorExpressionBase {
-  MeiliOrOperatorExpression or(MeiliOperatorExpressionBase other) => MeiliOrOperatorExpression(first: this, second: other);
-  MeiliOrOperatorExpression orList(List<MeiliOperatorExpressionBase> others) => MeiliOrOperatorExpression.fromList([this, ...others]);
+  MeiliOrOperatorExpression or(MeiliOperatorExpressionBase other) =>
+      MeiliOrOperatorExpression(first: this, second: other);
+  MeiliOrOperatorExpression orList(List<MeiliOperatorExpressionBase> others) =>
+      MeiliOrOperatorExpression.fromList([this, ...others]);
 
-  MeiliAndOperatorExpression and(MeiliOperatorExpressionBase other) => MeiliAndOperatorExpression(first: this, second: other);
-  MeiliAndOperatorExpression andList(List<MeiliOperatorExpressionBase> others) => MeiliAndOperatorExpression.fromList([this, ...others]);
+  MeiliAndOperatorExpression and(MeiliOperatorExpressionBase other) =>
+      MeiliAndOperatorExpression(first: this, second: other);
+  MeiliAndOperatorExpression andList(
+          List<MeiliOperatorExpressionBase> others) =>
+      MeiliAndOperatorExpression.fromList([this, ...others]);
 
   MeiliNotOperatorExpression not() => MeiliNotOperatorExpression(this);
 }
 
 extension MeiliAttributesExt on MeiliAttributeExpression {
-  MeiliEqualsOperatorExpression eq(MeiliValueExpressionBase value) => Meili.eq(this, value);
-  MeiliNotEqualsOperatorExpression notEq(MeiliValueExpressionBase value) => Meili.notEq(this, value);
-  MeiliGreaterThanOperatorExpression gt(MeiliValueExpressionBase value) => Meili.gt(this, value);
-  MeiliGreaterThanEqualsOperatorExpression gte(MeiliValueExpressionBase value) => Meili.gte(this, value);
-  MeiliLessThanOperatorExpression lt(MeiliValueExpressionBase value) => Meili.lt(this, value);
-  MeiliLessThanEqualsOperatorExpression lte(MeiliValueExpressionBase value) => Meili.lte(this, value);
-  MeiliToOperatorExpression to(MeiliValueExpressionBase min, MeiliValueExpressionBase max) => Meili.to(this, min, max);
+  MeiliEqualsOperatorExpression eq(MeiliValueExpressionBase value) =>
+      Meili.eq(this, value);
+  MeiliNotEqualsOperatorExpression notEq(MeiliValueExpressionBase value) =>
+      Meili.notEq(this, value);
+  MeiliGreaterThanOperatorExpression gt(MeiliValueExpressionBase value) =>
+      Meili.gt(this, value);
+  MeiliGreaterThanEqualsOperatorExpression gte(
+          MeiliValueExpressionBase value) =>
+      Meili.gte(this, value);
+  MeiliLessThanOperatorExpression lt(MeiliValueExpressionBase value) =>
+      Meili.lt(this, value);
+  MeiliLessThanEqualsOperatorExpression lte(MeiliValueExpressionBase value) =>
+      Meili.lte(this, value);
+  MeiliToOperatorExpression to(
+          MeiliValueExpressionBase min, MeiliValueExpressionBase max) =>
+      Meili.to(this, min, max);
   MeiliExistsOperatorExpression exists() => Meili.exists(this);
-  MeiliInOperatorExpression $in(List<MeiliValueExpressionBase> values) => Meili.$in(this, values);
+  MeiliInOperatorExpression $in(List<MeiliValueExpressionBase> values) =>
+      Meili.$in(this, values);
 }
 
 extension StrMeiliValueExt on String {
@@ -135,9 +161,11 @@ extension NumMeiliValueExt on num {
 }
 
 extension DateMeiliValueExt on DateTime {
-  MeiliNumberValueExpression toMeiliValue() => MeiliNumberValueExpression(millisecondsSinceEpoch);
+  MeiliNumberValueExpression toMeiliValue() =>
+      MeiliNumberValueExpression(millisecondsSinceEpoch);
 }
 
 extension BoolMeiliValueExt on bool {
-  MeiliBooleanValueExpression toMeiliValue() => MeiliBooleanValueExpression(this);
+  MeiliBooleanValueExpression toMeiliValue() =>
+      MeiliBooleanValueExpression(this);
 }

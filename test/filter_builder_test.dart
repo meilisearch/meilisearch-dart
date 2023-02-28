@@ -72,13 +72,15 @@ void main() {
             isA<AssertionError>().having(
               (p0) => p0.message,
               'message',
-              equals("DateTime passed to Meili must be in UTC to avoid inconsistency accross multiple devices"),
+              equals(
+                  "DateTime passed to Meili must be in UTC to avoid inconsistency accross multiple devices"),
             ),
           ),
         );
       });
       test("Arbitrary", () {
-        expect(Meili.value(_ArbitraryClass()).transform(), equals('\'ArbitraryString\''));
+        expect(Meili.value(_ArbitraryClass()).transform(),
+            equals('\'ArbitraryString\''));
       });
     });
 
