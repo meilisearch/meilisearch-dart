@@ -1,7 +1,7 @@
 [comment]: <> (All notable changes to this project will be documented in this file.)
 
 # 0.9.1
-- [web] Fix a bug which affected the web platform regarding the override of `User-Agent`. Now the header used to sent the client name information is the `X-Meilisearch-Client` one.
+- [web] Fix a bug that affected the web platform regarding the override of `User-Agent`. Now the header used to send the client name information is the `X-Meilisearch-Client` one.
 
 # 0.9.0
 ### Breaking Changes:
