@@ -161,8 +161,8 @@ extension NumMeiliValueExt on num {
 }
 
 extension DateMeiliValueExt on DateTime {
-  MeiliNumberValueExpression toMeiliValue() =>
-      MeiliNumberValueExpression(millisecondsSinceEpoch);
+  MeiliDateTimeValueExpression toMeiliValue() =>
+      MeiliDateTimeValueExpression(this);
 }
 
 extension BoolMeiliValueExt on bool {
