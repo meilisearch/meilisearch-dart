@@ -11,6 +11,7 @@ void main() {
         expect(Meili.attr('   book.id.   ').transform(), equals("book.id"));
       });
     });
+
     group("Values", () {
       test("Strings", () {
         //
@@ -23,16 +24,19 @@ void main() {
           "doesn\"t need escape",
           [r"fe\male", r'fe\\male'],
         ];
+
         for (var element in testData) {
           if (element is List<String>) {
             final value = element.first;
             final expected = element.last;
+
             expect(value.toMeiliValue().transform(), equals("'$expected'"));
           } else if (element is String) {
             expect(element.toMeiliValue().transform(), equals("'$element'"));
           }
         }
       });
+
       test("Booleans", () {
         final testData = [
           [true, "true"],
@@ -41,28 +45,33 @@ void main() {
         for (var element in testData) {
           final value = element.first;
           final expected = element.last;
+
           expect(Meili.value(value).transform(), equals(expected));
         }
       });
+
       test("Numbers", () {
         final testData = [
           [10, "10"],
           [11.5, "11.5"],
         ];
+
         for (var element in testData) {
           final value = element.first;
           final expected = element.last;
+
           expect(Meili.value(value).transform(), equals(expected));
         }
       });
       test("Dates", () {
-        //
         final testData = [
           [DateTime.utc(1999, 12, 14, 18, 53, 56), '945197636000'],
         ];
+
         for (var element in testData) {
           final value = element.first;
           final expected = element.last;
+
           expect(Meili.value(value).transform(), equals(expected));
         }
 
@@ -78,6 +87,7 @@ void main() {
           ),
         );
       });
+
       test("Arbitrary", () {
         expect(Meili.value(_ArbitraryClass()).transform(),
             equals('\'ArbitraryString\''));

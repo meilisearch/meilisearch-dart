@@ -67,6 +67,7 @@ class MeiliStringValueExpression extends MeiliValueExpressionBase {
   final String value;
 
   const MeiliStringValueExpression(this.value);
+
   String escapeValue(String value) {
     //TODO(ahmednfwela): write a proper escape algorithm, maybe using regex
     return value.replaceAll(r'\', r'\\').replaceAll(r"'", r"\'");
@@ -74,11 +75,11 @@ class MeiliStringValueExpression extends MeiliValueExpressionBase {
 
   @override
   String transform() {
-    final sb = StringBuffer();
-    sb.write("'");
-    sb.write(escapeValue(value));
-    sb.write("'");
-    return sb.toString();
+   return StringBuffer()
+    ..write("'")
+    ..write(escapeValue(value))
+    ..write("'")
+    ..toString();
   }
 
   @override

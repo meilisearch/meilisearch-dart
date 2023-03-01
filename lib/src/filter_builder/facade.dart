@@ -2,7 +2,8 @@ import 'filter_builder_base.dart';
 import 'operators.dart';
 import 'values.dart';
 
-/// Convenice class to access all MeiliSearch filter expressions
+/// Convenience class to access all Meilisearch filter expressions
+
 class Meili {
   Meili._();
 
@@ -100,7 +101,7 @@ class Meili {
     if (v is DateTime) {
       return MeiliDateTimeValueExpression(v);
     }
-    //fall back to string value
+    // fallback to a string value
     return MeiliStringValueExpression(v.toString());
   }
 
