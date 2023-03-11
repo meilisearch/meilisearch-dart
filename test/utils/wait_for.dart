@@ -1,5 +1,6 @@
 import 'package:meilisearch/meilisearch.dart';
 import 'package:collection/collection.dart';
+
 extension TaskWaiter on Task {
   Future<Task> waitFor({
     required MeiliSearchClient client,
@@ -33,13 +34,19 @@ extension TaskWaiterForLists on Iterable<Task> {
     final remainingUids = map((e) => e.uid).whereNotNull().toList();
     final completedTasks = <int, Task>{};
     while (DateTime.now().isBefore(endingTime)) {
-      var taskRes = await client.getTasks(params: TasksQuery(uids: remainingUids));
+      var taskRes =
+          await client.getTasks(params: TasksQuery(uids: remainingUids));
       final tasks = taskRes.results;
-      final completed = tasks.where((element) => element.status != 'enqueued' && element.status != 'processing');
+      final completed = tasks.where((element) =>
+          element.status != 'enqueued' && element.status != 'processing');
       completedTasks.addEntries(completed.map((e) => MapEntry(e.uid!, e)));
-      remainingUids.removeWhere((element) => completedTasks.containsKey(element));
+      remainingUids
+          .removeWhere((element) => completedTasks.containsKey(element));
       if (remainingUids.isEmpty) {
-        return originalUids.map((e) => completedTasks[e.uid]).whereNotNull().toList();
+        return originalUids
+            .map((e) => completedTasks[e.uid])
+            .whereNotNull()
+            .toList();
       }
       await Future<void>.delayed(interval);
     }
@@ -47,8 +54,6 @@ extension TaskWaiterForLists on Iterable<Task> {
     throw Exception('The tasks $originalUids timed out.');
   }
 }
-
-
 
 extension TaskWaiterForFutures on Future<Task> {
   Future<Task> waitFor({
@@ -67,6 +72,7 @@ extension TaskWaiterForFutureList on Future<Iterable<Task>> {
     Duration timeout = const Duration(seconds: 20),
     Duration interval = const Duration(milliseconds: 50),
   }) async {
-    return await (await this).waitFor(timeout: timeout, interval: interval, client: client);
+    return await (await this)
+        .waitFor(timeout: timeout, interval: interval, client: client);
   }
 }
