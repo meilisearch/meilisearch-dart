@@ -5,8 +5,9 @@ abstract class HttpRequest {
   factory HttpRequest(
     String serverUrl,
     String apiKey, [
-    Duration connectTimeout,
-    HttpClientAdapter adapter,
+    Duration? connectTimeout,
+    HttpClientAdapter? adapter,
+    List<Interceptor>? interceptors,
   ]) = HttpRequestImpl;
 
   /// Meilisearch server URL.

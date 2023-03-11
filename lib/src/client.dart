@@ -22,13 +22,15 @@ abstract class MeiliSearchClient {
     Duration? connectTimeout,
   ]) = MeiliSearchClientImpl;
 
-  factory MeiliSearchClient.withHttpAdapter(
+  factory MeiliSearchClient.withCustomDio(
     String serverUrl, {
     String? apiKey,
     Duration? connectTimeout,
     HttpClientAdapter? adapter,
+    List<Interceptor>? interceptors,
   }) =>
-      MeiliSearchClientImpl(serverUrl, apiKey, connectTimeout, adapter);
+      MeiliSearchClientImpl(
+          serverUrl, apiKey, connectTimeout, adapter, interceptors);
 
   /// Http client instance.
   HttpRequest get http;

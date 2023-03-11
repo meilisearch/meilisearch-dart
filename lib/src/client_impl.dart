@@ -25,11 +25,13 @@ class MeiliSearchClientImpl implements MeiliSearchClient {
     this.apiKey,
     this.connectTimeout,
     HttpClientAdapter? adapter,
+    List<Interceptor>? interceptors,
   ]) : http = HttpRequestImpl(
           serverUrl,
           apiKey,
           connectTimeout,
           adapter,
+          interceptors,
         );
 
   @override

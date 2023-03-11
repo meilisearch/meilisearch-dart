@@ -11,6 +11,7 @@ class HttpRequestImpl implements HttpRequest {
     this.apiKey, [
     this.connectTimeout,
     HttpClientAdapter? adapter,
+    List<Interceptor>? interceptors,
   ]) : dio = Dio(
           BaseOptions(
             baseUrl: serverUrl,
@@ -28,6 +29,10 @@ class HttpRequestImpl implements HttpRequest {
         ) {
     if (adapter != null) {
       dio.httpClientAdapter = adapter;
+    }
+    dio.interceptors.removeImplyContentTypeInterceptor();
+    if (interceptors != null) {
+      dio.interceptors.addAll(interceptors);
     }
   }
 

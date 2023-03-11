@@ -36,7 +36,7 @@ Future<void> setUpClient({bool isHttp2 = false}) async {
     final String server = testServer;
     const masterKey = 'masterKey';
     client = isHttp2
-        ? MeiliSearchClient.withHttpAdapter(
+        ? MeiliSearchClient.withCustomDio(
             server,
             apiKey: masterKey,
             adapter: Http2Adapter(
