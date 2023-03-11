@@ -1,3 +1,5 @@
+import 'typo_tolerance.dart';
+
 class IndexSettings {
   IndexSettings({
     this.synonyms,
@@ -8,6 +10,7 @@ class IndexSettings {
     this.sortableAttributes,
     this.searchableAttributes = allAttributes,
     this.displayedAttributes = allAttributes,
+    this.typoTolerance,
   });
 
   static const allAttributes = <String>['*'];
@@ -36,6 +39,9 @@ class IndexSettings {
   /// List of attributes by which to sort results
   List<String>? sortableAttributes;
 
+  /// Customize typo tolerance feature.
+  TypoToleranceSettings? typoTolerance;
+
   Map<String, Object?> toMap() => <String, Object?>{
         'synonyms': synonyms,
         'stopWords': stopWords,
@@ -45,22 +51,28 @@ class IndexSettings {
         'searchableAttributes': searchableAttributes,
         'displayedAttributes': displayedAttributes,
         'sortableAttributes': sortableAttributes,
+        'typoTolerance': typoTolerance?.toMap()
       };
 
-  factory IndexSettings.fromMap(Map<String, Object?> map) => IndexSettings(
-        synonyms: (map['synonyms'] as Map?)
-            ?.cast<String, List<Object?>>()
-            .map((key, value) => MapEntry(key, value.cast<String>())),
-        stopWords: (map['stopWords'] as Iterable?)?.cast<String>().toList(),
-        rankingRules: (map['rankingRules'] as List?)?.cast<String>(),
-        filterableAttributes:
-            (map['filterableAttributes'] as List?)?.cast<String>(),
-        distinctAttribute: (map['distinctAttribute'] as String?),
-        searchableAttributes:
-            (map['searchableAttributes'] as List?)?.cast<String>(),
-        displayedAttributes:
-            (map['displayedAttributes'] as List?)?.cast<String>(),
-        sortableAttributes:
-            (map['sortableAttributes'] as List?)?.cast<String>(),
-      );
+  factory IndexSettings.fromMap(Map<String, Object?> map) {
+    final typoTolerance = map['typoTolerance'];
+    return IndexSettings(
+      synonyms: (map['synonyms'] as Map?)
+          ?.cast<String, List<Object?>>()
+          .map((key, value) => MapEntry(key, value.cast<String>())),
+      stopWords: (map['stopWords'] as Iterable?)?.cast<String>().toList(),
+      rankingRules: (map['rankingRules'] as List?)?.cast<String>(),
+      filterableAttributes:
+          (map['filterableAttributes'] as List?)?.cast<String>(),
+      distinctAttribute: (map['distinctAttribute'] as String?),
+      searchableAttributes:
+          (map['searchableAttributes'] as List?)?.cast<String>(),
+      displayedAttributes:
+          (map['displayedAttributes'] as List?)?.cast<String>(),
+      sortableAttributes: (map['sortableAttributes'] as List?)?.cast<String>(),
+      typoTolerance: typoTolerance is Map<String, Object?>
+          ? TypoToleranceSettings.fromMap(typoTolerance)
+          : null,
+    );
+  }
 }

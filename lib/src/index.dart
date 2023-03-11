@@ -9,6 +9,7 @@ import 'index_settings.dart';
 import 'matching_strategy_enum.dart';
 import 'stats.dart' show IndexStats;
 import 'task.dart';
+import 'typo_tolerance.dart';
 
 abstract class MeiliSearchIndex {
   String get uid;
@@ -261,6 +262,15 @@ abstract class MeiliSearchIndex {
 
   /// Update sortable attributes of the index.
   Future<Task> updateSortableAttributes(List<String> sortableAttributes);
+
+  /// Get typo tolerance settings of the index.
+  Future<TypoToleranceSettings> getTypoTolerance();
+
+  /// Reset typo tolerance settings of the index.
+  Future<Task> resetTypoTolerance();
+
+  /// Update typo tolerance settings of the index.
+  Future<Task> updateTypoTolerance(TypoToleranceSettings typoTolerance);
 
   /// Reset the settings of the index.
   /// All settings will be reset to their default value.

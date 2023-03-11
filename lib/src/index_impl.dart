@@ -584,8 +584,38 @@ class MeiliSearchIndexImpl implements MeiliSearchIndex {
 
   @override
   Future<Task> updateSortableAttributes(List<String> sortableAttributes) async {
-    return _getTask(http.putMethod('/indexes/$uid/settings/sortable-attributes',
-        data: sortableAttributes));
+    return _getTask(
+      http.putMethod(
+        '/indexes/$uid/settings/sortable-attributes',
+        data: sortableAttributes,
+      ),
+    );
+  }
+
+  @override
+  Future<TypoToleranceSettings> getTypoTolerance() async {
+    final response = await http.getMethod<Map<String, Object?>>(
+      '/indexes/$uid/settings/typo-tolerance',
+    );
+
+    return TypoToleranceSettings.fromMap(response.data!);
+  }
+
+  @override
+  Future<Task> resetTypoTolerance() async {
+    return await _getTask(
+      http.deleteMethod('/indexes/$uid/settings/typo-tolerance'),
+    );
+  }
+
+  @override
+  Future<Task> updateTypoTolerance(TypoToleranceSettings typoTolerance) async {
+    return await _getTask(
+      http.putMethod(
+        '/indexes/$uid/settings/typo-tolerance',
+        data: typoTolerance.toMap(),
+      ),
+    );
   }
 
   ///
