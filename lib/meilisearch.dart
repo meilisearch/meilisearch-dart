@@ -4,6 +4,7 @@ export 'src/client.dart';
 export 'src/index.dart';
 export 'src/index_settings.dart';
 export 'src/typo_tolerance.dart';
+export 'src/pagination_settings.dart';
 export 'src/min_word_size_for_typos.dart';
 export 'src/search_result.dart';
 export 'src/paginated_search_result.dart';

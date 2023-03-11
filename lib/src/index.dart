@@ -7,6 +7,7 @@ import 'package:meilisearch/src/tasks_results.dart';
 import 'index_settings.dart';
 
 import 'matching_strategy_enum.dart';
+import 'pagination_settings.dart';
 import 'stats.dart' show IndexStats;
 import 'task.dart';
 import 'typo_tolerance.dart';
@@ -271,6 +272,15 @@ abstract class MeiliSearchIndex {
 
   /// Update typo tolerance settings of the index.
   Future<Task> updateTypoTolerance(TypoToleranceSettings typoTolerance);
+
+  /// Get pagination settings of the index.
+  Future<PaginationSettings> getPagination();
+
+  /// Reset pagination settings of the index.
+  Future<Task> resetPagination();
+
+  /// Update pagination settings of the index.
+  Future<Task> updatePagination(PaginationSettings pagination);
 
   /// Reset the settings of the index.
   /// All settings will be reset to their default value.

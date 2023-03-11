@@ -618,6 +618,32 @@ class MeiliSearchIndexImpl implements MeiliSearchIndex {
     );
   }
 
+  @override
+  Future<PaginationSettings> getPagination() async {
+    final response = await http.getMethod<Map<String, Object?>>(
+      '/indexes/$uid/settings/pagination',
+    );
+
+    return PaginationSettings.fromMap(response.data!);
+  }
+
+  @override
+  Future<Task> resetPagination() async {
+    return await _getTask(
+      http.deleteMethod('/indexes/$uid/settings/pagination'),
+    );
+  }
+
+  @override
+  Future<Task> updatePagination(PaginationSettings pagination) async {
+    return await _getTask(
+      http.putMethod(
+        '/indexes/$uid/settings/pagination',
+        data: pagination.toMap(),
+      ),
+    );
+  }
+
   ///
   /// Stats endponts
   ///

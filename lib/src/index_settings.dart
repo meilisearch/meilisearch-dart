@@ -1,3 +1,4 @@
+import 'pagination_settings.dart';
 import 'typo_tolerance.dart';
 
 class IndexSettings {
@@ -11,6 +12,7 @@ class IndexSettings {
     this.searchableAttributes = allAttributes,
     this.displayedAttributes = allAttributes,
     this.typoTolerance,
+    this.pagination,
   });
 
   static const allAttributes = <String>['*'];
@@ -41,6 +43,9 @@ class IndexSettings {
 
   /// Customize typo tolerance feature.
   TypoToleranceSettings? typoTolerance;
+  
+  ///Customize pagination feature.
+  PaginationSettings? pagination;
 
   Map<String, Object?> toMap() => <String, Object?>{
         'synonyms': synonyms,
@@ -51,11 +56,13 @@ class IndexSettings {
         'searchableAttributes': searchableAttributes,
         'displayedAttributes': displayedAttributes,
         'sortableAttributes': sortableAttributes,
-        'typoTolerance': typoTolerance?.toMap()
+        'typoTolerance': typoTolerance?.toMap(),
+        'pagination': pagination?.toMap(),
       };
 
   factory IndexSettings.fromMap(Map<String, Object?> map) {
     final typoTolerance = map['typoTolerance'];
+    final pagination = map['pagination'];
     return IndexSettings(
       synonyms: (map['synonyms'] as Map?)
           ?.cast<String, List<Object?>>()
@@ -72,6 +79,9 @@ class IndexSettings {
       sortableAttributes: (map['sortableAttributes'] as List?)?.cast<String>(),
       typoTolerance: typoTolerance is Map<String, Object?>
           ? TypoToleranceSettings.fromMap(typoTolerance)
+          : null,
+      pagination: pagination is Map<String, Object?>
+          ? PaginationSettings.fromMap(pagination)
           : null,
     );
   }
