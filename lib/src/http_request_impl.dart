@@ -6,8 +6,12 @@ import 'exception.dart';
 const bool _kIsWeb = bool.fromEnvironment('dart.library.js_util');
 
 class HttpRequestImpl implements HttpRequest {
-  HttpRequestImpl(this.serverUrl, this.apiKey, [this.connectTimeout])
-      : dio = Dio(
+  HttpRequestImpl(
+    this.serverUrl,
+    this.apiKey, [
+    this.connectTimeout,
+    HttpClientAdapter? adapter,
+  ]) : dio = Dio(
           BaseOptions(
             baseUrl: serverUrl,
             headers: <String, Object>{
@@ -21,7 +25,11 @@ class HttpRequestImpl implements HttpRequest {
             responseType: ResponseType.json,
             connectTimeout: connectTimeout ?? Duration(seconds: 5),
           ),
-        );
+        ) {
+    if (adapter != null) {
+      dio.httpClientAdapter = adapter;
+    }
+  }
 
   @override
   final String serverUrl;

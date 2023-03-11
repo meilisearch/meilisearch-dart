@@ -3,6 +3,7 @@ import 'dart:io';
 import 'dart:math';
 
 import 'package:crypto/crypto.dart';
+import 'package:dio_http2_adapter/dio_http2_adapter.dart';
 import 'package:meilisearch/src/http_request_impl.dart';
 import 'package:meilisearch/src/http_request.dart';
 import 'package:meilisearch/meilisearch.dart';
@@ -30,11 +31,23 @@ Future<void> deleteAllKeys() async {
   }
 }
 
-Future<void> setUpClient() async {
+Future<void> setUpClient({bool isHttp2 = false}) async {
   setUp(() {
     final String server = testServer;
-
-    client = MeiliSearchClient(server, 'masterKey');
+    const masterKey = 'masterKey';
+    client = isHttp2
+        ? MeiliSearchClient.withHttpAdapter(
+            server,
+            apiKey: masterKey,
+            adapter: Http2Adapter(
+              ConnectionManager(
+                // Ignore bad certificate
+                onClientCreate: (_, config) =>
+                    config.onBadCertificate = (_) => true,
+              ),
+            ),
+          )
+        : MeiliSearchClient(server, masterKey);
     random = Random();
   });
 
