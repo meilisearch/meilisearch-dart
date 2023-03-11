@@ -1,3 +1,15 @@
+List<Map<String, Object?>> dynamicBooks(int count) {
+  final tags = List.generate(4, (index) => "Tag $index");
+  return List.generate(
+    count,
+    (index) => {
+      'book_id': index,
+      'title': 'Book $index',
+      'tag': tags[index % tags.length],
+    },
+  );
+}
+
 final books = [
   {'book_id': 123, 'title': 'Pride and Prejudice', 'tag': 'Romance'},
   {'book_id': 456, 'title': 'Le Petit Prince', 'tag': 'Tale'},

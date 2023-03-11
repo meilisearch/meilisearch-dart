@@ -60,10 +60,26 @@ abstract class MeiliSearchIndex {
     String? primaryKey,
   });
 
+  /// Add a list of documents in batches of size [batchSize] by given [documents] and optional [primaryKey] parameter.
+  /// If index is not exists tries to create a new index and adds documents.
+  Future<List<Task>> addDocumentsInBatches(
+    List<Map<String, Object?>> documents, {
+    int batchSize = 1000,
+    String? primaryKey,
+  });
+
   /// Add a list of documents or update them if they already exist by given [documents] and optional [primaryKey] parameter.
   /// If index is not exists tries to create a new index and adds documents.
   Future<Task> updateDocuments(
     List<Map<String, Object?>> documents, {
+    String? primaryKey,
+  });
+
+  /// Add a list of documents or update them if they already exist in batches of size [batchSize] by given [documents] and optional [primaryKey] parameter.
+  /// If index is not exists tries to create a new index and adds documents.
+  Future<List<Task>> updateDocumentsInBatches(
+    List<Map<String, Object?>> documents, {
+    int batchSize = 1000,
     String? primaryKey,
   });
 
