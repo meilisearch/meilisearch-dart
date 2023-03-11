@@ -43,7 +43,7 @@ class IndexSettings {
 
   /// Customize typo tolerance feature.
   TypoToleranceSettings? typoTolerance;
-  
+
   ///Customize pagination feature.
   PaginationSettings? pagination;
 
