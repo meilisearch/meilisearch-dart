@@ -1,17 +1,16 @@
+import 'dart:convert';
+
 import 'package:dio/dio.dart';
-import 'package:meilisearch/src/query_parameters/documents_query.dart';
-import 'package:meilisearch/src/query_parameters/tasks_query.dart';
+import 'package:meilisearch/meilisearch.dart';
 import 'package:meilisearch/src/result.dart';
 import 'package:meilisearch/src/searchable.dart';
 import 'package:meilisearch/src/tasks_results.dart';
 import 'package:collection/collection.dart';
-import 'client.dart';
-import 'index.dart';
 import 'http_request.dart';
-import 'index_settings.dart';
-import 'matching_strategy_enum.dart';
 import 'stats.dart' show IndexStats;
-import 'task.dart';
+
+const _ndjsonContentType = 'application/x-ndjson';
+const _csvContentType = 'text/csv';
 
 class MeiliSearchIndexImpl implements MeiliSearchIndex {
   MeiliSearchIndexImpl(
@@ -72,12 +71,12 @@ class MeiliSearchIndexImpl implements MeiliSearchIndex {
       if (primaryKey != null) 'primaryKey': primaryKey,
     };
 
-    return await _update(http.patchMethod('/indexes/$uid', data: data));
+    return await _getTask(http.patchMethod('/indexes/$uid', data: data));
   }
 
   @override
   Future<Task> delete() async {
-    return await _update(http.deleteMethod('/indexes/$uid'));
+    return await _getTask(http.deleteMethod('/indexes/$uid'));
   }
 
   @override
@@ -149,7 +148,7 @@ class MeiliSearchIndexImpl implements MeiliSearchIndex {
   // Document endpoints
   //
 
-  Future<Task> _update(Future<Response<Map<String, Object?>>> future) async {
+  Future<Task> _getTask(Future<Response<Map<String, Object?>>> future) async {
     final response = await future;
     return Task.fromMap(response.data!);
   }
@@ -158,14 +157,101 @@ class MeiliSearchIndexImpl implements MeiliSearchIndex {
   Future<Task> addDocuments(
     documents, {
     String? primaryKey,
-  }) async {
-    return await _update(http.postMethod(
+  }) {
+    return _getTask(http.postMethod(
       '/indexes/$uid/documents',
       data: documents,
       queryParameters: {
         if (primaryKey != null) 'primaryKey': primaryKey,
       },
     ));
+  }
+
+  @override
+  Future<Task> addDocumentsJson(String documents, {String? primaryKey}) {
+    final decoded = jsonDecode(documents);
+    if (decoded is List<Object?>) {
+      final casted = decoded.whereType<Map<String, Object?>>().toList();
+      return addDocuments(casted, primaryKey: primaryKey);
+    }
+    throw MeiliSearchApiException(
+      "Provided json must be an array of documents, consider using addDocumentsNdjson if this isn't the case",
+    );
+  }
+
+  @override
+  Future<Task> addDocumentsCsv(
+    String documents, {
+    String? primaryKey,
+  }) {
+    return _getTask(http.postMethod(
+      '/indexes/$uid/documents',
+      data: documents,
+      queryParameters: {
+        if (primaryKey != null) 'primaryKey': primaryKey,
+      },
+      contentType: _csvContentType,
+    ));
+  }
+
+  @override
+  Future<Task> addDocumentsNdjson(String documents, {String? primaryKey}) {
+    return _getTask(http.postMethod(
+      '/indexes/$uid/documents',
+      data: documents,
+      queryParameters: {
+        if (primaryKey != null) 'primaryKey': primaryKey,
+      },
+      contentType: _ndjsonContentType,
+    ));
+  }
+
+  @override
+  Future<List<Task>> addDocumentsInBatches(
+    List<Map<String, Object?>> documents, {
+    int batchSize = 1000,
+    String? primaryKey,
+  }) =>
+      Future.wait(
+        documents
+            .slices(batchSize)
+            .map((slice) => addDocuments(slice, primaryKey: primaryKey)),
+      );
+
+  @override
+  Future<List<Task>> addDocumentsCsvInBatches(
+    String documents, {
+    String? primaryKey,
+    int batchSize = 1000,
+  }) {
+    final ls = LineSplitter();
+    final split = ls.convert(documents);
+    return Future.wait(
+      split.slices(batchSize).map(
+            (slice) => addDocumentsCsv(
+              slice.join('\n'),
+              primaryKey: primaryKey,
+            ),
+          ),
+    );
+  }
+
+  @override
+  Future<List<Task>> addDocumentsNdjsonInBatches(
+    String documents, {
+    String? primaryKey,
+    int batchSize = 1000,
+  }) {
+    final ls = LineSplitter();
+    final split = ls.convert(documents);
+    return Future.wait(
+      split.slices(batchSize).map(
+            (slice) => addDocumentsNdjson(
+              slice.join('\n'),
+              primaryKey: primaryKey,
+            ),
+          ),
+    );
   }
 
   @override
@@ -173,7 +259,7 @@ class MeiliSearchIndexImpl implements MeiliSearchIndex {
     documents, {
     String? primaryKey,
   }) async {
-    return await _update(http.putMethod(
+    return await _getTask(http.putMethod(
       '/indexes/$uid/documents',
       data: documents,
       queryParameters: {
@@ -183,18 +269,105 @@ class MeiliSearchIndexImpl implements MeiliSearchIndex {
   }
 
   @override
+  Future<Task> updateDocumentsJson(
+    String documents, {
+    String? primaryKey,
+  }) {
+    final decoded = jsonDecode(documents);
+    if (decoded is List<Object?>) {
+      final casted = decoded.whereType<Map<String, Object?>>().toList();
+      return updateDocuments(casted, primaryKey: primaryKey);
+    }
+    throw MeiliSearchApiException(
+      "Provided json must be an array of documents, consider using updateDocumentsNdjson if this isn't the case",
+    );
+  }
+
+  @override
+  Future<Task> updateDocumentsCsv(String documents, {String? primaryKey}) {
+    return _getTask(http.putMethod(
+      '/indexes/$uid/documents',
+      data: documents,
+      queryParameters: {
+        if (primaryKey != null) 'primaryKey': primaryKey,
+      },
+      contentType: _csvContentType,
+    ));
+  }
+
+  @override
+  Future<Task> updateDocumentsNdjson(String documents, {String? primaryKey}) {
+    return _getTask(http.putMethod(
+      '/indexes/$uid/documents',
+      data: documents,
+      queryParameters: {
+        if (primaryKey != null) 'primaryKey': primaryKey,
+      },
+      contentType: _ndjsonContentType,
+    ));
+  }
+
+  @override
+  Future<List<Task>> updateDocumentsInBatches(
+    List<Map<String, Object?>> documents, {
+    int batchSize = 1000,
+    String? primaryKey,
+  }) =>
+      Future.wait(
+        documents
+            .slices(batchSize)
+            .map((slice) => updateDocuments(slice, primaryKey: primaryKey)),
+      );
+
+  @override
+  Future<List<Task>> updateDocumentsCsvInBatches(
+    String documents, {
+    String? primaryKey,
+    int batchSize = 1000,
+  }) {
+    final ls = LineSplitter();
+    final split = ls.convert(documents);
+    return Future.wait(
+      split.slices(batchSize).map(
+            (slice) => updateDocumentsCsv(
+              slice.join('\n'),
+              primaryKey: primaryKey,
+            ),
+          ),
+    );
+  }
+
+  @override
+  Future<List<Task>> updateDocumentsNdjsonInBatches(
+    String documents, {
+    String? primaryKey,
+    int batchSize = 1000,
+  }) {
+    final ls = LineSplitter();
+    final split = ls.convert(documents);
+    return Future.wait(
+      split.slices(batchSize).map(
+            (slice) => updateDocumentsNdjson(
+              slice.join('\n'),
+              primaryKey: primaryKey,
+            ),
+          ),
+    );
+  }
+
+  @override
   Future<Task> deleteAllDocuments() async {
-    return await _update(http.deleteMethod('/indexes/$uid/documents'));
+    return await _getTask(http.deleteMethod('/indexes/$uid/documents'));
   }
 
   @override
   Future<Task> deleteDocument(Object? id) async {
-    return await _update(http.deleteMethod('/indexes/$uid/documents/$id'));
+    return await _getTask(http.deleteMethod('/indexes/$uid/documents/$id'));
   }
 
   @override
   Future<Task> deleteDocuments(List<Object> ids) async {
-    return await _update(
+    return await _getTask(
       http.postMethod(
         '/indexes/$uid/documents/delete-batch',
         data: ids,
@@ -237,12 +410,12 @@ class MeiliSearchIndexImpl implements MeiliSearchIndex {
 
   @override
   Future<Task> resetSettings() async {
-    return await _update(http.deleteMethod('/indexes/$uid/settings'));
+    return await _getTask(http.deleteMethod('/indexes/$uid/settings'));
   }
 
   @override
   Future<Task> updateSettings(IndexSettings settings) async {
-    return await _update(http.patchMethod(
+    return await _getTask(http.patchMethod(
       '/indexes/$uid/settings',
       data: settings.toMap(),
     ));
@@ -258,14 +431,14 @@ class MeiliSearchIndexImpl implements MeiliSearchIndex {
 
   @override
   Future<Task> resetFilterableAttributes() async {
-    return await _update(
+    return await _getTask(
         http.deleteMethod('/indexes/$uid/settings/filterable-attributes'));
   }
 
   @override
   Future<Task> updateFilterableAttributes(
       List<String> filterableAttributes) async {
-    return await _update(http.putMethod(
+    return await _getTask(http.putMethod(
         '/indexes/$uid/settings/filterable-attributes',
         data: filterableAttributes));
   }
@@ -280,14 +453,14 @@ class MeiliSearchIndexImpl implements MeiliSearchIndex {
 
   @override
   Future<Task> resetDisplayedAttributes() async {
-    return await _update(
+    return await _getTask(
         http.deleteMethod('/indexes/$uid/settings/displayed-attributes'));
   }
 
   @override
   Future<Task> updateDisplayedAttributes(
       List<String> displayedAttributes) async {
-    return await _update(http.putMethod(
+    return await _getTask(http.putMethod(
         '/indexes/$uid/settings/displayed-attributes',
         data: displayedAttributes));
   }
@@ -302,13 +475,13 @@ class MeiliSearchIndexImpl implements MeiliSearchIndex {
 
   @override
   Future<Task> resetDistinctAttribute() async {
-    return await _update(
+    return await _getTask(
         http.deleteMethod('/indexes/$uid/settings/distinct-attribute'));
   }
 
   @override
   Future<Task> updateDistinctAttribute(String distinctAttribute) async {
-    return await _update(http.putMethod(
+    return await _getTask(http.putMethod(
         '/indexes/$uid/settings/distinct-attribute',
         data: '"$distinctAttribute"'));
   }
@@ -323,13 +496,13 @@ class MeiliSearchIndexImpl implements MeiliSearchIndex {
 
   @override
   Future<Task> resetRankingRules() async {
-    return await _update(
+    return await _getTask(
         http.deleteMethod('/indexes/$uid/settings/ranking-rules'));
   }
 
   @override
   Future<Task> updateRankingRules(List<String> rankingRules) async {
-    return await _update(http.putMethod('/indexes/$uid/settings/ranking-rules',
+    return await _getTask(http.putMethod('/indexes/$uid/settings/ranking-rules',
         data: rankingRules));
   }
 
@@ -343,7 +516,7 @@ class MeiliSearchIndexImpl implements MeiliSearchIndex {
 
   @override
   Future<Task> resetStopWords() async {
-    return await _update(
+    return await _getTask(
         http.deleteMethod('/indexes/$uid/settings/stop-words'));
   }
 
@@ -357,21 +530,21 @@ class MeiliSearchIndexImpl implements MeiliSearchIndex {
 
   @override
   Future<Task> resetSearchableAttributes() async {
-    return await _update(
+    return await _getTask(
         http.deleteMethod('/indexes/$uid/settings/searchable-attributes'));
   }
 
   @override
   Future<Task> updateSearchableAttributes(
       List<String> searchableAttributes) async {
-    return await _update(http.putMethod(
+    return await _getTask(http.putMethod(
         '/indexes/$uid/settings/searchable-attributes',
         data: searchableAttributes));
   }
 
   @override
   Future<Task> updateStopWords(List<String> stopWords) async {
-    return await _update(
+    return await _getTask(
         http.putMethod('/indexes/$uid/settings/stop-words', data: stopWords));
   }
 
@@ -386,12 +559,12 @@ class MeiliSearchIndexImpl implements MeiliSearchIndex {
 
   @override
   Future<Task> resetSynonyms() async {
-    return await _update(http.deleteMethod('/indexes/$uid/settings/synonyms'));
+    return await _getTask(http.deleteMethod('/indexes/$uid/settings/synonyms'));
   }
 
   @override
   Future<Task> updateSynonyms(Map<String, List<String>> synonyms) async {
-    return await _update(
+    return await _getTask(
         http.putMethod('/indexes/$uid/settings/synonyms', data: synonyms));
   }
 
@@ -405,13 +578,13 @@ class MeiliSearchIndexImpl implements MeiliSearchIndex {
 
   @override
   Future<Task> resetSortableAttributes() async {
-    return await _update(
+    return await _getTask(
         http.deleteMethod('/indexes/$uid/settings/sortable-attributes'));
   }
 
   @override
   Future<Task> updateSortableAttributes(List<String> sortableAttributes) async {
-    return _update(http.putMethod('/indexes/$uid/settings/sortable-attributes',
+    return _getTask(http.putMethod('/indexes/$uid/settings/sortable-attributes',
         data: sortableAttributes));
   }
 
@@ -446,28 +619,4 @@ class MeiliSearchIndexImpl implements MeiliSearchIndex {
   Future<Task> getTask(int uid) async {
     return await client.getTask(uid);
   }
-
-  @override
-  Future<List<Task>> addDocumentsInBatches(
-    List<Map<String, Object?>> documents, {
-    int batchSize = 1000,
-    String? primaryKey,
-  }) =>
-      Future.wait(
-        documents
-            .slices(batchSize)
-            .map((slice) => addDocuments(slice, primaryKey: primaryKey)),
-      );
-
-  @override
-  Future<List<Task>> updateDocumentsInBatches(
-    List<Map<String, Object?>> documents, {
-    int batchSize = 1000,
-    String? primaryKey,
-  }) =>
-      Future.wait(
-        documents
-            .slices(batchSize)
-            .map((slice) => updateDocuments(slice, primaryKey: primaryKey)),
-      );
 }

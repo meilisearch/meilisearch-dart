@@ -54,33 +54,128 @@ abstract class MeiliSearchIndex {
   Future<Result<Map<String, Object?>>> getDocuments({DocumentsQuery? params});
 
   /// Add a list of documents by given [documents] and optional [primaryKey] parameter.
-  /// If index is not exists tries to create a new index and adds documents.
+  ///
+  /// If index does not exist, it tries to create a new index and adds documents.
   Future<Task> addDocuments(
     List<Map<String, Object?>> documents, {
     String? primaryKey,
   });
 
+  /// Add a list of documents by given [documents] and optional [primaryKey] parameter
+  ///
+  /// * the passed [documents] must be a valid JSON string representing an array of objects.
+  /// * If index does not exist, it tries to create a new index and adds documents.
+  Future<Task> addDocumentsJson(
+    String documents, {
+    String? primaryKey,
+  });
+
+  /// Add a list of documents by given [documents] and optional [primaryKey] parameter
+  ///
+  /// * The passed [documents] must be a valid CSV string, where each line corresponds to an object.
+  /// * If index does not exist tries to create a new index and adds documents.
+  Future<Task> addDocumentsCsv(
+    String documents, {
+    String? primaryKey,
+  });
+
+  /// Add a list of documents by given [documents] and optional [primaryKey] parameter
+  ///
+  /// the passed [documents] must be a valid Newline Delimited Json (NdJson) string, where each line corresponds to an object.
+  /// If index does not exist tries to create a new index and adds documents.
+  Future<Task> addDocumentsNdjson(
+    String documents, {
+    String? primaryKey,
+  });
+
   /// Add a list of documents in batches of size [batchSize] by given [documents] and optional [primaryKey] parameter.
-  /// If index is not exists tries to create a new index and adds documents.
+  /// If index does not exist tries to create a new index and adds documents.
   Future<List<Task>> addDocumentsInBatches(
     List<Map<String, Object?>> documents, {
     int batchSize = 1000,
     String? primaryKey,
   });
 
+  /// Add a list of documents in batches of size [batchSize] by given [documents] and optional [primaryKey] parameter.
+  ///
+  /// * The passed [documents] must be a valid CSV string, where each line corresponds to an object.
+  /// * If index does not exist tries to create a new index and adds documents.
+  Future<List<Task>> addDocumentsCsvInBatches(
+    String documents, {
+    String? primaryKey,
+    int batchSize = 1000,
+  });
+
+  /// Add a list of documents in batches of size [batchSize] by given [documents] and optional [primaryKey] parameter.
+  ///
+  /// * The passed [documents] must be a valid Newline Delimited Json (NdJson) string, where each line corresponds to an object.
+  /// * If index does not exist tries to create a new index and adds documents.
+  Future<List<Task>> addDocumentsNdjsonInBatches(
+    String documents, {
+    String? primaryKey,
+    int batchSize = 1000,
+  });
+
   /// Add a list of documents or update them if they already exist by given [documents] and optional [primaryKey] parameter.
-  /// If index is not exists tries to create a new index and adds documents.
+  /// If index does not exist tries to create a new index and adds documents.
   Future<Task> updateDocuments(
     List<Map<String, Object?>> documents, {
     String? primaryKey,
   });
 
+  /// Add a list of documents or update them if they already exist by given [documents] and optional [primaryKey] parameter.
+  ///
+  /// * the passed [documents] must be a valid JSON string representing an array of objects.
+  /// * If index does not exist, it tries to create a new index and adds documents.
+  Future<Task> updateDocumentsJson(
+    String documents, {
+    String? primaryKey,
+  });
+
+  /// Add a list of documents or update them if they already exist by given [documents] and optional [primaryKey] parameter.
+  ///
+  /// * The passed [documents] must be a valid Newline Delimited Json (NdJson) string, where each line corresponds to an object.
+  /// * If index does not exist, it tries to create a new index and adds documents.
+  Future<Task> updateDocumentsNdjson(
+    String documents, {
+    String? primaryKey,
+  });
+
+  /// Add a list of documents or update them if they already exist by given [documents] and optional [primaryKey] parameter.
+  ///
+  /// * The passed [documents] must be a valid CSV string, where each line corresponds to an object.
+  /// * If index does not exist, it tries to create a new index and adds documents.
+  Future<Task> updateDocumentsCsv(
+    String documents, {
+    String? primaryKey,
+  });
+
   /// Add a list of documents or update them if they already exist in batches of size [batchSize] by given [documents] and optional [primaryKey] parameter.
-  /// If index is not exists tries to create a new index and adds documents.
+  /// If index does not exist tries to create a new index and adds documents.
   Future<List<Task>> updateDocumentsInBatches(
     List<Map<String, Object?>> documents, {
     int batchSize = 1000,
     String? primaryKey,
+  });
+
+  /// Add a list of documents or update them if they already exist in batches of size [batchSize] by given [documents] and optional [primaryKey] parameter.
+  ///
+  /// * The passed [documents] must be a valid CSV string, where each line corresponds to an object.
+  /// * If index does not exist, it tries to create a new index and adds documents.
+  Future<List<Task>> updateDocumentsCsvInBatches(
+    String documents, {
+    String? primaryKey,
+    int batchSize = 1000,
+  });
+
+  /// Add a list of documents or update them if they already exist in batches of size [batchSize] by given [documents] and optional [primaryKey] parameter.
+  ///
+  /// * The passed [documents] must be a valid Newline Delimited Json (NdJson) string, where each line corresponds to an object.
+  /// * If index does not exist, it tries to create a new index and adds documents.
+  Future<List<Task>> updateDocumentsNdjsonInBatches(
+    String documents, {
+    String? primaryKey,
+    int batchSize = 1000,
   });
 
   /// Delete one document by given [id].
