@@ -1,13 +1,15 @@
 import 'dart:convert';
 
-import 'package:dio/dio.dart';
-import 'package:meilisearch/meilisearch.dart';
-import 'package:meilisearch/src/result.dart';
-import 'package:meilisearch/src/searchable.dart';
-import 'package:meilisearch/src/tasks_results.dart';
 import 'package:collection/collection.dart';
+import 'package:dio/dio.dart';
+
+import 'package:meilisearch/meilisearch.dart';
+
 import 'http_request.dart';
+import 'result.dart';
+import 'searchable.dart';
 import 'stats.dart' show IndexStats;
+import 'tasks_results.dart';
 
 const _ndjsonContentType = 'application/x-ndjson';
 const _csvContentType = 'text/csv';
@@ -640,6 +642,32 @@ class MeiliSearchIndexImpl implements MeiliSearchIndex {
       http.putMethod(
         '/indexes/$uid/settings/pagination',
         data: pagination.toMap(),
+      ),
+    );
+  }
+
+  @override
+  Future<FacetingSettings> getFaceting() async {
+    final response = await http.getMethod<Map<String, Object?>>(
+      '/indexes/$uid/settings/faceting',
+    );
+
+    return FacetingSettings.fromMap(response.data!);
+  }
+
+  @override
+  Future<Task> resetFaceting() async {
+    return await _getTask(
+      http.deleteMethod('/indexes/$uid/settings/faceting'),
+    );
+  }
+
+  @override
+  Future<Task> updateFaceting(FacetingSettings faceting) async {
+    return await _getTask(
+      http.putMethod(
+        '/indexes/$uid/settings/faceting',
+        data: faceting.toMap(),
       ),
     );
   }
