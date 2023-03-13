@@ -1,5 +1,4 @@
 import 'package:meilisearch/meilisearch.dart';
-import 'package:meilisearch/src/version.dart';
 import 'package:test/test.dart';
 
 void main() {
@@ -110,22 +109,23 @@ void main() {
         final expr2 = 'tag'.toMeiliAttribute().eq("Tale".toMeiliValue());
         final expr = expr1.and(expr2);
         expect(expr.transform(), "(book_id < 100) AND (tag = \"Tale\")");
-      });      
+      });
       test("Three expressions", () {
         final expr1 = 'book_id'.toMeiliAttribute().lt(100.toMeiliValue());
         final expr2 = 'tag'.toMeiliAttribute().eq("Tale".toMeiliValue());
-        final expr3 = 'tag'.toMeiliAttribute().isNotNull();
+        final expr3 = 'tag'.toMeiliAttribute().exists();
         final expr = expr1.andList([expr2, expr3]);
         expect(expr.transform(),
-            "(book_id < 100) AND (tag = \"Tale\") AND (tag NOT NULL)");
+            "(book_id < 100) AND (tag = \"Tale\") AND (tag EXISTS)");
       });
     });
     group('[OR]', () {});
 
-    test("[NULL]", () {
-      final expr = "tag".toMeiliAttribute().isNull();
-      expect(expr.transform(), "tag NULL");
-    });
+    /// TODO(ahmednfwela): waiting for Meili V1.2.0
+    // test("[NULL]", () {
+    //   final expr = "tag".toMeiliAttribute().isNull();
+    //   expect(expr.transform(), "tag NULL");
+    // });
   });
 }
 

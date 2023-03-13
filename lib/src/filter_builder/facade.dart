@@ -83,12 +83,13 @@ class Meili {
           MeiliAttributeExpression attribute) =>
       MeiliNotExistsOperatorExpression(attribute);
 
-  static MeiliNullOperatorExpression isNull(
-          MeiliAttributeExpression attribute) =>
-      MeiliNullOperatorExpression(attribute);
-  static MeiliNotNullOperatorExpression isNotNull(
-          MeiliAttributeExpression attribute) =>
-      MeiliNotNullOperatorExpression(attribute);
+  /// TODO(ahmednfwela): waiting for Meili V1.2.0
+  // static MeiliNullOperatorExpression isNull(
+  //         MeiliAttributeExpression attribute) =>
+  //     MeiliNullOperatorExpression(attribute);
+  // static MeiliNotNullOperatorExpression isNotNull(
+  //         MeiliAttributeExpression attribute) =>
+  //     MeiliNotNullOperatorExpression(attribute);
   static MeiliNotOperatorExpression not(MeiliOperatorExpressionBase operator) =>
       MeiliNotOperatorExpression(operator);
   static MeiliInOperatorExpression $in(MeiliAttributeExpression attribute,
@@ -161,8 +162,9 @@ extension MeiliAttributesExt on MeiliAttributeExpression {
   MeiliExistsOperatorExpression exists() => Meili.exists(this);
   MeiliNotExistsOperatorExpression notExists() => Meili.notExists(this);
 
-  MeiliNullOperatorExpression isNull() => Meili.isNull(this);
-  MeiliNotNullOperatorExpression isNotNull() => Meili.isNotNull(this);
+  /// TODO(ahmednfwela): waiting for Meili V1.2.0
+  // MeiliNullOperatorExpression isNull() => Meili.isNull(this);
+  // MeiliNotNullOperatorExpression isNotNull() => Meili.isNotNull(this);
   MeiliInOperatorExpression $in(List<MeiliValueExpressionBase> values) =>
       Meili.$in(this, values);
 }

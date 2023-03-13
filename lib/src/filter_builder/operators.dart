@@ -120,6 +120,7 @@ class MeiliExistsOperatorExpression extends MeiliOperatorExpressionBase {
     return "${attribute.transform()} EXISTS";
   }
 }
+
 class MeiliNotExistsOperatorExpression extends MeiliOperatorExpressionBase {
   final MeiliAttributeExpression attribute;
 
@@ -130,26 +131,28 @@ class MeiliNotExistsOperatorExpression extends MeiliOperatorExpressionBase {
     return "${attribute.transform()} NOT EXISTS";
   }
 }
-class MeiliNullOperatorExpression extends MeiliOperatorExpressionBase {
-  final MeiliAttributeExpression attribute;
 
-  const MeiliNullOperatorExpression(this.attribute);
+/// TODO(ahmednfwela): waiting for Meili V1.2.0
+// class MeiliNullOperatorExpression extends MeiliOperatorExpressionBase {
+//   final MeiliAttributeExpression attribute;
 
-  @override
-  String transform() {
-    return "${attribute.transform()} NULL";
-  }
-}
-class MeiliNotNullOperatorExpression extends MeiliOperatorExpressionBase {
-  final MeiliAttributeExpression attribute;
+//   const MeiliNullOperatorExpression(this.attribute);
 
-  const MeiliNotNullOperatorExpression(this.attribute);
+//   @override
+//   String transform() {
+//     return "${attribute.transform()} NULL";
+//   }
+// }
+// class MeiliNotNullOperatorExpression extends MeiliOperatorExpressionBase {
+//   final MeiliAttributeExpression attribute;
 
-  @override
-  String transform() {
-    return "${attribute.transform()} NOT NULL";
-  }
-}
+//   const MeiliNotNullOperatorExpression(this.attribute);
+
+//   @override
+//   String transform() {
+//     return "${attribute.transform()} NOT NULL";
+//   }
+// }
 
 class MeiliNotOperatorExpression extends MeiliOperatorExpressionBase {
   final MeiliOperatorExpressionBase operator;
