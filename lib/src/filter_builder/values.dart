@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'filter_builder_base.dart';
 
 class MeiliNumberValueExpression extends MeiliValueExpressionBase {
@@ -6,10 +8,7 @@ class MeiliNumberValueExpression extends MeiliValueExpressionBase {
   const MeiliNumberValueExpression(this.value);
 
   @override
-  String transform() {
-    //TODO(ahmednfwela): what is the proper way to handle decimals ?
-    return value.toString();
-  }
+  String transform() => value.toString();
 
   @override
   bool operator ==(Object other) {
@@ -68,18 +67,9 @@ class MeiliStringValueExpression extends MeiliValueExpressionBase {
 
   const MeiliStringValueExpression(this.value);
 
-  String escapeValue(String value) {
-    //TODO(ahmednfwela): write a proper escape algorithm, maybe using regex
-    return value.replaceAll(r'\', r'\\').replaceAll(r"'", r"\'");
-  }
-
   @override
   String transform() {
-   return StringBuffer()
-    ..write("'")
-    ..write(escapeValue(value))
-    ..write("'")
-    ..toString();
+    return jsonEncode(value);
   }
 
   @override

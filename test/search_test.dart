@@ -1,4 +1,5 @@
 import 'package:meilisearch/meilisearch.dart';
+import 'package:meilisearch/src/version.dart';
 import 'package:test/test.dart';
 
 import 'utils/books.dart';
@@ -126,6 +127,19 @@ void main() {
         expect(response.status, 'succeeded');
         var result = await index.search('prince', filter: 'tag = Tale');
         expect(result.hits, hasLength(1));
+      });
+      
+      test('filter parameter is null', () async {
+        var index = await createBooksIndex();
+        var response = await index
+            .updateSettings(IndexSettings(
+              filterableAttributes: ['tag'],
+            ))
+            .waitFor(client: client);
+        expect(response.status, 'succeeded');
+        var result = await index.search('The Hobbit', filter: "tag NULL");
+        expect(result.hits, hasLength(1));
+        expect(result.hits!.first["book_id"], equals(9999));
       });
 
       test('filter parameter with spaces', () async {

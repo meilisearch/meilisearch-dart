@@ -1,4 +1,5 @@
 import 'package:meilisearch/meilisearch.dart';
+import 'package:meilisearch/src/version.dart';
 import 'package:test/test.dart';
 
 void main() {
@@ -20,8 +21,8 @@ void main() {
           "hello",
           "hello!",
           "hello spaces",
-          ["needs escapin' ", r"needs escapin\' "],
-          "doesn\"t need escape",
+          "doesn't need escape",
+          ['needs escape"', 'needs escape\\"'],
           [r"fe\male", r'fe\\male'],
         ];
 
@@ -30,9 +31,9 @@ void main() {
             final value = element.first;
             final expected = element.last;
 
-            expect(value.toMeiliValue().transform(), equals("'$expected'"));
+            expect(value.toMeiliValue().transform(), equals("\"$expected\""));
           } else if (element is String) {
-            expect(element.toMeiliValue().transform(), equals("'$element'"));
+            expect(element.toMeiliValue().transform(), equals("\"$element\""));
           }
         }
       });
@@ -90,16 +91,41 @@ void main() {
 
       test("Arbitrary", () {
         expect(Meili.value(_ArbitraryClass()).transform(),
-            equals('\'ArbitraryString\''));
+            equals('"ArbitraryString"'));
       });
     });
 
     group('[AND]', () {
-      // final exp1 = 'book_id'.toMeiliAttribute().lt(100.toMeiliValue()).and(
-      //       'tag'.toMeiliAttribute().eq("Tale".toMeiliValue()),
-      //     );
+      test("No expressions", () {
+        final and = Meili.and([]);
+        expect(and.transform(), equals(""));
+      });
+      test("One expressions", () {
+        final expr1 = 'book_id'.toMeiliAttribute().lt(100.toMeiliValue());
+        final and = Meili.and([expr1]);
+        expect(and.transform(), equals(expr1.transform()));
+      });
+      test("Two expressions", () {
+        final expr1 = 'book_id'.toMeiliAttribute().lt(100.toMeiliValue());
+        final expr2 = 'tag'.toMeiliAttribute().eq("Tale".toMeiliValue());
+        final expr = expr1.and(expr2);
+        expect(expr.transform(), "(book_id < 100) AND (tag = \"Tale\")");
+      });      
+      test("Three expressions", () {
+        final expr1 = 'book_id'.toMeiliAttribute().lt(100.toMeiliValue());
+        final expr2 = 'tag'.toMeiliAttribute().eq("Tale".toMeiliValue());
+        final expr3 = 'tag'.toMeiliAttribute().isNotNull();
+        final expr = expr1.andList([expr2, expr3]);
+        expect(expr.transform(),
+            "(book_id < 100) AND (tag = \"Tale\") AND (tag NOT NULL)");
+      });
     });
     group('[OR]', () {});
+
+    test("[NULL]", () {
+      final expr = "tag".toMeiliAttribute().isNull();
+      expect(expr.transform(), "tag NULL");
+    });
   });
 }
 

@@ -120,6 +120,36 @@ class MeiliExistsOperatorExpression extends MeiliOperatorExpressionBase {
     return "${attribute.transform()} EXISTS";
   }
 }
+class MeiliNotExistsOperatorExpression extends MeiliOperatorExpressionBase {
+  final MeiliAttributeExpression attribute;
+
+  const MeiliNotExistsOperatorExpression(this.attribute);
+
+  @override
+  String transform() {
+    return "${attribute.transform()} NOT EXISTS";
+  }
+}
+class MeiliNullOperatorExpression extends MeiliOperatorExpressionBase {
+  final MeiliAttributeExpression attribute;
+
+  const MeiliNullOperatorExpression(this.attribute);
+
+  @override
+  String transform() {
+    return "${attribute.transform()} NULL";
+  }
+}
+class MeiliNotNullOperatorExpression extends MeiliOperatorExpressionBase {
+  final MeiliAttributeExpression attribute;
+
+  const MeiliNotNullOperatorExpression(this.attribute);
+
+  @override
+  String transform() {
+    return "${attribute.transform()} NOT NULL";
+  }
+}
 
 class MeiliNotOperatorExpression extends MeiliOperatorExpressionBase {
   final MeiliOperatorExpressionBase operator;
