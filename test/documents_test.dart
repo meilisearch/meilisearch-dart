@@ -28,7 +28,7 @@ void main() {
       );
 
       expect(tasks.length, chunks);
-      await tasks.waitFor(client: client);
+      await tasks.waitFor(client: client, timeout: Duration(seconds: 30));
       final docs = await index.getDocuments();
       expect(docs.total, totalCount);
     });
@@ -71,7 +71,7 @@ void main() {
       );
 
       expect(tasks.length, chunks);
-      await tasks.waitFor(client: client);
+      await tasks.waitFor(client: client, timeout: Duration(seconds: 30));
       final docs = await index.getDocuments();
       expect(docs.total, totalCount);
       docs.results.map((element) {

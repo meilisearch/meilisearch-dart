@@ -39,7 +39,7 @@ extension TaskWaiterForLists on Iterable<Task> {
       var taskRes =
           await client.getTasks(params: TasksQuery(uids: remainingUids));
       final tasks = taskRes.results;
-      final completed = tasks.where((e) => statuses.contains(e.status));
+      final completed = tasks.where((e) => !statuses.contains(e.status));
 
       completedTasks.addEntries(completed.map((e) => MapEntry(e.uid!, e)));
       remainingUids
