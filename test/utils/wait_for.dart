@@ -33,15 +33,18 @@ extension TaskWaiterForLists on Iterable<Task> {
     final originalUids = toList();
     final remainingUids = map((e) => e.uid).whereNotNull().toList();
     final completedTasks = <int, Task>{};
+    final statuses = ['enqueued', 'processing'];
+
     while (DateTime.now().isBefore(endingTime)) {
       var taskRes =
           await client.getTasks(params: TasksQuery(uids: remainingUids));
       final tasks = taskRes.results;
-      final completed = tasks.where((element) =>
-          element.status != 'enqueued' && element.status != 'processing');
+      final completed = tasks.where((e) => statuses.contains(e.status));
+
       completedTasks.addEntries(completed.map((e) => MapEntry(e.uid!, e)));
       remainingUids
           .removeWhere((element) => completedTasks.containsKey(element));
+
       if (remainingUids.isEmpty) {
         return originalUids
             .map((e) => completedTasks[e.uid])

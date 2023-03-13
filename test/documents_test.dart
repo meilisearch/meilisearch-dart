@@ -26,6 +26,7 @@ void main() {
         dynamicBooks(totalCount),
         batchSize: batchSize,
       );
+
       expect(tasks.length, chunks);
       await tasks.waitFor(client: client);
       final docs = await index.getDocuments();
@@ -57,6 +58,7 @@ void main() {
       const chunks = 3;
       const totalCount = (batchSize * 2) + 1;
       final index = await createDynamicBooksIndex(count: totalCount);
+
       final tasks = await index.updateDocumentsInBatches(
         List.generate(
           totalCount,
@@ -67,6 +69,7 @@ void main() {
         ),
         batchSize: batchSize,
       );
+
       expect(tasks.length, chunks);
       await tasks.waitFor(client: client);
       final docs = await index.getDocuments();
