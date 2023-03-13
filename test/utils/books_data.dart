@@ -24,7 +24,8 @@ final books = [
     'book_id': 42,
     'title': 'The Hitchhiker\'s Guide to the Galaxy',
     'tag': 'Epic fantasy'
-  }
+  },
+  {'book_id': 9999, 'title': 'The Hobbit', 'tag': null},
 ];
 
 final nestedBooks = [
