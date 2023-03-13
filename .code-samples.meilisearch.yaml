@@ -105,8 +105,8 @@ reset_pagination_settings_1: |-
 get_faceting_settings_1: |-
 update_faceting_settings_1: |-
 reset_faceting_settings_1: |-
-settings_guide_faceting_1: |-
-settings_guide_pagination_1: |-
+>>>>>>>>>>> REMOVE_ME settings_guide_faceting_1: |-
+>>>>>>>>>>> REMOVE_ME settings_guide_pagination_1: |-
 get_one_index_1: |-
   await client.getIndex('movies');
 list_all_indexes_1: |-
@@ -258,14 +258,14 @@ get_health_1: |-
   await client.health();
 get_version_1: |-
   await client.getVersion();
-distinct_attribute_guide_1: |-
+>>>>>>>>>>>>>>>> UPDATE_ME distinct_attribute_guide_1 (use distinct attribute route): |-
   await client
       .index('jackets')
       .updateSettings(IndexSettings(distinctAttribute: 'product_id'));
-field_properties_guide_searchable_1: |-
+>>>>>>>>>>>>>>>> UPDATE_ME field_properties_guide_searchable_1 (use searchable attribute route): |-
   await client.index('movies').updateSettings(
       IndexSettings(searchableAttributes: ['title', 'overview', 'genres']));
-field_properties_guide_displayed_1: |-
+>>>>>>>>>>>>>>>> UPDATE_ME field_properties_guide_displayed_1 (use displayed attribute route): |-
   await client.index('movies').updateSettings(IndexSettings(
       displayedAttributes: ['title', 'overview', 'genres', 'release_date']));
 filtering_guide_1: |-
@@ -303,16 +303,16 @@ search_parameter_guide_highlight_1: |-
       .search('winter feast', attributesToHighlight: ['overview']);
 search_parameter_guide_show_matches_position_1: |-
   await client.index('movies').search('winter feast', showMatchesPosition: true);
-settings_guide_synonyms_1: |-
+>>>>>>>>>>> REMOVE_ME settings_guide_synonyms_1: |-
   await client.index('tops').updateSettings(IndexSettings(synonyms: {
         'sweater': ['jumper'],
         'jumper': ['sweater']
       }));
-settings_guide_stop_words_1: |-
+>>>>>>>>>>> REMOVE_ME settings_guide_stop_words_1: |-
   await client
       .index('movies')
       .updateSettings(IndexSettings(stopWords: ['the', 'a', 'an']));
-settings_guide_ranking_rules_1: |-
+>>>>>>>>>>> REMOVE_ME settings_guide_ranking_rules_1: |-
   await client.index('movies').updateSettings(IndexSettings(rankingRules: [
         'words',
         'typo',
@@ -323,17 +323,17 @@ settings_guide_ranking_rules_1: |-
         'release_date:asc',
         'rank:desc'
       ]));
-settings_guide_distinct_1: |-
+>>>>>>>>>>> REMOVE_ME settings_guide_distinct_1: |-
   await client
       .index('jackets')
       .updateSettings(IndexSettings(distinctAttribute: 'product_id'));
-settings_guide_searchable_1: |-
+>>>>>>>>>>> REMOVE_ME settings_guide_searchable_1: |-
   await client.index('movies').updateSettings(
       IndexSettings(searchableAttributes: ['title', 'overview', 'genres']));
-settings_guide_displayed_1: |-
+>>>>>>>>>>> REMOVE_ME settings_guide_displayed_1: |-
   await client.index('movies').updateSettings(IndexSettings(
       displayedAttributes: ['title', 'overview', 'genres', 'release_date']));
-settings_guide_sortable_1: |-
+>>>>>>>>>>> REMOVE_ME settings_guide_sortable_1: |-
   await client
       .index('books')
       .updateSettings(IndexSettings(sortableAttributes: ['author', 'price']));
