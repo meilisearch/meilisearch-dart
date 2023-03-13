@@ -4,7 +4,7 @@ import 'package:meilisearch/src/query_parameters/tasks_query.dart';
 import 'package:meilisearch/src/result.dart';
 import 'package:meilisearch/src/searchable.dart';
 import 'package:meilisearch/src/tasks_results.dart';
-
+import 'package:collection/collection.dart';
 import 'client.dart';
 import 'filter_builder/filter_builder_base.dart';
 import 'index.dart';
@@ -448,4 +448,28 @@ class MeiliSearchIndexImpl implements MeiliSearchIndex {
   Future<Task> getTask(int uid) async {
     return await client.getTask(uid);
   }
+
+  @override
+  Future<List<Task>> addDocumentsInBatches(
+    List<Map<String, Object?>> documents, {
+    int batchSize = 1000,
+    String? primaryKey,
+  }) =>
+      Future.wait(
+        documents
+            .slices(batchSize)
+            .map((slice) => addDocuments(slice, primaryKey: primaryKey)),
+      );
+
+  @override
+  Future<List<Task>> updateDocumentsInBatches(
+    List<Map<String, Object?>> documents, {
+    int batchSize = 1000,
+    String? primaryKey,
+  }) =>
+      Future.wait(
+        documents
+            .slices(batchSize)
+            .map((slice) => updateDocuments(slice, primaryKey: primaryKey)),
+      );
 }
