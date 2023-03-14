@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:dio/dio.dart';
+import 'pagination_settings.dart';
 import 'result.dart';
 import 'searchable.dart';
 import 'tasks_results.dart';
