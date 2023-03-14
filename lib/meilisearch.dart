@@ -8,6 +8,7 @@ export 'src/pagination_settings.dart';
 export 'src/faceting_settings.dart';
 export 'src/min_word_size_for_typos.dart';
 export 'src/search_result.dart';
+export 'src/filter_builder/_exports.dart';
 export 'src/paginated_search_result.dart';
 export 'src/query_parameters/documents_query.dart';
 export 'src/query_parameters/cancel_tasks_query.dart';
