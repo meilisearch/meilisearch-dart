@@ -4,6 +4,7 @@ import 'package:meilisearch/src/result.dart';
 import 'package:meilisearch/src/searchable.dart';
 import 'package:meilisearch/src/tasks_results.dart';
 
+import 'filter_builder/filter_builder_base.dart';
 import 'index_settings.dart';
 
 import 'matching_strategy_enum.dart';
@@ -36,6 +37,7 @@ abstract class MeiliSearchIndex {
 
     /// filter is either a list or a string
     Object? filter,
+    MeiliOperatorExpressionBase? filterExpression,
     List<String>? sort,
     List<String>? facets,
     List<String>? attributesToRetrieve,
@@ -55,125 +57,155 @@ abstract class MeiliSearchIndex {
   /// Return a list of all existing documents in the index.
   Future<Result<Map<String, Object?>>> getDocuments({DocumentsQuery? params});
 
+  /// {@template meili.add_docs}
   /// Add a list of documents by given [documents] and optional [primaryKey] parameter.
+  /// {@endtemplate}
   ///
-  /// If index does not exist, it tries to create a new index and adds documents.
+  /// {@template meili.index_upsert}
+  /// If the index does not exist, tries to create a new index and adds documents.
+  /// {@endtemplate}
   Future<Task> addDocuments(
     List<Map<String, Object?>> documents, {
     String? primaryKey,
   });
 
-  /// Add a list of documents by given [documents] and optional [primaryKey] parameter
+  /// {@macro meili.add_docs}
   ///
-  /// * the passed [documents] must be a valid JSON string representing an array of objects.
-  /// * If index does not exist, it tries to create a new index and adds documents.
+  /// * The passed [documents] must be a valid JSON string representing an array of objects.
+  /// *
+  /// {@macro meili.index_upsert}
   Future<Task> addDocumentsJson(
     String documents, {
     String? primaryKey,
   });
 
-  /// Add a list of documents by given [documents] and optional [primaryKey] parameter
+  /// {@macro meili.add_docs}
   ///
-  /// * The passed [documents] must be a valid CSV string, where each line corresponds to an object.
-  /// * If index does not exist tries to create a new index and adds documents.
+  /// *
+  /// {@template meili.csv}
+  /// The passed documents must be a valid CSV string, where the first line contains objects' keys and types, and each subsequent line corresponds to an object.
+  /// [see relevant documentation](https://docs.meilisearch.com/learn/core_concepts/documents.html#csv)
+  /// {@endtemplate}
+  ///
+  /// *
+  /// {@macro meili.index_upsert}
   Future<Task> addDocumentsCsv(
     String documents, {
     String? primaryKey,
   });
 
-  /// Add a list of documents by given [documents] and optional [primaryKey] parameter
+  /// {@macro meili.add_docs}
   ///
-  /// the passed [documents] must be a valid Newline Delimited Json (NdJson) string, where each line corresponds to an object.
-  /// If index does not exist tries to create a new index and adds documents.
+  /// * The passed [documents] must be a valid Newline Delimited Json (NdJson) string, where each line corresponds to an object.
+  /// *
+  /// {@macro meili.index_upsert}
   Future<Task> addDocumentsNdjson(
     String documents, {
     String? primaryKey,
   });
 
+  /// {@template meili.add_docs_batches}
   /// Add a list of documents in batches of size [batchSize] by given [documents] and optional [primaryKey] parameter.
-  /// If index does not exist tries to create a new index and adds documents.
+  /// {@endtemplate}
+  ///
+  /// {@macro meili.index_upsert}
   Future<List<Task>> addDocumentsInBatches(
     List<Map<String, Object?>> documents, {
     int batchSize = 1000,
     String? primaryKey,
   });
 
-  /// Add a list of documents in batches of size [batchSize] by given [documents] and optional [primaryKey] parameter.
+  /// {@macro meili.add_docs_batches}
   ///
-  /// * The passed [documents] must be a valid CSV string, where each line corresponds to an object.
-  /// * If index does not exist tries to create a new index and adds documents.
+  /// *
+  /// {@macro meili.csv}
+  /// *
+  /// {@macro meili.index_upsert}
   Future<List<Task>> addDocumentsCsvInBatches(
     String documents, {
     String? primaryKey,
     int batchSize = 1000,
   });
 
-  /// Add a list of documents in batches of size [batchSize] by given [documents] and optional [primaryKey] parameter.
+  /// {@macro meili.add_docs_batches}
   ///
   /// * The passed [documents] must be a valid Newline Delimited Json (NdJson) string, where each line corresponds to an object.
-  /// * If index does not exist tries to create a new index and adds documents.
+  /// *
+  /// {@macro meili.index_upsert}
   Future<List<Task>> addDocumentsNdjsonInBatches(
     String documents, {
     String? primaryKey,
     int batchSize = 1000,
   });
 
+  /// {@template meili.update_docs}
   /// Add a list of documents or update them if they already exist by given [documents] and optional [primaryKey] parameter.
-  /// If index does not exist tries to create a new index and adds documents.
+  /// {@endtemplate}
+  ///
+  /// {@macro meili.index_upsert}
   Future<Task> updateDocuments(
     List<Map<String, Object?>> documents, {
     String? primaryKey,
   });
 
-  /// Add a list of documents or update them if they already exist by given [documents] and optional [primaryKey] parameter.
+  /// {@macro meili.update_docs}
   ///
   /// * the passed [documents] must be a valid JSON string representing an array of objects.
-  /// * If index does not exist, it tries to create a new index and adds documents.
+  /// *
+  /// {@macro meili.index_upsert}
   Future<Task> updateDocumentsJson(
     String documents, {
     String? primaryKey,
   });
 
-  /// Add a list of documents or update them if they already exist by given [documents] and optional [primaryKey] parameter.
+  /// {@macro meili.update_docs}
   ///
   /// * The passed [documents] must be a valid Newline Delimited Json (NdJson) string, where each line corresponds to an object.
-  /// * If index does not exist, it tries to create a new index and adds documents.
+  /// *
+  /// {@macro meili.index_upsert}
   Future<Task> updateDocumentsNdjson(
     String documents, {
     String? primaryKey,
   });
 
-  /// Add a list of documents or update them if they already exist by given [documents] and optional [primaryKey] parameter.
+  /// {@macro meili.update_docs}
   ///
-  /// * The passed [documents] must be a valid CSV string, where each line corresponds to an object.
-  /// * If index does not exist, it tries to create a new index and adds documents.
+  /// *
+  /// {@macro meili.csv}
+  /// *
+  /// {@macro meili.index_upsert}
   Future<Task> updateDocumentsCsv(
     String documents, {
     String? primaryKey,
   });
 
+  /// {@template meili.update_docs_batches}
   /// Add a list of documents or update them if they already exist in batches of size [batchSize] by given [documents] and optional [primaryKey] parameter.
-  /// If index does not exist tries to create a new index and adds documents.
+  /// {@endtemplate}
+  ///
+  /// {@macro meili.index_upsert}
   Future<List<Task>> updateDocumentsInBatches(
     List<Map<String, Object?>> documents, {
     int batchSize = 1000,
     String? primaryKey,
   });
 
-  /// Add a list of documents or update them if they already exist in batches of size [batchSize] by given [documents] and optional [primaryKey] parameter.
+  /// {@macro meili.update_docs_batches}
   ///
   /// * The passed [documents] must be a valid CSV string, where each line corresponds to an object.
-  /// * If index does not exist, it tries to create a new index and adds documents.
+  /// *
+  /// {@macro meili.index_upsert}
   Future<List<Task>> updateDocumentsCsvInBatches(
     String documents, {
     String? primaryKey,
     int batchSize = 1000,
   });
 
-  /// Add a list of documents or update them if they already exist in batches of size [batchSize] by given [documents] and optional [primaryKey] parameter.
+  /// {@macro meili.update_docs_batches}
   ///
   /// * The passed [documents] must be a valid Newline Delimited Json (NdJson) string, where each line corresponds to an object.
-  /// * If index does not exist, it tries to create a new index and adds documents.
+  /// *
+  /// {@macro meili.index_upsert}
   Future<List<Task>> updateDocumentsNdjsonInBatches(
     String documents, {
     String? primaryKey,

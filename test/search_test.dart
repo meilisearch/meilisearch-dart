@@ -128,6 +128,20 @@ void main() {
         expect(result.hits, hasLength(1));
       });
 
+      /// TODO(ahmednfwela): waiting for Meili V1.2.0
+      // test('filter parameter is null', () async {
+      //   var index = await createBooksIndex();
+      //   var response = await index
+      //       .updateSettings(IndexSettings(
+      //         filterableAttributes: ['tag'],
+      //       ))
+      //       .waitFor(client: client);
+      //   expect(response.status, 'succeeded');
+      //   var result = await index.search('The Hobbit', filter: "tag NULL");
+      //   expect(result.hits, hasLength(1));
+      //   expect(result.hits!.first["book_id"], equals(9999));
+      // });
+
       test('filter parameter with spaces', () async {
         var index = await createBooksIndex();
         var response = await index
@@ -136,8 +150,10 @@ void main() {
             ))
             .waitFor(client: client);
         expect(response.status, 'succeeded');
-        var result =
-            await index.search('prince', filter: 'tag = "Epic fantasy"');
+        var result = await index.search(
+          'prince',
+          filter: 'tag = "Epic fantasy"',
+        );
         expect(result.hits, hasLength(1));
       });
 
@@ -149,8 +165,17 @@ void main() {
             ))
             .waitFor(client: client);
         expect(response.status, 'succeeded');
-        var result =
-            await index.search('', filter: 'book_id < 100 AND tag = Tale');
+        var result = await index.search(
+          '',
+          filter: 'book_id < 100 AND tag = Tale',
+        );
+        final exp1 = 'book_id'.toMeiliAttribute().lt(100.toMeiliValue()).and(
+              'tag'.toMeiliAttribute().eq("Tale".toMeiliValue()),
+            );
+        final exp2 = (Meili.attr('book_id') < Meili.value(100)) &
+            (Meili.attr("tag").eq(Meili.value("Tale")));
+        expect(exp1.transform(), equals(exp2.transform()));
+
         expect(result.hits, hasLength(1));
       });
 
