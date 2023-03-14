@@ -29,6 +29,7 @@ abstract class HttpRequest {
     String path, {
     Object? data,
     Map<String, Object?>? queryParameters,
+    String contentType,
   });
 
   /// POST method
@@ -36,6 +37,7 @@ abstract class HttpRequest {
     String path, {
     Object? data,
     Map<String, Object?>? queryParameters,
+    String contentType,
   });
 
   /// PUT method
@@ -43,6 +45,7 @@ abstract class HttpRequest {
     String path, {
     Object? data,
     Map<String, Object?>? queryParameters,
+    String contentType,
   });
 
   /// DELETE method
