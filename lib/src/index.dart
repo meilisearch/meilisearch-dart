@@ -84,7 +84,7 @@ abstract class MeiliSearchIndex {
   /// The passed documents must be a valid CSV string, where the first line contains objects' keys and types, and each subsequent line corresponds to an object.
   /// [see relevant documentation](https://docs.meilisearch.com/learn/core_concepts/documents.html#csv)
   /// {@endtemplate}
-  /// 
+  ///
   /// *
   /// {@macro meili.index_upsert}
   Future<Task> addDocumentsCsv(
@@ -168,7 +168,7 @@ abstract class MeiliSearchIndex {
 
   /// {@macro meili.update_docs}
   ///
-  /// * 
+  /// *
   /// {@macro meili.csv}
   /// *
   /// {@macro meili.index_upsert}
