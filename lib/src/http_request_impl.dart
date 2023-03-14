@@ -22,7 +22,6 @@ class HttpRequestImpl implements HttpRequest {
                 if (_kIsWeb) Version.qualifiedVersionWeb
               ].join(',')
             },
-            contentType: 'application/json',
             responseType: ResponseType.json,
             connectTimeout: connectTimeout ?? Duration(seconds: 5),
           ),
@@ -76,12 +75,16 @@ class HttpRequestImpl implements HttpRequest {
     String path, {
     Object? data,
     Map<String, Object?>? queryParameters,
+    String contentType = Headers.jsonContentType,
   }) async {
     try {
       return await dio.post<T>(
         path,
         data: data,
         queryParameters: queryParameters,
+        options: Options(
+          contentType: contentType,
+        ),
       );
     } on DioError catch (e) {
       return throwException(e);
@@ -93,12 +96,16 @@ class HttpRequestImpl implements HttpRequest {
     String path, {
     Object? data,
     Map<String, Object?>? queryParameters,
+    String contentType = Headers.jsonContentType,
   }) async {
     try {
       return await dio.patch<T>(
         path,
         data: data,
         queryParameters: queryParameters,
+        options: Options(
+          contentType: contentType,
+        ),
       );
     } on DioError catch (e) {
       return throwException(e);
@@ -110,12 +117,16 @@ class HttpRequestImpl implements HttpRequest {
     String path, {
     Object? data,
     Map<String, Object?>? queryParameters,
+    String contentType = Headers.jsonContentType,
   }) async {
     try {
       return await dio.put<T>(
         path,
         data: data,
         queryParameters: queryParameters,
+        options: Options(
+          contentType: contentType,
+        ),
       );
     } on DioError catch (e) {
       return throwException(e);
