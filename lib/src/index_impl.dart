@@ -1,13 +1,20 @@
 import 'dart:convert';
-
 import 'package:dio/dio.dart';
-import 'package:meilisearch/meilisearch.dart';
-import 'package:meilisearch/src/result.dart';
-import 'package:meilisearch/src/searchable.dart';
-import 'package:meilisearch/src/tasks_results.dart';
+import 'result.dart';
+import 'searchable.dart';
+import 'tasks_results.dart';
 import 'package:collection/collection.dart';
+import 'client.dart';
+import 'exception.dart';
+import 'filter_builder/filter_builder_base.dart';
 import 'http_request.dart';
+import 'index.dart';
+import 'index_settings.dart';
+import 'matching_strategy_enum.dart';
+import 'query_parameters/documents_query.dart';
+import 'query_parameters/tasks_query.dart';
 import 'stats.dart' show IndexStats;
+import 'task.dart';
 
 const _ndjsonContentType = 'application/x-ndjson';
 const _csvContentType = 'text/csv';
@@ -106,6 +113,7 @@ class MeiliSearchIndexImpl implements MeiliSearchIndex {
     int? page,
     int? hitsPerPage,
     Object? filter,
+    MeiliOperatorExpressionBase? filterExpression,
     List<String>? sort,
     List<String>? facets,
     List<String>? attributesToRetrieve,
@@ -124,7 +132,7 @@ class MeiliSearchIndexImpl implements MeiliSearchIndex {
       'limit': limit,
       'page': page,
       'hitsPerPage': hitsPerPage,
-      'filter': filter,
+      'filter': filter ?? filterExpression?.transform(),
       'sort': sort,
       'facets': facets,
       'attributesToRetrieve': attributesToRetrieve,
@@ -170,10 +178,13 @@ class MeiliSearchIndexImpl implements MeiliSearchIndex {
   @override
   Future<Task> addDocumentsJson(String documents, {String? primaryKey}) {
     final decoded = jsonDecode(documents);
+
     if (decoded is List<Object?>) {
       final casted = decoded.whereType<Map<String, Object?>>().toList();
+
       return addDocuments(casted, primaryKey: primaryKey);
     }
+
     throw MeiliSearchApiException(
       "Provided json must be an array of documents, consider using addDocumentsNdjson if this isn't the case",
     );
@@ -226,10 +237,12 @@ class MeiliSearchIndexImpl implements MeiliSearchIndex {
   }) {
     final ls = LineSplitter();
     final split = ls.convert(documents);
+    //header is shared for all slices
+    final header = split.first;
     return Future.wait(
-      split.slices(batchSize).map(
+      split.skip(1).slices(batchSize).map(
             (slice) => addDocumentsCsv(
-              slice.join('\n'),
+              [header, ...slice].join('\n'),
               primaryKey: primaryKey,
             ),
           ),
@@ -244,6 +257,7 @@ class MeiliSearchIndexImpl implements MeiliSearchIndex {
   }) {
     final ls = LineSplitter();
     final split = ls.convert(documents);
+
     return Future.wait(
       split.slices(batchSize).map(
             (slice) => addDocumentsNdjson(
@@ -274,10 +288,13 @@ class MeiliSearchIndexImpl implements MeiliSearchIndex {
     String? primaryKey,
   }) {
     final decoded = jsonDecode(documents);
+
     if (decoded is List<Object?>) {
       final casted = decoded.whereType<Map<String, Object?>>().toList();
+
       return updateDocuments(casted, primaryKey: primaryKey);
     }
+
     throw MeiliSearchApiException(
       "Provided json must be an array of documents, consider using updateDocumentsNdjson if this isn't the case",
     );
@@ -327,10 +344,13 @@ class MeiliSearchIndexImpl implements MeiliSearchIndex {
   }) {
     final ls = LineSplitter();
     final split = ls.convert(documents);
+    //header is shared for all slices
+    final header = split.first;
+
     return Future.wait(
-      split.slices(batchSize).map(
+      split.skip(1).slices(batchSize).map(
             (slice) => updateDocumentsCsv(
-              slice.join('\n'),
+              [header, ...slice].join('\n'),
               primaryKey: primaryKey,
             ),
           ),
@@ -345,6 +365,7 @@ class MeiliSearchIndexImpl implements MeiliSearchIndex {
   }) {
     final ls = LineSplitter();
     final split = ls.convert(documents);
+
     return Future.wait(
       split.slices(batchSize).map(
             (slice) => updateDocumentsNdjson(
