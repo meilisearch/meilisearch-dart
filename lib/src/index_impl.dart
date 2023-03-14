@@ -178,10 +178,13 @@ class MeiliSearchIndexImpl implements MeiliSearchIndex {
   @override
   Future<Task> addDocumentsJson(String documents, {String? primaryKey}) {
     final decoded = jsonDecode(documents);
+
     if (decoded is List<Object?>) {
       final casted = decoded.whereType<Map<String, Object?>>().toList();
+
       return addDocuments(casted, primaryKey: primaryKey);
     }
+
     throw MeiliSearchApiException(
       "Provided json must be an array of documents, consider using addDocumentsNdjson if this isn't the case",
     );
@@ -234,6 +237,7 @@ class MeiliSearchIndexImpl implements MeiliSearchIndex {
   }) {
     final ls = LineSplitter();
     final split = ls.convert(documents);
+
     return Future.wait(
       split.slices(batchSize).map(
             (slice) => addDocumentsCsv(
@@ -252,6 +256,7 @@ class MeiliSearchIndexImpl implements MeiliSearchIndex {
   }) {
     final ls = LineSplitter();
     final split = ls.convert(documents);
+
     return Future.wait(
       split.slices(batchSize).map(
             (slice) => addDocumentsNdjson(
@@ -282,10 +287,13 @@ class MeiliSearchIndexImpl implements MeiliSearchIndex {
     String? primaryKey,
   }) {
     final decoded = jsonDecode(documents);
+
     if (decoded is List<Object?>) {
       final casted = decoded.whereType<Map<String, Object?>>().toList();
+
       return updateDocuments(casted, primaryKey: primaryKey);
     }
+
     throw MeiliSearchApiException(
       "Provided json must be an array of documents, consider using updateDocumentsNdjson if this isn't the case",
     );
@@ -335,6 +343,7 @@ class MeiliSearchIndexImpl implements MeiliSearchIndex {
   }) {
     final ls = LineSplitter();
     final split = ls.convert(documents);
+
     return Future.wait(
       split.slices(batchSize).map(
             (slice) => updateDocumentsCsv(
@@ -353,6 +362,7 @@ class MeiliSearchIndexImpl implements MeiliSearchIndex {
   }) {
     final ls = LineSplitter();
     final split = ls.convert(documents);
+
     return Future.wait(
       split.slices(batchSize).map(
             (slice) => updateDocumentsNdjson(
