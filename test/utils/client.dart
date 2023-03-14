@@ -65,12 +65,25 @@ Future<void> setUpHttp() async {
   });
 }
 
-Future<void> setUpClientWithWrongUrl() async {
+Future<void> setUpClientWithWrongUrl({bool isHttp2 = false}) async {
   setUp(() {
     final String server = 'http://wrongurl:1234';
     final connectTimeout = Duration(milliseconds: 1000);
+    const masterKey = 'masterKey';
 
-    client = MeiliSearchClient(server, 'masterKey', connectTimeout);
+    client = isHttp2
+        ? MeiliSearchClient.withCustomDio(
+            server,
+            apiKey: masterKey,
+            adapter: Http2Adapter(
+              ConnectionManager(
+                // Ignore bad certificate
+                onClientCreate: (_, config) =>
+                    config.onBadCertificate = (_) => true,
+              ),
+            ),
+          )
+        : MeiliSearchClient(server, masterKey, connectTimeout);
   });
 }
 
