@@ -79,7 +79,12 @@ abstract class MeiliSearchIndex {
 
   /// {@macro meili.add_docs}
   ///
-  /// * The passed [documents] must be a valid CSV string, where each line corresponds to an object.
+  /// *
+  /// {@template meili.csv}
+  /// The passed documents must be a valid CSV string, where the first line contains objects' keys and types, and each subsequent line corresponds to an object.
+  /// [see relevant documentation](https://docs.meilisearch.com/learn/core_concepts/documents.html#csv)
+  /// {@endtemplate}
+  /// 
   /// *
   /// {@macro meili.index_upsert}
   Future<Task> addDocumentsCsv(
@@ -110,7 +115,8 @@ abstract class MeiliSearchIndex {
 
   /// {@macro meili.add_docs_batches}
   ///
-  /// * The passed [documents] must be a valid CSV string, where each line corresponds to an object.
+  /// *
+  /// {@macro meili.csv}
   /// *
   /// {@macro meili.index_upsert}
   Future<List<Task>> addDocumentsCsvInBatches(
@@ -162,7 +168,8 @@ abstract class MeiliSearchIndex {
 
   /// {@macro meili.update_docs}
   ///
-  /// * The passed [documents] must be a valid CSV string, where each line corresponds to an object.
+  /// * 
+  /// {@macro meili.csv}
   /// *
   /// {@macro meili.index_upsert}
   Future<Task> updateDocumentsCsv(

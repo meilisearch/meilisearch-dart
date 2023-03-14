@@ -237,11 +237,12 @@ class MeiliSearchIndexImpl implements MeiliSearchIndex {
   }) {
     final ls = LineSplitter();
     final split = ls.convert(documents);
-
+    //header is shared for all slices
+    final header = split.first;
     return Future.wait(
-      split.slices(batchSize).map(
+      split.skip(1).slices(batchSize).map(
             (slice) => addDocumentsCsv(
-              slice.join('\n'),
+              [header, ...slice].join('\n'),
               primaryKey: primaryKey,
             ),
           ),
@@ -343,11 +344,13 @@ class MeiliSearchIndexImpl implements MeiliSearchIndex {
   }) {
     final ls = LineSplitter();
     final split = ls.convert(documents);
+    //header is shared for all slices
+    final header = split.first;
 
     return Future.wait(
-      split.slices(batchSize).map(
+      split.skip(1).slices(batchSize).map(
             (slice) => updateDocumentsCsv(
-              slice.join('\n'),
+              [header, ...slice].join('\n'),
               primaryKey: primaryKey,
             ),
           ),
