@@ -15,6 +15,7 @@ import 'query_parameters/documents_query.dart';
 import 'query_parameters/tasks_query.dart';
 import 'stats.dart' show IndexStats;
 import 'task.dart';
+import 'typo_tolerance.dart';
 
 const _ndjsonContentType = 'application/x-ndjson';
 const _csvContentType = 'text/csv';
