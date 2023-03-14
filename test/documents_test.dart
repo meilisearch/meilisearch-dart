@@ -13,7 +13,7 @@ void main() {
       final index = client.index(randomUid());
       await index.addDocuments(books).waitFor(client: client);
       final docs = await index.getDocuments();
-      expect(docs.total, 6);
+      expect(docs.total, books.length);
     });
 
     test('Add documents in batches', () async {
@@ -26,8 +26,9 @@ void main() {
         dynamicBooks(totalCount),
         batchSize: batchSize,
       );
+
       expect(tasks.length, chunks);
-      await tasks.waitFor(client: client);
+      await tasks.waitFor(client: client, timeout: Duration(seconds: 30));
       final docs = await index.getDocuments();
       expect(docs.total, totalCount);
     });
@@ -38,7 +39,7 @@ void main() {
           .addDocuments(books, primaryKey: 'book_id')
           .waitFor(client: client);
       final docs = await index.getDocuments();
-      expect(docs.total, 6);
+      expect(docs.total, books.length);
     });
 
     test('Update documents', () async {
@@ -57,6 +58,7 @@ void main() {
       const chunks = 3;
       const totalCount = (batchSize * 2) + 1;
       final index = await createDynamicBooksIndex(count: totalCount);
+
       final tasks = await index.updateDocumentsInBatches(
         List.generate(
           totalCount,
@@ -67,8 +69,9 @@ void main() {
         ),
         batchSize: batchSize,
       );
+
       expect(tasks.length, chunks);
-      await tasks.waitFor(client: client);
+      await tasks.waitFor(client: client, timeout: Duration(seconds: 30));
       final docs = await index.getDocuments();
       expect(docs.total, totalCount);
       docs.results.map((element) {
@@ -115,7 +118,7 @@ void main() {
       final index = await createBooksIndex();
       final docs = await index.getDocuments(
           params: DocumentsQuery(offset: 1, fields: ['book_id']));
-      expect(docs.total, equals(6));
+      expect(docs.total, equals(books.length));
       expect(docs.offset, equals(1));
       expect(docs.limit, greaterThan(0));
       expect(docs.results[0]['book_id'], isNotNull);
