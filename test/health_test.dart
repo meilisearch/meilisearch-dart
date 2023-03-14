@@ -4,57 +4,32 @@ import 'utils/client.dart';
 
 void main() {
   group('Health', () {
-    group("Default", () {
-      setUpClient();
+    setUpClient();
 
-      test('of the server when the url is valid', () async {
-        var health = await client.health();
-        expect(health, {'status': 'available'});
-      });
+    test('of the server when the url is valid', () async {
+      var health = await client.health();
 
-      test('of the server when the url is valid with isHealthy', () async {
-        var health = await client.isHealthy();
-        expect(health, true);
-      });
+      expect(health, {'status': 'available'});
     });
-    group("Custom dio with Http2", () {
-      setUpClient(isHttp2: true);
-      test('of the server when the url is valid', () async {
-        var health = await client.health();
 
-        expect(health, {'status': 'available'});
-      });
+    test('of the server when the url is valid with isHealthy', () async {
+      var health = await client.isHealthy();
 
-      test('of the server when the url is valid with isHealthy', () async {
-        var health = await client.isHealthy();
-        expect(health, true);
-      });
+      expect(health, true);
     });
   });
+
   group('Health Fail', () {
-    group("Default", () {
-      setUpClientWithWrongUrl();
+    setUpClientWithWrongUrl();
 
-      test('when the url is not valid', () async {
-        expect(client.health(), throwsException);
-      });
-
-      test('when the url is not valid with isHealthy', () async {
-        var health = await client.isHealthy();
-        expect(health, false);
-      });
+    test('when the url is not valid', () async {
+      expect(client.health(), throwsException);
     });
-    group("Custom dio with Http2", () {
-      setUpClient(isHttp2: true);
-      
-      test('when the url is not valid', () async {
-        expect(client.health(), throwsException);
-      });
 
-      test('when the url is not valid with isHealthy', () async {
-        var health = await client.isHealthy();
-        expect(health, false);
-      });
+    test('when the url is not valid with isHealthy', () async {
+      var health = await client.isHealthy();
+
+      expect(health, false);
     });
   });
 }

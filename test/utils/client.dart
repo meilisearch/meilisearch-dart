@@ -3,7 +3,6 @@ import 'dart:io';
 import 'dart:math';
 
 import 'package:crypto/crypto.dart';
-import 'package:dio_http2_adapter/dio_http2_adapter.dart';
 import 'package:meilisearch/src/http_request_impl.dart';
 import 'package:meilisearch/src/http_request.dart';
 import 'package:meilisearch/meilisearch.dart';
@@ -31,23 +30,11 @@ Future<void> deleteAllKeys() async {
   }
 }
 
-Future<void> setUpClient({bool isHttp2 = false}) async {
+Future<void> setUpClient() async {
   setUp(() {
     final String server = testServer;
     const masterKey = 'masterKey';
-    client = isHttp2
-        ? MeiliSearchClient.withCustomDio(
-            server,
-            apiKey: masterKey,
-            adapter: Http2Adapter(
-              ConnectionManager(
-                // Ignore bad certificate
-                onClientCreate: (_, config) =>
-                    config.onBadCertificate = (_) => true,
-              ),
-            ),
-          )
-        : MeiliSearchClient(server, masterKey);
+    client = MeiliSearchClient(server, masterKey);
     random = Random();
   });
 
@@ -65,25 +52,13 @@ Future<void> setUpHttp() async {
   });
 }
 
-Future<void> setUpClientWithWrongUrl({bool isHttp2 = false}) async {
+Future<void> setUpClientWithWrongUrl() async {
   setUp(() {
     final String server = 'http://wrongurl:1234';
     final connectTimeout = Duration(milliseconds: 1000);
     const masterKey = 'masterKey';
 
-    client = isHttp2
-        ? MeiliSearchClient.withCustomDio(
-            server,
-            apiKey: masterKey,
-            adapter: Http2Adapter(
-              ConnectionManager(
-                // Ignore bad certificate
-                onClientCreate: (_, config) =>
-                    config.onBadCertificate = (_) => true,
-              ),
-            ),
-          )
-        : MeiliSearchClient(server, masterKey, connectTimeout);
+    client = MeiliSearchClient(server, masterKey, connectTimeout);
   });
 }
 

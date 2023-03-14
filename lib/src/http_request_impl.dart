@@ -30,7 +30,9 @@ class HttpRequestImpl implements HttpRequest {
     if (adapter != null) {
       dio.httpClientAdapter = adapter;
     }
+
     dio.interceptors.removeImplyContentTypeInterceptor();
+
     if (interceptors != null) {
       dio.interceptors.addAll(interceptors);
     }
