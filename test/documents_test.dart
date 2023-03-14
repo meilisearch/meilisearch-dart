@@ -1,6 +1,5 @@
 import 'package:meilisearch/meilisearch.dart';
 import 'package:test/test.dart';
-
 import 'utils/books_data.dart';
 import 'utils/wait_for.dart';
 import 'utils/client.dart';
@@ -14,7 +13,24 @@ void main() {
       final index = client.index(randomUid());
       await index.addDocuments(books).waitFor(client: client);
       final docs = await index.getDocuments();
-      expect(docs.total, 6);
+      expect(docs.total, books.length);
+    });
+
+    test('Add documents in batches', () async {
+      final index = client.index(randomUid());
+      const batchSize = 10;
+      const totalCount = (batchSize * 4) + 1;
+      const chunks = 5;
+
+      final tasks = await index.addDocumentsInBatches(
+        dynamicBooks(totalCount),
+        batchSize: batchSize,
+      );
+
+      expect(tasks.length, chunks);
+      await tasks.waitFor(client: client, timeout: Duration(seconds: 30));
+      final docs = await index.getDocuments();
+      expect(docs.total, totalCount);
     });
 
     test('Add documents with primary key', () async {
@@ -23,7 +39,7 @@ void main() {
           .addDocuments(books, primaryKey: 'book_id')
           .waitFor(client: client);
       final docs = await index.getDocuments();
-      expect(docs.total, 6);
+      expect(docs.total, books.length);
     });
 
     test('Update documents', () async {
@@ -35,6 +51,33 @@ void main() {
       expect(doc, isNotNull);
       expect(doc?['book_id'], equals(1344));
       expect(doc?['title'], equals('The Hobbit 2'));
+    });
+
+    test('Update documents in batches', () async {
+      const batchSize = 10;
+      const chunks = 3;
+      const totalCount = (batchSize * 2) + 1;
+      final index = await createDynamicBooksIndex(count: totalCount);
+
+      final tasks = await index.updateDocumentsInBatches(
+        List.generate(
+          totalCount,
+          (index) => {
+            'book_id': index,
+            'title': 'Updated Book $index',
+          },
+        ),
+        batchSize: batchSize,
+      );
+
+      expect(tasks.length, chunks);
+      await tasks.waitFor(client: client, timeout: Duration(seconds: 30));
+      final docs = await index.getDocuments();
+      expect(docs.total, totalCount);
+      docs.results.map((element) {
+        final bookId = element['book_id'];
+        expect(element['title'], equals('Updated Book $bookId'));
+      });
     });
 
     test('Update documents and pass a primary key', () async {
@@ -75,7 +118,7 @@ void main() {
       final index = await createBooksIndex();
       final docs = await index.getDocuments(
           params: DocumentsQuery(offset: 1, fields: ['book_id']));
-      expect(docs.total, equals(6));
+      expect(docs.total, equals(books.length));
       expect(docs.offset, equals(1));
       expect(docs.limit, greaterThan(0));
       expect(docs.results[0]['book_id'], isNotNull);

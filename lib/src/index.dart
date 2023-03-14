@@ -4,6 +4,7 @@ import 'package:meilisearch/src/result.dart';
 import 'package:meilisearch/src/searchable.dart';
 import 'package:meilisearch/src/tasks_results.dart';
 
+import 'filter_builder/filter_builder_base.dart';
 import 'index_settings.dart';
 
 import 'matching_strategy_enum.dart';
@@ -34,6 +35,7 @@ abstract class MeiliSearchIndex {
 
     /// filter is either a list or a string
     Object? filter,
+    MeiliOperatorExpressionBase? filterExpression,
     List<String>? sort,
     List<String>? facets,
     List<String>? attributesToRetrieve,
@@ -60,10 +62,26 @@ abstract class MeiliSearchIndex {
     String? primaryKey,
   });
 
+  /// Add a list of documents in batches of size [batchSize] by given [documents] and optional [primaryKey] parameter.
+  /// If the index does not exist try to create a new index and add documents.
+  Future<List<Task>> addDocumentsInBatches(
+    List<Map<String, Object?>> documents, {
+    int batchSize = 1000,
+    String? primaryKey,
+  });
+
   /// Add a list of documents or update them if they already exist by given [documents] and optional [primaryKey] parameter.
   /// If index is not exists tries to create a new index and adds documents.
   Future<Task> updateDocuments(
     List<Map<String, Object?>> documents, {
+    String? primaryKey,
+  });
+
+  /// Add a list of documents or update them if they already exist in batches of size [batchSize] by given [documents] and optional [primaryKey] parameter.
+  /// If index is not exists tries to create a new index and adds documents.
+  Future<List<Task>> updateDocumentsInBatches(
+    List<Map<String, Object?>> documents, {
+    int batchSize = 1000,
     String? primaryKey,
   });
 
