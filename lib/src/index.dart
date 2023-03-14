@@ -173,7 +173,7 @@ abstract class MeiliSearchIndex {
   /// {@template meili.update_docs_batches}
   /// Add a list of documents or update them if they already exist in batches of size [batchSize] by given [documents] and optional [primaryKey] parameter.
   /// {@endtemplate}
-  /// 
+  ///
   /// {@macro meili.index_upsert}
   Future<List<Task>> updateDocumentsInBatches(
     List<Map<String, Object?>> documents, {

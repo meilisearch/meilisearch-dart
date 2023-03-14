@@ -1,13 +1,20 @@
 import 'dart:convert';
-
 import 'package:dio/dio.dart';
-import 'package:meilisearch/meilisearch.dart';
-import 'package:meilisearch/src/result.dart';
-import 'package:meilisearch/src/searchable.dart';
-import 'package:meilisearch/src/tasks_results.dart';
+import 'result.dart';
+import 'searchable.dart';
+import 'tasks_results.dart';
 import 'package:collection/collection.dart';
+import 'client.dart';
+import 'exception.dart';
+import 'filter_builder/filter_builder_base.dart';
 import 'http_request.dart';
+import 'index.dart';
+import 'index_settings.dart';
+import 'matching_strategy_enum.dart';
+import 'query_parameters/documents_query.dart';
+import 'query_parameters/tasks_query.dart';
 import 'stats.dart' show IndexStats;
+import 'task.dart';
 
 const _ndjsonContentType = 'application/x-ndjson';
 const _csvContentType = 'text/csv';
