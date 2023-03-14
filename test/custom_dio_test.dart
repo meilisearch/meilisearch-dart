@@ -3,7 +3,6 @@ import 'dart:typed_data';
 import 'package:dio/dio.dart';
 import 'package:dio/io.dart';
 import 'package:meilisearch/meilisearch.dart';
-import 'package:meilisearch/src/version.dart';
 import 'package:test/test.dart';
 
 import 'utils/client.dart';
