@@ -632,7 +632,7 @@ class MeiliSearchIndexImpl implements MeiliSearchIndex {
   @override
   Future<Task> updateTypoTolerance(TypoTolerance typoTolerance) async {
     return await _getTask(
-      http.putMethod(
+      http.patchMethod(
         '/indexes/$uid/settings/typo-tolerance',
         data: typoTolerance.toMap(),
       ),

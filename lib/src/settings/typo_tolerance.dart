@@ -17,8 +17,8 @@ class TypoTolerance {
     this.enabled = true,
     this.disableOnAttributes = const [],
     this.disableOnWords = const [],
-    this.minWordSizeForTypos,
-  });
+    MinWordSizeForTypos? minWordSizeForTypos,
+  }) : minWordSizeForTypos = minWordSizeForTypos ?? MinWordSizeForTypos();
 
   Map<String, dynamic> toMap() {
     return {

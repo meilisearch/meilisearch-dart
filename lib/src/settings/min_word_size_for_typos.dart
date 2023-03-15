@@ -6,24 +6,24 @@ class MinWordSizeForTypos {
   int oneTypo;
 
   ///Customize the minimum size for a word to tolerate 2 typo.
-  int twoTypo;
+  int twoTypos;
 
   MinWordSizeForTypos({
     this.oneTypo = _defaultOneTypo,
-    this.twoTypo = _defaultTwoTypo,
+    this.twoTypos = _defaultTwoTypo,
   });
 
   Map<String, dynamic> toMap() {
     return {
       'oneTypo': oneTypo,
-      'twoTypo': twoTypo,
+      'twoTypos': twoTypos,
     };
   }
 
   factory MinWordSizeForTypos.fromMap(Map<String, dynamic> map) {
     return MinWordSizeForTypos(
       oneTypo: map['oneTypo'] as int? ?? _defaultOneTypo,
-      twoTypo: map['twoTypo'] as int? ?? _defaultTwoTypo,
+      twoTypos: map['twoTypos'] as int? ?? _defaultTwoTypo,
     );
   }
 }
