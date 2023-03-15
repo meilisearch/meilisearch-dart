@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'result.dart';
 import 'searchable.dart';
+import 'settings/_exports.dart';
 import 'tasks_results.dart';
 import 'package:collection/collection.dart';
 import 'client.dart';
@@ -9,13 +10,11 @@ import 'exception.dart';
 import 'filter_builder/filter_builder_base.dart';
 import 'http_request.dart';
 import 'index.dart';
-import 'index_settings.dart';
 import 'matching_strategy_enum.dart';
 import 'query_parameters/documents_query.dart';
 import 'query_parameters/tasks_query.dart';
 import 'stats.dart' show IndexStats;
 import 'task.dart';
-import 'typo_tolerance.dart';
 
 const _ndjsonContentType = 'application/x-ndjson';
 const _csvContentType = 'text/csv';
@@ -615,12 +614,12 @@ class MeiliSearchIndexImpl implements MeiliSearchIndex {
   }
 
   @override
-  Future<TypoToleranceSettings> getTypoTolerance() async {
+  Future<TypoTolerance> getTypoTolerance() async {
     final response = await http.getMethod<Map<String, Object?>>(
       '/indexes/$uid/settings/typo-tolerance',
     );
 
-    return TypoToleranceSettings.fromMap(response.data!);
+    return TypoTolerance.fromMap(response.data!);
   }
 
   @override
@@ -631,7 +630,7 @@ class MeiliSearchIndexImpl implements MeiliSearchIndex {
   }
 
   @override
-  Future<Task> updateTypoTolerance(TypoToleranceSettings typoTolerance) async {
+  Future<Task> updateTypoTolerance(TypoTolerance typoTolerance) async {
     return await _getTask(
       http.putMethod(
         '/indexes/$uid/settings/typo-tolerance',

@@ -1,14 +1,14 @@
 const _defaultOneTypo = 5;
 const _defaultTwoTypo = 9;
 
-class MinWordSizeForTyposSettings {
+class MinWordSizeForTypos {
   ///Customize the minimum size for a word to tolerate 1 typo.
   int oneTypo;
 
   ///Customize the minimum size for a word to tolerate 2 typo.
   int twoTypo;
 
-  MinWordSizeForTyposSettings({
+  MinWordSizeForTypos({
     this.oneTypo = _defaultOneTypo,
     this.twoTypo = _defaultTwoTypo,
   });
@@ -20,8 +20,8 @@ class MinWordSizeForTyposSettings {
     };
   }
 
-  factory MinWordSizeForTyposSettings.fromMap(Map<String, dynamic> map) {
-    return MinWordSizeForTyposSettings(
+  factory MinWordSizeForTypos.fromMap(Map<String, dynamic> map) {
+    return MinWordSizeForTypos(
       oneTypo: map['oneTypo'] as int? ?? _defaultOneTypo,
       twoTypo: map['twoTypo'] as int? ?? _defaultTwoTypo,
     );

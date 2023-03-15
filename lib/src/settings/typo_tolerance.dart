@@ -1,6 +1,6 @@
-import 'package:meilisearch/src/min_word_size_for_typos.dart';
+import 'min_word_size_for_typos.dart';
 
-class TypoToleranceSettings {
+class TypoTolerance {
   ///Enable the typo tolerance feature.
   bool enabled;
 
@@ -11,9 +11,9 @@ class TypoToleranceSettings {
   List<String> disableOnWords;
 
   ///Customize the minimum size for a typo in a word
-  MinWordSizeForTyposSettings? minWordSizeForTypos;
+  MinWordSizeForTypos? minWordSizeForTypos;
 
-  TypoToleranceSettings({
+  TypoTolerance({
     this.enabled = true,
     this.disableOnAttributes = const [],
     this.disableOnWords = const [],
@@ -29,16 +29,16 @@ class TypoToleranceSettings {
     };
   }
 
-  factory TypoToleranceSettings.fromMap(Map<String, dynamic> map) {
+  factory TypoTolerance.fromMap(Map<String, dynamic> map) {
     final minWordSizeForTypos = map['minWordSizeForTypos'];
-    return TypoToleranceSettings(
+    return TypoTolerance(
       enabled: map['enabled'] as bool? ?? true,
       disableOnAttributes:
           (map['disableOnAttributes'] as List?)?.cast<String>() ?? [],
       disableOnWords: (map['disableOnWords'] as List?)?.cast<String>() ?? [],
       minWordSizeForTypos: minWordSizeForTypos is Map<String, Object?>
-          ? MinWordSizeForTyposSettings.fromMap(minWordSizeForTypos)
-          : MinWordSizeForTyposSettings(),
+          ? MinWordSizeForTypos.fromMap(minWordSizeForTypos)
+          : MinWordSizeForTypos(),
     );
   }
 }
