@@ -20,8 +20,19 @@ import 'key.dart';
 import 'stats.dart' show AllStats;
 
 class MeiliSearchClientImpl implements MeiliSearchClient {
-  MeiliSearchClientImpl(this.serverUrl, [this.apiKey, this.connectTimeout])
-      : http = HttpRequestImpl(serverUrl, apiKey, connectTimeout);
+  MeiliSearchClientImpl(
+    this.serverUrl, [
+    this.apiKey,
+    this.connectTimeout,
+    HttpClientAdapter? adapter,
+    List<Interceptor>? interceptors,
+  ]) : http = HttpRequestImpl(
+          serverUrl,
+          apiKey,
+          connectTimeout,
+          adapter,
+          interceptors,
+        );
 
   @override
   final String serverUrl;
