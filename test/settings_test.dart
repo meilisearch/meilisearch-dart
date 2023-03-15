@@ -23,18 +23,29 @@ void main() {
       var index = await client.getIndex(uid);
 
       var response = await index
-          .updateSettings(IndexSettings(
-            stopWords: ['is', 'or', 'and', 'to'],
-            displayedAttributes: ['name'],
-            searchableAttributes: ['name'],
-            synonyms: <String, List<String>>{
-              'male': ['man'],
-              'female': ['woman'],
-            },
-            distinctAttribute: 'movie_id',
-            sortableAttributes: ['genre', 'title'],
-          ))
+          .updateSettings(
+            IndexSettings(
+              stopWords: ['is', 'or', 'and', 'to'],
+              displayedAttributes: ['name'],
+              searchableAttributes: ['name'],
+              synonyms: <String, List<String>>{
+                'male': ['man'],
+                'female': ['woman'],
+              },
+              distinctAttribute: 'movie_id',
+              sortableAttributes: ['genre', 'title'],
+              typoTolerance: TypoTolerance(
+                disableOnAttributes: ['genre'],
+                disableOnWords: ['prince'],
+                enabled: true,
+                minWordSizeForTypos: MinWordSizeForTypos(
+                  oneTypo: 3,
+                ),
+              ),
+            ),
+          )
           .waitFor(client: client);
+
       expect(response.status, 'succeeded');
       final settings = await index.getSettings();
       expect(settings.displayedAttributes, equals(['name']));
@@ -48,6 +59,9 @@ void main() {
           }));
       expect(settings.distinctAttribute, equals('movie_id'));
       expect(settings.sortableAttributes, equals(['genre', 'title']));
+      expect(settings.typoTolerance?.disableOnAttributes, contains('genre'));
+      expect(settings.typoTolerance?.disableOnWords, contains('prince'));
+      expect(settings.typoTolerance?.minWordSizeForTypos?.oneTypo, equals(3));
     });
 
     test('Reseting the settings', () async {
@@ -215,6 +229,81 @@ void main() {
       response = await index.resetSortableAttributes().waitFor(client: client);
       final resetSortablettributes = await index.getSortableAttributes();
       expect(resetSortablettributes, <String>[]);
+    });
+
+    group('Typo Tolerance', () {
+      late MeiliSearchIndex index;
+      setUp(() async {
+        final uid = randomUid();
+        await client.createIndex(uid).waitFor(client: client);
+        index = await client.getIndex(uid);
+      });
+
+      Future<TypoTolerance> doUpdate() async {
+        final toUpdate = TypoTolerance(
+          enabled: false,
+          disableOnWords: ["hello", "world"],
+          disableOnAttributes: [
+            'attribute',
+            'hello',
+          ],
+          minWordSizeForTypos: MinWordSizeForTypos(
+            oneTypo: 4,
+            twoTypos: 10,
+          ),
+        );
+        var response =
+            await index.updateTypoTolerance(toUpdate).waitFor(client: client);
+
+        expect(response.status, "succeeded");
+        return toUpdate;
+      }
+
+      test("Get", () async {
+        final initial = await index.getTypoTolerance();
+        final initialFromSettings =
+            await index.getSettings().then((value) => value.typoTolerance);
+        expect(
+          initial.toMap(),
+          equals(initialFromSettings?.toMap()),
+        );
+      });
+
+      test("Update", () async {
+        final toUpdate = await doUpdate();
+
+        final afterUpdate = await index.getTypoTolerance();
+        final afterUpdateFromSettings =
+            await index.getSettings().then((value) => value.typoTolerance);
+        expect(
+          afterUpdateFromSettings?.toMap(),
+          equals(toUpdate.toMap()),
+        );
+        expect(
+          afterUpdate.toMap(),
+          equals(toUpdate.toMap()),
+        );
+      });
+
+      test("Reset", () async {
+        //first update, then reset
+        await doUpdate();
+        final response =
+            await index.resetTypoTolerance().waitFor(client: client);
+
+        expect(response.status, 'succeeded');
+        final afterReset = await index.getTypoTolerance();
+        final afterResetFromSettings =
+            await index.getSettings().then((value) => value.typoTolerance);
+        expect(
+          afterReset.toMap(),
+          equals(TypoTolerance().toMap()),
+        );
+        expect(
+          afterResetFromSettings?.toMap(),
+          equals(TypoTolerance().toMap()),
+        );
+      });
     });
   });
 }

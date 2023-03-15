@@ -1,17 +1,13 @@
-import 'package:meilisearch/src/query_parameters/documents_query.dart';
-import 'package:meilisearch/src/query_parameters/tasks_query.dart';
-import 'package:meilisearch/src/result.dart';
-import 'package:meilisearch/src/searchable.dart';
-import 'package:meilisearch/src/tasks_results.dart';
-
+import 'query_parameters/documents_query.dart';
+import 'query_parameters/tasks_query.dart';
+import 'settings/_exports.dart';
+import 'result.dart';
+import 'searchable.dart';
+import 'tasks_results.dart';
 import 'filter_builder/filter_builder_base.dart';
-import 'index_settings.dart';
-
 import 'matching_strategy_enum.dart';
-import 'pagination_settings.dart';
 import 'stats.dart' show IndexStats;
 import 'task.dart';
-import 'typo_tolerance.dart';
 
 abstract class MeiliSearchIndex {
   String get uid;
@@ -297,22 +293,22 @@ abstract class MeiliSearchIndex {
   Future<Task> updateSortableAttributes(List<String> sortableAttributes);
 
   /// Get typo tolerance settings of the index.
-  Future<TypoToleranceSettings> getTypoTolerance();
+  Future<TypoTolerance> getTypoTolerance();
 
   /// Reset typo tolerance settings of the index.
   Future<Task> resetTypoTolerance();
 
   /// Update typo tolerance settings of the index.
-  Future<Task> updateTypoTolerance(TypoToleranceSettings typoTolerance);
+  Future<Task> updateTypoTolerance(TypoTolerance typoTolerance);
 
   /// Get pagination settings of the index.
-  Future<PaginationSettings> getPagination();
+  Future<Pagination> getPagination();
 
   /// Reset pagination settings of the index.
   Future<Task> resetPagination();
 
   /// Update pagination settings of the index.
-  Future<Task> updatePagination(PaginationSettings pagination);
+  Future<Task> updatePagination(Pagination pagination);
 
   /// Reset the settings of the index.
   /// All settings will be reset to their default value.

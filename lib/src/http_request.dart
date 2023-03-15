@@ -2,8 +2,13 @@ import 'package:dio/dio.dart';
 import 'http_request_impl.dart';
 
 abstract class HttpRequest {
-  factory HttpRequest(String serverUrl, String apiKey,
-      [Duration connectTimeout]) = HttpRequestImpl;
+  factory HttpRequest(
+    String serverUrl,
+    String apiKey, [
+    Duration? connectTimeout,
+    HttpClientAdapter? adapter,
+    List<Interceptor>? interceptors,
+  ]) = HttpRequestImpl;
 
   /// Meilisearch server URL.
   String get serverUrl;
