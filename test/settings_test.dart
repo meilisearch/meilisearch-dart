@@ -263,6 +263,7 @@ void main() {
         final initial = await index.getTypoTolerance();
         final initialFromSettings =
             await index.getSettings().then((value) => value.typoTolerance);
+
         expect(
           initial.toMap(),
           equals(initialFromSettings?.toMap()),
@@ -275,6 +276,7 @@ void main() {
         final afterUpdate = await index.getTypoTolerance();
         final afterUpdateFromSettings =
             await index.getSettings().then((value) => value.typoTolerance);
+
         expect(
           afterUpdateFromSettings?.toMap(),
           equals(toUpdate.toMap()),
@@ -302,6 +304,72 @@ void main() {
         expect(
           afterResetFromSettings?.toMap(),
           equals(TypoTolerance().toMap()),
+        );
+      });
+    });
+
+    group('Pagination', () {
+      late MeiliSearchIndex index;
+      setUp(() async {
+        final uid = randomUid();
+        await client.createIndex(uid).waitFor(client: client);
+        index = await client.getIndex(uid);
+      });
+
+      Future<Pagination> doUpdate() async {
+        final toUpdate = Pagination(
+          maxTotalHits: 2000,
+        );
+        var response =
+            await index.updatePagination(toUpdate).waitFor(client: client);
+
+        expect(response.status, "succeeded");
+        return toUpdate;
+      }
+
+      test("Get", () async {
+        final initial = await index.getPagination();
+        final initialFromSettings =
+            await index.getSettings().then((value) => value.pagination);
+
+        expect(
+          initial.toMap(),
+          equals(initialFromSettings?.toMap()),
+        );
+      });
+
+      test("Update", () async {
+        final toUpdate = await doUpdate();
+
+        final afterUpdate = await index.getPagination();
+        final afterUpdateFromSettings =
+            await index.getSettings().then((value) => value.pagination);
+        expect(
+          afterUpdateFromSettings?.toMap(),
+          equals(toUpdate.toMap()),
+        );
+        expect(
+          afterUpdate.toMap(),
+          equals(toUpdate.toMap()),
+        );
+      });
+
+      test("Reset", () async {
+        //first update, then reset
+        await doUpdate();
+        final response = await index.resetPagination().waitFor(client: client);
+
+        expect(response.status, 'succeeded');
+        final afterReset = await index.getPagination();
+        final afterResetFromSettings =
+            await index.getSettings().then((value) => value.pagination);
+        expect(
+          afterReset.toMap(),
+          equals(Pagination().toMap()),
+        );
+        expect(
+          afterResetFromSettings?.toMap(),
+          equals(Pagination().toMap()),
         );
       });
     });
