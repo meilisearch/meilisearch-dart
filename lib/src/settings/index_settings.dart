@@ -1,5 +1,5 @@
-import 'faceting_settings.dart';
-import 'pagination_settings.dart';
+import 'faceting.dart';
+import 'pagination.dart';
 import 'typo_tolerance.dart';
 
 class IndexSettings {
@@ -44,13 +44,13 @@ class IndexSettings {
   List<String>? sortableAttributes;
 
   /// Customize typo tolerance feature.
-  TypoToleranceSettings? typoTolerance;
+  TypoTolerance? typoTolerance;
 
   ///Customize pagination feature.
-  PaginationSettings? pagination;
+  Pagination? pagination;
 
   ///Customize faceting feature.
-  FacetingSettings? faceting;
+  Faceting? faceting;
 
   Map<String, Object?> toMap() => <String, Object?>{
         'synonyms': synonyms,
@@ -70,29 +70,45 @@ class IndexSettings {
     final typoTolerance = map['typoTolerance'];
     final pagination = map['pagination'];
     final faceting = map['faceting'];
+    final synonyms = map['synonyms'];
+    final stopWords = map['stopWords'];
+    final rankingRules = map['rankingRules'];
+    final filterableAttributes = map['filterableAttributes'];
+    final searchableAttributes = map['searchableAttributes'];
+    final displayedAttributes = map['displayedAttributes'];
+    final sortableAttributes = map['sortableAttributes'];
+
     return IndexSettings(
-      synonyms: (map['synonyms'] as Map?)
-          ?.cast<String, List<Object?>>()
-          .map((key, value) => MapEntry(key, value.cast<String>())),
-      stopWords: (map['stopWords'] as Iterable?)?.cast<String>().toList(),
-      rankingRules: (map['rankingRules'] as List?)?.cast<String>(),
-      filterableAttributes:
-          (map['filterableAttributes'] as List?)?.cast<String>(),
-      distinctAttribute: (map['distinctAttribute'] as String?),
-      searchableAttributes:
-          (map['searchableAttributes'] as List?)?.cast<String>(),
-      displayedAttributes:
-          (map['displayedAttributes'] as List?)?.cast<String>(),
-      sortableAttributes: (map['sortableAttributes'] as List?)?.cast<String>(),
+      synonyms: synonyms is Map<String, Object?>
+          ? synonyms
+              .cast<String, List<Object?>>()
+              .map((key, value) => MapEntry(key, value.cast<String>()))
+          : null,
+      stopWords:
+          stopWords is List<Object?> ? stopWords.cast<String>().toList() : null,
+      rankingRules:
+          rankingRules is List<Object?> ? rankingRules.cast<String>() : null,
+      filterableAttributes: filterableAttributes is List<Object?>
+          ? filterableAttributes.cast<String>()
+          : null,
+      distinctAttribute: map['distinctAttribute'] as String?,
+      searchableAttributes: searchableAttributes is List<Object?>
+          ? searchableAttributes.cast<String>()
+          : allAttributes,
+      displayedAttributes: displayedAttributes is List<Object?>
+          ? displayedAttributes.cast<String>()
+          : allAttributes,
+      sortableAttributes: sortableAttributes is List<Object?>
+          ? sortableAttributes.cast<String>()
+          : null,
       typoTolerance: typoTolerance is Map<String, Object?>
-          ? TypoToleranceSettings.fromMap(typoTolerance)
+          ? TypoTolerance.fromMap(typoTolerance)
           : null,
       pagination: pagination is Map<String, Object?>
-          ? PaginationSettings.fromMap(pagination)
+          ? Pagination.fromMap(pagination)
           : null,
-      faceting: faceting is Map<String, Object?>
-          ? FacetingSettings.fromMap(faceting)
-          : null,
+      faceting:
+          faceting is Map<String, Object?> ? Faceting.fromMap(faceting) : null,
     );
   }
 }
