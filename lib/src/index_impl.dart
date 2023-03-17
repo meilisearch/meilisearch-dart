@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'result.dart';
 import 'searchable.dart';
+import 'settings/_exports.dart';
 import 'tasks_results.dart';
 import 'package:collection/collection.dart';
 import 'client.dart';
@@ -9,7 +10,6 @@ import 'exception.dart';
 import 'filter_builder/filter_builder_base.dart';
 import 'http_request.dart';
 import 'index.dart';
-import 'index_settings.dart';
 import 'matching_strategy_enum.dart';
 import 'query_parameters/documents_query.dart';
 import 'query_parameters/tasks_query.dart';
@@ -605,8 +605,38 @@ class MeiliSearchIndexImpl implements MeiliSearchIndex {
 
   @override
   Future<Task> updateSortableAttributes(List<String> sortableAttributes) async {
-    return _getTask(http.putMethod('/indexes/$uid/settings/sortable-attributes',
-        data: sortableAttributes));
+    return _getTask(
+      http.putMethod(
+        '/indexes/$uid/settings/sortable-attributes',
+        data: sortableAttributes,
+      ),
+    );
+  }
+
+  @override
+  Future<TypoTolerance> getTypoTolerance() async {
+    final response = await http.getMethod<Map<String, Object?>>(
+      '/indexes/$uid/settings/typo-tolerance',
+    );
+
+    return TypoTolerance.fromMap(response.data!);
+  }
+
+  @override
+  Future<Task> resetTypoTolerance() async {
+    return await _getTask(
+      http.deleteMethod('/indexes/$uid/settings/typo-tolerance'),
+    );
+  }
+
+  @override
+  Future<Task> updateTypoTolerance(TypoTolerance typoTolerance) async {
+    return await _getTask(
+      http.patchMethod(
+        '/indexes/$uid/settings/typo-tolerance',
+        data: typoTolerance.toMap(),
+      ),
+    );
   }
 
   ///
