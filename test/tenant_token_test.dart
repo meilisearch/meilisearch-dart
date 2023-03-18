@@ -59,7 +59,7 @@ void main() {
           client: client,
         );
 
-        Future.wait(
+        await Future.wait(
           possibleRules.map((rule) {
             final token = admClient.generateTenantToken(admKey.uid!, rule);
             final custom = MeiliSearchClient(testServer, token);
