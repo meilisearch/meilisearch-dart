@@ -59,11 +59,13 @@ void main() {
           client: client,
         );
 
-        for (final Object rule in possibleRules) {
-          final token = admClient.generateTenantToken(admKey.uid!, rule);
-          final custom = MeiliSearchClient(testServer, token);
-          await custom.index('my_index').search('');
-        }
+        Future.wait(
+          possibleRules.map((rule) {
+            final token = admClient.generateTenantToken(admKey.uid!, rule);
+            final custom = MeiliSearchClient(testServer, token);
+            return custom.index('my_index').search('');
+          }),
+        );
       });
     });
 
