@@ -56,14 +56,13 @@ void main() {
         final admClient = MeiliSearchClient(testServer, admKey.key);
         final index = await createBooksIndex(uid: 'my_index');
         await index.updateFilterableAttributes(['tag', 'book_id']).waitFor(
-            client: client);
+          client: client,
+        );
 
         for (final Object rule in possibleRules) {
           final token = admClient.generateTenantToken(admKey.uid!, rule);
           final custom = MeiliSearchClient(testServer, token);
-
-          expect(() async => await custom.index('my_index').search(''),
-              returnsNormally);
+          await custom.index('my_index').search('');
         }
       });
     });
