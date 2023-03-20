@@ -310,6 +310,15 @@ abstract class MeiliSearchIndex {
   /// Update pagination settings of the index.
   Future<Task> updatePagination(Pagination pagination);
 
+  /// Get faceting settings of the index.
+  Future<Faceting> getFaceting();
+
+  /// Reset faceting settings of the index.
+  Future<Task> resetFaceting();
+
+  /// Update faceting settings of the index.
+  Future<Task> updateFaceting(Faceting faceting);
+
   /// Reset the settings of the index.
   /// All settings will be reset to their default value.
   Future<Task> resetSettings();

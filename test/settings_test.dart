@@ -42,6 +42,9 @@ void main() {
                   oneTypo: 3,
                 ),
               ),
+              faceting: Faceting(
+                maxValuesPerFacet: 200,
+              ),
             ),
           )
           .waitFor(client: client);
@@ -62,6 +65,7 @@ void main() {
       expect(settings.typoTolerance?.disableOnAttributes, contains('genre'));
       expect(settings.typoTolerance?.disableOnWords, contains('prince'));
       expect(settings.typoTolerance?.minWordSizeForTypos?.oneTypo, equals(3));
+      expect(settings.faceting?.maxValuesPerFacet, equals(200));
     });
 
     test('Reseting the settings', () async {
@@ -370,6 +374,72 @@ void main() {
         expect(
           afterResetFromSettings?.toMap(),
           equals(Pagination().toMap()),
+        );
+      });
+    });
+
+    group('Faceting', () {
+      late MeiliSearchIndex index;
+      setUp(() async {
+        final uid = randomUid();
+        await client.createIndex(uid).waitFor(client: client);
+        index = await client.getIndex(uid);
+      });
+
+      Future<Faceting> doUpdate() async {
+        final toUpdate = Faceting(
+          maxValuesPerFacet: 200,
+        );
+        var response =
+            await index.updateFaceting(toUpdate).waitFor(client: client);
+
+        expect(response.status, "succeeded");
+        return toUpdate;
+      }
+
+      test("Get", () async {
+        final initial = await index.getFaceting();
+        final initialFromSettings =
+            await index.getSettings().then((value) => value.faceting);
+
+        expect(
+          initial.toMap(),
+          equals(initialFromSettings?.toMap()),
+        );
+      });
+
+      test("Update", () async {
+        final toUpdate = await doUpdate();
+
+        final afterUpdate = await index.getFaceting();
+        final afterUpdateFromSettings =
+            await index.getSettings().then((value) => value.faceting);
+        expect(
+          afterUpdateFromSettings?.toMap(),
+          equals(toUpdate.toMap()),
+        );
+        expect(
+          afterUpdate.toMap(),
+          equals(toUpdate.toMap()),
+        );
+      });
+
+      test("Reset", () async {
+        //first update, then reset
+        await doUpdate();
+        final response = await index.resetFaceting().waitFor(client: client);
+
+        expect(response.status, 'succeeded');
+        final afterReset = await index.getFaceting();
+        final afterResetFromSettings =
+            await index.getSettings().then((value) => value.faceting);
+        expect(
+          afterReset.toMap(),
+          equals(Faceting().toMap()),
+        );
+        expect(
+          afterResetFromSettings?.toMap(),
+          equals(Faceting().toMap()),
         );
       });
     });
