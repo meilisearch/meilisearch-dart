@@ -301,6 +301,15 @@ abstract class MeiliSearchIndex {
   /// Update typo tolerance settings of the index.
   Future<Task> updateTypoTolerance(TypoTolerance typoTolerance);
 
+  /// Get pagination settings of the index.
+  Future<Pagination> getPagination();
+
+  /// Reset pagination settings of the index.
+  Future<Task> resetPagination();
+
+  /// Update pagination settings of the index.
+  Future<Task> updatePagination(Pagination pagination);
+
   /// Reset the settings of the index.
   /// All settings will be reset to their default value.
   Future<Task> resetSettings();
