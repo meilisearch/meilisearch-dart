@@ -639,6 +639,58 @@ class MeiliSearchIndexImpl implements MeiliSearchIndex {
     );
   }
 
+  @override
+  Future<Pagination> getPagination() async {
+    final response = await http.getMethod<Map<String, Object?>>(
+      '/indexes/$uid/settings/pagination',
+    );
+
+    return Pagination.fromMap(response.data!);
+  }
+
+  @override
+  Future<Task> resetPagination() async {
+    return await _getTask(
+      http.deleteMethod('/indexes/$uid/settings/pagination'),
+    );
+  }
+
+  @override
+  Future<Task> updatePagination(Pagination pagination) async {
+    return await _getTask(
+      http.patchMethod(
+        '/indexes/$uid/settings/pagination',
+        data: pagination.toMap(),
+      ),
+    );
+  }
+
+  @override
+  Future<Faceting> getFaceting() async {
+    final response = await http.getMethod<Map<String, Object?>>(
+      '/indexes/$uid/settings/faceting',
+    );
+
+    return Faceting.fromMap(response.data!);
+  }
+
+  @override
+  Future<Task> resetFaceting() async {
+    return await _getTask(
+      http.deleteMethod('/indexes/$uid/settings/faceting'),
+    );
+  }
+
+  @override
+  Future<Task> updateFaceting(Faceting faceting) async {
+    return await _getTask(
+      http.patchMethod(
+        '/indexes/$uid/settings/faceting',
+        data: faceting.toMap(),
+      ),
+    );
+  }
+
   ///
   /// Stats endponts
   ///
