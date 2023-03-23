@@ -1,7 +1,6 @@
 import 'package:meilisearch/meilisearch.dart';
 import 'package:test/test.dart';
 
-import 'utils/books.dart';
 import 'utils/books_data.dart';
 import 'utils/client.dart';
 import 'utils/wait_for.dart';
