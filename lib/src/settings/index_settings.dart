@@ -1,3 +1,5 @@
+import 'faceting.dart';
+import 'pagination.dart';
 import 'typo_tolerance.dart';
 
 class IndexSettings {
@@ -11,6 +13,8 @@ class IndexSettings {
     this.searchableAttributes = allAttributes,
     this.displayedAttributes = allAttributes,
     this.typoTolerance,
+    this.pagination,
+    this.faceting,
   });
 
   static const allAttributes = <String>['*'];
@@ -42,6 +46,12 @@ class IndexSettings {
   /// Customize typo tolerance feature.
   TypoTolerance? typoTolerance;
 
+  ///Customize pagination feature.
+  Pagination? pagination;
+
+  ///Customize faceting feature.
+  Faceting? faceting;
+
   Map<String, Object?> toMap() => <String, Object?>{
         'synonyms': synonyms,
         'stopWords': stopWords,
@@ -51,11 +61,15 @@ class IndexSettings {
         'searchableAttributes': searchableAttributes,
         'displayedAttributes': displayedAttributes,
         'sortableAttributes': sortableAttributes,
-        'typoTolerance': typoTolerance?.toMap()
+        'typoTolerance': typoTolerance?.toMap(),
+        'pagination': pagination?.toMap(),
+        'faceting': faceting?.toMap(),
       };
 
   factory IndexSettings.fromMap(Map<String, Object?> map) {
     final typoTolerance = map['typoTolerance'];
+    final pagination = map['pagination'];
+    final faceting = map['faceting'];
     final synonyms = map['synonyms'];
     final stopWords = map['stopWords'];
     final rankingRules = map['rankingRules'];
@@ -77,7 +91,7 @@ class IndexSettings {
       filterableAttributes: filterableAttributes is List<Object?>
           ? filterableAttributes.cast<String>()
           : null,
-      distinctAttribute: (map['distinctAttribute'] as String?),
+      distinctAttribute: map['distinctAttribute'] as String?,
       searchableAttributes: searchableAttributes is List<Object?>
           ? searchableAttributes.cast<String>()
           : allAttributes,
@@ -90,6 +104,11 @@ class IndexSettings {
       typoTolerance: typoTolerance is Map<String, Object?>
           ? TypoTolerance.fromMap(typoTolerance)
           : null,
+      pagination: pagination is Map<String, Object?>
+          ? Pagination.fromMap(pagination)
+          : null,
+      faceting:
+          faceting is Map<String, Object?> ? Faceting.fromMap(faceting) : null,
     );
   }
 }
