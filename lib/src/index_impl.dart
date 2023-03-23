@@ -660,7 +660,9 @@ class MeiliSearchIndexImpl implements MeiliSearchIndex {
     if (params == null) {
       params = TasksQuery(indexUids: [uid]);
     } else {
-      params.indexUids.add(uid);
+      if (!params.indexUids.contains(uid)) {
+        params = params.copyWith(indexUids: [...params.indexUids, uid]);
+      }
     }
 
     return await client.getTasks(params: params);
