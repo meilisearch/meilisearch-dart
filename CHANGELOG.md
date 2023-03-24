@@ -1,5 +1,10 @@
 [comment]: <> (All notable changes to this project will be documented in this file.)
 
+# 0.10.1
+### Bug Fixes:
+
+- Fix the behavior of `client.index.getTasks()` where the `indexUid` was not changing correctly after consecutive calls.
+
 # 0.10.0
 ### Changes:
 
