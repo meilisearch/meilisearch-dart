@@ -31,6 +31,30 @@ class TasksQuery extends Queryable {
     this.types = const [],
   });
 
+  TasksQuery copyWith({
+    List<int>? uids,
+    List<int>? canceledBy,
+    List<String>? statuses,
+    List<String>? types,
+    List<String>? indexUids,
+  }) {
+    return TasksQuery(
+      from: from,
+      limit: limit,
+      beforeEnqueuedAt: beforeEnqueuedAt,
+      afterEnqueuedAt: afterEnqueuedAt,
+      beforeStartedAt: beforeStartedAt,
+      afterStartedAt: afterStartedAt,
+      beforeFinishedAt: beforeFinishedAt,
+      afterFinishedAt: afterFinishedAt,
+      uids: uids ?? this.uids,
+      canceledBy: canceledBy ?? this.canceledBy,
+      statuses: statuses ?? this.statuses,
+      types: types ?? this.types,
+      indexUids: indexUids ?? this.indexUids,
+    );
+  }
+
   Map<String, Object?> buildMap() {
     return {
       'from': from,
