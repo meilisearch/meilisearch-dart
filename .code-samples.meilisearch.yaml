@@ -397,7 +397,7 @@ getting_started_sorting: |-
   await client.index('meteorites').search('', sort: ['mass:asc'], filter: 'mass < 200');
 getting_started_filtering: |-
   await client.index('meteorites').search('', filter: 'mass < 200');
-faceted_search_update_settings_1: |-
+filtering_update_settings_1: |-
   await client.index('movies').updateFilterableAttributes([
     'director',
     'genres',
