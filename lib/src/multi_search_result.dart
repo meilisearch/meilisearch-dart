@@ -1,4 +1,3 @@
-import 'package:collection/collection.dart';
 import 'searchable.dart';
 
 class MultiSearchResult {
