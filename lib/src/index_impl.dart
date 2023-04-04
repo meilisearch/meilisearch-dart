@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'result.dart';
+import 'search_query.dart';
 import 'searchable.dart';
 import 'settings/_exports.dart';
 import 'tasks_results.dart';
@@ -126,30 +127,32 @@ class MeiliSearchIndexImpl implements MeiliSearchIndex {
     String? highlightPostTag,
     MatchingStrategy? matchingStrategy,
   }) async {
-    final data = <String, Object?>{
-      'q': query,
-      'offset': offset,
-      'limit': limit,
-      'page': page,
-      'hitsPerPage': hitsPerPage,
-      'filter': filter ?? filterExpression?.transform(),
-      'sort': sort,
-      'facets': facets,
-      'attributesToRetrieve': attributesToRetrieve,
-      'attributesToCrop': attributesToCrop,
-      'cropLength': cropLength,
-      'attributesToHighlight': attributesToHighlight,
-      'showMatchesPosition': showMatchesPosition,
-      'cropMarker': cropMarker,
-      'highlightPreTag': highlightPreTag,
-      'highlightPostTag': highlightPostTag,
-      'matchingStrategy': matchingStrategy?.name,
-    };
-    data.removeWhere((k, v) => v == null);
-    final response = await http
-        .postMethod<Map<String, Object?>>('/indexes/$uid/search', data: data);
+    final data = SearchQuery(
+      indexUid: uid,
+      query: query,
+      offset: offset,
+      limit: limit,
+      page: page,
+      hitsPerPage: hitsPerPage,
+      filter: filter,
+      filterExpression: filterExpression,
+      sort: sort,
+      facets: facets,
+      attributesToRetrieve: attributesToRetrieve,
+      attributesToCrop: attributesToCrop,
+      cropLength: cropLength,
+      attributesToHighlight: attributesToHighlight,
+      showMatchesPosition: showMatchesPosition,
+      cropMarker: cropMarker,
+      highlightPreTag: highlightPreTag,
+      highlightPostTag: highlightPostTag,
+      matchingStrategy: matchingStrategy,
+    ).toMap();
+    final response = await http.postMethod<Map<String, Object>>(
+        '/indexes/$uid/search',
+        data: data.remove('indexUid'));
 
-    return Searcheable.createSearchResult(response.data!);
+    return Searcheable.createSearchResult(response.data!, indexUid: uid);
   }
 
   //

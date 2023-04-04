@@ -1,26 +1,38 @@
 import 'package:meilisearch/meilisearch.dart';
 
 abstract class Searcheable {
+  final String indexUid;
+
   /// Query originating the response
-  String? query;
+  final String? query;
 
   /// Results of the query
-  List<Map<String, Object?>>? hits;
+  final List<Map<String, Object?>>? hits;
 
   /// Distribution of the given facets
-  Object? facetDistribution;
+  final Object? facetDistribution;
 
   /// Contains the location of each occurrence of queried terms across all fields
-  Object? matchesPosition;
+  final Object? matchesPosition;
 
   /// Processing time of the query
-  int? processingTimeMs;
+  final int? processingTimeMs;
 
-  static Searcheable createSearchResult(Map<String, Object?> map) {
+  const Searcheable({
+    required this.indexUid,
+    this.query,
+    this.hits,
+    this.facetDistribution,
+    this.matchesPosition,
+    this.processingTimeMs,
+  });
+
+  static Searcheable createSearchResult(Map<String, Object?> map,
+      {String? indexUid}) {
     if (map['totalHits'] != null) {
-      return PaginatedSearchResult.fromMap(map);
+      return PaginatedSearchResult.fromMap(map, indexUid: indexUid);
     } else {
-      return SearchResult.fromMap(map);
+      return SearchResult.fromMap(map, indexUid: indexUid);
     }
   }
 }

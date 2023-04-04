@@ -10,6 +10,8 @@ import 'package:meilisearch/src/tasks_results.dart';
 import 'package:meilisearch/src/task.dart';
 import 'package:meilisearch/src/tenant_token.dart';
 
+import 'multi_search_result.dart';
+import 'multi_search_query.dart';
 import 'http_request.dart';
 import 'http_request_impl.dart';
 
@@ -257,5 +259,14 @@ class MeiliSearchClientImpl implements MeiliSearchClient {
         await http.getMethod<Map<String, Object?>>(('/tasks/$uid'));
 
     return Task.fromMap(response.data!);
+  }
+
+  @override
+  Future<MultiSearchResult> multiSearch(MultiSearchQuery query) async {
+    final response = await http.postMethod<Map<String, Object?>>(
+      '/multi-search',
+      data: query.toMap(),
+    );
+    return MultiSearchResult.fromMap(response.data!);
   }
 }
