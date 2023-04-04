@@ -8,8 +8,6 @@ class MultiSearchQuery {
   });
 
   Map<String, Object?> toMap() {
-    return {
-      'queries': queries.map((e) => e.toMap()).toList()
-    };
+    return {'queries': queries.map((e) => e.toMap()).toList()};
   }
 }
