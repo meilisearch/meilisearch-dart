@@ -6,8 +6,13 @@ import 'exception.dart';
 const bool _kIsWeb = bool.fromEnvironment('dart.library.js_util');
 
 class HttpRequestImpl implements HttpRequest {
-  HttpRequestImpl(this.serverUrl, this.apiKey, [this.connectTimeout])
-      : dio = Dio(
+  HttpRequestImpl(
+    this.serverUrl,
+    this.apiKey, [
+    this.connectTimeout,
+    HttpClientAdapter? adapter,
+    List<Interceptor>? interceptors,
+  ]) : dio = Dio(
           BaseOptions(
             baseUrl: serverUrl,
             headers: <String, Object>{
@@ -17,11 +22,20 @@ class HttpRequestImpl implements HttpRequest {
                 if (_kIsWeb) Version.qualifiedVersionWeb
               ].join(',')
             },
-            contentType: 'application/json',
             responseType: ResponseType.json,
             connectTimeout: connectTimeout ?? Duration(seconds: 5),
           ),
-        );
+        ) {
+    if (adapter != null) {
+      dio.httpClientAdapter = adapter;
+    }
+
+    dio.interceptors.removeImplyContentTypeInterceptor();
+
+    if (interceptors != null) {
+      dio.interceptors.addAll(interceptors);
+    }
+  }
 
   @override
   final String serverUrl;
@@ -61,12 +75,16 @@ class HttpRequestImpl implements HttpRequest {
     String path, {
     Object? data,
     Map<String, Object?>? queryParameters,
+    String contentType = Headers.jsonContentType,
   }) async {
     try {
       return await dio.post<T>(
         path,
         data: data,
         queryParameters: queryParameters,
+        options: Options(
+          contentType: contentType,
+        ),
       );
     } on DioError catch (e) {
       return throwException(e);
@@ -78,12 +96,16 @@ class HttpRequestImpl implements HttpRequest {
     String path, {
     Object? data,
     Map<String, Object?>? queryParameters,
+    String contentType = Headers.jsonContentType,
   }) async {
     try {
       return await dio.patch<T>(
         path,
         data: data,
         queryParameters: queryParameters,
+        options: Options(
+          contentType: contentType,
+        ),
       );
     } on DioError catch (e) {
       return throwException(e);
@@ -95,12 +117,16 @@ class HttpRequestImpl implements HttpRequest {
     String path, {
     Object? data,
     Map<String, Object?>? queryParameters,
+    String contentType = Headers.jsonContentType,
   }) async {
     try {
       return await dio.put<T>(
         path,
         data: data,
         queryParameters: queryParameters,
+        options: Options(
+          contentType: contentType,
+        ),
       );
     } on DioError catch (e) {
       return throwException(e);

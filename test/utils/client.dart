@@ -30,11 +30,11 @@ Future<void> deleteAllKeys() async {
   }
 }
 
-Future<void> setUpClient() async {
+void setUpClient() {
   setUp(() {
     final String server = testServer;
-
-    client = MeiliSearchClient(server, 'masterKey');
+    const masterKey = 'masterKey';
+    client = MeiliSearchClient(server, masterKey);
     random = Random();
   });
 
@@ -44,7 +44,7 @@ Future<void> setUpClient() async {
   });
 }
 
-Future<void> setUpHttp() async {
+void setUpHttp() {
   setUp(() {
     final String server = testServer;
 
@@ -52,12 +52,13 @@ Future<void> setUpHttp() async {
   });
 }
 
-Future<void> setUpClientWithWrongUrl() async {
+void setUpClientWithWrongUrl() {
   setUp(() {
     final String server = 'http://wrongurl:1234';
     final connectTimeout = Duration(milliseconds: 1000);
+    const masterKey = 'masterKey';
 
-    client = MeiliSearchClient(server, 'masterKey', connectTimeout);
+    client = MeiliSearchClient(server, masterKey, connectTimeout);
   });
 }
 

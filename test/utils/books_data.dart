@@ -1,48 +1,145 @@
+import 'dart:convert';
+
+const kbookId = 'book_id';
+const ktitle = 'title';
+const ktag = 'tag';
+const kid = 'id';
+
+List<Map<String, Object?>> dynamicBooks(int count) {
+  final tags = List.generate(4, (index) => "Tag $index");
+  return List.generate(
+    count,
+    (index) => {
+      kbookId: index,
+      ktitle: 'Book $index',
+      ktag: tags[index % tags.length],
+    },
+  );
+}
+
+List<Map<String, Object?>> dynamicPartialBookUpdate(int count) {
+  return List.generate(
+    count,
+    (index) {
+      //shift index by 5 to simulate 5 non-existent book update
+      index += 5;
+      return {
+        kbookId: index,
+        ktitle: 'UPDATED Book $index',
+      };
+    },
+  );
+}
+
+final partialBookUpdate = [
+  {kbookId: 123, ktitle: 'UPDATED Pride and Prejudice'},
+  {kbookId: 1344, ktitle: 'UPDATED The Hobbit'},
+  //New book should be upserted
+  {kbookId: 654, ktitle: 'UPDATED Not Le Petit Prince'},
+];
+
 final books = [
-  {'book_id': 123, 'title': 'Pride and Prejudice', 'tag': 'Romance'},
-  {'book_id': 456, 'title': 'Le Petit Prince', 'tag': 'Tale'},
-  {'book_id': 1, 'title': 'Alice In Wonderland', 'tag': 'Tale'},
-  {'book_id': 1344, 'title': 'The Hobbit', 'tag': 'Epic fantasy'},
+  {kbookId: 123, ktitle: 'Pride and Prejudice', ktag: 'Romance'},
+  {kbookId: 456, ktitle: 'Le Petit Prince', ktag: 'Tale'},
+  {kbookId: 1, ktitle: 'Alice In Wonderland', ktag: 'Tale'},
+  {kbookId: 1344, ktitle: 'The Hobbit', ktag: 'Epic fantasy'},
   {
-    'book_id': 4,
-    'title': 'Harry Potter and the Half-Blood Prince',
-    'tag': 'Epic fantasy'
+    kbookId: 4,
+    ktitle: 'Harry Potter and the Half-Blood Prince',
+    ktag: 'Epic fantasy'
   },
   {
-    'book_id': 42,
-    'title': 'The Hitchhiker\'s Guide to the Galaxy',
-    'tag': 'Epic fantasy'
-  }
+    kbookId: 42,
+    ktitle: 'The Hitchhiker\'s Guide to the Galaxy',
+    ktag: 'Epic fantasy'
+  },
+  {kbookId: 9999, ktitle: 'The Hobbit', ktag: null},
 ];
+
+enum CSVHeaderTypes {
+  string,
+
+  ///TODO(ahmednfwela): blocked until https://github.com/meilisearch/meilisearch/pull/3576
+  boolean,
+  number,
+  unkown,
+}
+
+String dataAsCSV(List<Map<String, Object?>> data) {
+  final csvHeaders = <String, CSVHeaderTypes?>{};
+  final csvDataBuffer = StringBuffer();
+  for (final element in data) {
+    for (final entry in element.entries) {
+      if (!csvHeaders.containsKey(entry.key)) {
+        final value = entry.value;
+        if (value != null) {
+          csvHeaders[entry.key] = value is String
+              ? CSVHeaderTypes.string
+              : value is num
+                  ? CSVHeaderTypes.number
+                  : value is bool
+                      ? CSVHeaderTypes.boolean
+                      : CSVHeaderTypes.unkown;
+        }
+      }
+    }
+  }
+  final csvHeaderEntries = csvHeaders.entries.toList();
+
+  data
+      .map(
+        (obj) => csvHeaderEntries
+            .map((e) => e.key)
+            .map((headerKey) => json.encode(obj[headerKey] ?? ""))
+            .join(','),
+      )
+      .forEach(csvDataBuffer.writeln);
+
+  final headerStr = csvHeaders.entries.map((header) {
+    final headerType = header.value;
+    final typeStr = headerType == CSVHeaderTypes.number
+        ? ':number'
+        : headerType == CSVHeaderTypes.boolean
+            ? ':boolean'
+            : null;
+    return jsonEncode('${header.key}${typeStr ?? ""}');
+  }).join(",");
+
+  return '$headerStr\n${csvDataBuffer.toString()}';
+}
+
+String dataAsNDJson(List<Map<String, Object?>> data) {
+  return data.map(jsonEncode).join("\n");
+}
 
 final nestedBooks = [
   {
-    "id": 1,
-    "title": 'Pride and Prejudice',
+    kid: 1,
+    ktitle: 'Pride and Prejudice',
     "info": {
       "comment": 'A great book',
       "reviewNb": 500,
     },
   },
   {
-    "id": 2,
-    "title": 'Le Petit Prince',
+    kid: 2,
+    ktitle: 'Le Petit Prince',
     "info": {
       "comment": 'A french book',
       "reviewNb": 600,
     },
   },
   {
-    "id": 3,
-    "title": 'Le Rouge et le Noir',
+    kid: 3,
+    ktitle: 'Le Rouge et le Noir',
     "info": {
       "comment": 'Another french book',
       "reviewNb": 700,
     },
   },
   {
-    "id": 4,
-    "title": 'Alice In Wonderland',
+    kid: 4,
+    ktitle: 'Alice In Wonderland',
     "comment": 'A weird book',
     "info": {
       "comment": 'A weird book',
@@ -50,20 +147,20 @@ final nestedBooks = [
     },
   },
   {
-    "id": 5,
-    "title": 'The Hobbit',
+    kid: 5,
+    ktitle: 'The Hobbit',
     "info": {
       "comment": 'An awesome book',
       "reviewNb": 900,
     },
   },
   {
-    "id": 6,
-    "title": 'Harry Potter and the Half-Blood Prince',
+    kid: 6,
+    ktitle: 'Harry Potter and the Half-Blood Prince',
     "info": {
       "comment": 'The best book',
       "reviewNb": 1000,
     },
   },
-  {"id": 7, "title": "The Hitchhiker's Guide to the Galaxy"},
+  {kid: 7, ktitle: "The Hitchhiker's Guide to the Galaxy"},
 ];

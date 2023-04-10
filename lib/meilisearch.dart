@@ -2,8 +2,9 @@ library meilisearch;
 
 export 'src/client.dart';
 export 'src/index.dart';
-export 'src/index_settings.dart';
+export 'src/settings/_exports.dart';
 export 'src/search_result.dart';
+export 'src/filter_builder/_exports.dart';
 export 'src/paginated_search_result.dart';
 export 'src/query_parameters/documents_query.dart';
 export 'src/query_parameters/cancel_tasks_query.dart';

@@ -1,5 +1,32 @@
 [comment]: <> (All notable changes to this project will be documented in this file.)
 
+# 0.10.1
+### Bug Fixes:
+
+- Fix the behavior of `client.index.getTasks()` where the `indexUid` was not changing correctly after consecutive calls.
+
+# 0.10.0
+### Changes:
+
+- Add `pagination` settings methods `Future<Pagination> getPagination()`, `Future<Task> resetPagination()`, `Future<Task> updatePagination(Pagination pagination)` on `Index` instances.
+- Add `faceting` settings methods `Future<Faceting> getFaceting()`, `Future<Task> resetFaceting()`, `Future<Task> updateFaceting(Faceting faceting)` on `Index` instances.
+- Add `typo tolerance` settings methods `Future<TypoTolerance> getTypoTolerance()`, `Future<Task> resetTypoTolerance()`, `Future<Task> updateTypoTolerance(TypoTolerance typoTolerance)` on `Index` instances.
+- Add filter-builder style:
+  - Added `filterExpression` parameter to the `search` method, which takes a `MeiliOperatorExpressionBase`, you can only use the new parameter or the regular `filter` parameter, but not both. If both are provided, `filter` parameter will take priority.
+  - Added new facade class `Meili` which contains static methods to help create filter expressions.
+  - Added extension method `toMeiliAttribute()` to String, which is equivalent to `Meili.attr`.
+  - Added extension method `toMeiliValue()` to `String`,`num`,`DateTime`,`bool`, which are equivalent to `Meili.value`.
+
+  - `example:`
+    This query `await index.search('prince', filterExpression: Meili.eq(Meili.attribute('tag'), Meili.value("Tale")));` is the same as `await index.search('prince', filter: "tag = Tale")`.
+
+- Add `Future<List<Task>> addDocumentsInBatches(List<Map<String, Object?>> documents, { int batchSize = 1000, String? primaryKey })` to `Index` instances.
+- Add `Future<List<Task>> updateDocumentsInBatches(List<Map<String, Object?>> documents, { int batchSize = 1000, String? primaryKey })` to `Index` instances.
+- Add support to create documents from ndJson and CSV formats directly from `Index` with `addDocumentsNdjson`, `addDocumentsCsv`, `updateDocumentsNdjson`, and `updateDocumentsCsv` methods.
+- Add support for `Dio` adapter customization with `MeiliSearchClient.withCustomDio(url, apiKey: "secret", interceptors: [interceptor])` (e.g: you can use this to inject custom code, support to HTTP/2 and more)
+
+Special thanks to [@ahmednfwela](https://github.com/ahmednfwela) :tada:
+
 # 0.9.1
 - [web] Fix a bug that affected the web platform regarding the override of `User-Agent`. Now the header used to send the client name information is the `X-Meilisearch-Client` one.
 
