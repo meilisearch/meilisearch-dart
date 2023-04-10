@@ -12,6 +12,7 @@ class MultiSearchResult {
     final parsed = list
         .cast<Map<String, Object?>>()
         .map((e) => Searcheable.createSearchResult(e));
+
     return MultiSearchResult(results: parsed.toList());
   }
 }

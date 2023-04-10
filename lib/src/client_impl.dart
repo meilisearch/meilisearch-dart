@@ -267,6 +267,7 @@ class MeiliSearchClientImpl implements MeiliSearchClient {
       '/multi-search',
       data: query.toMap(),
     );
+
     return MultiSearchResult.fromMap(response.data!);
   }
 }

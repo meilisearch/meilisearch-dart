@@ -148,6 +148,7 @@ class MeiliSearchIndexImpl implements MeiliSearchIndex {
       highlightPostTag: highlightPostTag,
       matchingStrategy: matchingStrategy,
     ).toMap();
+
     final response = await http.postMethod<Map<String, Object?>>(
         '/indexes/$uid/search',
         data: data..remove('indexUid'));

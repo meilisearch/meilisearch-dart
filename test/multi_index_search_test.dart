@@ -10,9 +10,11 @@ void main() {
     setUpClient();
     late MeiliSearchIndex index1;
     late MeiliSearchIndex index2;
+
     setUp(() async {
       index1 = client.index(randomUid());
       index2 = client.index(randomUid());
+
       await Future.wait([
         index1.updateFilterableAttributes([ktag]).waitFor(client: client),
         index2.updateFilterableAttributes([ktag]).waitFor(client: client),
