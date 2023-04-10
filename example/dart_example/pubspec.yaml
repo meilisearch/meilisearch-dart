@@ -1,4 +1,4 @@
-name: example
+name: dart_example
 publish_to: 'none'
 version: 0.1.0
 
@@ -10,4 +10,4 @@ dependencies:
 
 dependency_overrides:
   meilisearch:
-    path: ..
+    path: ../..
