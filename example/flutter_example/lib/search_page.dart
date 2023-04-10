@@ -6,6 +6,8 @@ import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:meilisearch/meilisearch.dart';
 import 'dart:async';
 
+import 'highlighted_text.dart';
+
 class SearchPage extends StatefulWidget {
   const SearchPage({super.key});
 
@@ -34,6 +36,7 @@ class _SearchPageState extends State<SearchPage> {
         (index) {
           final id = faker.guid.guid();
           final name = faker.person.name();
+          //we duplicate the name to simulate cases where there are multiple highlights
           return PersonDto(id: id, name: "$name $name");
         },
       ).map((e) => e.toMap()).toList(),
@@ -242,62 +245,3 @@ class _SearchPageState extends State<SearchPage> {
   }
 }
 
-class HighlightedText extends StatelessWidget {
-  const HighlightedText({
-    super.key,
-    required this.preTag,
-    required this.postTag,
-    required this.original,
-    this.highlightedStyle = const TextStyle(
-      fontWeight: FontWeight.bold,
-      fontStyle: FontStyle.normal,
-      decoration: TextDecoration.underline,
-    ),
-  });
-
-  final String original;
-  final String preTag;
-  final String postTag;
-  final TextStyle? highlightedStyle;
-
-  TextSpan tryGetFromText(String text) {
-    final preIndex = text.indexOf(preTag);
-    final postIndex = text.indexOf(postTag);
-    if (preIndex < 0 || postIndex < 0) {
-      return TextSpan(text: text);
-    } else {
-      //before the pre tag should be normal text
-      final beforePre = preIndex == 0 ? null : text.substring(0, preIndex);
-      //after the post tag might be normal or highlighted
-      final afterPost = text.substring(postIndex + postTag.length);
-      final between = text.substring(preIndex + preTag.length, postIndex);
-      return TextSpan(children: [
-        if (beforePre != null) TextSpan(text: beforePre),
-        TextSpan(text: between, style: highlightedStyle),
-        //Recursive part to handle cases where multiple places can get highlighted
-        if (afterPost.isNotEmpty) tryGetFromText(afterPost),
-      ]);
-    }
-
-    // if (original.contains(preTag) && original.contains(postTag)) {
-    //   final result = <TextSpan>[];
-    //   final splitPre =
-    //       original.split(preTag).where((element) => element.isNotEmpty);
-    //   //splitPre is at least 1
-    //   for (var splitElement in splitPre) {
-    //     //splitPost is at least 1
-    //     final splitPost = splitElement.split(postTag);
-
-    //     final toHighlight = splitPost.first;
-    //     final normal = splitPost.length > 1 ? splitPost.last : null;
-    //   }
-    // } else {
-    //   return TextSpan(text: text);
-    // }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Text.rich(tryGetFromText(original));
-  }
-}
