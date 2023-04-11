@@ -1,11 +1,11 @@
 # Examples
 
 ### Pure Dart
-a very basic dart example 
+A pure Dart example, to showcase basic features of the SDK like searching and indexing.
 
 [Jump to source](https://github.com/meilisearch/meilisearch-dart/tree/main/example/dart_example)
 
 ### Flutter
-a somewhat advanced flutter app showing usage similar to production
+A Flutter example app that showcases a usage similar to production, like highlighting, indexing, searching, and different pagination styles.
 
 [Jump to source](https://github.com/meilisearch/meilisearch-dart/tree/main/example/flutter_example)
