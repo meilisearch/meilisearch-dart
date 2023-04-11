@@ -1,17 +1,28 @@
 import 'package:flutter/material.dart';
 
+/// This can be added to the sdk
+class HighlightableStringPart {
+  final String text;
+  final bool isHighlighted;
+
+  const HighlightableStringPart({
+    required this.text,
+    required this.isHighlighted,
+  });
+}
+
 /// The core function for handling text highlighting
-TextSpan highlightedTextToSpan(
-  String text, {
+/// This can be added to the sdk
+Iterable<HighlightableStringPart> parseHighligtableString({
+  required String text,
   required String preTag,
   required String postTag,
-  TextStyle? highlightedStyle,
-}) {
+}) sync* {
   final preIndex = text.indexOf(preTag);
   final postIndex = text.indexOf(postTag);
   if (preIndex < 0 || postIndex < 0) {
     //if the text doesn't contain pre/post tags, there is no need for highlighting
-    return TextSpan(text: text);
+    yield HighlightableStringPart(text: text, isHighlighted: false);
   } else {
     //before the pre tag should be normal text
     final beforePre = preIndex == 0 ? null : text.substring(0, preIndex);
@@ -19,19 +30,40 @@ TextSpan highlightedTextToSpan(
     final afterPost = text.substring(postIndex + postTag.length);
     //between the Pre and Post tags is the highlighted text
     final between = text.substring(preIndex + preTag.length, postIndex);
-    return TextSpan(children: [
-      if (beforePre != null && beforePre.isNotEmpty) TextSpan(text: beforePre),
-      TextSpan(text: between, style: highlightedStyle),
-      //Recursive part to handle cases where multiple places can get highlighted
-      if (afterPost.isNotEmpty)
-        highlightedTextToSpan(
-          afterPost,
-          postTag: postTag,
-          preTag: preTag,
-          highlightedStyle: highlightedStyle,
-        ),
-    ]);
+    if (beforePre != null && beforePre.isNotEmpty) {
+      yield HighlightableStringPart(text: beforePre, isHighlighted: false);
+    }
+    yield HighlightableStringPart(text: between, isHighlighted: true);
+    if (afterPost.isNotEmpty) {
+      yield* parseHighligtableString(
+        text: afterPost,
+        postTag: postTag,
+        preTag: preTag,
+      );
+    }
   }
+}
+
+/// adapts [parseHighligtableString] to flutter's [TextSpan]
+TextSpan highlightedTextToSpan(
+  String text, {
+  required String preTag,
+  required String postTag,
+  TextStyle? highlightedStyle,
+}) {
+  final parts = parseHighligtableString(
+    postTag: postTag,
+    preTag: preTag,
+    text: text,
+  ).toList();
+  return TextSpan(
+    children: parts
+        .map(
+          (e) => TextSpan(
+              text: e.text, style: e.isHighlighted ? highlightedStyle : null),
+        )
+        .toList(),
+  );
 }
 
 class HighlightedText extends StatelessWidget {

@@ -1,5 +1,4 @@
 import 'package:faker/faker.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_example/person.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
@@ -7,6 +6,7 @@ import 'package:meilisearch/meilisearch.dart';
 import 'dart:async';
 
 import 'highlighted_text.dart';
+import 'index_setup.dart';
 
 class SearchPage extends StatefulWidget {
   const SearchPage({super.key});
@@ -28,24 +28,6 @@ class _SearchPageState extends State<SearchPage> {
   Future<MeiliSearchIndex>? _initFuture;
   static const kPreTag = '<b>';
   static const kPostTag = '</b>';
-  Future<void> seedFakePeople({int count = 100}) async {
-    if (index == null) return;
-    final task = await index!.addDocuments(
-      Iterable.generate(
-        100,
-        (index) {
-          final id = faker.guid.guid();
-          final name = faker.person.name();
-          //we duplicate the name to simulate cases where there are multiple highlights
-          return PersonDto(id: id, name: "$name $name");
-        },
-      ).map((e) => e.toMap()).toList(),
-      primaryKey: PersonDto.kid,
-    );
-    //Usually you would need to await for the task to complete, see https://github.com/meilisearch/meilisearch-dart/issues/260
-    await Future.delayed(const Duration(milliseconds: 100));
-    _pagingController.refresh();
-  }
 
   Future<void> _fetchPage(int offsetOrPageIndex) async {
     if (index == null) return;
@@ -104,28 +86,10 @@ class _SearchPageState extends State<SearchPage> {
     _pagingController.refresh();
   }
 
-  Future<MeiliSearchIndex> initIndex() async {
-    const indexUid = "people";
-    try {
-      return await client.getIndex(indexUid);
-    } on MeiliSearchApiException catch (e) {
-      if (e.code == 'index_not_found') {
-        final task =
-            await client.createIndex(indexUid, primaryKey: PersonDto.kid);
-        //Usually you would need to await for the task to complete, see https://github.com/meilisearch/meilisearch-dart/issues/260
-        await Future.delayed(const Duration(milliseconds: 100));
-        final res = client.index(indexUid);
-        return res;
-      } else {
-        rethrow;
-      }
-    }
-  }
-
   @override
   void initState() {
     super.initState();
-    _initFuture = initIndex().then((value) => index = value);
+    _initFuture = initIndex(client: client).then((value) => index = value);
     _pagingController.addPageRequestListener(_fetchPage);
     _textController.addListener(onTextChanged);
   }
@@ -185,7 +149,10 @@ class _SearchPageState extends State<SearchPage> {
             title: const Text("Meilisearch Example"),
             actions: [
               IconButton(
-                onPressed: () => seedFakePeople(),
+                onPressed: () => seedFakePeople(
+                  faker: faker,
+                  index: index,
+                ).then((value) => _pagingController.refresh()),
                 icon: const Icon(Icons.input),
                 tooltip: "Seed 100 Fake People",
               ),
