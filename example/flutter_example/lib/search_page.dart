@@ -1,7 +1,7 @@
 import 'package:faker/faker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_example/book.dart';
+import 'package:flutter_example/person.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:meilisearch/meilisearch.dart';
 import 'dart:async';
@@ -28,7 +28,7 @@ class _SearchPageState extends State<SearchPage> {
   Future<MeiliSearchIndex>? _initFuture;
   static const kPreTag = '<b>';
   static const kPostTag = '</b>';
-  Future<void> seedFakeBooks({int count = 100}) async {
+  Future<void> seedFakePeople({int count = 100}) async {
     if (index == null) return;
     final task = await index!.addDocuments(
       Iterable.generate(
@@ -105,7 +105,7 @@ class _SearchPageState extends State<SearchPage> {
   }
 
   Future<MeiliSearchIndex> initIndex() async {
-    const indexUid = "books";
+    const indexUid = "people";
     try {
       return await client.getIndex(indexUid);
     } on MeiliSearchApiException catch (e) {
@@ -185,9 +185,9 @@ class _SearchPageState extends State<SearchPage> {
             title: const Text("Meilisearch Example"),
             actions: [
               IconButton(
-                onPressed: () => seedFakeBooks(),
+                onPressed: () => seedFakePeople(),
                 icon: const Icon(Icons.input),
-                tooltip: "Seed 100 fake books",
+                tooltip: "Seed 100 Fake People",
               ),
               Builder(
                 builder: (context) => IconButton(
