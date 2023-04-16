@@ -10,6 +10,8 @@ import 'package:meilisearch/src/swap_index.dart';
 import 'package:meilisearch/src/tasks_results.dart';
 import 'package:meilisearch/src/task.dart';
 
+import 'multi_search_query.dart';
+import 'multi_search_result.dart';
 import 'http_request.dart';
 import 'index.dart';
 import 'client_impl.dart';
@@ -50,6 +52,9 @@ abstract class MeiliSearchClient {
     String? apiKey,
     DateTime? expiresAt,
   });
+
+  /// does a Multi-index search
+  Future<MultiSearchResult> multiSearch(MultiSearchQuery requests);
 
   /// Create an index object by given [uid].
   MeiliSearchIndex index(String uid);
