@@ -9,7 +9,6 @@ export 'src/multi_search_query.dart';
 export 'src/search_query.dart';
 export 'src/filter_builder/_exports.dart';
 export 'src/query_parameters/_exports.dart';
-export 'src/utils/_exports.dart';
 export 'src/paginated_search_result.dart';
 export 'src/matching_strategy_enum.dart';
 export 'src/key.dart';
