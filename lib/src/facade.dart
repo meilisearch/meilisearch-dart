@@ -15,6 +15,12 @@ class Meili {
     required String preTag,
     required String postTag,
   }) sync* {
+    assert(preTag != postTag,
+        "Pre ($preTag) and post ($postTag) tags can't be the same string");
+    if (text.isEmpty) {
+      yield MeiliHighlightableStringPart(isHighlighted: false, text: text);
+      return;
+    }
     final preIndex = text.indexOf(preTag);
     final postIndex = text.indexOf(postTag);
     if (preIndex < 0 || postIndex < 0) {
