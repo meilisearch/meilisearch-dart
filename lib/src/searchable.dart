@@ -41,4 +41,16 @@ abstract class Searcheable<T> {
   }
 
   Searcheable<TOther> cast<TOther>(MeilisearchDocumentMapper<T, TOther> mapper);
+
+  PaginatedSearchResult<T> asPaginatedResult() {
+    final src = this;
+    assert(src is PaginatedSearchResult<T>);
+    return src as PaginatedSearchResult<T>;
+  }
+
+  SearchResult<T> asSearchResult() {
+    final src = this;
+    assert(src is SearchResult<T>);
+    return src as SearchResult<T>;
+  }
 }
