@@ -1,9 +1,5 @@
-import 'dart:io';
-
 import 'package:meilisearch/meilisearch.dart';
 import 'package:test/test.dart';
-
-import 'utils/client.dart';
 
 void main() {
   group('parseHighligtableString', () {
