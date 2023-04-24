@@ -8,4 +8,3 @@ class MeiliHighlightableStringPart {
     required this.isHighlighted,
   });
 }
-
