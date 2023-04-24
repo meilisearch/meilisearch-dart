@@ -1,5 +1,5 @@
 class Version {
-  static const String current = '0.10.1';
+  static const String current = '0.10.2';
 
   static String get qualifiedVersion {
     return "Meilisearch Dart (v$current)";

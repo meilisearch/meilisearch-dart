@@ -1,5 +1,11 @@
 [comment]: <> (All notable changes to this project will be documented in this file.)
 
+# 0.10.2
+### Changes:
+
+- Introduce `MultiSearchQuery` class to handle search requests.
+- Add `Future<MultiSearchResult> multiSearch(MultiSearchQuery requests);` to `MeiliSearchClient`.
+
 # 0.10.1
 ### Bug Fixes:
 
