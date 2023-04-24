@@ -1,13 +1,15 @@
 import 'package:meilisearch/meilisearch.dart';
 
-abstract class Searcheable {
+typedef MeilisearchDocumentMapper<TSrc, TOther> = TOther Function(TSrc src);
+
+abstract class Searcheable<T> {
   final String indexUid;
 
   /// Query originating the response
   final String? query;
 
   /// Results of the query
-  final List<Map<String, Object?>>? hits;
+  final List<T>? hits;
 
   /// Distribution of the given facets
   final Object? facetDistribution;
@@ -27,12 +29,16 @@ abstract class Searcheable {
     this.processingTimeMs,
   });
 
-  static Searcheable createSearchResult(Map<String, Object?> map,
-      {String? indexUid}) {
+  static Searcheable<Map<String, Object?>> createSearchResult(
+    Map<String, Object?> map, {
+    String? indexUid,
+  }) {
     if (map['totalHits'] != null) {
       return PaginatedSearchResult.fromMap(map, indexUid: indexUid);
     } else {
       return SearchResult.fromMap(map, indexUid: indexUid);
     }
   }
+
+  Searcheable<TOther> cast<TOther>(MeilisearchDocumentMapper<T, TOther> mapper);
 }

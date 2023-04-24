@@ -24,7 +24,7 @@ abstract class MeiliSearchIndex {
   Future<Task> delete();
 
   /// Search for documents matching a specific query in the index.
-  Future<Searcheable> search(
+  Future<Searcheable<Map<String, Object?>>> search(
     String? query, {
     int? offset,
     int? limit,
