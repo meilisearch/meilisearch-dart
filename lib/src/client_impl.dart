@@ -78,13 +78,13 @@ class MeiliSearchClientImpl implements MeiliSearchClient {
   }
 
   @override
-  Future<Map<String, dynamic>> getRawIndex(String uid) async {
+  Future<Map<String, Object?>> getRawIndex(String uid) async {
     final response = await _getIndex(uid);
 
     return response.data!;
   }
 
-  Future<Response<Map<String, dynamic>>> _getIndex(String uid) {
+  Future<Response<Map<String, Object?>>> _getIndex(String uid) {
     return http.getMethod<Map<String, dynamic>>('/indexes/$uid');
   }
 
