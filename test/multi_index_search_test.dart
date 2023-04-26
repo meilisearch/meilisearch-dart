@@ -41,10 +41,10 @@ void main() {
       expect(result.results, hasLength(2));
       //test first result
       expect(result.results.first.indexUid, index1.uid);
-      expect(result.results.first.hits!.length, 1);
+      expect(result.results.first.hits.length, 1);
       //test second result
       expect(result.results.last.indexUid, index2.uid);
-      expect(result.results.last.hits!.length, 2);
+      expect(result.results.last.hits.length, 2);
     });
   });
 }

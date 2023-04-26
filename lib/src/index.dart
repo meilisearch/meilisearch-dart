@@ -18,13 +18,13 @@ abstract class MeiliSearchIndex {
   set primaryKey(String? primaryKey);
 
   /// Update the primary Key of the index.
-  Future<Task> update({String primaryKey});
+  Future<Task> update({String? primaryKey});
 
   /// Delete the index.
   Future<Task> delete();
 
   /// Search for documents matching a specific query in the index.
-  Future<Searcheable<Map<String, Object?>>> search(
+  Future<Searcheable<Map<String, dynamic>>> search(
     String? query, {
     int? offset,
     int? limit,
@@ -48,10 +48,10 @@ abstract class MeiliSearchIndex {
   });
 
   /// Return the document in the index by given [id].
-  Future<Map<String, Object?>?> getDocument(Object id, {List<String> fields});
+  Future<Map<String, dynamic>?> getDocument(Object id, {List<String> fields});
 
   /// Return a list of all existing documents in the index.
-  Future<Result<Map<String, Object?>>> getDocuments({DocumentsQuery? params});
+  Future<Result<Map<String, dynamic>>> getDocuments({DocumentsQuery? params});
 
   /// {@template meili.add_docs}
   /// Add a list of documents by given [documents] and optional [primaryKey] parameter.

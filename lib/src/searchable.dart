@@ -9,7 +9,7 @@ abstract class Searcheable<T> {
   final String? query;
 
   /// Results of the query
-  final List<T>? hits;
+  final List<T> hits;
 
   /// Distribution of the given facets
   final Object? facetDistribution;
@@ -23,13 +23,13 @@ abstract class Searcheable<T> {
   const Searcheable({
     required this.indexUid,
     this.query,
-    this.hits,
+    this.hits = const [],
     this.facetDistribution,
     this.matchesPosition,
     this.processingTimeMs,
   });
 
-  static Searcheable<Map<String, Object?>> createSearchResult(
+  static Searcheable<Map<String, dynamic>> createSearchResult(
     Map<String, Object?> map, {
     String? indexUid,
   }) {
@@ -40,7 +40,7 @@ abstract class Searcheable<T> {
     }
   }
 
-  Searcheable<TOther> cast<TOther>(MeilisearchDocumentMapper<T, TOther> mapper);
+  Searcheable<TOther> map<TOther>(MeilisearchDocumentMapper<T, TOther> mapper);
 
   PaginatedSearchResult<T> asPaginatedResult() {
     final src = this;
@@ -53,4 +53,31 @@ abstract class Searcheable<T> {
     assert(src is SearchResult<T>);
     return src as SearchResult<T>;
   }
+}
+
+extension SearchableExt<T> on Future<Searcheable<T>> {
+  Future<PaginatedSearchResult<T>> asPaginatedResult() =>
+      then((value) => value.asPaginatedResult());
+
+  Future<SearchResult<T>> asSearchResult() =>
+      then((value) => value.asSearchResult());
+
+  Future<Searcheable<TOther>> cast<TOther>(
+    MeilisearchDocumentMapper<T, TOther> mapper,
+  ) =>
+      then((value) => value.map(mapper));
+}
+
+extension SearchResultExt<T> on Future<SearchResult<T>> {
+  Future<SearchResult<TOther>> cast<TOther>(
+    MeilisearchDocumentMapper<T, TOther> mapper,
+  ) =>
+      then((value) => value.map(mapper));
+}
+
+extension PaginatedSearchResultExt<T> on Future<PaginatedSearchResult<T>> {
+  Future<PaginatedSearchResult<TOther>> cast<TOther>(
+    MeilisearchDocumentMapper<T, TOther> mapper,
+  ) =>
+      then((value) => value.map(mapper));
 }

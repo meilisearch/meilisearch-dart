@@ -2,7 +2,7 @@ import 'package:meilisearch/src/searchable.dart';
 
 class SearchResult<T> extends Searcheable<T> {
   const SearchResult({
-    List<T>? hits,
+    List<T> hits = const [],
     Object? facetDistribution,
     Object? matchesPosition,
     int? processingTimeMs,
@@ -29,7 +29,7 @@ class SearchResult<T> extends Searcheable<T> {
   /// Estimated number of matches
   final int? estimatedTotalHits;
 
-  static SearchResult<Map<String, Object?>> fromMap(
+  static SearchResult<Map<String, dynamic>> fromMap(
     Map<String, Object?> map, {
     String? indexUid,
   }) {
@@ -37,7 +37,7 @@ class SearchResult<T> extends Searcheable<T> {
       limit: map['limit'] as int?,
       offset: map['offset'] as int?,
       estimatedTotalHits: map['estimatedTotalHits'] as int?,
-      hits: (map['hits'] as List?)?.cast<Map<String, Object?>>(),
+      hits: (map['hits'] as List?)?.cast<Map<String, Object?>>() ?? [],
       query: map['query'] as String?,
       processingTimeMs: map['processingTimeMs'] as int?,
       facetDistribution: map['facetDistribution'],
@@ -47,13 +47,13 @@ class SearchResult<T> extends Searcheable<T> {
   }
 
   @override
-  SearchResult<TOther> cast<TOther>(
+  SearchResult<TOther> map<TOther>(
     MeilisearchDocumentMapper<T, TOther> mapper,
   ) {
     return SearchResult<TOther>(
       indexUid: indexUid,
       facetDistribution: facetDistribution,
-      hits: hits?.map(mapper).toList(),
+      hits: hits.map(mapper).toList(),
       estimatedTotalHits: estimatedTotalHits,
       limit: limit,
       offset: offset,

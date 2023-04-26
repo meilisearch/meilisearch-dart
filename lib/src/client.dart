@@ -66,7 +66,7 @@ abstract class MeiliSearchClient {
   Future<MeiliSearchIndex> getIndex(String uid);
 
   /// Find index by matching [uid] and responds with raw information from API.
-  /// Throws error if index is not exists.
+  /// Throws error if index does not exist.
   Future<Map<String, Object?>> getRawIndex(String uid);
 
   /// Create a new index by given [uid] and optional [primaryKey] parameter.
@@ -84,7 +84,7 @@ abstract class MeiliSearchClient {
 
   /// Return health of the Meilisearch server.
   /// Throws an error if containing details if Meilisearch can't process your request.
-  Future<Map<String, Object?>> health();
+  Future<Map<String, dynamic>> health();
 
   /// Get health of the Meilisearch server.
   /// Return true or false.
