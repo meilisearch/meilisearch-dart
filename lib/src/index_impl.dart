@@ -107,7 +107,7 @@ class MeiliSearchIndexImpl implements MeiliSearchIndex {
   //
 
   @override
-  Future<Searcheable<Map<String, Object?>>> search(
+  Future<Searcheable<Map<String, dynamic>>> search(
     String? query, {
     int? offset,
     int? limit,
@@ -223,7 +223,7 @@ class MeiliSearchIndexImpl implements MeiliSearchIndex {
 
   @override
   Future<List<Task>> addDocumentsInBatches(
-    List<Map<String, Object?>> documents, {
+    List<Map<String, dynamic>> documents, {
     int batchSize = 1000,
     String? primaryKey,
   }) =>
@@ -401,10 +401,10 @@ class MeiliSearchIndexImpl implements MeiliSearchIndex {
   }
 
   @override
-  Future<Map<String, Object?>?> getDocument(Object id,
+  Future<Map<String, dynamic>?> getDocument(Object id,
       {List<String> fields = const []}) async {
     final params = DocumentsQuery(fields: fields);
-    final response = await http.getMethod<Map<String, Object?>>(
+    final response = await http.getMethod<Map<String, dynamic>>(
         '/indexes/$uid/documents/$id',
         queryParameters: params.toQuery());
 
@@ -412,7 +412,7 @@ class MeiliSearchIndexImpl implements MeiliSearchIndex {
   }
 
   @override
-  Future<Result<Map<String, Object?>>> getDocuments(
+  Future<Result<Map<String, dynamic>>> getDocuments(
       {DocumentsQuery? params}) async {
     final response = await http.getMethod<Map<String, Object?>>(
         '/indexes/$uid/documents',

@@ -2,7 +2,7 @@ import 'package:meilisearch/src/searchable.dart';
 
 class PaginatedSearchResult<T> extends Searcheable<T> {
   const PaginatedSearchResult({
-    List<T>? hits,
+    List<T> hits = const [],
     Object? facetDistribution,
     Object? matchesPosition,
     int? processingTimeMs,
@@ -33,7 +33,7 @@ class PaginatedSearchResult<T> extends Searcheable<T> {
   /// Total number of pages
   final int? totalPages;
 
-  static PaginatedSearchResult<Map<String, Object?>> fromMap(
+  static PaginatedSearchResult<Map<String, dynamic>> fromMap(
     Map<String, Object?> map, {
     String? indexUid,
   }) {
@@ -42,7 +42,7 @@ class PaginatedSearchResult<T> extends Searcheable<T> {
       hitsPerPage: map['hitsPerPage'] as int?,
       totalHits: map['totalHits'] as int?,
       totalPages: map['totalPages'] as int?,
-      hits: (map['hits'] as List?)?.cast<Map<String, Object?>>(),
+      hits: (map['hits'] as List?)?.cast<Map<String, Object?>>() ?? [],
       query: map['query'] as String?,
       processingTimeMs: map['processingTimeMs'] as int?,
       facetDistribution: map['facetDistribution'],
@@ -52,13 +52,13 @@ class PaginatedSearchResult<T> extends Searcheable<T> {
   }
 
   @override
-  PaginatedSearchResult<TOther> cast<TOther>(
+  PaginatedSearchResult<TOther> map<TOther>(
     MeilisearchDocumentMapper<T, TOther> mapper,
   ) {
     return PaginatedSearchResult<TOther>(
       indexUid: indexUid,
       facetDistribution: facetDistribution,
-      hits: hits?.map(mapper).toList(),
+      hits: hits.map(mapper).toList(),
       hitsPerPage: hitsPerPage,
       matchesPosition: matchesPosition,
       page: page,

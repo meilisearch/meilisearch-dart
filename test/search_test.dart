@@ -1,4 +1,5 @@
 import 'package:meilisearch/meilisearch.dart';
+import 'package:meilisearch/src/searchable.dart';
 import 'package:test/test.dart';
 
 import 'utils/books.dart';
@@ -13,11 +14,10 @@ void main() {
     test('cast', () async {
       final index = await createBooksIndex();
       //search
-      final result =
-          await index.search('').then((value) => value.asSearchResult());
-      //test
       //if deserialization fails it will throw
-      final castedResult = result.cast(BookDto.fromMap);
+      final castedResult =
+          await index.search('').asSearchResult().cast(BookDto.fromMap);
+      //test
       expect(castedResult.hits, everyElement(isA<BookDto>()));
     });
 
@@ -66,7 +66,7 @@ void main() {
           cropLength: 2,
         );
         expect(
-          (result.hits![0]['_formatted'] as Map<String, Object?>)['title'],
+          result.hits[0]['_formatted']['title'],
           equals('Alice In…'),
         );
       });
@@ -76,8 +76,7 @@ void main() {
         var result = await index.search('prince',
             attributesToCrop: ['*'], cropLength: 2);
 
-        expect((result.hits![0]['_formatted'] as Map<String, Object?>)['title'],
-            equals('…Petit Prince'));
+        expect(result.hits[0]['_formatted']['title'], equals('…Petit Prince'));
       });
 
       test('searches with custom cropMarker', () async {
@@ -85,8 +84,7 @@ void main() {
         var result = await index.search('prince',
             attributesToCrop: ['*'], cropLength: 1, cropMarker: '[…] ');
 
-        expect((result.hits![0]['_formatted'] as Map<String, Object?>)['title'],
-            equals('[…] Prince'));
+        expect(result.hits[0]['_formatted']['title'], equals('[…] Prince'));
       });
 
       test('searches with custom highlight tags', () async {
@@ -96,7 +94,7 @@ void main() {
             highlightPreTag: '<mark>',
             highlightPostTag: '</mark>');
 
-        expect((result.hits![0]['_formatted'] as Map<String, Object?>)['title'],
+        expect(result.hits[0]['_formatted']['title'],
             equals('Harry Potter and the Half-<mark>Blood</mark> Prince'));
       });
 
@@ -107,7 +105,7 @@ void main() {
           matchingStrategy: MatchingStrategy.last,
         );
 
-        expect(result.hits!.last['title'],
+        expect(result.hits.last['title'],
             equals('Harry Potter and the Half-Blood Prince'));
       });
 
@@ -118,7 +116,7 @@ void main() {
           matchingStrategy: MatchingStrategy.all,
         );
 
-        expect(result.hits!.last['title'],
+        expect(result.hits.last['title'],
             equals('The Hitchhiker\'s Guide to the Galaxy'));
       });
 
@@ -128,7 +126,7 @@ void main() {
           'the to',
         );
 
-        expect(result.hits!.last['title'],
+        expect(result.hits.last['title'],
             equals('Harry Potter and the Half-Blood Prince'));
       });
 
@@ -251,7 +249,7 @@ void main() {
         expect(response.status, 'succeeded');
         var result = await index.search('prince', sort: ['title:asc']);
         expect(result.hits, hasLength(2));
-        expect(result.hits![0]['book_id'], 4);
+        expect(result.hits[0]['book_id'], 4);
       });
     });
 
@@ -259,7 +257,7 @@ void main() {
       var index = await createNestedBooksIndex();
       var response = await index.search('An awesome');
 
-      expect(response.hits![0], {
+      expect(response.hits[0], {
         "id": 5,
         "title": 'The Hobbit',
         "info": {
@@ -279,7 +277,7 @@ void main() {
 
       var response = await index.search('An awesome');
 
-      expect(response.hits![0], {
+      expect(response.hits[0], {
         "id": 5,
         "title": 'The Hobbit',
         "info": {
@@ -299,7 +297,7 @@ void main() {
 
       var response = await index.search('', sort: ['info.reviewNb:desc']);
 
-      expect(response.hits![0], {
+      expect(response.hits[0], {
         "id": 6,
         "title": 'Harry Potter and the Half-Blood Prince',
         "info": {
@@ -322,7 +320,7 @@ void main() {
       var index = await createBooksIndex();
       var result = await index.search('pri', page: 1) as PaginatedSearchResult;
 
-      expect(result.hits!.length, greaterThanOrEqualTo(1));
+      expect(result.hits.length, greaterThanOrEqualTo(1));
       expect(result.totalPages, 1);
     });
 

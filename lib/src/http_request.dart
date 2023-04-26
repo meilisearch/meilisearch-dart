@@ -20,7 +20,7 @@ abstract class HttpRequest {
   Duration? get connectTimeout;
 
   /// Retrieve all headers used when Http calls are made.
-  Map<String, Object?> headers();
+  Map<String, dynamic> headers();
 
   /// GET method
   Future<Response<T>> getMethod<T>(
