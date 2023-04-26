@@ -1,7 +1,7 @@
 import 'searchable.dart';
 
 class MultiSearchResult {
-  final List<Searcheable> results;
+  final List<Searcheable<Map<String, Object?>>> results;
 
   const MultiSearchResult({
     required this.results,

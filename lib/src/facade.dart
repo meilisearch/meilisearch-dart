@@ -1,6 +1,6 @@
-import 'filter_builder_base.dart';
-import 'operators.dart';
-import 'values.dart';
+import 'filter_builder/filter_builder_base.dart';
+import 'filter_builder/operators.dart';
+import 'filter_builder/values.dart';
 
 /// Convenience class to access all Meilisearch filter expressions
 

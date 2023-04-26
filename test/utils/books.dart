@@ -41,3 +41,31 @@ Future<MeiliSearchIndex> _createIndex({
   }
   return index;
 }
+
+class BookDto {
+  final int bookId;
+  final String title;
+  final String? tag;
+
+  const BookDto({
+    required this.bookId,
+    required this.title,
+    required this.tag,
+  });
+
+  Map<String, dynamic> toMap() {
+    return {
+      kbookId: bookId,
+      ktitle: title,
+      ktag: tag,
+    };
+  }
+
+  factory BookDto.fromMap(Map<String, dynamic> map) {
+    return BookDto(
+      bookId: map[kbookId] as int,
+      title: map[ktitle] as String,
+      tag: map[ktag] as String?,
+    );
+  }
+}

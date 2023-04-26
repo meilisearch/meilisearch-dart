@@ -107,7 +107,7 @@ class MeiliSearchIndexImpl implements MeiliSearchIndex {
   //
 
   @override
-  Future<Searcheable> search(
+  Future<Searcheable<Map<String, Object?>>> search(
     String? query, {
     int? offset,
     int? limit,

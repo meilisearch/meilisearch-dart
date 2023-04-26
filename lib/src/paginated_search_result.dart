@@ -1,8 +1,8 @@
 import 'package:meilisearch/src/searchable.dart';
 
-class PaginatedSearchResult extends Searcheable {
+class PaginatedSearchResult<T> extends Searcheable<T> {
   const PaginatedSearchResult({
-    List<Map<String, Object?>>? hits,
+    List<T>? hits,
     Object? facetDistribution,
     Object? matchesPosition,
     int? processingTimeMs,
@@ -33,8 +33,10 @@ class PaginatedSearchResult extends Searcheable {
   /// Total number of pages
   final int? totalPages;
 
-  factory PaginatedSearchResult.fromMap(Map<String, Object?> map,
-      {String? indexUid}) {
+  static PaginatedSearchResult<Map<String, Object?>> fromMap(
+    Map<String, Object?> map, {
+    String? indexUid,
+  }) {
     return PaginatedSearchResult(
       page: map['page'] as int?,
       hitsPerPage: map['hitsPerPage'] as int?,
@@ -46,6 +48,24 @@ class PaginatedSearchResult extends Searcheable {
       facetDistribution: map['facetDistribution'],
       matchesPosition: map['_matchesPosition'],
       indexUid: indexUid ?? map['indexUid'] as String,
+    );
+  }
+
+  @override
+  PaginatedSearchResult<TOther> cast<TOther>(
+    MeilisearchDocumentMapper<T, TOther> mapper,
+  ) {
+    return PaginatedSearchResult<TOther>(
+      indexUid: indexUid,
+      facetDistribution: facetDistribution,
+      hits: hits?.map(mapper).toList(),
+      hitsPerPage: hitsPerPage,
+      matchesPosition: matchesPosition,
+      page: page,
+      processingTimeMs: processingTimeMs,
+      query: query,
+      totalHits: totalHits,
+      totalPages: totalPages,
     );
   }
 }

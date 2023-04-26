@@ -10,6 +10,17 @@ void main() {
   group('Search', () {
     setUpClient();
 
+    test('cast', () async {
+      final index = await createBooksIndex();
+      //search
+      final result =
+          await index.search('').then((value) => value.asSearchResult());
+      //test
+      //if deserialization fails it will throw
+      final castedResult = result.cast(BookDto.fromMap);
+      expect(castedResult.hits, everyElement(isA<BookDto>()));
+    });
+
     test('with basic query', () async {
       var index = await createBooksIndex();
       var result = await index.search('prience'); // with typo
@@ -49,10 +60,15 @@ void main() {
 
       test('cropLength parameter', () async {
         var index = await createBooksIndex();
-        var result = await index.search('Alice In Wonderland',
-            attributesToCrop: ["title"], cropLength: 2);
-        expect((result.hits![0]['_formatted'] as Map<String, Object?>)['title'],
-            equals('Alice In…'));
+        var result = await index.search(
+          'Alice In Wonderland',
+          attributesToCrop: ["title"],
+          cropLength: 2,
+        );
+        expect(
+          (result.hits![0]['_formatted'] as Map<String, Object?>)['title'],
+          equals('Alice In…'),
+        );
       });
 
       test('searches with default cropping parameters', () async {
