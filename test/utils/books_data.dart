@@ -65,7 +65,7 @@ enum CSVHeaderTypes {
   unkown,
 }
 
-String dataAsCSV(List<Map<String, Object?>> data) {
+String dataAsCSV(List<Map<String, Object?>> data, {String delimiter = ','}) {
   final csvHeaders = <String, CSVHeaderTypes?>{};
   final csvDataBuffer = StringBuffer();
   for (final element in data) {
@@ -91,7 +91,7 @@ String dataAsCSV(List<Map<String, Object?>> data) {
         (obj) => csvHeaderEntries
             .map((e) => e.key)
             .map((headerKey) => json.encode(obj[headerKey] ?? ""))
-            .join(','),
+            .join(delimiter),
       )
       .forEach(csvDataBuffer.writeln);
 
@@ -103,7 +103,7 @@ String dataAsCSV(List<Map<String, Object?>> data) {
             ? ':boolean'
             : null;
     return jsonEncode('${header.key}${typeStr ?? ""}');
-  }).join(",");
+  }).join(delimiter);
 
   return '$headerStr\n${csvDataBuffer.toString()}';
 }
