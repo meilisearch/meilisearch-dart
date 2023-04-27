@@ -16,7 +16,7 @@ void main() {
       //search
       //if deserialization fails it will throw
       final castedResult =
-          await index.search('').asSearchResult().cast(BookDto.fromMap);
+          await index.search('').asSearchResult().map(BookDto.fromMap);
       //test
       expect(castedResult.hits, everyElement(isA<BookDto>()));
     });
