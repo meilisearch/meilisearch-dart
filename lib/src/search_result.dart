@@ -1,12 +1,13 @@
-import 'package:meilisearch/src/searchable.dart';
+part of 'searchable.dart';
 
 class SearchResult<T> extends Searcheable<T> {
   const SearchResult({
     List<T> hits = const [],
-    Object? facetDistribution,
-    Object? matchesPosition,
+    Map<String, Map<String, int>>? facetDistribution,
+    Map<String, List<MatchPosition>>? matchesPosition,
     int? processingTimeMs,
     String? query,
+    Map<String, FacetStat>? facetStats,
     required String indexUid,
     this.offset,
     this.limit,
@@ -18,6 +19,7 @@ class SearchResult<T> extends Searcheable<T> {
           processingTimeMs: processingTimeMs,
           query: query,
           indexUid: indexUid,
+          facetStats: facetStats,
         );
 
   /// Number of documents skipped
@@ -37,12 +39,13 @@ class SearchResult<T> extends Searcheable<T> {
       limit: map['limit'] as int?,
       offset: map['offset'] as int?,
       estimatedTotalHits: map['estimatedTotalHits'] as int?,
-      hits: (map['hits'] as List?)?.cast<Map<String, Object?>>() ?? [],
-      query: map['query'] as String?,
-      processingTimeMs: map['processingTimeMs'] as int?,
-      facetDistribution: map['facetDistribution'],
-      matchesPosition: map['_matchesPosition'],
-      indexUid: indexUid ?? map['indexUid'] as String,
+      hits: _readHits(map),
+      query: _readQuery(map),
+      processingTimeMs: _readProcessingTimeMs(map),
+      facetDistribution: _readFacetDistribution(map),
+      matchesPosition: _readMatchesPosition(map),
+      indexUid: indexUid ?? _readIndexUid(map),
+      facetStats: _readFacetStats(map),
     );
   }
 
