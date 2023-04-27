@@ -76,6 +76,20 @@ class Meili {
         distanceInMeters,
       );
 
+  //TODO(ahmednfwela): rework this method after Dart 3 lands with patterns
+  static MeiliGeoBoundingBoxOperatorExpression geoBoundingBox(
+    double lat1,
+    double lng1,
+    double lat2,
+    double lng2,
+  ) =>
+      MeiliGeoBoundingBoxOperatorExpression(
+        lat1,
+        lng1,
+        lat2,
+        lng2,
+      );
+
   static MeiliExistsOperatorExpression exists(
           MeiliAttributeExpression attribute) =>
       MeiliExistsOperatorExpression(attribute);
