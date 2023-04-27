@@ -1,5 +1,10 @@
 [comment]: <> (All notable changes to this project will be documented in this file.)
 
+# 0.11.1
+### Bug Fixes:
+
+- `Searchable` class was not being public exported.
+
 # 0.11.0
 ### Breaking Changes:
 
