@@ -1,9 +1,11 @@
 library meilisearch;
 
+
 export 'src/client.dart';
 export 'src/index.dart';
 export 'src/settings/_exports.dart';
 export 'src/search_result.dart';
+export 'src/searchable.dart';
 export 'src/multi_search_result.dart';
 export 'src/multi_search_query.dart';
 export 'src/search_query.dart';
