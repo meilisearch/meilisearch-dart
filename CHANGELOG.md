@@ -5,7 +5,7 @@
 
 - Changes `Searcheable`, `SearchResult`, `PaginatedSearchResult` signatures to be generic `Searcheable<T>`, `SearchResult<T>`, `PaginatedSearchResult<T>`
 - Adds a new `map<TOther>` method to `Searcheable<T>` and its subclasses to map the search result to a different type.
-- All search operations produce `Searcheable<Map<String, Object?>>` by default, which can be mapped to other types using the `cast<TOther>` method.
+- All search operations produce `Searcheable<Map<String, dynamic>>` by default, which can be mapped to other types using the `map<TOther>` method.
 - Revert some of the `Object?` types that were changed from `dynamic`: 
   - `MeiliSearchClient` class `Future<Map<String, dynamic>> health();`
   - `HttpRequest` class `Map<String, dynamic> headers();`
