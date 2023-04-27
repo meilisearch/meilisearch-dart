@@ -1,5 +1,32 @@
 [comment]: <> (All notable changes to this project will be documented in this file.)
 
+# 0.11.0
+### Breaking Changes:
+
+- Changes `Searcheable`, `SearchResult`, `PaginatedSearchResult` signatures to be generic `Searcheable<T>`, `SearchResult<T>`, `PaginatedSearchResult<T>`
+- Adds a new `map<TOther>` method to `Searcheable<T>` and its subclasses to map the search result to a different type.
+- All search operations produce `Searcheable<Map<String, dynamic>>` by default, which can be mapped to other types using the `map<TOther>` method.
+- Revert some of the `Object?` types that were changed from `dynamic`: 
+  - `MeiliSearchClient` class `Future<Map<String, dynamic>> health();`
+  - `HttpRequest` class `Map<String, dynamic> headers();`
+  - `MeiliSearchIndex` class `Future<Searcheable<Map<String, dynamic>>> search(...);`
+  - `MeiliSearchIndex` class`Future<Map<String, dynamic>?> getDocument(Object id, {List<String> fields});`
+  - `MeiliSearchIndex` class `Future<Result<Map<String, dynamic>>> getDocuments({DocumentsQuery? params});`
+- `Searcheable<T>.hits` is non-nullable now, and defaults to `const []`
+
+### Changes: 
+
+- Introduced new extension methods to help consumers cast `Future<Searchable<T>>` to the corresponding type:
+```dart
+final result = await index.search('').then((value) => (value as SearchResult<Map<String, dynamic>>).map(BookDto.fromMap));
+final resultPaginated = await index.search('').then((value) => (value as PaginatedSearchResult<Map<String, dynamic>>).map(BookDto.fromMap));
+```
+to:
+```dart
+final result = await index.search('').asSearchResult().map(BookDto.fromMap);
+final resultPaginated = await index.search('').asPaginatedResult().map(BookDto.fromMap);
+```
+
 # 0.10.2
 ### Changes:
 
