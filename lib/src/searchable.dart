@@ -62,21 +62,21 @@ extension SearchableExt<T> on Future<Searcheable<T>> {
   Future<SearchResult<T>> asSearchResult() =>
       then((value) => value.asSearchResult());
 
-  Future<Searcheable<TOther>> cast<TOther>(
+  Future<Searcheable<TOther>> map<TOther>(
     MeilisearchDocumentMapper<T, TOther> mapper,
   ) =>
       then((value) => value.map(mapper));
 }
 
 extension SearchResultExt<T> on Future<SearchResult<T>> {
-  Future<SearchResult<TOther>> cast<TOther>(
+  Future<SearchResult<TOther>> map<TOther>(
     MeilisearchDocumentMapper<T, TOther> mapper,
   ) =>
       then((value) => value.map(mapper));
 }
 
 extension PaginatedSearchResultExt<T> on Future<PaginatedSearchResult<T>> {
-  Future<PaginatedSearchResult<TOther>> cast<TOther>(
+  Future<PaginatedSearchResult<TOther>> map<TOther>(
     MeilisearchDocumentMapper<T, TOther> mapper,
   ) =>
       then((value) => value.map(mapper));
