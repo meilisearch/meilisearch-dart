@@ -1,5 +1,4 @@
 import 'package:meilisearch/meilisearch.dart';
-import 'package:meilisearch/src/searchable.dart';
 import 'package:test/test.dart';
 
 import 'utils/books.dart';
