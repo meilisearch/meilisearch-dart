@@ -88,6 +88,7 @@ abstract class MeiliSearchIndex {
   Future<Task> addDocumentsCsv(
     String documents, {
     String? primaryKey,
+    String? csvDelimiter,
   });
 
   /// {@macro meili.add_docs}
@@ -120,6 +121,7 @@ abstract class MeiliSearchIndex {
   Future<List<Task>> addDocumentsCsvInBatches(
     String documents, {
     String? primaryKey,
+    String? csvDelimiter,
     int batchSize = 1000,
   });
 
@@ -173,6 +175,7 @@ abstract class MeiliSearchIndex {
   Future<Task> updateDocumentsCsv(
     String documents, {
     String? primaryKey,
+    String? csvDelimiter,
   });
 
   /// {@template meili.update_docs_batches}
@@ -195,6 +198,7 @@ abstract class MeiliSearchIndex {
     String documents, {
     String? primaryKey,
     int batchSize = 1000,
+    String? csvDelimiter,
   });
 
   /// {@macro meili.update_docs_batches}
