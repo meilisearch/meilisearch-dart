@@ -18,7 +18,7 @@ void main() {
         )),
       );
     });
-    
+
     test('Throw basic 404 exception', () async {
       expect(
         () async => await http.getMethod<Map<String, Object?>>('/wrong-path'),

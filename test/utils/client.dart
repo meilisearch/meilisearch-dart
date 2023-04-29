@@ -3,7 +3,6 @@ import 'dart:io';
 import 'dart:math';
 
 import 'package:crypto/crypto.dart';
-import 'package:meilisearch/src/http_request_impl.dart';
 import 'package:meilisearch/src/http_request.dart';
 import 'package:meilisearch/meilisearch.dart';
 import 'package:test/test.dart';
