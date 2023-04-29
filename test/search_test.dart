@@ -9,326 +9,333 @@ import 'utils/wait_for.dart';
 void main() {
   group('Search', () {
     setUpClient();
+    late String uid;
+    late MeiliSearchIndex index;
 
-    test('cast', () async {
-      final index = await createBooksIndex();
-      //search
-      //if deserialization fails it will throw
-      final castedResult =
-          await index.search('').asSearchResult().map(BookDto.fromMap);
-      //test
-      expect(castedResult.hits, everyElement(isA<BookDto>()));
+    setUp(() {
+      uid = randomUid();
     });
+    tearDown(() => index.delete());
 
-    test('with basic query', () async {
-      var index = await createBooksIndex();
-      var result = await index.search('prience'); // with typo
-      expect(result.hits, hasLength(2));
-    });
-
-    test('with basic query with no q', () async {
-      var index = await createBooksIndex();
-      var result = await index.search(null);
-      expect(result.hits, hasLength(books.length));
-    });
-
-    test('with basic query with an empty string q=""', () async {
-      var index = await createBooksIndex();
-      var result = await index.search('');
-      expect(result.hits, hasLength(books.length));
-    });
-
-    test('with basic query with phrase search', () async {
-      var index = await createBooksIndex();
-      var result = await index.search('coco "harry"');
-      expect(result.hits, hasLength(1));
-    });
-
-    group('with', () {
-      test('offset parameter', () async {
-        var index = await createBooksIndex();
-        var result = await index.search('', limit: 3, offset: 10);
-        expect(result.hits, isEmpty);
+    group('Books', () {
+      setUp(() async {
+        index = await createBooksIndex(uid: uid);
       });
 
-      test('limit parameter', () async {
-        var index = await createBooksIndex();
-        var result = await index.search('', limit: 3);
-        expect(result.hits, hasLength(3));
+      test('map', () async {
+        //search
+        //if deserialization fails it will throw
+        final castedResult =
+            await index.search('').asSearchResult().map(BookDto.fromMap);
+        //test
+        expect(castedResult.hits, everyElement(isA<BookDto>()));
       });
 
-      test('cropLength parameter', () async {
-        var index = await createBooksIndex();
-        var result = await index.search(
-          'Alice In Wonderland',
-          attributesToCrop: ["title"],
-          cropLength: 2,
-        );
-        expect(
-          result.hits[0]['_formatted']['title'],
-          equals('Alice In…'),
-        );
+      test('with basic query', () async {
+        final result = await index.search('prience'); // with typo
+
+        expect(result.hits, hasLength(2));
       });
 
-      test('searches with default cropping parameters', () async {
-        var index = await createBooksIndex();
-        var result = await index.search('prince',
-            attributesToCrop: ['*'], cropLength: 2);
+      test('with basic query with no q', () async {
+        final result = await index.search(null);
 
-        expect(result.hits[0]['_formatted']['title'], equals('…Petit Prince'));
+        expect(result.hits, hasLength(books.length));
       });
 
-      test('searches with custom cropMarker', () async {
-        var index = await createBooksIndex();
-        var result = await index.search('prince',
-            attributesToCrop: ['*'], cropLength: 1, cropMarker: '[…] ');
+      test('with basic query with an empty string q=""', () async {
+        final result = await index.search('');
 
-        expect(result.hits[0]['_formatted']['title'], equals('[…] Prince'));
+        expect(result.hits, hasLength(books.length));
       });
 
-      test('searches with custom highlight tags', () async {
-        var index = await createBooksIndex();
-        var result = await index.search('blood',
+      test('with basic query with phrase search', () async {
+        final result = await index.search('coco "harry"');
+
+        expect(result.hits, hasLength(1));
+      });
+
+      group('with', () {
+        test('offset parameter', () async {
+          final result = await index.search('', limit: 3, offset: 10);
+
+          expect(result.hits, isEmpty);
+        });
+
+        test('limit parameter', () async {
+          final result = await index.search('', limit: 3);
+
+          expect(result.hits, hasLength(3));
+        });
+
+        test('cropLength parameter', () async {
+          final result = await index.search(
+            'Alice In Wonderland',
+            attributesToCrop: ["title"],
+            cropLength: 2,
+          );
+
+          expect(
+            result.hits[0]['_formatted']['title'],
+            equals('Alice In…'),
+          );
+        });
+
+        test('searches with default cropping parameters', () async {
+          final result = await index.search(
+            'prince',
+            attributesToCrop: ['*'],
+            cropLength: 2,
+          );
+
+          expect(
+            result.hits[0]['_formatted']['title'],
+            equals('…Petit Prince'),
+          );
+        });
+
+        test('searches with custom cropMarker', () async {
+          final result = await index.search(
+            'prince',
+            attributesToCrop: ['*'],
+            cropLength: 1,
+            cropMarker: '[…] ',
+          );
+
+          expect(result.hits[0]['_formatted']['title'], equals('[…] Prince'));
+        });
+
+        test('searches with custom highlight tags', () async {
+          final result = await index.search(
+            'blood',
             attributesToHighlight: ['*'],
             highlightPreTag: '<mark>',
-            highlightPostTag: '</mark>');
+            highlightPostTag: '</mark>',
+          );
 
-        expect(result.hits[0]['_formatted']['title'],
-            equals('Harry Potter and the Half-<mark>Blood</mark> Prince'));
-      });
+          expect(
+            result.hits[0]['_formatted']['title'],
+            equals('Harry Potter and the Half-<mark>Blood</mark> Prince'),
+          );
+        });
 
-      test('searches with matching strategy last', () async {
-        var index = await createBooksIndex();
-        var result = await index.search(
-          'the to',
-          matchingStrategy: MatchingStrategy.last,
-        );
+        test('searches with matching strategy last', () async {
+          final result = await index.search(
+            'the to',
+            matchingStrategy: MatchingStrategy.last,
+          );
 
-        expect(result.hits.last['title'],
-            equals('Harry Potter and the Half-Blood Prince'));
-      });
+          expect(
+            result.hits.last['title'],
+            equals('Harry Potter and the Half-Blood Prince'),
+          );
+        });
 
-      test('searches with matching strategy all', () async {
-        var index = await createBooksIndex();
-        var result = await index.search(
-          'the to',
-          matchingStrategy: MatchingStrategy.all,
-        );
+        test('searches with matching strategy all', () async {
+          final result = await index.search(
+            'the to',
+            matchingStrategy: MatchingStrategy.all,
+          );
 
-        expect(result.hits.last['title'],
-            equals('The Hitchhiker\'s Guide to the Galaxy'));
-      });
+          expect(
+            result.hits.last['title'],
+            equals('The Hitchhiker\'s Guide to the Galaxy'),
+          );
+        });
 
-      test('searches with matching strategy as null if not set', () async {
-        var index = await createBooksIndex();
-        var result = await index.search(
-          'the to',
-        );
+        test('searches with matching strategy as null if not set', () async {
+          final result = await index.search(
+            'the to',
+          );
 
-        expect(result.hits.last['title'],
-            equals('Harry Potter and the Half-Blood Prince'));
-      });
+          expect(
+            result.hits.last['title'],
+            equals('Harry Potter and the Half-Blood Prince'),
+          );
+        });
 
-      test('filter parameter', () async {
-        var index = await createBooksIndex();
-        var response = await index
-            .updateSettings(IndexSettings(
-              filterableAttributes: ['tag'],
-            ))
-            .waitFor(client: client);
-        expect(response.status, 'succeeded');
-        var result = await index.search('prince', filter: 'tag = Tale');
-        expect(result.hits, hasLength(1));
-      });
+        test('filter parameter', () async {
+          await index
+              .updateFilterableAttributes(['tag']).waitFor(client: client);
 
-      /// TODO(ahmednfwela): waiting for Meili V1.2.0
-      // test('filter parameter is null', () async {
-      //   var index = await createBooksIndex();
-      //   var response = await index
-      //       .updateSettings(IndexSettings(
-      //         filterableAttributes: ['tag'],
-      //       ))
-      //       .waitFor(client: client);
-      //   expect(response.status, 'succeeded');
-      //   var result = await index.search('The Hobbit', filter: "tag NULL");
-      //   expect(result.hits, hasLength(1));
-      //   expect(result.hits!.first["book_id"], equals(9999));
-      // });
+          final result = await index.search('prince', filter: 'tag = Tale');
 
-      test('filter parameter with spaces', () async {
-        var index = await createBooksIndex();
-        var response = await index
-            .updateSettings(IndexSettings(
-              filterableAttributes: ['tag'],
-            ))
-            .waitFor(client: client);
-        expect(response.status, 'succeeded');
-        var result = await index.search(
-          'prince',
-          filter: 'tag = "Epic fantasy"',
-        );
-        expect(result.hits, hasLength(1));
-      });
+          expect(result.hits, hasLength(1));
+        });
 
-      test('filter parameter with number', () async {
-        var index = await createBooksIndex();
-        var response = await index
-            .updateSettings(IndexSettings(
-              filterableAttributes: ['tag', 'book_id'],
-            ))
-            .waitFor(client: client);
-        expect(response.status, 'succeeded');
-        var result = await index.search(
-          '',
-          filter: 'book_id < 100 AND tag = Tale',
-        );
-        final exp1 = 'book_id'.toMeiliAttribute().lt(100.toMeiliValue()).and(
-              'tag'.toMeiliAttribute().eq("Tale".toMeiliValue()),
-            );
-        final exp2 = (Meili.attr('book_id') < Meili.value(100)) &
-            (Meili.attr("tag").eq(Meili.value("Tale")));
-        expect(exp1.transform(), equals(exp2.transform()));
+        /// TODO(ahmednfwela): waiting for Meili V1.2.0
+        // test('filter parameter is null', () async {
+        //   var index = await createBooksIndex();
+        //   var response = await index
+        //       .updateSettings(IndexSettings(
+        //         filterableAttributes: ['tag'],
+        //       ))
+        //       .waitFor(client: client);
+        //   expect(response.status, 'succeeded');
+        //   var result = await index.search('The Hobbit', filter: "tag NULL");
+        //   expect(result.hits, hasLength(1));
+        //   expect(result.hits!.first["book_id"], equals(9999));
+        // });
 
-        expect(result.hits, hasLength(1));
-      });
+        test('filter parameter with spaces', () async {
+          await index
+              .updateFilterableAttributes(['tag']).waitFor(client: client);
 
-      test('filter parameter with array', () async {
-        var index = await createBooksIndex();
-        var response = await index
-            .updateSettings(IndexSettings(
-              filterableAttributes: ['tag'],
-            ))
-            .waitFor(client: client);
-        expect(response.status, 'succeeded');
-        var result = await index.search('prince', filter: ['tag = Tale']);
-        expect(result.hits, hasLength(1));
-      });
+          final result = await index.search(
+            'prince',
+            filter: 'tag = "Epic fantasy"',
+          );
 
-      test('filter parameter with multiple array', () async {
-        var index = await createBooksIndex();
-        var response = await index
-            .updateSettings(IndexSettings(
-              filterableAttributes: ['tag'],
-            ))
-            .waitFor(client: client);
-        expect(response.status, 'succeeded');
-        var result = await index.search('prince', filter: [
-          ['tag = Tale', 'tag = Tale'],
-          'tag = Tale'
-        ]);
-        expect(result.hits, hasLength(1));
-      });
+          expect(result.hits, hasLength(1));
+        });
 
-      test('facetDistributions parameter', () async {
-        var index = await createBooksIndex();
-        var response = await index
-            .updateSettings(IndexSettings(
-              filterableAttributes: ['tag'],
-            ))
-            .waitFor(client: client);
-        expect(response.status, 'succeeded');
-        var result = await index.search('prince', facets: ['*']);
-        expect(result.hits, hasLength(2));
-      });
+        test('filter parameter with number', () async {
+          await index.updateFilterableAttributes(
+            ['tag', 'book_id'],
+          ).waitFor(client: client);
 
-      test('Sort parameter', () async {
-        var index = await createBooksIndex();
-        var response = await index
-            .updateSettings(IndexSettings(sortableAttributes: [
-              'title'
-            ], rankingRules: [
-              'words',
-              'sort',
-              'typo',
-              'proximity',
-              'attribute',
-              'exactness'
-            ]))
-            .waitFor(client: client);
-        expect(response.status, 'succeeded');
-        var result = await index.search('prince', sort: ['title:asc']);
-        expect(result.hits, hasLength(2));
-        expect(result.hits[0]['book_id'], 4);
-      });
-    });
+          final result = await index.search(
+            '',
+            filter: 'book_id < 100 AND tag = Tale',
+          );
 
-    test('searches within nested content with no parameters', () async {
-      var index = await createNestedBooksIndex();
-      var response = await index.search('An awesome');
+          expect(result.hits, hasLength(1));
+        });
 
-      expect(response.hits[0], {
-        "id": 5,
-        "title": 'The Hobbit',
-        "info": {
-          "comment": 'An awesome book',
-          "reviewNb": 900,
-        },
+        test('filter parameter with array', () async {
+          await index
+              .updateFilterableAttributes(['tag']).waitFor(client: client);
+
+          final result = await index.search('prince', filter: ['tag = Tale']);
+
+          expect(result.hits, hasLength(1));
+        });
+
+        test('filter parameter with multiple array', () async {
+          await index
+              .updateFilterableAttributes(['tag']).waitFor(client: client);
+
+          final result = await index.search('prince', filter: [
+            ['tag = Tale', 'tag = Tale'],
+            'tag = Tale'
+          ]);
+
+          expect(result.hits, hasLength(1));
+        });
+
+        test('facetDistributions parameter', () async {
+          await index
+              .updateFilterableAttributes(['tag']).waitFor(client: client);
+
+          final result = await index.search('prince', facets: ['*']);
+
+          expect(result.hits, hasLength(2));
+        });
+
+        test('Sort parameter', () async {
+          await index
+              .updateSettings(IndexSettings(sortableAttributes: [
+                'title'
+              ], rankingRules: [
+                'words',
+                'sort',
+                'typo',
+                'proximity',
+                'attribute',
+                'exactness'
+              ]))
+              .waitFor(client: client);
+
+          final result = await index.search('prince', sort: ['title:asc']);
+
+          expect(result.hits, hasLength(2));
+          expect(result.hits[0]['book_id'], 4);
+        });
+
+        group('finite-pagination query params', () {
+          test('with basic query', () async {
+            final result =
+                await index.search('pri', page: 1).asPaginatedResult();
+
+            expect(result.totalPages, 1);
+          });
+
+          test('accesses fields from Searchable', () async {
+            final result =
+                await index.search('pri', page: 1).asPaginatedResult();
+
+            expect(result.hits.length, greaterThanOrEqualTo(1));
+            expect(result.totalPages, 1);
+          });
+
+          test('with mixed pagination query params', () async {
+            final result = await index
+                .search('pri', page: 1, limit: 10)
+                .asPaginatedResult();
+
+            expect(result.totalPages, 1);
+          });
+        });
       });
     });
 
-    test('searches on nested content with searchable on specific nested field',
-        () async {
-      var index = await createNestedBooksIndex();
-      await index
-          .updateSettings(
-              IndexSettings(searchableAttributes: ['title', 'info.comment']))
-          .waitFor(client: client);
-
-      var response = await index.search('An awesome');
-
-      expect(response.hits[0], {
-        "id": 5,
-        "title": 'The Hobbit',
-        "info": {
-          "comment": 'An awesome book',
-          "reviewNb": 900,
-        },
+    group('Nested Books', () {
+      setUp(() async {
+        index = await createNestedBooksIndex(uid: uid);
       });
-    });
 
-    test('searches on nested content with content with sort', () async {
-      var index = await createNestedBooksIndex();
-      await index
-          .updateSettings(IndexSettings(
-              searchableAttributes: ['title', 'info.comment'],
-              sortableAttributes: ['info.reviewNb']))
-          .waitFor(client: client);
+      test('searches within nested content with no parameters', () async {
+        final response = await index.search('An awesome');
 
-      var response = await index.search('', sort: ['info.reviewNb:desc']);
-
-      expect(response.hits[0], {
-        "id": 6,
-        "title": 'Harry Potter and the Half-Blood Prince',
-        "info": {
-          "comment": 'The best book',
-          "reviewNb": 1000,
-        },
+        expect(response.hits[0], {
+          "id": 5,
+          "title": 'The Hobbit',
+          "info": {
+            "comment": 'An awesome book',
+            "reviewNb": 900,
+          },
+        });
       });
-    });
-  });
 
-  group('with finite-pagination query params', () {
-    test('with basic query', () async {
-      var index = await createBooksIndex();
-      var result = await index.search('pri', page: 1) as PaginatedSearchResult;
+      test(
+          'searches on nested content with searchable on specific nested field',
+          () async {
+        await index.updateSearchableAttributes(
+          ['title', 'info.comment'],
+        ).waitFor(client: client);
 
-      expect(result.totalPages, 1);
-    });
+        final response = await index.search('An awesome');
 
-    test('accesses fields from Searchable', () async {
-      var index = await createBooksIndex();
-      var result = await index.search('pri', page: 1) as PaginatedSearchResult;
+        expect(response.hits[0], {
+          "id": 5,
+          "title": 'The Hobbit',
+          "info": {
+            "comment": 'An awesome book',
+            "reviewNb": 900,
+          },
+        });
+      });
 
-      expect(result.hits.length, greaterThanOrEqualTo(1));
-      expect(result.totalPages, 1);
-    });
+      test('searches on nested content with content with sort', () async {
+        await index
+            .updateSettings(
+              IndexSettings(
+                  searchableAttributes: ['title', 'info.comment'],
+                  sortableAttributes: ['info.reviewNb']),
+            )
+            .waitFor(client: client);
 
-    test('with mixed pagination query params', () async {
-      var index = await createBooksIndex();
-      var result = await index.search('pri', page: 1, limit: 10)
-          as PaginatedSearchResult;
+        final response = await index.search('', sort: ['info.reviewNb:desc']);
 
-      expect(result.totalPages, 1);
+        expect(response.hits[0], {
+          "id": 6,
+          "title": 'Harry Potter and the Half-Blood Prince',
+          "info": {
+            "comment": 'The best book',
+            "reviewNb": 1000,
+          },
+        });
+      });
     });
   });
 }

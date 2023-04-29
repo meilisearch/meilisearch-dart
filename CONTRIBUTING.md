@@ -2,11 +2,21 @@
 
 First of all, thank you for contributing to Meilisearch! The goal of this document is to provide everything you need to know in order to contribute to Meilisearch and its different integrations.
 
-- [Assumptions](#assumptions)
-- [How to Contribute](#how-to-contribute)
-- [Development Workflow](#development-workflow)
-- [Git Guidelines](#git-guidelines)
-- [Release Process (for internal team only)](#release-process-for-internal-team-only)
+- [Contributing ](#contributing-)
+  - [Assumptions](#assumptions)
+  - [How to Contribute](#how-to-contribute)
+  - [Development Workflow](#development-workflow)
+    - [Requirements ](#requirements-)
+    - [Setup ](#setup-)
+    - [Tests and Linter ](#tests-and-linter-)
+  - [Git Guidelines](#git-guidelines)
+    - [Git Branches ](#git-branches-)
+    - [Git Commits ](#git-commits-)
+    - [GitHub Pull Requests ](#github-pull-requests-)
+  - [Release Process (for the internal team only)](#release-process-for-the-internal-team-only)
+    - [Automation to Rebase and Merge the PRs ](#automation-to-rebase-and-merge-the-prs-)
+    - [Automated Changelogs ](#automated-changelogs-)
+    - [How to Publish the Release ](#how-to-publish-the-release-)
 
 ## Assumptions
 
@@ -38,7 +48,7 @@ You can set up your local environment natively or using `docker`, check out the 
 
 Example of running all the checks with docker:
 ```bash
-docker-compose run --rm package bash -c "dart pub get && dart run test --concurrency=1 && dart analyze && dart format . --set-exit-if-changed"
+docker-compose run --rm package bash -c "dart pub get && dart run test --concurrency=4 && dart analyze && dart format . --set-exit-if-changed"
 ```
 
 To install dependencies:
@@ -61,7 +71,7 @@ Each PR should pass the tests and the linter to be accepted.
 # Tests
 curl -L https://install.meilisearch.com | sh # download Meilisearch
 ./meilisearch --master-key=masterKey --no-analytics # run Meilisearch
-pub run test --concurrency=1
+pub run test --concurrency=4
 # Linter
 flutter analyze
 ```

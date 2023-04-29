@@ -8,6 +8,7 @@ void main() {
 
     test('version is returned from the server', () async {
       var keys = await client.getVersion();
+
       expect(keys.keys, contains('commitSha'));
       expect(keys.keys, contains('commitDate'));
       expect(keys.keys, contains('pkgVersion'));

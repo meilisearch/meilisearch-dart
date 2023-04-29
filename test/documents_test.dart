@@ -50,7 +50,9 @@ void main() {
     setUp(() {
       index = client.index(randomUid());
     });
-
+    tearDown(() async {
+      await client.deleteIndex(index.uid);
+    });
     group("Normal", () {
       final data = books;
       final totalCount = data.length;

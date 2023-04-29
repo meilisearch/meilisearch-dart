@@ -21,9 +21,10 @@ services:
       - ./:/home/package
 
   meilisearch:
-    image: getmeili/meilisearch:latest
+    # image: getmeili/meilisearch:latest
+    image: getmeili/meilisearch:v1.1.0
     ports:
-      - "7700"
+      - 7700:7700
     environment:
       - MEILI_MASTER_KEY=masterKey
       - MEILI_NO_ANALYTICS=true

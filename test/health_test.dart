@@ -7,13 +7,13 @@ void main() {
     setUpClient();
 
     test('of the server when the url is valid', () async {
-      var health = await client.health();
+      final health = await client.health();
 
       expect(health, {'status': 'available'});
     });
 
     test('of the server when the url is valid with isHealthy', () async {
-      var health = await client.isHealthy();
+      final health = await client.isHealthy();
 
       expect(health, true);
     });
@@ -23,11 +23,11 @@ void main() {
     setUpClientWithWrongUrl();
 
     test('when the url is not valid', () async {
-      expect(client.health(), throwsException);
+      await expectLater(client.health(), throwsException);
     });
 
     test('when the url is not valid with isHealthy', () async {
-      var health = await client.isHealthy();
+      final health = await client.isHealthy();
 
       expect(health, false);
     });

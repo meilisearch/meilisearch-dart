@@ -8,7 +8,7 @@ import 'package:meilisearch/src/http_request.dart';
 import 'package:meilisearch/meilisearch.dart';
 import 'package:test/test.dart';
 
-late HttpRequest http;
+HttpRequest get http => client.http;
 late MeiliSearchClient client;
 Random random = Random();
 
@@ -38,19 +38,27 @@ void setUpClient() {
     random = Random();
   });
 
+  // tearDownAll(() async {
+  //   await client.deleteTasks(
+  //     params: DeleteTasksQuery(statuses: ['succeeded', 'failed']),
+  //   );
+  // });
+}
+
+void tearDownClient() {
   tearDown(() async {
     await deleteAllIndexes();
     await deleteAllKeys();
   });
 }
 
-void setUpHttp() {
-  setUp(() {
-    final String server = testServer;
+// void setUpHttp() {
+//   setUp(() {
+//     final String server = testServer;
 
-    http = HttpRequestImpl(server, 'masterKey');
-  });
-}
+//     http = HttpRequestImpl(server, 'masterKey');
+//   });
+// }
 
 void setUpClientWithWrongUrl() {
   setUp(() {
