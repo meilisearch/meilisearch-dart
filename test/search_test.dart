@@ -220,23 +220,20 @@ void main() {
       });
 
       test('facetDistributions parameter', () async {
-        //setup
         var index = await createBooksIndex();
-        var response = await index
+        await index
             .updateSettings(IndexSettings(
               filterableAttributes: [ktag],
             ))
             .waitFor(client: client);
-        //action
+
         var result = await index.search('prince', facets: ['*']);
-        //test
-        expect(response.status, 'succeeded');
+
         expect(result.hits, hasLength(2));
         expect(result.facetDistribution?[ktag]?.length, 2);
       });
 
       test('facetStats parameter', () async {
-        //setup
         final index = client.index(randomUid());
         final docs = List.generate(
           10,
@@ -248,18 +245,15 @@ void main() {
         final responseAdd =
             await index.addDocuments(docs).waitFor(client: client);
         var responseUpdate = await index
-            .updateSettings(IndexSettings(
-              filterableAttributes: ['year'],
-            ))
-            .waitFor(client: client);
-        //action
+            .updateFilterableAttributes(['year']).waitFor(client: client);
+
         var result = await index.search('', facets: ['*']);
-        //test
+
         expect(responseAdd.status, 'succeeded');
         expect(responseUpdate.status, 'succeeded');
         expect(result.hits, hasLength(10));
         expect(result.facetStats?['year']?.min, 2010);
-        expect(result.facetStats?['year']?.max, 2010 + (9 * 2));
+        expect(result.facetStats?['year']?.max, 2028);
       });
 
       test('Sort parameter', () async {

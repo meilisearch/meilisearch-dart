@@ -13,6 +13,7 @@ Map<String, FacetStat>? _readFacetStats(
   Map<String, Object?> map,
 ) {
   final facetStatsRaw = map['facetStats'] as Map<String, Object?>?;
+
   return facetStatsRaw?.map(
     (key, value) => MapEntry(
       key,
@@ -25,7 +26,9 @@ Map<String, Map<String, int>>? _readFacetDistribution(
   Map<String, Object?> map,
 ) {
   final src = map['facetDistribution'];
+
   if (src == null) return null;
+
   return (src as Map<String, Object?>).map(
     (key, value) => MapEntry(
       key,
@@ -38,7 +41,9 @@ Map<String, List<MatchPosition>>? _readMatchesPosition(
   Map<String, Object?> map,
 ) {
   final src = map['_matchesPosition'];
+
   if (src == null) return null;
+
   return (src as Map<String, Object?>).map(
     (key, value) => MapEntry(
       key,
