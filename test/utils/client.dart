@@ -16,20 +16,6 @@ String get testServer {
   return Platform.environment['MEILISEARCH_URL'] ?? 'http://localhost:7700';
 }
 
-Future<void> deleteAllIndexes() async {
-  var data = await client.getIndexes();
-  for (var item in data.results) {
-    await item.delete();
-  }
-}
-
-Future<void> deleteAllKeys() async {
-  var data = await client.getKeys();
-  for (var item in data.results) {
-    await client.deleteKey(item.key);
-  }
-}
-
 void setUpClient() {
   setUp(() {
     final String server = testServer;
@@ -37,28 +23,7 @@ void setUpClient() {
     client = MeiliSearchClient(server, masterKey);
     random = Random();
   });
-
-  // tearDownAll(() async {
-  //   await client.deleteTasks(
-  //     params: DeleteTasksQuery(statuses: ['succeeded', 'failed']),
-  //   );
-  // });
 }
-
-void tearDownClient() {
-  tearDown(() async {
-    await deleteAllIndexes();
-    await deleteAllKeys();
-  });
-}
-
-// void setUpHttp() {
-//   setUp(() {
-//     final String server = testServer;
-
-//     http = HttpRequestImpl(server, 'masterKey');
-//   });
-// }
 
 void setUpClientWithWrongUrl() {
   setUp(() {
