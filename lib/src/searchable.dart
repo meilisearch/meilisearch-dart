@@ -1,6 +1,8 @@
 import 'package:meilisearch/meilisearch.dart';
 
-typedef MeilisearchDocumentMapper<TSrc, TOther> = TOther Function(TSrc src);
+part 'search_result.dart';
+part 'paginated_search_result.dart';
+part 'searchable_helpers.dart';
 
 abstract class Searcheable<T> {
   final String indexUid;
@@ -12,10 +14,13 @@ abstract class Searcheable<T> {
   final List<T> hits;
 
   /// Distribution of the given facets
-  final Object? facetDistribution;
+  final Map<String, Map<String, int>>? facetDistribution;
+
+  /// Distribution of the given facets
+  final Map<String, FacetStat>? facetStats;
 
   /// Contains the location of each occurrence of queried terms across all fields
-  final Object? matchesPosition;
+  final Map<String, List<MatchPosition>>? matchesPosition;
 
   /// Processing time of the query
   final int? processingTimeMs;
@@ -27,6 +32,7 @@ abstract class Searcheable<T> {
     this.facetDistribution,
     this.matchesPosition,
     this.processingTimeMs,
+    this.facetStats,
   });
 
   static Searcheable<Map<String, dynamic>> createSearchResult(
@@ -53,31 +59,4 @@ abstract class Searcheable<T> {
     assert(src is SearchResult<T>);
     return src as SearchResult<T>;
   }
-}
-
-extension SearchableExt<T> on Future<Searcheable<T>> {
-  Future<PaginatedSearchResult<T>> asPaginatedResult() =>
-      then((value) => value.asPaginatedResult());
-
-  Future<SearchResult<T>> asSearchResult() =>
-      then((value) => value.asSearchResult());
-
-  Future<Searcheable<TOther>> map<TOther>(
-    MeilisearchDocumentMapper<T, TOther> mapper,
-  ) =>
-      then((value) => value.map(mapper));
-}
-
-extension SearchResultExt<T> on Future<SearchResult<T>> {
-  Future<SearchResult<TOther>> map<TOther>(
-    MeilisearchDocumentMapper<T, TOther> mapper,
-  ) =>
-      then((value) => value.map(mapper));
-}
-
-extension PaginatedSearchResultExt<T> on Future<PaginatedSearchResult<T>> {
-  Future<PaginatedSearchResult<TOther>> map<TOther>(
-    MeilisearchDocumentMapper<T, TOther> mapper,
-  ) =>
-      then((value) => value.map(mapper));
 }

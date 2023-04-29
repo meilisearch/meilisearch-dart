@@ -221,14 +221,36 @@ void main() {
 
       test('facetDistributions parameter', () async {
         var index = await createBooksIndex();
-        var response = await index
+        await index
             .updateSettings(IndexSettings(
-              filterableAttributes: ['tag'],
+              filterableAttributes: [ktag],
             ))
             .waitFor(client: client);
-        expect(response.status, 'succeeded');
+
         var result = await index.search('prince', facets: ['*']);
+
         expect(result.hits, hasLength(2));
+        expect(result.facetDistribution?[ktag]?.length, 2);
+      });
+
+      test('facetStats parameter', () async {
+        final index = client.index(randomUid());
+        final docs = List.generate(
+          10,
+          (index) => <String, Object?>{
+            'id': 100 - index,
+            'year': (index * 2) + 2010,
+          },
+        );
+        await index.addDocuments(docs).waitFor(client: client);
+        await index
+            .updateFilterableAttributes(['year']).waitFor(client: client);
+
+        var result = await index.search('', facets: ['*']);
+
+        expect(result.hits, hasLength(10));
+        expect(result.facetStats?['year']?.min, 2010);
+        expect(result.facetStats?['year']?.max, 2028);
       });
 
       test('Sort parameter', () async {
