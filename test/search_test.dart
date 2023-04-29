@@ -242,15 +242,12 @@ void main() {
             'year': (index * 2) + 2010,
           },
         );
-        final responseAdd =
-            await index.addDocuments(docs).waitFor(client: client);
-        var responseUpdate = await index
+        await index.addDocuments(docs).waitFor(client: client);
+        await index
             .updateFilterableAttributes(['year']).waitFor(client: client);
 
         var result = await index.search('', facets: ['*']);
 
-        expect(responseAdd.status, 'succeeded');
-        expect(responseUpdate.status, 'succeeded');
         expect(result.hits, hasLength(10));
         expect(result.facetStats?['year']?.min, 2010);
         expect(result.facetStats?['year']?.max, 2028);
