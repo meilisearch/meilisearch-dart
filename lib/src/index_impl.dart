@@ -198,12 +198,14 @@ class MeiliSearchIndexImpl implements MeiliSearchIndex {
   Future<Task> addDocumentsCsv(
     String documents, {
     String? primaryKey,
+    String? csvDelimiter,
   }) {
     return _getTask(http.postMethod(
       '/indexes/$uid/documents',
       data: documents,
       queryParameters: {
         if (primaryKey != null) 'primaryKey': primaryKey,
+        if (csvDelimiter != null) 'csvDelimiter': csvDelimiter,
       },
       contentType: _csvContentType,
     ));
@@ -238,6 +240,7 @@ class MeiliSearchIndexImpl implements MeiliSearchIndex {
     String documents, {
     String? primaryKey,
     int batchSize = 1000,
+    String? csvDelimiter,
   }) {
     final ls = LineSplitter();
     final split = ls.convert(documents);
@@ -248,6 +251,7 @@ class MeiliSearchIndexImpl implements MeiliSearchIndex {
             (slice) => addDocumentsCsv(
               [header, ...slice].join('\n'),
               primaryKey: primaryKey,
+              csvDelimiter: csvDelimiter,
             ),
           ),
     );
@@ -305,12 +309,17 @@ class MeiliSearchIndexImpl implements MeiliSearchIndex {
   }
 
   @override
-  Future<Task> updateDocumentsCsv(String documents, {String? primaryKey}) {
+  Future<Task> updateDocumentsCsv(
+    String documents, {
+    String? primaryKey,
+    String? csvDelimiter,
+  }) {
     return _getTask(http.putMethod(
       '/indexes/$uid/documents',
       data: documents,
       queryParameters: {
         if (primaryKey != null) 'primaryKey': primaryKey,
+        if (csvDelimiter != null) 'csvDelimiter': csvDelimiter,
       },
       contentType: _csvContentType,
     ));
@@ -345,6 +354,7 @@ class MeiliSearchIndexImpl implements MeiliSearchIndex {
     String documents, {
     String? primaryKey,
     int batchSize = 1000,
+    String? csvDelimiter,
   }) {
     final ls = LineSplitter();
     final split = ls.convert(documents);
@@ -356,6 +366,7 @@ class MeiliSearchIndexImpl implements MeiliSearchIndex {
             (slice) => updateDocumentsCsv(
               [header, ...slice].join('\n'),
               primaryKey: primaryKey,
+              csvDelimiter: csvDelimiter,
             ),
           ),
     );
