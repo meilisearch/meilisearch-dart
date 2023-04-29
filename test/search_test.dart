@@ -189,6 +189,27 @@ void main() {
           expect(result.hits, hasLength(1));
         });
 
+        test('facetStats parameter', () async {
+          final indexWithNumbers = client.index(randomUid());
+          final docs = List.generate(
+            10,
+            (index) => <String, Object?>{
+              'id': 100 - index,
+              'year': (index * 2) + 2010,
+            },
+          );
+          await indexWithNumbers.addDocuments(docs).waitFor(client: client);
+          addTearDown(() => indexWithNumbers.delete());
+          await indexWithNumbers
+              .updateFilterableAttributes(['year']).waitFor(client: client);
+
+          var result = await indexWithNumbers.search('', facets: ['*']);
+
+          expect(result.hits, hasLength(10));
+          expect(result.facetStats?['year']?.min, 2010);
+          expect(result.facetStats?['year']?.max, 2028);
+        });
+
         test('filter parameter with number', () async {
           await index.updateFilterableAttributes(
             ['tag', 'book_id'],
@@ -225,11 +246,12 @@ void main() {
 
         test('facetDistributions parameter', () async {
           await index
-              .updateFilterableAttributes(['tag']).waitFor(client: client);
+              .updateFilterableAttributes([ktag]).waitFor(client: client);
 
           final result = await index.search('prince', facets: ['*']);
 
           expect(result.hits, hasLength(2));
+          expect(result.facetDistribution?[ktag]?.length, 2);
         });
 
         test('Sort parameter', () async {
