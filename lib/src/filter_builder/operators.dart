@@ -110,6 +110,27 @@ class MeiliGeoRadiusOperatorExpression extends MeiliOperatorExpressionBase {
   }
 }
 
+//TODO(ahmednfwela): rework this class after Dart 3 lands with patterns
+class MeiliGeoBoundingBoxOperatorExpression
+    extends MeiliOperatorExpressionBase {
+  final double lat1;
+  final double lng1;
+  final double lat2;
+  final double lng2;
+
+  const MeiliGeoBoundingBoxOperatorExpression(
+    this.lat1,
+    this.lng1,
+    this.lat2,
+    this.lng2,
+  );
+
+  @override
+  String transform() {
+    return '_geoBoundingBox([$lat1,$lng1],[$lat2,$lng2])';
+  }
+}
+
 class MeiliExistsOperatorExpression extends MeiliOperatorExpressionBase {
   final MeiliAttributeExpression attribute;
 
