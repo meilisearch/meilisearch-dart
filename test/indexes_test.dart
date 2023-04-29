@@ -128,7 +128,7 @@ void main() {
       await index.addDocuments([
         {'book_id': 123, 'title': 'Pride and Prejudice'}
       ]).waitFor(client: client);
-      addTearDown(() => client.deleteIndex(uid));
+      addTearDown(() => index.delete());
 
       index = await client.getIndex(uid);
 
@@ -151,7 +151,7 @@ void main() {
         {'book_id': 123, 'title': 'Pride and Prejudice'},
         {'book_id': 456, 'title': 'The Martin'},
       ]).waitFor(client: client);
-      addTearDown(() => client.deleteIndex(uid));
+      addTearDown(() => index.delete());
 
       expect(response.status, 'succeeded');
       final stats = await index.getStats();
@@ -198,9 +198,9 @@ void main() {
 
     test('Getting non-existant update status', () async {
       await client.createIndex(uid).waitFor(client: client);
-      addTearDown(() => client.deleteIndex(uid));
 
       final index = await client.getIndex(uid);
+      addTearDown(() => index.delete());
 
       await expectLater(
         index.getTask(9999),
