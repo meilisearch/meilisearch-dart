@@ -8,6 +8,7 @@ import 'utils/wait_for.dart';
 import 'utils/client.dart';
 import 'utils/books.dart';
 
+const _customCSVDelimiter = ';';
 void main() {
   group('Documents', () {
     setUpClient();
@@ -106,6 +107,17 @@ void main() {
 
           await testAddedData();
         });
+        test('CSV with custom delimiter', () async {
+          await index
+              .addDocumentsCsv(
+                dataAsCSV(data, delimiter: _customCSVDelimiter),
+                primaryKey: kbookId,
+                csvDelimiter: _customCSVDelimiter,
+              )
+              .waitFor(client: client);
+
+          await testAddedData();
+        });
 
         test('NDJson', () async {
           await index
@@ -190,6 +202,17 @@ void main() {
               .updateDocumentsCsv(
                 dataAsCSV(updateData),
                 primaryKey: kbookId,
+              )
+              .waitFor(client: client);
+
+          await testUpdatedData();
+        });
+        test('CSV With custom delimiter', () async {
+          await index
+              .updateDocumentsCsv(
+                dataAsCSV(updateData, delimiter: _customCSVDelimiter),
+                primaryKey: kbookId,
+                csvDelimiter: _customCSVDelimiter,
               )
               .waitFor(client: client);
 
@@ -315,6 +338,16 @@ void main() {
 
           await testAddedBatches(tasks);
         });
+        test('CSV with custom delimiter', () async {
+          final tasks = await index.addDocumentsCsvInBatches(
+            dataAsCSV(data, delimiter: _customCSVDelimiter),
+            batchSize: batchSize,
+            primaryKey: kbookId,
+            csvDelimiter: _customCSVDelimiter,
+          );
+
+          await testAddedBatches(tasks);
+        });
 
         test('NDJSON', () async {
           final tasks = await index.addDocumentsNdjsonInBatches(
@@ -395,6 +428,16 @@ void main() {
             dataAsCSV(updateData),
             batchSize: batchSize,
             primaryKey: kbookId,
+          );
+
+          await testUpdatedBatches(tasks);
+        });
+        test('CSV with custom delimiter', () async {
+          final tasks = await index.updateDocumentsCsvInBatches(
+            dataAsCSV(updateData, delimiter: _customCSVDelimiter),
+            batchSize: batchSize,
+            primaryKey: kbookId,
+            csvDelimiter: _customCSVDelimiter,
           );
 
           await testUpdatedBatches(tasks);
