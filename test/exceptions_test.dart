@@ -4,13 +4,13 @@ import 'package:meilisearch/meilisearch.dart';
 import 'utils/client.dart';
 
 void main() {
-  group('Exceptions', () {
-    setUpClient();
+  setUpClient();
 
+  group('Exceptions', () {
     test('Throw exception with the detailed information from Meilisearch',
         () async {
-      expect(
-        () async => await client.getIndex('wrongUID'),
+      await expectLater(
+        () => client.getIndex('wrongUID'),
         throwsA(isA<MeiliSearchApiException>().having(
           (error) => error.code, // Actual
           'code', // Description of the check
@@ -20,8 +20,8 @@ void main() {
     });
 
     test('Throw basic 404 exception', () async {
-      expect(
-        () async => await http.getMethod<Map<String, Object?>>('/wrong-path'),
+      await expectLater(
+        () => http.getMethod<Map<String, Object?>>('/wrong-path'),
         throwsA(isA<MeiliSearchApiException>().having(
           (error) => error.toString(), // Actual
           'toString() method', // Description of the check
@@ -33,8 +33,8 @@ void main() {
     test('Throw a CommunicationException', () async {
       final wrongClient = MeiliSearchClient('http://wrongURL', 'masterKey');
 
-      expect(
-        () async => await wrongClient.getIndex('test'),
+      await expectLater(
+        () => wrongClient.getIndex('test'),
         throwsA(isA<CommunicationException>()),
       );
     });
