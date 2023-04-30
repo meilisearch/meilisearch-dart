@@ -1,10 +1,9 @@
-import 'dart:typed_data';
-
 import 'package:dio/dio.dart';
-import 'package:dio/io.dart';
+
 import 'package:meilisearch/meilisearch.dart';
 import 'package:test/test.dart';
 
+import 'models/adapter.dart';
 import 'utils/client.dart';
 
 class TestInterceptor extends Interceptor {
@@ -13,16 +12,6 @@ class TestInterceptor extends Interceptor {
   void onRequest(RequestOptions options, RequestInterceptorHandler handler) {
     onRequestCalled = true;
     super.onRequest(options, handler);
-  }
-}
-
-class TestAdapter extends IOHttpClientAdapter {
-  bool fetchCalled = false;
-  @override
-  Future<ResponseBody> fetch(RequestOptions options,
-      Stream<Uint8List>? requestStream, Future<void>? cancelFuture) {
-    fetchCalled = true;
-    return super.fetch(options, requestStream, cancelFuture);
   }
 }
 
@@ -42,7 +31,7 @@ void main() {
       expect(interceptor.onRequestCalled, equals(true));
     });
     test("Adapter", () async {
-      final adapter = TestAdapter();
+      final adapter = createTestAdapter();
       final client = MeiliSearchClient.withCustomDio(
         testServer,
         apiKey: testApiKey,

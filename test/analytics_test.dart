@@ -1,3 +1,5 @@
+@TestOn('vm')
+
 import 'dart:io';
 
 import 'package:meilisearch/src/version.dart';
@@ -19,6 +21,8 @@ void main() {
       expect(Version.current, isNotNull);
       expect(Version.current, equals(version));
     });
+  },onPlatform: {
+
   });
 
   group('Analytics', () {
