@@ -21,8 +21,6 @@ void main() {
       expect(Version.current, isNotNull);
       expect(Version.current, equals(version));
     });
-  },onPlatform: {
-
   });
 
   group('Analytics', () {
