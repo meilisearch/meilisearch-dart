@@ -13,7 +13,12 @@ void main() {
       var movies = ['movies', 'movies_new'];
       var swaps = [SwapIndex(books), SwapIndex(movies)];
 
-      var response = await client.swapIndexes(swaps).waitFor(
+      var response = await client
+          .swapIndexes(
+            swaps,
+            deleteWhenDone: false,
+          )
+          .waitFor(
             client: client,
             throwFailed: false,
           );

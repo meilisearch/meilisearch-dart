@@ -8,6 +8,7 @@ void main() {
     setUpClient();
     test('creates a dump', () async {
       final task = await client.createDump();
+      //this teardown is to ensure no dump actually happens, since we are only checking the returned task
       addTearDown(
         () => client.cancelTasks(params: CancelTasksQuery(uids: [task.uid!])),
       );

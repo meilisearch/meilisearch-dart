@@ -51,7 +51,7 @@ void main() {
     setUp(() {
       index = client.index(randomUid());
     });
-    tearDown(() => index.delete());
+
     group("Normal", () {
       final data = books;
       final totalCount = data.length;

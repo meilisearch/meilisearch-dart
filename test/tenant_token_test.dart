@@ -57,10 +57,8 @@ void main() {
 
       test('invokes search successfully with the new token', () async {
         final admKey = await client.createKey(indexes: ["*"], actions: ["*"]);
-        addTearDown(() => client.deleteKey(admKey.key));
         final admClient = MeiliSearchClient(testServer, admKey.key);
         final index = await createBooksIndex(uid: 'my_index');
-        addTearDown(() => index.delete());
 
         await index.updateFilterableAttributes(['tag', 'book_id']).waitFor(
           client: client,

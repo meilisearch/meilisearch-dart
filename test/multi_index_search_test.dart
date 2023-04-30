@@ -23,13 +23,6 @@ void main() {
       ]);
     });
 
-    tearDown(() async {
-      await Future.wait([
-        index1.delete(),
-        index2.delete(),
-      ]);
-    });
-
     test("Multi search from 2 indexes", () async {
       final result = await client.multiSearch(MultiSearchQuery(queries: [
         SearchQuery(

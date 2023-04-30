@@ -15,7 +15,6 @@ void main() {
     setUp(() {
       uid = randomUid();
     });
-    tearDown(() => index.delete());
 
     group('Books', () {
       setUp(() async {
@@ -199,7 +198,6 @@ void main() {
             },
           );
           await indexWithNumbers.addDocuments(docs).waitFor(client: client);
-          addTearDown(() => indexWithNumbers.delete());
           await indexWithNumbers
               .updateFilterableAttributes(['year']).waitFor(client: client);
 

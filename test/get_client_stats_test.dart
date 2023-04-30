@@ -12,7 +12,6 @@ void main() {
       //index 1
       final uid1 = randomUid();
       var index = client.index(uid1);
-      addTearDown(() => client.deleteIndex(uid1));
 
       var response = await index.addDocuments([
         {'book_id': 123, 'title': 'Pride and Prejudice'},
@@ -24,7 +23,6 @@ void main() {
       //index 2
       final uid2 = randomUid();
       index = client.index(uid2);
-      addTearDown(() => client.deleteIndex(uid2));
 
       response = await index.addDocuments([
         {'book_id': 789, 'title': 'Project Hail Mary'},
@@ -41,7 +39,6 @@ void main() {
     test('gets all tasks', () async {
       final uid = randomUid();
       await client.createIndex(uid);
-      addTearDown(() => client.deleteIndex(uid));
 
       final tasks = await client.getTasks();
 
@@ -52,7 +49,6 @@ void main() {
     test('gets a task by taskId', () async {
       final uid = randomUid();
       final info = await client.createIndex(uid);
-      addTearDown(() => client.deleteIndex(uid));
 
       final task = await client.getTask(info.uid!);
 

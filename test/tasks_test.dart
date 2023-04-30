@@ -16,8 +16,6 @@ void main() {
       index = client.index(uid);
     });
 
-    tearDown(() => index.delete());
-
     test('Query by type', () async {
       final docs = books;
       final task = await index.addDocuments(docs);

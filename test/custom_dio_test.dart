@@ -32,7 +32,7 @@ void main() {
       final interceptor = TestInterceptor();
       final client = MeiliSearchClient.withCustomDio(
         testServer,
-        apiKey: "masterKey",
+        apiKey: testApiKey,
         interceptors: [interceptor],
       );
 
@@ -45,7 +45,7 @@ void main() {
       final adapter = TestAdapter();
       final client = MeiliSearchClient.withCustomDio(
         testServer,
-        apiKey: "masterKey",
+        apiKey: testApiKey,
         adapter: adapter,
       );
 

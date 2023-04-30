@@ -16,8 +16,6 @@ void main() {
       index = await client.getIndex(uid);
     });
 
-    tearDown(() => index.delete());
-
     test('Getting the default settings', () async {
       final settings = await index.getSettings();
 

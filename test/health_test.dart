@@ -1,3 +1,4 @@
+import 'package:meilisearch/meilisearch.dart';
 import 'package:test/test.dart';
 
 import 'utils/client.dart';
@@ -20,14 +21,23 @@ void main() {
   });
 
   group('Health Fail', () {
-    setUpClientWithWrongUrl();
+    late MeiliSearchClient badClient;
+    setUp(() {
+      final String server = 'http://wrongurl:1234';
+      final connectTimeout = Duration(milliseconds: 1000);
+      badClient = MeiliSearchClient(
+        server,
+        testApiKey,
+        connectTimeout,
+      );
+    });
 
     test('when the url is not valid', () async {
-      await expectLater(client.health(), throwsException);
+      await expectLater(badClient.health(), throwsException);
     });
 
     test('when the url is not valid with isHealthy', () async {
-      final health = await client.isHealthy();
+      final health = await badClient.isHealthy();
 
       expect(health, false);
     });

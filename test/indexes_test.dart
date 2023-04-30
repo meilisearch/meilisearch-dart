@@ -14,7 +14,6 @@ void main() {
 
     test('Create index with right UID without any primary passed', () async {
       await client.createIndex(uid).waitFor(client: client);
-      addTearDown(() => client.deleteIndex(uid));
 
       final index = await client.getIndex(uid);
 
@@ -24,7 +23,6 @@ void main() {
 
     test('Create index with right UID with a primary', () async {
       await client.createIndex(uid, primaryKey: 'myId').waitFor(client: client);
-      addTearDown(() => client.deleteIndex(uid));
 
       final index = await client.getIndex(uid);
 
@@ -34,7 +32,6 @@ void main() {
 
     test('Update an index where the primary has not been set', () async {
       await client.createIndex(uid).waitFor(client: client);
-      addTearDown(() => client.deleteIndex(uid));
 
       var index = await client.getIndex(uid);
       await index.update(primaryKey: 'nextId').waitFor(client: client);
@@ -47,7 +44,6 @@ void main() {
       'Update an index from the client where the primary has not been set',
       () async {
         await client.createIndex(uid).waitFor(client: client);
-        addTearDown(() => client.deleteIndex(uid));
 
         await client.updateIndex(uid, 'nextId').waitFor(client: client);
 
@@ -80,7 +76,6 @@ void main() {
 
     test('Get an existing index', () async {
       await client.createIndex(uid).waitFor(client: client);
-      addTearDown(() => client.deleteIndex(uid));
 
       var index = await client.getIndex(uid);
 
@@ -90,7 +85,6 @@ void main() {
 
     test('gets raw information about an index', () async {
       await client.createIndex(uid).waitFor(client: client);
-      addTearDown(() => client.deleteIndex(uid));
 
       final index = await client.getRawIndex(uid);
       final keys = ['uid', 'primaryKey', 'createdAt', 'updatedAt'];
@@ -109,7 +103,6 @@ void main() {
       const count = 3;
       final ids = List.generate(count, (index) => randomUid());
       await Future.wait(ids.map(client.createIndex)).waitFor(client: client);
-      addTearDown(() => Future.wait(ids.map(client.deleteIndex)));
 
       final response = await client.getIndexes();
 
@@ -117,7 +110,7 @@ void main() {
     });
 
     test('Create index object with UID', () async {
-      final index = client.index(uid);
+      final index = client.index(uid, deleteWhenDone: false);
 
       expect(index.uid, uid);
       expect(index.primaryKey, null);
@@ -128,7 +121,6 @@ void main() {
       await index.addDocuments([
         {'book_id': 123, 'title': 'Pride and Prejudice'}
       ]).waitFor(client: client);
-      addTearDown(() => index.delete());
 
       index = await client.getIndex(uid);
 
@@ -136,7 +128,7 @@ void main() {
     });
 
     test('Create index object and get it without add it', () async {
-      client.index(uid);
+      client.index(uid, deleteWhenDone: false);
 
       await expectLater(
         client.getIndex(uid),
@@ -151,7 +143,6 @@ void main() {
         {'book_id': 123, 'title': 'Pride and Prejudice'},
         {'book_id': 456, 'title': 'The Martin'},
       ]).waitFor(client: client);
-      addTearDown(() => index.delete());
 
       expect(response.status, 'succeeded');
       final stats = await index.getStats();
@@ -160,7 +151,6 @@ void main() {
 
     test('gets all tasks by index', () async {
       await client.createIndex(uid).waitFor(client: client);
-      addTearDown(() => client.deleteIndex(uid));
       final index = await client.getIndex(uid);
 
       await index.addDocuments([
@@ -180,7 +170,6 @@ void main() {
       final response = await index.addDocuments([
         {'book_id': 1234, 'title': 'Pride and Prejudice'}
       ]);
-      addTearDown(() => client.deleteIndex(uid));
 
       final task = await index.getTask(response.uid!);
 
@@ -200,17 +189,14 @@ void main() {
       await client.createIndex(uid).waitFor(client: client);
 
       final index = await client.getIndex(uid);
-      addTearDown(() => index.delete());
-
       await expectLater(
-        index.getTask(9999),
+        index.getTask(-1),
         throwsA(isA<MeiliSearchApiException>()),
       );
     });
 
     test('extracts all possible properties from task', () async {
       final task = await client.createIndex(uid);
-      addTearDown(() => client.deleteIndex(uid));
 
       expect(task.uid, greaterThan(0));
       expect(task.indexUid, equals(uid));
