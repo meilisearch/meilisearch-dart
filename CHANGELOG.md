@@ -7,7 +7,7 @@
 - `SwapIndex` class has a new `assert` to require at least two items in the `this.indexes` attribute.
 - Introduces new classes: `FacetStat`, `MatchPosition`.
 - Change `Searchable<T>` to have proper types:
-```dart
+```diff
 - final Object? facetDistribution;
 + final Map<String, Map<String, int>>? facetDistribution;
 - final Object? matchesPosition;   
