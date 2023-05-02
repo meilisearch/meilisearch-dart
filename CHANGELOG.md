@@ -1,7 +1,24 @@
 [comment]: <> (All notable changes to this project will be documented in this file.)
 
 # 0.12.0
+
 ### Breaking Changes:
+
+- `SwapIndex` class has a new `assert` to require at least two items in the `this.indexes` attribute.
+- Introduces new classes: `FacetStat`, `MatchPosition`.
+- Change `Searchable<T>` to have proper types:
+```dart
+- final Object? facetDistribution;
++ final Map<String, Map<String, int>>? facetDistribution;
+- final Object? matchesPosition;   
++ final Map<String, List<MatchPosition>>? matchesPosition;
++ final Map<String, FacetStat>? facetStats;
+```
+
+### Changes:
+
+- Add `csvDelimiter` parameter to `addDocumentsCsv`, `addDocumentsCsvInBatches`, `updateDocumentsCsv`, `updateDocumentsCsvInBatches` `MeiliSearchIndex` methods.
+- Add support for `_geoBoundingBox` in `filterExpression`
 
 # 0.11.1
 ### Bug Fixes:
