@@ -6,26 +6,31 @@ import 'utils/wait_for.dart';
 
 void main() {
   group('Indexes', () {
+    late String uid;
     setUpClient();
+    setUp(() {
+      uid = randomUid();
+    });
 
     test('Create index with right UID without any primary passed', () async {
-      final uid = randomUid();
       await client.createIndex(uid).waitFor(client: client);
+
       final index = await client.getIndex(uid);
+
       expect(index.uid, uid);
       expect(index.primaryKey, null);
     });
 
     test('Create index with right UID with a primary', () async {
-      final uid = randomUid();
       await client.createIndex(uid, primaryKey: 'myId').waitFor(client: client);
+
       final index = await client.getIndex(uid);
+
       expect(index.uid, uid);
       expect(index.primaryKey, 'myId');
     });
 
     test('Update an index where the primary has not been set', () async {
-      final uid = randomUid();
       await client.createIndex(uid).waitFor(client: client);
 
       var index = await client.getIndex(uid);
@@ -35,43 +40,50 @@ void main() {
       expect(index.primaryKey, equals('nextId'));
     });
 
-    test('Update an index from the client where the primary has not been set',
-        () async {
-      final uid = randomUid();
-      await client.createIndex(uid).waitFor(client: client);
-      await client.updateIndex(uid, 'nextId').waitFor(client: client);
-      final index = await client.getIndex(uid);
-      expect(index.primaryKey, equals('nextId'));
-    });
+    test(
+      'Update an index from the client where the primary has not been set',
+      () async {
+        await client.createIndex(uid).waitFor(client: client);
+
+        await client.updateIndex(uid, 'nextId').waitFor(client: client);
+
+        final index = await client.getIndex(uid);
+        expect(index.primaryKey, equals('nextId'));
+      },
+    );
 
     test('Delete an existing index', () async {
-      final uid = randomUid();
       await client.createIndex(uid).waitFor(client: client);
 
       final index = await client.getIndex(uid);
       await index.delete().waitFor(client: client);
 
-      expect(client.getIndex(uid), throwsA(isA<MeiliSearchApiException>()));
+      await expectLater(
+        client.getIndex(uid),
+        throwsA(isA<MeiliSearchApiException>()),
+      );
     });
 
     test('Delete index with right UID from the client', () async {
-      final uid = randomUid();
       await client.createIndex(uid).waitFor(client: client);
       await client.deleteIndex(uid).waitFor(client: client);
 
-      expect(client.getIndex(uid), throwsA(isA<MeiliSearchApiException>()));
+      await expectLater(
+        client.getIndex(uid),
+        throwsA(isA<MeiliSearchApiException>()),
+      );
     });
 
     test('Get an existing index', () async {
-      final uid = randomUid();
       await client.createIndex(uid).waitFor(client: client);
+
       var index = await client.getIndex(uid);
+
       expect(index.uid, uid);
       expect(index.primaryKey, null);
     });
 
     test('gets raw information about an index', () async {
-      final uid = randomUid();
       await client.createIndex(uid).waitFor(client: client);
 
       final index = await client.getRawIndex(uid);
@@ -88,52 +100,56 @@ void main() {
     });
 
     test('Get all indexes', () async {
-      await client.createIndex(randomUid()).waitFor(client: client);
-      await client.createIndex(randomUid()).waitFor(client: client);
-      await client.createIndex(randomUid()).waitFor(client: client);
-      var response = await client.getIndexes();
-      expect(response.total, 3);
+      const count = 3;
+      final ids = List.generate(count, (index) => randomUid());
+      await Future.wait(ids.map(client.createIndex)).waitFor(client: client);
+
+      final response = await client.getIndexes();
+
+      expect(response.results.map((e) => e.uid), containsAll(ids));
     });
 
     test('Create index object with UID', () async {
-      final uid = randomUid();
-      final index = client.index(uid);
+      final index = client.index(uid, deleteWhenDone: false);
+
       expect(index.uid, uid);
       expect(index.primaryKey, null);
     });
 
     test('Create index object with UID and add Document', () async {
-      final uid = randomUid();
       var index = client.index(uid);
-      final response = await index.addDocuments([
+      await index.addDocuments([
         {'book_id': 123, 'title': 'Pride and Prejudice'}
       ]).waitFor(client: client);
-      expect(response.status, 'succeeded');
+
       index = await client.getIndex(uid);
+
       expect(index.uid, uid);
     });
 
     test('Create index object and get it without add it', () async {
-      final uid = randomUid();
-      client.index(uid);
-      expect(client.getIndex(randomUid(uid)),
-          throwsA(isA<MeiliSearchApiException>()));
+      client.index(uid, deleteWhenDone: false);
+
+      await expectLater(
+        client.getIndex(uid),
+        throwsA(isA<MeiliSearchApiException>()),
+      );
     });
 
     test('Geting index stats', () async {
-      final uid = randomUid();
       final index = client.index(uid);
+
       final response = await index.addDocuments([
         {'book_id': 123, 'title': 'Pride and Prejudice'},
         {'book_id': 456, 'title': 'The Martin'},
       ]).waitFor(client: client);
+
       expect(response.status, 'succeeded');
       final stats = await index.getStats();
       expect(stats.numberOfDocuments, 2);
     });
 
     test('gets all tasks by index', () async {
-      final uid = randomUid();
       await client.createIndex(uid).waitFor(client: client);
       final index = await client.getIndex(uid);
 
@@ -150,7 +166,7 @@ void main() {
     });
 
     test('gets a task from a index by taskId', () async {
-      final index = client.index(randomUid());
+      final index = client.index(uid);
       final response = await index.addDocuments([
         {'book_id': 1234, 'title': 'Pride and Prejudice'}
       ]);
@@ -161,23 +177,25 @@ void main() {
     });
 
     test('gets a task with a failure', () async {
-      final index = client.index(randomUid());
+      final index = client.index(uid);
 
-      expect(() async => await index.updateRankingRules(['invalid-rule']),
-          throwsA(isA<MeiliSearchApiException>()));
+      await expectLater(
+        index.updateRankingRules(['invalid-rule']),
+        throwsA(isA<MeiliSearchApiException>()),
+      );
     });
 
     test('Getting non-existant update status', () async {
-      final uid = randomUid();
       await client.createIndex(uid).waitFor(client: client);
-      final index = await client.getIndex(uid);
 
-      expect(() async => await index.getTask(9999),
-          throwsA(isA<MeiliSearchApiException>()));
+      final index = await client.getIndex(uid);
+      await expectLater(
+        index.getTask(-1),
+        throwsA(isA<MeiliSearchApiException>()),
+      );
     });
 
     test('extracts all possible properties from task', () async {
-      final uid = randomUid();
       final task = await client.createIndex(uid);
 
       expect(task.uid, greaterThan(0));

@@ -3,63 +3,34 @@ import 'dart:io';
 import 'dart:math';
 
 import 'package:crypto/crypto.dart';
-import 'package:meilisearch/src/http_request_impl.dart';
 import 'package:meilisearch/src/http_request.dart';
-import 'package:meilisearch/meilisearch.dart';
 import 'package:test/test.dart';
 
-late HttpRequest http;
-late MeiliSearchClient client;
-Random random = Random();
+import '../models/test_client.dart';
 
+HttpRequest get http => client.http;
+late TestMeiliSearchClient client;
+final random = Random();
+
+const bool _kIsWeb = bool.fromEnvironment('dart.library.js_util');
 String get testServer {
-  return Platform.environment['MEILISEARCH_URL'] ?? 'http://localhost:7700';
-}
-
-Future<void> deleteAllIndexes() async {
-  var data = await client.getIndexes();
-  for (var item in data.results) {
-    await item.delete();
+  const defaultUrl = 'http://localhost:7700';
+  if (_kIsWeb) {
+    return defaultUrl;
+  } else {
+    return Platform.environment['MEILISEARCH_URL'] ?? defaultUrl;
   }
 }
 
-Future<void> deleteAllKeys() async {
-  var data = await client.getKeys();
-  for (var item in data.results) {
-    await client.deleteKey(item.key);
-  }
+String get testApiKey {
+  return 'masterKey';
 }
 
 void setUpClient() {
   setUp(() {
-    final String server = testServer;
-    const masterKey = 'masterKey';
-    client = MeiliSearchClient(server, masterKey);
-    random = Random();
+    client = TestMeiliSearchClient(testServer, testApiKey);
   });
-
-  tearDown(() async {
-    await deleteAllIndexes();
-    await deleteAllKeys();
-  });
-}
-
-void setUpHttp() {
-  setUp(() {
-    final String server = testServer;
-
-    http = HttpRequestImpl(server, 'masterKey');
-  });
-}
-
-void setUpClientWithWrongUrl() {
-  setUp(() {
-    final String server = 'http://wrongurl:1234';
-    final connectTimeout = Duration(milliseconds: 1000);
-    const masterKey = 'masterKey';
-
-    client = MeiliSearchClient(server, masterKey, connectTimeout);
-  });
+  tearDown(() => client.disposeUsedResources());
 }
 
 String randomUid([String prefix = 'index']) {

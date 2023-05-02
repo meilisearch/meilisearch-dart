@@ -32,8 +32,10 @@ void main() {
       test('decodes successfully using apiKey from instance', () {
         final token = client.generateTenantToken('uid', searchRules);
 
-        expect(() => JWT.verify(token, SecretKey(client.apiKey!)),
-            returnsNormally);
+        expect(
+          () => JWT.verify(token, SecretKey(client.apiKey!)),
+          returnsNormally,
+        );
       });
 
       test('decodes successfully using uid from param', () {
@@ -47,14 +49,17 @@ void main() {
       test('throws InvalidApiKeyException if all given keys are invalid', () {
         final custom = MeiliSearchClient(testServer, null);
 
-        expect(() => custom.generateTenantToken('uid', searchRules),
-            throwsA(isA<InvalidApiKeyException>()));
+        expect(
+          () => custom.generateTenantToken('uid', searchRules),
+          throwsA(isA<InvalidApiKeyException>()),
+        );
       });
 
       test('invokes search successfully with the new token', () async {
         final admKey = await client.createKey(indexes: ["*"], actions: ["*"]);
         final admClient = MeiliSearchClient(testServer, admKey.key);
         final index = await createBooksIndex(uid: 'my_index');
+
         await index.updateFilterableAttributes(['tag', 'book_id']).waitFor(
           client: client,
         );

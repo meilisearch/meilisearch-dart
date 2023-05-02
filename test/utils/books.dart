@@ -14,7 +14,8 @@ Future<MeiliSearchIndex> createDynamicBooksIndex({
 
   if (response.status != 'succeeded') {
     throw Exception(
-        'Impossible to process test suite, the documents were not added into the index.');
+      'Impossible to process test suite, the documents were not added into the index.',
+    );
   }
   return index;
 }
@@ -37,7 +38,8 @@ Future<MeiliSearchIndex> _createIndex({
 
   if (response.status != 'succeeded') {
     throw Exception(
-        'Impossible to process test suite, the documents were not added into the index.');
+      'Impossible to process test suite, the documents were not added into the index.',
+    );
   }
   return index;
 }

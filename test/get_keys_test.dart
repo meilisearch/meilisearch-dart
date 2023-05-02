@@ -10,10 +10,14 @@ void main() {
 
     group('When has master key', () {
       test('responds with all keys', () async {
-        await client.createKey(indexes: ['movies'], actions: ['*']);
+        final key = await client.createKey(indexes: ['movies'], actions: ['*']);
 
         final allKeys = await client.getKeys();
-        expect(allKeys.total, greaterThan(0));
+
+        expect(
+          allKeys.results,
+          contains(predicate((Key p0) => p0.key == key.key)),
+        );
       });
 
       test('gets a key from server by key/uid', () async {
@@ -88,51 +92,55 @@ void main() {
       test('deletes a key', () async {
         final key = await client.createKey(actions: ["*"], indexes: ["*"]);
 
-        expect(await client.deleteKey(key.key), isTrue);
+        await expectLater(client.deleteKey(key.key), completion(isTrue));
       });
     });
 
     group('When has a key with search scope only', () {
+      late MeiliSearchClient tempClient;
+      late String indexName;
+
       setUp(() async {
         final key = await client.createKey(indexes: ['*'], actions: ['search']);
-        await client.createIndex('movies').waitFor(client: client);
+        indexName = randomUid();
+        await client.createIndex(indexName).waitFor(client: client);
 
-        client = MeiliSearchClient(testServer, key.key);
-      });
-
-      tearDown(() {
-        client = MeiliSearchClient(testServer, 'masterKey');
+        tempClient = MeiliSearchClient(testServer, key.key);
       });
 
       test('throws MeiliSearchApiException in getKeys call', () async {
-        expect(() async => await client.getKeys(),
-            throwsA(isA<MeiliSearchApiException>()));
+        await expectLater(
+          tempClient.getKeys(),
+          throwsA(isA<MeiliSearchApiException>()),
+        );
       });
 
       test('throws MeiliSearchApiException in createKey call', () async {
-        expect(
-            () async => await client.createKey(actions: ['*'], indexes: ['*']),
-            throwsA(isA<MeiliSearchApiException>()));
+        await expectLater(
+          tempClient.createKey(actions: ['*'], indexes: ['*']),
+          throwsA(isA<MeiliSearchApiException>()),
+        );
       });
 
       test('searches successfully', () async {
-        expect(() async => await client.index('movies').search('name'),
-            returnsNormally);
+        await expectLater(
+          tempClient.index(indexName).search('name'),
+          completion(isA<SearchResult<Map<String, Object?>>>()),
+        );
       });
     });
 
     group('When has a invalid key', () {
+      late MeiliSearchClient tempClient;
       setUp(() async {
-        client = MeiliSearchClient(testServer, 'this-is-a-invalid-key');
-      });
-
-      tearDown(() {
-        client = MeiliSearchClient(testServer, 'masterKey');
+        tempClient = MeiliSearchClient(testServer, 'this-is-a-invalid-key');
       });
 
       test('throws MeiliSearchApiException in getKeys call', () async {
-        expect(() async => await client.getKeys(),
-            throwsA(isA<MeiliSearchApiException>()));
+        await expectLater(
+          tempClient.getKeys(),
+          throwsA(isA<MeiliSearchApiException>()),
+        );
       });
     });
   });

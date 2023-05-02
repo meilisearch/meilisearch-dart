@@ -9,21 +9,30 @@ void main() {
     setUpClient();
 
     test('Getting all stats', () async {
+      //index 1
       final uid1 = randomUid();
       var index = client.index(uid1);
+
       var response = await index.addDocuments([
         {'book_id': 123, 'title': 'Pride and Prejudice'},
         {'book_id': 456, 'title': 'The Martin'},
       ]).waitFor(client: client);
+
       expect(response.status, 'succeeded');
+
+      //index 2
       final uid2 = randomUid();
       index = client.index(uid2);
+
       response = await index.addDocuments([
         {'book_id': 789, 'title': 'Project Hail Mary'},
       ]).waitFor(client: client);
+
       expect(response.status, 'succeeded');
+
+      //stats
       final stats = await client.getStats();
-      expect(stats.indexes!.length, 2);
+      /*since tests might run concurrently, this needs to only check specific index uids*/
       expect(stats.indexes!.keys, containsAll([uid1, uid2]));
     });
 
@@ -33,7 +42,7 @@ void main() {
 
       final tasks = await client.getTasks();
 
-      expect(tasks.results.length, greaterThan(0));
+      expect(tasks.results, hasLength(greaterThan(0)));
       expect(tasks.results.first, isA<Task>());
     });
 

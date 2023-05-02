@@ -42,7 +42,7 @@ jobs:
       - name: Install dependencies
         run: dart pub get
       - name: Run integration tests
-        run: dart test --exclude-tags=browser --concurrency=1
+        run: dart test --concurrency=4
 
   linter:
     name: linter-check

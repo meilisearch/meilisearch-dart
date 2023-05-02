@@ -7,9 +7,16 @@ import 'utils/wait_for.dart';
 
 void main() {
   group("Tasks", () {
+    late String uid;
+    late MeiliSearchIndex index;
+
     setUpClient();
+    setUp(() {
+      uid = randomUid();
+      index = client.index(uid);
+    });
+
     test('Query by type', () async {
-      final index = client.index(randomUid());
       final docs = books;
       final task = await index.addDocuments(docs);
 
@@ -31,27 +38,31 @@ void main() {
       }
     });
     test('cancels given an input', () async {
-      var date = DateTime.now();
-      var response = await client
+      final date = DateTime.now();
+      final response = await client
           .cancelTasks(
-              params: CancelTasksQuery(uids: [1, 2], beforeStartedAt: date))
+            params: CancelTasksQuery(uids: [1, 2], beforeStartedAt: date),
+          )
           .waitFor(client: client);
 
-      expect(response.status, 'succeeded');
-      expect(response.details!['originalFilter'],
-          '?beforeStartedAt=${Uri.encodeComponent(date.toUtc().toIso8601String())}&uids=1%2C2');
+      expect(
+        response.details!['originalFilter'],
+        '?beforeStartedAt=${Uri.encodeComponent(date.toUtc().toIso8601String())}&uids=1%2C2',
+      );
     });
 
     test('deletes given an input', () async {
-      var date = DateTime.now();
-      var response = await client
+      final date = DateTime.now();
+      final response = await client
           .deleteTasks(
-              params: DeleteTasksQuery(uids: [1, 2], beforeStartedAt: date))
+            params: DeleteTasksQuery(uids: [1, 2], beforeStartedAt: date),
+          )
           .waitFor(client: client);
 
-      expect(response.status, 'succeeded');
-      expect(response.details!['originalFilter'],
-          '?beforeStartedAt=${Uri.encodeComponent(date.toUtc().toIso8601String())}&uids=1%2C2');
+      expect(
+        response.details!['originalFilter'],
+        '?beforeStartedAt=${Uri.encodeComponent(date.toUtc().toIso8601String())}&uids=1%2C2',
+      );
     });
   });
 }

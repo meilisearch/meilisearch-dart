@@ -6,13 +6,22 @@ extension TaskWaiter on Task {
     required MeiliSearchClient client,
     Duration timeout = const Duration(seconds: 5),
     Duration interval = const Duration(milliseconds: 50),
+    bool throwFailed = true,
   }) async {
     var endingTime = DateTime.now().add(timeout);
 
     while (DateTime.now().isBefore(endingTime)) {
-      var task = await client.getTask(uid!);
+      final task = await client.getTask(uid!);
 
       if (task.status != 'enqueued' && task.status != 'processing') {
+        if (throwFailed && task.status != 'succeeded') {
+          throw MeiliSearchApiException(
+            "Task ($uid) failed",
+            code: task.error?.code,
+            link: task.error?.link,
+            type: task.error?.type,
+          );
+        }
         return task;
       }
 
@@ -28,6 +37,7 @@ extension TaskWaiterForLists on Iterable<Task> {
     required MeiliSearchClient client,
     Duration timeout = const Duration(seconds: 20),
     Duration interval = const Duration(milliseconds: 50),
+    bool throwFailed = true,
   }) async {
     final endingTime = DateTime.now().add(timeout);
     final originalUids = toList();
@@ -36,10 +46,22 @@ extension TaskWaiterForLists on Iterable<Task> {
     final statuses = ['enqueued', 'processing'];
 
     while (DateTime.now().isBefore(endingTime)) {
-      var taskRes =
+      final taskRes =
           await client.getTasks(params: TasksQuery(uids: remainingUids));
       final tasks = taskRes.results;
       final completed = tasks.where((e) => !statuses.contains(e.status));
+      if (throwFailed) {
+        final failed = completed
+            .firstWhereOrNull((element) => element.status != 'succeeded');
+        if (failed != null) {
+          throw MeiliSearchApiException(
+            "Task (${failed.uid}) failed",
+            code: failed.error?.code,
+            link: failed.error?.link,
+            type: failed.error?.type,
+          );
+        }
+      }
 
       completedTasks.addEntries(completed.map((e) => MapEntry(e.uid!, e)));
       remainingUids
@@ -63,9 +85,14 @@ extension TaskWaiterForFutures on Future<Task> {
     required MeiliSearchClient client,
     Duration timeout = const Duration(seconds: 5),
     Duration interval = const Duration(milliseconds: 50),
+    bool throwFailed = true,
   }) async {
-    return await (await this)
-        .waitFor(timeout: timeout, interval: interval, client: client);
+    return await (await this).waitFor(
+      timeout: timeout,
+      interval: interval,
+      client: client,
+      throwFailed: throwFailed,
+    );
   }
 }
 
@@ -74,8 +101,13 @@ extension TaskWaiterForFutureList on Future<Iterable<Task>> {
     required MeiliSearchClient client,
     Duration timeout = const Duration(seconds: 20),
     Duration interval = const Duration(milliseconds: 50),
+    bool throwFailed = true,
   }) async {
-    return await (await this)
-        .waitFor(timeout: timeout, interval: interval, client: client);
+    return await (await this).waitFor(
+      timeout: timeout,
+      interval: interval,
+      client: client,
+      throwFailed: throwFailed,
+    );
   }
 }

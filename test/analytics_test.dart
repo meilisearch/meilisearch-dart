@@ -1,3 +1,5 @@
+@TestOn('vm')
+
 import 'dart:io';
 
 import 'package:meilisearch/src/version.dart';
