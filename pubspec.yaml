@@ -17,3 +17,7 @@ dev_dependencies:
   test: ^1.0.0
   dart_jsonwebtoken: ^2.3.2
   lints: ">=1.0.1 <3.0.0"
+
+screenshots:
+  - description: The Meilisearch logo.
+    path: screenshots/logo.png
