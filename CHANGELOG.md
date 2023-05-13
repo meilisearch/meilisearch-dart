@@ -1,5 +1,11 @@
 [comment]: <> (All notable changes to this project will be documented in this file.)
 
+# 0.13.0
+
+### Breaking Changes
+
+- The minimum supported Dart runtime is now `2.17.0`.
+
 # 0.12.0
 
 ### Breaking Changes:
