@@ -4,7 +4,7 @@
 
 ### Breaking Changes
 
-- The minimum supported Dart runtime is now `2.17.0`.
+- The minimum supported Dart runtime is now `3.0.0`.
 
 # 0.12.0
 

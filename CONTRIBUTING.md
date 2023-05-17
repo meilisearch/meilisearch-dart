@@ -136,21 +136,6 @@ static const String current = 'X.X.X';
 version: X.X.X
 ```
 
-- the file [`example/pubspec.yaml`](./example/pubspec.yaml).
-
-```yaml
-meilisearch: "X.X.X"
-```
-
-- the file [`example/pubspec.lock`](./example/pubspec.lock).
-
-```yml
-  meilisearch:
-    dependency: "direct main"
-    ...
-    version: "X.X.X"
-```
-
 - the file [`README.md` in the Installation section](./README.md):
 
 ```yaml
