@@ -25,14 +25,14 @@ void main() {
 
     test("Multi search from 2 indexes", () async {
       final result = await client.multiSearch(MultiSearchQuery(queries: [
-        SearchQuery(
-          query: "",
+        IndexSearchQuery(
+          "",
           indexUid: index1.uid,
           filterExpression:
               ktag.toMeiliAttribute().eq("Romance".toMeiliValue()),
         ),
-        SearchQuery(
-          query: "",
+        IndexSearchQuery(
+          "",
           indexUid: index2.uid,
           filterExpression: ktag.toMeiliAttribute().eq("Tale".toMeiliValue()),
         ),

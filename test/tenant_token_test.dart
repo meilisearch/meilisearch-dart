@@ -68,7 +68,7 @@ void main() {
           possibleRules.map((rule) {
             final token = admClient.generateTenantToken(admKey.uid!, rule);
             final custom = MeiliSearchClient(testServer, token);
-            return custom.index('my_index').search('');
+            return custom.index('my_index').search(SearchQuery(''));
           }),
         );
       });
