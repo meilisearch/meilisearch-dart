@@ -66,13 +66,11 @@ class Meili {
       );
 
   static MeiliGeoRadiusOperatorExpression geoRadius(
-    double lat,
-    double lng,
+    MeiliPoint point,
     double distanceInMeters,
   ) =>
       MeiliGeoRadiusOperatorExpression(
-        lat,
-        lng,
+        (lat: point.lat, lng: point.lng),
         distanceInMeters,
       );
 

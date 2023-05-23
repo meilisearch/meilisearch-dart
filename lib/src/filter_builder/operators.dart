@@ -1,7 +1,7 @@
 import 'package:collection/collection.dart';
 import 'package:meilisearch/meilisearch.dart';
 
-typedef MeiliPoint = ({double lat, double lng});
+typedef MeiliPoint = ({num lat, num lng});
 
 class MeiliAndOperatorExpression extends MeiliOperatorExpressionBase {
   final List<MeiliOperatorExpressionBase> operands;
@@ -99,16 +99,17 @@ class MeiliToOperatorExpression extends MeiliOperatorExpressionBase {
 }
 
 class MeiliGeoRadiusOperatorExpression extends MeiliOperatorExpressionBase {
-  final double lat;
-  final double lng;
+  final MeiliPoint point;
   final double distanceInMeters;
 
   const MeiliGeoRadiusOperatorExpression(
-      this.lat, this.lng, this.distanceInMeters);
+    this.point,
+    this.distanceInMeters,
+  );
 
   @override
   String transform() {
-    return '_geoRadius($lat,$lng,$distanceInMeters)';
+    return '_geoRadius(${point.lat},${point.lng},$distanceInMeters)';
   }
 }
 

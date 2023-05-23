@@ -9,7 +9,7 @@ export 'src/searchable.dart';
 export 'src/multi_search_result.dart';
 export 'src/query_parameters/multi_search_query.dart';
 export 'src/query_parameters/index_search_query.dart';
-export 'src/filter_builder/_exports.dart';
+export 'src/filter_builder/_exports.dart' hide MeiliPoint;
 export 'src/query_parameters/_exports.dart';
 export 'src/matching_strategy_enum.dart';
 export 'src/key.dart';
