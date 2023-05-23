@@ -10,7 +10,7 @@ import 'package:meilisearch/src/swap_index.dart';
 import 'package:meilisearch/src/tasks_results.dart';
 import 'package:meilisearch/src/task.dart';
 
-import 'multi_search_query.dart';
+import 'query_parameters/multi_search_query.dart';
 import 'multi_search_result.dart';
 import 'http_request.dart';
 import 'index.dart';

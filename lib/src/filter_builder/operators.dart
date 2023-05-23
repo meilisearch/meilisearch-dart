@@ -1,6 +1,8 @@
 import 'package:collection/collection.dart';
 import 'package:meilisearch/meilisearch.dart';
 
+typedef MeiliPoint = ({double lat, double lng});
+
 class MeiliAndOperatorExpression extends MeiliOperatorExpressionBase {
   final List<MeiliOperatorExpressionBase> operands;
 
@@ -110,24 +112,19 @@ class MeiliGeoRadiusOperatorExpression extends MeiliOperatorExpressionBase {
   }
 }
 
-//TODO(ahmednfwela): rework this class after Dart 3 lands with patterns
 class MeiliGeoBoundingBoxOperatorExpression
     extends MeiliOperatorExpressionBase {
-  final double lat1;
-  final double lng1;
-  final double lat2;
-  final double lng2;
+  final MeiliPoint point1;
+  final MeiliPoint point2;
 
   const MeiliGeoBoundingBoxOperatorExpression(
-    this.lat1,
-    this.lng1,
-    this.lat2,
-    this.lng2,
+    this.point1,
+    this.point2,
   );
 
   @override
   String transform() {
-    return '_geoBoundingBox([$lat1,$lng1],[$lat2,$lng2])';
+    return '_geoBoundingBox([${point1.lat},${point1.lng}],[${point2.lat},${point2.lng}])';
   }
 }
 
