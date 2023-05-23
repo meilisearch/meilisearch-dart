@@ -67,4 +67,48 @@ class SearchQuery {
     }..removeWhere((key, value) => value == null))
         .cast<String, Object>();
   }
+
+  SearchQuery copyWith({
+    String? indexUid,
+    String? query,
+    int? offset,
+    int? limit,
+    int? page,
+    int? hitsPerPage,
+    Object? filter,
+    MeiliOperatorExpressionBase? filterExpression,
+    List<String>? sort,
+    List<String>? facets,
+    List<String>? attributesToRetrieve,
+    List<String>? attributesToCrop,
+    int? cropLength,
+    List<String>? attributesToHighlight,
+    bool? showMatchesPosition,
+    String? cropMarker,
+    String? highlightPreTag,
+    String? highlightPostTag,
+    MatchingStrategy? matchingStrategy,
+  }) =>
+      SearchQuery(
+        indexUid: indexUid ?? this.indexUid,
+        query: query ?? this.query,
+        offset: offset ?? this.offset,
+        limit: limit ?? this.limit,
+        page: page ?? this.page,
+        hitsPerPage: hitsPerPage ?? this.hitsPerPage,
+        filter: filter ?? this.filter,
+        filterExpression: filterExpression ?? this.filterExpression,
+        sort: sort ?? this.sort,
+        facets: facets ?? this.facets,
+        attributesToRetrieve: attributesToRetrieve ?? this.attributesToRetrieve,
+        attributesToCrop: attributesToCrop ?? this.attributesToCrop,
+        cropLength: cropLength ?? this.cropLength,
+        attributesToHighlight:
+            attributesToHighlight ?? this.attributesToHighlight,
+        showMatchesPosition: showMatchesPosition ?? this.showMatchesPosition,
+        cropMarker: cropMarker ?? this.cropMarker,
+        highlightPreTag: highlightPreTag ?? this.highlightPreTag,
+        highlightPostTag: highlightPostTag ?? this.highlightPostTag,
+        matchingStrategy: matchingStrategy ?? this.matchingStrategy,
+      );
 }
