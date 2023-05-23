@@ -202,7 +202,6 @@ class MeiliSearchClientImpl implements MeiliSearchClient {
     String key, {
     String? name,
     String? description,
-
   }) async {
     final data = <String, Object?>{
       if (description != null) 'description': description,
