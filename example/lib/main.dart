@@ -20,6 +20,6 @@ void main() async {
   await index.addDocuments(documents);
 
   // Search
-  var result = await index.search('prience');
+  var result = await index.search(SearchQuery('prience'));
   print(result.hits);
 }
