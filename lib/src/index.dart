@@ -19,7 +19,8 @@ abstract class MeiliSearchIndex {
   Future<Task> delete();
 
   /// Search for documents matching a specific query in the index.
-  Future<Searcheable<Map<String, dynamic>>> search(SearchQuery query);
+  Future<Searcheable<Map<String, dynamic>>> search(String? text,
+      [SearchQuery? query]);
 
   /// Return the document in the index by given [id].
   Future<Map<String, dynamic>?> getDocument(Object id, {List<String> fields});

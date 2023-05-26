@@ -8,7 +8,9 @@ void main() {
         expect(Meili.attr('book_id').transform(), equals("\"book_id\""));
         expect(Meili.attr('book.id').transform(), equals("\"book.id\""));
         expect(
-            Meili.attr('   book.  id   ').transform(), equals("\"book.id\""));
+          Meili.attr('   book.  id   ').transform(),
+          equals("\"book.id\""),
+        );
         expect(Meili.attr('   book.id.   ').transform(), equals("\"book.id\""));
       });
     });
@@ -83,15 +85,18 @@ void main() {
               (p0) => p0.message,
               'message',
               equals(
-                  "DateTime passed to Meili must be in UTC to avoid inconsistency accross multiple devices"),
+                "DateTime passed to Meili must be in UTC to avoid inconsistency accross multiple devices",
+              ),
             ),
           ),
         );
       });
 
       test("Arbitrary", () {
-        expect(Meili.value(_ArbitraryClass()).transform(),
-            equals('"ArbitraryString"'));
+        expect(
+          Meili.value(_ArbitraryClass()).transform(),
+          equals('"ArbitraryString"'),
+        );
       });
     });
 
@@ -101,42 +106,52 @@ void main() {
 
         expect(and.transform(), equals(""));
       });
+
       test("One expressions", () {
         final expr1 = 'book_id'.toMeiliAttribute().lt(100.toMeiliValue());
         final and = Meili.and([expr1]);
 
         expect(and.transform(), equals(expr1.transform()));
       });
+
       test("Two expressions", () {
         final expr1 = 'book_id'.toMeiliAttribute().lt(100.toMeiliValue());
         final expr2 = 'tag'.toMeiliAttribute().eq("Tale".toMeiliValue());
         final expr = expr1.and(expr2);
 
         expect(
-            expr.transform(), "(\"book_id\" < 100) AND (\"tag\" = \"Tale\")");
+          expr.transform(),
+          "(\"book_id\" < 100) AND (\"tag\" = \"Tale\")",
+        );
       });
+
       test("Three expressions", () {
         final expr1 = 'book_id'.toMeiliAttribute().lt(100.toMeiliValue());
         final expr2 = 'tag'.toMeiliAttribute().eq("Tale".toMeiliValue());
         final expr3 = 'tag'.toMeiliAttribute().exists();
         final expr = expr1.andList([expr2, expr3]);
 
-        expect(expr.transform(),
-            "(\"book_id\" < 100) AND (\"tag\" = \"Tale\") AND (\"tag\" EXISTS)");
+        expect(
+          expr.transform(),
+          "(\"book_id\" < 100) AND (\"tag\" = \"Tale\") AND (\"tag\" EXISTS)",
+        );
       });
     });
+
     group('[OR]', () {
       test("No expressions", () {
         final or = Meili.or([]);
 
         expect(or.transform(), equals(""));
       });
+
       test("One expressions", () {
         final expr1 = 'book_id'.toMeiliAttribute().lt(100.toMeiliValue());
         final or = Meili.or([expr1]);
 
         expect(or.transform(), equals(expr1.transform()));
       });
+
       test("Two expressions", () {
         final expr1 = 'book_id'.toMeiliAttribute().lt(100.toMeiliValue());
         final expr2 = 'tag'.toMeiliAttribute().eq("Tale".toMeiliValue());
@@ -144,16 +159,20 @@ void main() {
 
         expect(expr.transform(), "(\"book_id\" < 100) OR (\"tag\" = \"Tale\")");
       });
+
       test("Three expressions", () {
         final expr1 = 'book_id'.toMeiliAttribute().lt(100.toMeiliValue());
         final expr2 = 'tag'.toMeiliAttribute().eq("Tale".toMeiliValue());
         final expr3 = 'tag'.toMeiliAttribute().exists();
         final expr = expr1.orList([expr2, expr3]);
 
-        expect(expr.transform(),
-            "(\"book_id\" < 100) OR (\"tag\" = \"Tale\") OR (\"tag\" EXISTS)");
+        expect(
+          expr.transform(),
+          "(\"book_id\" < 100) OR (\"tag\" = \"Tale\") OR (\"tag\" EXISTS)",
+        );
       });
     });
+
     test('geoBoundingBox', () {
       final op = Meili.geoBoundingBox((lat: 10, lng: 5.3), (lat: 10, lng: 5));
 

@@ -5,9 +5,9 @@ import 'search_query.dart';
 class IndexSearchQuery extends SearchQuery {
   final String indexUid;
 
-  const IndexSearchQuery(
-    super.query, {
+  const IndexSearchQuery({
     required this.indexUid,
+    required super.query,
     super.offset,
     super.limit,
     super.page,
@@ -58,7 +58,7 @@ class IndexSearchQuery extends SearchQuery {
     MatchingStrategy? matchingStrategy,
   }) =>
       IndexSearchQuery(
-        query ?? this.query,
+        query: query ?? this.query,
         indexUid: indexUid ?? this.indexUid,
         offset: offset ?? this.offset,
         limit: limit ?? this.limit,

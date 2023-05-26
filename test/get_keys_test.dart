@@ -124,7 +124,7 @@ void main() {
 
       test('searches successfully', () async {
         await expectLater(
-          tempClient.index(indexName).search(SearchQuery('name')),
+          tempClient.index(indexName).search('name'),
           completion(isA<SearchResult<Map<String, Object?>>>()),
         );
       });

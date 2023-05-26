@@ -20,8 +20,8 @@ class SearchQuery {
   final String? highlightPostTag;
   final MatchingStrategy? matchingStrategy;
 
-  const SearchQuery(
-    this.query, {
+  const SearchQuery({
+    this.query,
     this.offset,
     this.limit,
     this.page,
@@ -85,7 +85,7 @@ class SearchQuery {
     MatchingStrategy? matchingStrategy,
   }) =>
       SearchQuery(
-        query ?? this.query,
+        query: query ?? this.query,
         offset: offset ?? this.offset,
         limit: limit ?? this.limit,
         page: page ?? this.page,

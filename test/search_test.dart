@@ -24,34 +24,32 @@ void main() {
       test('map', () async {
         //search
         //if deserialization fails it will throw
-        final castedResult = await index
-            .search(SearchQuery(''))
-            .asSearchResult()
-            .map(BookDto.fromMap);
+        final castedResult =
+            await index.search('').asSearchResult().map(BookDto.fromMap);
         //test
         expect(castedResult.hits, everyElement(isA<BookDto>()));
       });
 
       test('with basic query', () async {
-        final result = await index.search(SearchQuery('prience')); // with typo
+        final result = await index.search('prience'); // with typo
 
         expect(result.hits, hasLength(2));
       });
 
       test('with basic query with no q', () async {
-        final result = await index.search(SearchQuery(null));
+        final result = await index.search(null);
 
         expect(result.hits, hasLength(books.length));
       });
 
       test('with basic query with an empty string q=""', () async {
-        final result = await index.search(SearchQuery(''));
+        final result = await index.search('');
 
         expect(result.hits, hasLength(books.length));
       });
 
       test('with basic query with phrase search', () async {
-        final result = await index.search(SearchQuery('coco "harry"'));
+        final result = await index.search('coco "harry"');
 
         expect(result.hits, hasLength(1));
       });
@@ -59,23 +57,25 @@ void main() {
       group('with', () {
         test('offset parameter', () async {
           final result =
-              await index.search(SearchQuery('', limit: 3, offset: 10));
+              await index.search('', SearchQuery(limit: 3, offset: 10));
 
           expect(result.hits, isEmpty);
         });
 
         test('limit parameter', () async {
-          final result = await index.search(SearchQuery('', limit: 3));
+          final result = await index.search('', SearchQuery(limit: 3));
 
           expect(result.hits, hasLength(3));
         });
 
         test('cropLength parameter', () async {
-          final result = await index.search(SearchQuery(
+          final result = await index.search(
             'Alice In Wonderland',
-            attributesToCrop: ["title"],
-            cropLength: 2,
-          ));
+            SearchQuery(
+              attributesToCrop: ["title"],
+              cropLength: 2,
+            ),
+          );
 
           expect(
             result.hits[0]['_formatted']['title'],
@@ -84,11 +84,13 @@ void main() {
         });
 
         test('searches with default cropping parameters', () async {
-          final result = await index.search(SearchQuery(
+          final result = await index.search(
             'prince',
-            attributesToCrop: ['*'],
-            cropLength: 2,
-          ));
+            SearchQuery(
+              attributesToCrop: ['*'],
+              cropLength: 2,
+            ),
+          );
 
           expect(
             result.hits[0]['_formatted']['title'],
@@ -97,23 +99,27 @@ void main() {
         });
 
         test('searches with custom cropMarker', () async {
-          final result = await index.search(SearchQuery(
+          final result = await index.search(
             'prince',
-            attributesToCrop: ['*'],
-            cropLength: 1,
-            cropMarker: '[…] ',
-          ));
+            SearchQuery(
+              attributesToCrop: ['*'],
+              cropLength: 1,
+              cropMarker: '[…] ',
+            ),
+          );
 
           expect(result.hits[0]['_formatted']['title'], equals('[…] Prince'));
         });
 
         test('searches with custom highlight tags', () async {
-          final result = await index.search(SearchQuery(
+          final result = await index.search(
             'blood',
-            attributesToHighlight: ['*'],
-            highlightPreTag: '<mark>',
-            highlightPostTag: '</mark>',
-          ));
+            SearchQuery(
+              attributesToHighlight: ['*'],
+              highlightPreTag: '<mark>',
+              highlightPostTag: '</mark>',
+            ),
+          );
 
           expect(
             result.hits[0]['_formatted']['title'],
@@ -122,10 +128,12 @@ void main() {
         });
 
         test('searches with matching strategy last', () async {
-          final result = await index.search(SearchQuery(
+          final result = await index.search(
             'the to',
-            matchingStrategy: MatchingStrategy.last,
-          ));
+            SearchQuery(
+              matchingStrategy: MatchingStrategy.last,
+            ),
+          );
 
           expect(
             result.hits.last['title'],
@@ -134,10 +142,12 @@ void main() {
         });
 
         test('searches with matching strategy all', () async {
-          final result = await index.search(SearchQuery(
+          final result = await index.search(
             'the to',
-            matchingStrategy: MatchingStrategy.all,
-          ));
+            SearchQuery(
+              matchingStrategy: MatchingStrategy.all,
+            ),
+          );
 
           expect(
             result.hits.last['title'],
@@ -146,9 +156,7 @@ void main() {
         });
 
         test('searches with matching strategy as null if not set', () async {
-          final result = await index.search(SearchQuery(
-            'the to',
-          ));
+          final result = await index.search('the to');
 
           expect(
             result.hits.last['title'],
@@ -161,7 +169,7 @@ void main() {
               .updateFilterableAttributes(['tag']).waitFor(client: client);
 
           final result =
-              await index.search(SearchQuery('prince', filter: 'tag = Tale'));
+              await index.search('prince', SearchQuery(filter: 'tag = Tale'));
 
           expect(result.hits, hasLength(1));
         });
@@ -184,10 +192,12 @@ void main() {
           await index
               .updateFilterableAttributes(['tag']).waitFor(client: client);
 
-          final result = await index.search(SearchQuery(
+          final result = await index.search(
             'prince',
-            filter: 'tag = "Epic fantasy"',
-          ));
+            SearchQuery(
+              filter: 'tag = "Epic fantasy"',
+            ),
+          );
 
           expect(result.hits, hasLength(1));
         });
@@ -206,7 +216,7 @@ void main() {
               .updateFilterableAttributes(['year']).waitFor(client: client);
 
           var result =
-              await indexWithNumbers.search(SearchQuery('', facets: ['*']));
+              await indexWithNumbers.search('', SearchQuery(facets: ['*']));
 
           expect(result.hits, hasLength(10));
           expect(result.facetStats?['year']?.min, 2010);
@@ -218,10 +228,12 @@ void main() {
             ['tag', 'book_id'],
           ).waitFor(client: client);
 
-          final result = await index.search(SearchQuery(
+          final result = await index.search(
             '',
-            filter: 'book_id < 100 AND tag = Tale',
-          ));
+            SearchQuery(
+              filter: 'book_id < 100 AND tag = Tale',
+            ),
+          );
 
           expect(result.hits, hasLength(1));
         });
@@ -231,7 +243,7 @@ void main() {
               .updateFilterableAttributes(['tag']).waitFor(client: client);
 
           final result =
-              await index.search(SearchQuery('prince', filter: ['tag = Tale']));
+              await index.search('prince', SearchQuery(filter: ['tag = Tale']));
 
           expect(result.hits, hasLength(1));
         });
@@ -240,10 +252,13 @@ void main() {
           await index
               .updateFilterableAttributes(['tag']).waitFor(client: client);
 
-          final result = await index.search(SearchQuery('prince', filter: [
-            ['tag = Tale', 'tag = Tale'],
-            'tag = Tale'
-          ]));
+          final result = await index.search(
+            'prince',
+            SearchQuery(filter: [
+              ['tag = Tale', 'tag = Tale'],
+              'tag = Tale'
+            ]),
+          );
 
           expect(result.hits, hasLength(1));
         });
@@ -253,7 +268,7 @@ void main() {
               .updateFilterableAttributes([ktag]).waitFor(client: client);
 
           final result =
-              await index.search(SearchQuery('prince', facets: ['*']));
+              await index.search('prince', SearchQuery(facets: ['*']));
 
           expect(result.hits, hasLength(2));
           expect(result.facetDistribution?[ktag]?.length, 2);
@@ -274,7 +289,7 @@ void main() {
               .waitFor(client: client);
 
           final result =
-              await index.search(SearchQuery('prince', sort: ['title:asc']));
+              await index.search('prince', SearchQuery(sort: ['title:asc']));
 
           expect(result.hits, hasLength(2));
           expect(result.hits[0]['book_id'], 4);
@@ -283,7 +298,7 @@ void main() {
         group('finite-pagination query params', () {
           test('with basic query', () async {
             final result = await index
-                .search(SearchQuery('pri', page: 1))
+                .search('pri', SearchQuery(page: 1))
                 .asPaginatedResult();
 
             expect(result.totalPages, 1);
@@ -291,7 +306,7 @@ void main() {
 
           test('accesses fields from Searchable', () async {
             final result = await index
-                .search(SearchQuery('pri', page: 1))
+                .search('pri', SearchQuery(page: 1))
                 .asPaginatedResult();
 
             expect(result.hits.length, greaterThanOrEqualTo(1));
@@ -300,7 +315,7 @@ void main() {
 
           test('with mixed pagination query params', () async {
             final result = await index
-                .search(SearchQuery('pri', page: 1, limit: 10))
+                .search('pri', SearchQuery(page: 1, limit: 10))
                 .asPaginatedResult();
 
             expect(result.totalPages, 1);
@@ -315,7 +330,7 @@ void main() {
       });
 
       test('searches within nested content with no parameters', () async {
-        final response = await index.search(SearchQuery('An awesome'));
+        final response = await index.search('An awesome');
 
         expect(response.hits[0], {
           "id": 5,
@@ -334,7 +349,7 @@ void main() {
           ['title', 'info.comment'],
         ).waitFor(client: client);
 
-        final response = await index.search(SearchQuery('An awesome'));
+        final response = await index.search('An awesome');
 
         expect(response.hits[0], {
           "id": 5,
@@ -356,7 +371,7 @@ void main() {
             .waitFor(client: client);
 
         final response =
-            await index.search(SearchQuery('', sort: ['info.reviewNb:desc']));
+            await index.search('', SearchQuery(sort: ['info.reviewNb:desc']));
 
         expect(response.hits[0], {
           "id": 6,

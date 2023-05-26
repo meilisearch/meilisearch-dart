@@ -98,11 +98,17 @@ class MeiliSearchIndexImpl implements MeiliSearchIndex {
 
   @override
   Future<Searcheable<Map<String, dynamic>>> search(
-    SearchQuery q,
-  ) async {
+    String? text, [
+    SearchQuery? q,
+  ]) async {
+    if (q == null) {
+      q = SearchQuery(query: text);
+    } else {
+      q = q.copyWith(query: text);
+    }
     final response = await http.postMethod<Map<String, Object?>>(
       '/indexes/$uid/search',
-      data: q.toMap()..remove('indexUid'),
+      data: q.toMap(),
     );
     return Searcheable.createSearchResult(response.data!, indexUid: uid);
   }
