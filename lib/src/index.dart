@@ -57,7 +57,6 @@ class MeiliSearchIndex {
   //
 
   /// Update the primary Key of the index.
-
   Future<Task> update({String? primaryKey}) async {
     final data = <String, Object?>{
       if (primaryKey != null) 'primaryKey': primaryKey,
@@ -67,7 +66,6 @@ class MeiliSearchIndex {
   }
 
   /// Delete the index.
-
   Future<Task> delete() async {
     return await _getTask(http.deleteMethod('/indexes/$uid'));
   }
@@ -407,7 +405,6 @@ class MeiliSearchIndex {
   }
 
   /// Delete all documents in the specified index.
-
   Future<Task> deleteAllDocuments() async {
     return await _getTask(http.deleteMethod('/indexes/$uid/documents'));
   }
@@ -418,7 +415,6 @@ class MeiliSearchIndex {
   }
 
   /// Delete a selection of documents by given [ids].
-
   Future<Task> deleteDocuments(List<Object> ids) async {
     return await _getTask(
       http.postMethod(
@@ -476,7 +472,6 @@ class MeiliSearchIndex {
   }
 
   /// Get filterable attributes of the index.
-
   Future<List<String>> getFilterableAttributes() async {
     final response = await http.getMethod<List<Object?>>(
         '/indexes/$uid/settings/filterable-attributes');
@@ -485,23 +480,24 @@ class MeiliSearchIndex {
   }
 
   /// Reset filterable attributes of the index.
-
   Future<Task> resetFilterableAttributes() async {
     return await _getTask(
         http.deleteMethod('/indexes/$uid/settings/filterable-attributes'));
   }
 
   /// Update filterable attributes of the index.
-
   Future<Task> updateFilterableAttributes(
-      List<String> filterableAttributes) async {
-    return await _getTask(http.putMethod(
+    List<String> filterableAttributes,
+  ) async {
+    return await _getTask(
+      http.putMethod(
         '/indexes/$uid/settings/filterable-attributes',
-        data: filterableAttributes));
+        data: filterableAttributes,
+      ),
+    );
   }
 
   /// Get the displayed attributes of the index.
-
   Future<List<String>> getDisplayedAttributes() async {
     final response = await http.getMethod<List<Object?>>(
         '/indexes/$uid/settings/displayed-attributes');
@@ -510,19 +506,21 @@ class MeiliSearchIndex {
   }
 
   /// Reset the displayed attributes of the index.
-
   Future<Task> resetDisplayedAttributes() async {
     return await _getTask(
-        http.deleteMethod('/indexes/$uid/settings/displayed-attributes'));
+      http.deleteMethod('/indexes/$uid/settings/displayed-attributes'),
+    );
   }
 
   /// Update the displayed attributes of the index.
-
   Future<Task> updateDisplayedAttributes(
       List<String> displayedAttributes) async {
-    return await _getTask(http.putMethod(
+    return await _getTask(
+      http.putMethod(
         '/indexes/$uid/settings/displayed-attributes',
-        data: displayedAttributes));
+        data: displayedAttributes,
+      ),
+    );
   }
 
   /// Get the distinct attribute for the index.
@@ -536,14 +534,18 @@ class MeiliSearchIndex {
   /// Reset the distinct attribute for the index.
   Future<Task> resetDistinctAttribute() async {
     return await _getTask(
-        http.deleteMethod('/indexes/$uid/settings/distinct-attribute'));
+      http.deleteMethod('/indexes/$uid/settings/distinct-attribute'),
+    );
   }
 
   /// Update the distinct attribute for the index.
   Future<Task> updateDistinctAttribute(String distinctAttribute) async {
-    return await _getTask(http.putMethod(
+    return await _getTask(
+      http.putMethod(
         '/indexes/$uid/settings/distinct-attribute',
-        data: '"$distinctAttribute"'));
+        data: '"$distinctAttribute"',
+      ),
+    );
   }
 
   /// Get ranking rules of the index.
@@ -555,23 +557,27 @@ class MeiliSearchIndex {
   }
 
   /// Reset ranking rules of the index.
-
   Future<Task> resetRankingRules() async {
     return await _getTask(
-        http.deleteMethod('/indexes/$uid/settings/ranking-rules'));
+      http.deleteMethod('/indexes/$uid/settings/ranking-rules'),
+    );
   }
 
   /// Update ranking rules of the index.
   Future<Task> updateRankingRules(List<String> rankingRules) async {
-    return await _getTask(http.putMethod('/indexes/$uid/settings/ranking-rules',
-        data: rankingRules));
+    return await _getTask(
+      http.putMethod(
+        '/indexes/$uid/settings/ranking-rules',
+        data: rankingRules,
+      ),
+    );
   }
 
   /// Get searchable attributes of the index.
-
   Future<List<String>> getSearchableAttributes() async {
     final response = await http.getMethod<List<Object?>>(
-        '/indexes/$uid/settings/searchable-attributes');
+      '/indexes/$uid/settings/searchable-attributes',
+    );
 
     return response.data!.cast<String>();
   }
@@ -579,7 +585,8 @@ class MeiliSearchIndex {
   /// Reset searchable attributes of the index.
   Future<Task> resetSearchableAttributes() async {
     return await _getTask(
-        http.deleteMethod('/indexes/$uid/settings/searchable-attributes'));
+      http.deleteMethod('/indexes/$uid/settings/searchable-attributes'),
+    );
   }
 
   /// Update the searchable attributes of the index.

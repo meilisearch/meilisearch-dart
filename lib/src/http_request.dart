@@ -38,7 +38,6 @@ class HttpRequest {
   }
 
   /// Meilisearch server URL.
-
   final String serverUrl;
 
   /// API key for authenticating with Meilisearch server.
@@ -50,13 +49,11 @@ class HttpRequest {
   final Dio dio;
 
   /// Retrieve all headers used when Http calls are made.
-
   Map<String, Object?> headers() {
     return dio.options.headers;
   }
 
   /// GET method
-
   Future<Response<T>> getMethod<T>(
     String path, {
     Object? data,
@@ -69,7 +66,7 @@ class HttpRequest {
         data: data,
       );
     } on DioError catch (e) {
-      return throwException(e);
+      return _throwException(e);
     }
   }
 
@@ -90,12 +87,11 @@ class HttpRequest {
         ),
       );
     } on DioError catch (e) {
-      return throwException(e);
+      return _throwException(e);
     }
   }
 
   /// PATCH method
-
   Future<Response<T>> patchMethod<T>(
     String path, {
     Object? data,
@@ -112,7 +108,7 @@ class HttpRequest {
         ),
       );
     } on DioError catch (e) {
-      return throwException(e);
+      return _throwException(e);
     }
   }
 
@@ -133,7 +129,7 @@ class HttpRequest {
         ),
       );
     } on DioError catch (e) {
-      return throwException(e);
+      return _throwException(e);
     }
   }
 
@@ -150,11 +146,11 @@ class HttpRequest {
         queryParameters: queryParameters,
       );
     } on DioError catch (e) {
-      return throwException(e);
+      return _throwException(e);
     }
   }
 
-  Never throwException(DioError e) {
+  Never _throwException(DioError e) {
     final message = e.message ?? '';
     if (e.type == DioErrorType.badResponse) {
       throw MeiliSearchApiException.fromHttpBody(message, e.response?.data);

@@ -103,7 +103,9 @@ class MeiliSearchClient {
         queryParameters: params?.toQuery());
 
     return Result<MeiliSearchIndex>.fromMapWithType(
-        response.data!, (item) => MeiliSearchIndex.fromMap(this, item));
+      response.data!,
+      (item) => MeiliSearchIndex.fromMap(this, item),
+    );
   }
 
   /// Delete the index by matching [uid].
@@ -286,7 +288,6 @@ class MeiliSearchClient {
   }
 
   /// does a Multi-index search
-
   Future<MultiSearchResult> multiSearch(MultiSearchQuery query) async {
     final response = await http.postMethod<Map<String, Object?>>(
       '/multi-search',
