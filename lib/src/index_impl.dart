@@ -1,21 +1,11 @@
 import 'dart:convert';
 import 'package:dio/dio.dart';
+import 'package:meilisearch/meilisearch.dart';
 import 'result.dart';
-import 'search_query.dart';
-import 'searchable.dart';
-import 'settings/_exports.dart';
 import 'tasks_results.dart';
 import 'package:collection/collection.dart';
-import 'client.dart';
-import 'exception.dart';
-import 'filter_builder/filter_builder_base.dart';
 import 'http_request.dart';
-import 'index.dart';
-import 'matching_strategy_enum.dart';
-import 'query_parameters/documents_query.dart';
-import 'query_parameters/tasks_query.dart';
 import 'stats.dart' show IndexStats;
-import 'task.dart';
 
 const _ndjsonContentType = 'application/x-ndjson';
 const _csvContentType = 'text/csv';
@@ -108,51 +98,16 @@ class MeiliSearchIndexImpl implements MeiliSearchIndex {
 
   @override
   Future<Searcheable<Map<String, dynamic>>> search(
-    String? query, {
-    int? offset,
-    int? limit,
-    int? page,
-    int? hitsPerPage,
-    Object? filter,
-    MeiliOperatorExpressionBase? filterExpression,
-    List<String>? sort,
-    List<String>? facets,
-    List<String>? attributesToRetrieve,
-    List<String>? attributesToCrop,
-    int? cropLength,
-    List<String>? attributesToHighlight,
-    bool? showMatchesPosition,
-    String? cropMarker,
-    String? highlightPreTag,
-    String? highlightPostTag,
-    MatchingStrategy? matchingStrategy,
-  }) async {
-    final data = SearchQuery(
-      indexUid: uid,
-      query: query,
-      offset: offset,
-      limit: limit,
-      page: page,
-      hitsPerPage: hitsPerPage,
-      filter: filter,
-      filterExpression: filterExpression,
-      sort: sort,
-      facets: facets,
-      attributesToRetrieve: attributesToRetrieve,
-      attributesToCrop: attributesToCrop,
-      cropLength: cropLength,
-      attributesToHighlight: attributesToHighlight,
-      showMatchesPosition: showMatchesPosition,
-      cropMarker: cropMarker,
-      highlightPreTag: highlightPreTag,
-      highlightPostTag: highlightPostTag,
-      matchingStrategy: matchingStrategy,
-    ).toMap();
-
+    String? text, [
+    SearchQuery? q,
+  ]) async {
     final response = await http.postMethod<Map<String, Object?>>(
-        '/indexes/$uid/search',
-        data: data..remove('indexUid'));
-
+      '/indexes/$uid/search',
+      data: {
+        'q': text,
+        ...?q?.toMap(),
+      },
+    );
     return Searcheable.createSearchResult(response.data!, indexUid: uid);
   }
 

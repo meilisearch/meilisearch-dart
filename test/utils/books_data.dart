@@ -58,8 +58,6 @@ final books = [
 
 enum CSVHeaderTypes {
   string,
-
-  ///TODO(ahmednfwela): blocked until https://github.com/meilisearch/meilisearch/pull/3576
   boolean,
   number,
   unkown,

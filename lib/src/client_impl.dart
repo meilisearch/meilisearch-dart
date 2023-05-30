@@ -11,7 +11,7 @@ import 'package:meilisearch/src/task.dart';
 import 'package:meilisearch/src/tenant_token.dart';
 
 import 'multi_search_result.dart';
-import 'multi_search_query.dart';
+import 'query_parameters/multi_search_query.dart';
 import 'http_request.dart';
 import 'http_request_impl.dart';
 
@@ -198,7 +198,11 @@ class MeiliSearchClientImpl implements MeiliSearchClient {
   }
 
   @override
-  Future<Key> updateKey(String key, {String? name, String? description}) async {
+  Future<Key> updateKey(
+    String key, {
+    String? name,
+    String? description,
+  }) async {
     final data = <String, Object?>{
       if (description != null) 'description': description,
       if (name != null) 'name': name,

@@ -1,13 +1,8 @@
-import 'query_parameters/documents_query.dart';
-import 'query_parameters/tasks_query.dart';
-import 'settings/_exports.dart';
+import 'package:meilisearch/meilisearch.dart';
+
 import 'result.dart';
-import 'searchable.dart';
 import 'tasks_results.dart';
-import 'filter_builder/filter_builder_base.dart';
-import 'matching_strategy_enum.dart';
 import 'stats.dart' show IndexStats;
-import 'task.dart';
 
 abstract class MeiliSearchIndex {
   String get uid;
@@ -24,28 +19,8 @@ abstract class MeiliSearchIndex {
   Future<Task> delete();
 
   /// Search for documents matching a specific query in the index.
-  Future<Searcheable<Map<String, dynamic>>> search(
-    String? query, {
-    int? offset,
-    int? limit,
-    int? page,
-    int? hitsPerPage,
-
-    /// filter is either a list or a string
-    Object? filter,
-    MeiliOperatorExpressionBase? filterExpression,
-    List<String>? sort,
-    List<String>? facets,
-    List<String>? attributesToRetrieve,
-    List<String>? attributesToCrop,
-    int? cropLength,
-    List<String>? attributesToHighlight,
-    bool? showMatchesPosition,
-    String? cropMarker,
-    String? highlightPreTag,
-    String? highlightPostTag,
-    MatchingStrategy? matchingStrategy,
-  });
+  Future<Searcheable<Map<String, dynamic>>> search(String? text,
+      [SearchQuery? query]);
 
   /// Return the document in the index by given [id].
   Future<Map<String, dynamic>?> getDocument(Object id, {List<String> fields});

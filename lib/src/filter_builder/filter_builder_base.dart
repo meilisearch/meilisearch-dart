@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'operators.dart';
 
 /// Represents an arbitrary filter expression
@@ -56,7 +58,7 @@ class MeiliAttributeExpression extends MeiliExpressionBase {
 
   @override
   String transform() {
-    return parts.join('.');
+    return jsonEncode(parts.join('.'));
   }
 
   MeiliLessThanOperatorExpression operator <(MeiliValueExpressionBase value) {

@@ -5,3 +5,6 @@ export 'documents_query.dart';
 export 'indexes_query.dart';
 export 'keys_query.dart';
 export 'tasks_query.dart';
+export 'index_search_query.dart';
+export 'search_query.dart';
+export 'multi_search_query.dart';
