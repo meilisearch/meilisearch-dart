@@ -1,9 +1,8 @@
 import 'package:collection/collection.dart';
 import 'package:dio/dio.dart';
 import 'package:meilisearch/meilisearch.dart';
-import 'package:meilisearch/src/client_impl.dart';
 
-class TestMeiliSearchClient extends MeiliSearchClientImpl {
+class TestMeiliSearchClient extends MeiliSearchClient {
   TestMeiliSearchClient(
     String serverUrl, [
     String? apiKey,
