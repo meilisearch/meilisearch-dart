@@ -66,29 +66,19 @@ class Meili {
       );
 
   static MeiliGeoRadiusOperatorExpression geoRadius(
-    double lat,
-    double lng,
+    MeiliPoint point,
     double distanceInMeters,
   ) =>
       MeiliGeoRadiusOperatorExpression(
-        lat,
-        lng,
+        (lat: point.lat, lng: point.lng),
         distanceInMeters,
       );
 
-  //TODO(ahmednfwela): rework this method after Dart 3 lands with patterns
   static MeiliGeoBoundingBoxOperatorExpression geoBoundingBox(
-    double lat1,
-    double lng1,
-    double lat2,
-    double lng2,
+    MeiliPoint p1,
+    MeiliPoint p2,
   ) =>
-      MeiliGeoBoundingBoxOperatorExpression(
-        lat1,
-        lng1,
-        lat2,
-        lng2,
-      );
+      MeiliGeoBoundingBoxOperatorExpression(p1, p2);
 
   static MeiliExistsOperatorExpression exists(
           MeiliAttributeExpression attribute) =>

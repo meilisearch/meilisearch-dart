@@ -5,10 +5,13 @@ void main() {
   group('Filter builder', () {
     group("Attributes", () {
       test('basic transform', () {
-        expect(Meili.attr('book_id').transform(), equals("book_id"));
-        expect(Meili.attr('book.id').transform(), equals("book.id"));
-        expect(Meili.attr('   book.  id   ').transform(), equals("book.id"));
-        expect(Meili.attr('   book.id.   ').transform(), equals("book.id"));
+        expect(Meili.attr('book_id').transform(), equals("\"book_id\""));
+        expect(Meili.attr('book.id').transform(), equals("\"book.id\""));
+        expect(
+          Meili.attr('   book.  id   ').transform(),
+          equals("\"book.id\""),
+        );
+        expect(Meili.attr('   book.id.   ').transform(), equals("\"book.id\""));
       });
     });
 
@@ -82,44 +85,99 @@ void main() {
               (p0) => p0.message,
               'message',
               equals(
-                  "DateTime passed to Meili must be in UTC to avoid inconsistency accross multiple devices"),
+                "DateTime passed to Meili must be in UTC to avoid inconsistency accross multiple devices",
+              ),
             ),
           ),
         );
       });
 
       test("Arbitrary", () {
-        expect(Meili.value(_ArbitraryClass()).transform(),
-            equals('"ArbitraryString"'));
+        expect(
+          Meili.value(_ArbitraryClass()).transform(),
+          equals('"ArbitraryString"'),
+        );
       });
     });
 
     group('[AND]', () {
       test("No expressions", () {
         final and = Meili.and([]);
+
         expect(and.transform(), equals(""));
       });
+
       test("One expressions", () {
         final expr1 = 'book_id'.toMeiliAttribute().lt(100.toMeiliValue());
         final and = Meili.and([expr1]);
+
         expect(and.transform(), equals(expr1.transform()));
       });
+
       test("Two expressions", () {
         final expr1 = 'book_id'.toMeiliAttribute().lt(100.toMeiliValue());
         final expr2 = 'tag'.toMeiliAttribute().eq("Tale".toMeiliValue());
         final expr = expr1.and(expr2);
-        expect(expr.transform(), "(book_id < 100) AND (tag = \"Tale\")");
+
+        expect(
+          expr.transform(),
+          "(\"book_id\" < 100) AND (\"tag\" = \"Tale\")",
+        );
       });
+
       test("Three expressions", () {
         final expr1 = 'book_id'.toMeiliAttribute().lt(100.toMeiliValue());
         final expr2 = 'tag'.toMeiliAttribute().eq("Tale".toMeiliValue());
         final expr3 = 'tag'.toMeiliAttribute().exists();
         final expr = expr1.andList([expr2, expr3]);
-        expect(expr.transform(),
-            "(book_id < 100) AND (tag = \"Tale\") AND (tag EXISTS)");
+
+        expect(
+          expr.transform(),
+          "(\"book_id\" < 100) AND (\"tag\" = \"Tale\") AND (\"tag\" EXISTS)",
+        );
       });
     });
-    group('[OR]', () {});
+
+    group('[OR]', () {
+      test("No expressions", () {
+        final or = Meili.or([]);
+
+        expect(or.transform(), equals(""));
+      });
+
+      test("One expressions", () {
+        final expr1 = 'book_id'.toMeiliAttribute().lt(100.toMeiliValue());
+        final or = Meili.or([expr1]);
+
+        expect(or.transform(), equals(expr1.transform()));
+      });
+
+      test("Two expressions", () {
+        final expr1 = 'book_id'.toMeiliAttribute().lt(100.toMeiliValue());
+        final expr2 = 'tag'.toMeiliAttribute().eq("Tale".toMeiliValue());
+        final expr = expr1.or(expr2);
+
+        expect(expr.transform(), "(\"book_id\" < 100) OR (\"tag\" = \"Tale\")");
+      });
+
+      test("Three expressions", () {
+        final expr1 = 'book_id'.toMeiliAttribute().lt(100.toMeiliValue());
+        final expr2 = 'tag'.toMeiliAttribute().eq("Tale".toMeiliValue());
+        final expr3 = 'tag'.toMeiliAttribute().exists();
+        final expr = expr1.orList([expr2, expr3]);
+
+        expect(
+          expr.transform(),
+          "(\"book_id\" < 100) OR (\"tag\" = \"Tale\") OR (\"tag\" EXISTS)",
+        );
+      });
+    });
+
+    test('geoBoundingBox', () {
+      final op = Meili.geoBoundingBox((lat: 10, lng: 5.3), (lat: 10, lng: 5));
+
+      expect(op.transform(), '_geoBoundingBox([10,5.3],[10,5])');
+    });
 
     /// TODO(ahmednfwela): waiting for Meili V1.2.0
     // test("[NULL]", () {
