@@ -27,6 +27,7 @@ class DeleteTasksQuery extends Queryable {
     this.types = const [],
   });
 
+  @override
   Map<String, Object?> buildMap() {
     return {
       'beforeEnqueuedAt': beforeEnqueuedAt,
@@ -41,10 +42,5 @@ class DeleteTasksQuery extends Queryable {
       'types': types,
       'indexUids': indexUids,
     };
-  }
-
-  @override
-  Map<String, Object> toQuery() {
-    return removeEmptyOrNullsFromMap(buildMap())..updateAll(toURIString);
   }
 }

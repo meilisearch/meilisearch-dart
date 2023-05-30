@@ -169,24 +169,26 @@ void main() {
               .updateFilterableAttributes(['tag']).waitFor(client: client);
 
           final result =
-              await index.search('prince', SearchQuery(filter: 'tag = Tale'));
+              await index.search('prince', SearchQuery(filter: '"tag" = Tale'));
 
           expect(result.hits, hasLength(1));
         });
 
-        /// TODO(ahmednfwela): waiting for Meili V1.2.0
-        // test('filter parameter is null', () async {
-        //   var index = await createBooksIndex();
-        //   var response = await index
-        //       .updateSettings(IndexSettings(
-        //         filterableAttributes: ['tag'],
-        //       ))
-        //       .waitFor(client: client);
-        //   expect(response.status, 'succeeded');
-        //   var result = await index.search('The Hobbit', filter: "tag NULL");
-        //   expect(result.hits, hasLength(1));
-        //   expect(result.hits!.first["book_id"], equals(9999));
-        // });
+        test('filter parameter is null', () async {
+          var index = await createBooksIndex();
+          var response = await index
+              .updateSettings(IndexSettings(
+                filterableAttributes: ['tag'],
+              ))
+              .waitFor(client: client);
+          expect(response.status, 'succeeded');
+          var result = await index.search(
+            'The Hobbit',
+            SearchQuery(filterExpression: 'tag'.toMeiliAttribute().isNull()),
+          );
+          expect(result.hits, hasLength(1));
+          expect(result.hits.first["book_id"], equals(9999));
+        });
 
         test('filter parameter with spaces', () async {
           await index

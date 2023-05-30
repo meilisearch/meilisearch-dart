@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'annotations.dart';
 import 'query_parameters/_exports.dart';
 import 'result.dart';
 import 'swap_index.dart';
@@ -99,8 +100,10 @@ class MeiliSearchClient {
 
   /// Return list of all existing indexes.
   Future<Result<MeiliSearchIndex>> getIndexes({IndexesQuery? params}) async {
-    final response = await http.getMethod<Map<String, Object?>>('/indexes',
-        queryParameters: params?.toQuery());
+    final response = await http.getMethod<Map<String, Object?>>(
+      '/indexes',
+      queryParameters: params?.toQuery(),
+    );
 
     return Result<MeiliSearchIndex>.fromMapWithType(
       response.data!,
@@ -256,8 +259,10 @@ class MeiliSearchClient {
 
   /// Get a list of tasks from the client.
   Future<TasksResults> getTasks({TasksQuery? params}) async {
-    final response = await http.getMethod<Map<String, Object?>>('/tasks',
-        queryParameters: params?.toQuery());
+    final response = await http.getMethod<Map<String, Object?>>(
+      '/tasks',
+      queryParameters: params?.toQuery(),
+    );
 
     return TasksResults.fromMap(response.data!);
   }
@@ -265,8 +270,9 @@ class MeiliSearchClient {
   /// Cancel tasks based on the input query params
   Future<Task> cancelTasks({CancelTasksQuery? params}) async {
     final response = await http.postMethod<Map<String, Object?>>(
-        '/tasks/cancel',
-        queryParameters: params?.toQuery());
+      '/tasks/cancel',
+      queryParameters: params?.toQuery(),
+    );
 
     return Task.fromMap(response.data!);
   }
@@ -288,10 +294,11 @@ class MeiliSearchClient {
   }
 
   /// does a Multi-index search
+  @MeiliServerVersion('1.1.0')
   Future<MultiSearchResult> multiSearch(MultiSearchQuery query) async {
     final response = await http.postMethod<Map<String, Object?>>(
       '/multi-search',
-      data: query.toMap(),
+      data: query.toSparseMap(),
     );
 
     return MultiSearchResult.fromMap(response.data!);

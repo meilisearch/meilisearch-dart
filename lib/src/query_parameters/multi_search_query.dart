@@ -1,15 +1,20 @@
+import 'package:meilisearch/src/query_parameters/queryable.dart';
+
+import '../annotations.dart';
 import 'index_search_query.dart';
 
-class MultiSearchQuery {
+@MeiliServerVersion('1.1.0')
+class MultiSearchQuery extends Queryable {
   final List<IndexSearchQuery> queries;
 
   const MultiSearchQuery({
     required this.queries,
   });
 
-  Map<String, Object?> toMap() {
+  @override
+  Map<String, Object?> buildMap() {
     return {
-      'queries': queries.map((e) => e.toMap()).toList(),
+      'queries': queries.map((e) => e.toSparseMap()).toList(),
     };
   }
 }

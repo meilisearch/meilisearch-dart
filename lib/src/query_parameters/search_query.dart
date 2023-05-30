@@ -1,6 +1,7 @@
 import 'package:meilisearch/meilisearch.dart';
+import 'queryable.dart';
 
-class SearchQuery {
+class SearchQuery extends Queryable {
   final int? offset;
   final int? limit;
   final int? page;
@@ -39,8 +40,9 @@ class SearchQuery {
     this.matchingStrategy,
   });
 
-  Map<String, Object> toMap() {
-    return (<String, Object?>{
+  @override
+  Map<String, Object?> buildMap() {
+    return {
       'offset': offset,
       'limit': limit,
       'page': page,
@@ -57,8 +59,7 @@ class SearchQuery {
       'highlightPreTag': highlightPreTag,
       'highlightPostTag': highlightPostTag,
       'matchingStrategy': matchingStrategy?.name,
-    }..removeWhere((key, value) => value == null))
-        .cast<String, Object>();
+    };
   }
 
   SearchQuery copyWith({

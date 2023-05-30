@@ -1,6 +1,5 @@
-import 'filter_builder/filter_builder_base.dart';
-import 'filter_builder/operators.dart';
-import 'filter_builder/values.dart';
+import 'annotations.dart';
+import 'filter_builder/_exports.dart';
 
 /// Convenience class to access all Meilisearch filter expressions
 
@@ -74,6 +73,7 @@ class Meili {
         distanceInMeters,
       );
 
+  @MeiliServerVersion('1.1.0')
   static MeiliGeoBoundingBoxOperatorExpression geoBoundingBox(
     MeiliPoint p1,
     MeiliPoint p2,
@@ -87,13 +87,30 @@ class Meili {
           MeiliAttributeExpression attribute) =>
       MeiliNotExistsOperatorExpression(attribute);
 
-  /// TODO(ahmednfwela): waiting for Meili V1.2.0
-  // static MeiliNullOperatorExpression isNull(
-  //         MeiliAttributeExpression attribute) =>
-  //     MeiliNullOperatorExpression(attribute);
-  // static MeiliNotNullOperatorExpression isNotNull(
-  //         MeiliAttributeExpression attribute) =>
-  //     MeiliNotNullOperatorExpression(attribute);
+  @MeiliServerVersion('1.2.0')
+  static MeiliIsNullOperatorExpression isNull(
+    MeiliAttributeExpression attribute,
+  ) =>
+      MeiliIsNullOperatorExpression(attribute);
+
+  @MeiliServerVersion('1.2.0')
+  static MeiliIsNotNullOperatorExpression isNotNull(
+    MeiliAttributeExpression attribute,
+  ) =>
+      MeiliIsNotNullOperatorExpression(attribute);
+
+  @MeiliServerVersion('1.2.0')
+  static MeiliIsEmptyOperatorExpression isEmpty(
+    MeiliAttributeExpression attribute,
+  ) =>
+      MeiliIsEmptyOperatorExpression(attribute);
+
+  @MeiliServerVersion('1.2.0')
+  static MeiliIsNotEmptyOperatorExpression isNotEmpty(
+    MeiliAttributeExpression attribute,
+  ) =>
+      MeiliIsNotEmptyOperatorExpression(attribute);
+
   static MeiliNotOperatorExpression not(MeiliOperatorExpressionBase operator) =>
       MeiliNotOperatorExpression(operator);
   static MeiliInOperatorExpression $in(MeiliAttributeExpression attribute,
@@ -102,6 +119,10 @@ class Meili {
         attribute: attribute,
         values: values,
       );
+
+  static List<MeiliValueExpressionBase> values(Iterable<Object> v) {
+    return v.map(value).toList();
+  }
 
   static MeiliValueExpressionBase value(Object v) {
     if (v is String) {
@@ -121,10 +142,13 @@ class Meili {
   }
 
   static MeiliOrOperatorExpression or(
-          List<MeiliOperatorExpressionBase> operands) =>
+    List<MeiliOperatorExpressionBase> operands,
+  ) =>
       MeiliOrOperatorExpression.fromList(operands);
+
   static MeiliAndOperatorExpression and(
-          List<MeiliOperatorExpressionBase> operands) =>
+    List<MeiliOperatorExpressionBase> operands,
+  ) =>
       MeiliAndOperatorExpression.fromList(operands);
 
   static MeiliEmptyExpression empty() => MeiliEmptyExpression();
@@ -166,9 +190,17 @@ extension MeiliAttributesExt on MeiliAttributeExpression {
   MeiliExistsOperatorExpression exists() => Meili.exists(this);
   MeiliNotExistsOperatorExpression notExists() => Meili.notExists(this);
 
-  /// TODO(ahmednfwela): waiting for Meili V1.2.0
-  // MeiliNullOperatorExpression isNull() => Meili.isNull(this);
-  // MeiliNotNullOperatorExpression isNotNull() => Meili.isNotNull(this);
+  @MeiliServerVersion('1.2.0')
+  MeiliIsNullOperatorExpression isNull() => Meili.isNull(this);
+  @MeiliServerVersion('1.2.0')
+  MeiliIsNotNullOperatorExpression isNotNull() => Meili.isNotNull(this);
+
+  @MeiliServerVersion('1.2.0')
+  MeiliIsEmptyOperatorExpression isEmpty() => Meili.isEmpty(this);
+
+  @MeiliServerVersion('1.2.0')
+  MeiliIsNotEmptyOperatorExpression isNotEmpty() => Meili.isNotEmpty(this);
+
   MeiliInOperatorExpression $in(List<MeiliValueExpressionBase> values) =>
       Meili.$in(this, values);
 }

@@ -14,6 +14,7 @@ class FakeQueryClass extends Queryable {
     this.myList = const [],
   });
 
+  @override
   Map<String, Object?> buildMap() {
     return {
       'myInteger': myInteger,
@@ -21,11 +22,6 @@ class FakeQueryClass extends Queryable {
       'myDate': myDate,
       'myList': myList,
     };
-  }
-
-  @override
-  Map<String, Object> toQuery() {
-    return removeEmptyOrNullsFromMap(buildMap())..updateAll(toURIString);
   }
 }
 
