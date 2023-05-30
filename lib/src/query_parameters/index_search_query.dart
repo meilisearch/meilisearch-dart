@@ -4,10 +4,11 @@ import 'search_query.dart';
 
 class IndexSearchQuery extends SearchQuery {
   final String indexUid;
+  final String? query;
 
   const IndexSearchQuery({
     required this.indexUid,
-    required super.query,
+    required this.query,
     super.offset,
     super.limit,
     super.page,
@@ -29,8 +30,14 @@ class IndexSearchQuery extends SearchQuery {
 
   @override
   Map<String, Object> toMap() {
-    return {
+    final self = (<String, Object?>{
       'indexUid': indexUid,
+      'q': query,
+    }..removeWhere((key, value) => value == null))
+        .cast<String, Object>();
+
+    return {
+      ...self,
       ...super.toMap(),
     };
   }

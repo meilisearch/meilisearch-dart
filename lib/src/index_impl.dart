@@ -101,14 +101,12 @@ class MeiliSearchIndexImpl implements MeiliSearchIndex {
     String? text, [
     SearchQuery? q,
   ]) async {
-    if (q == null) {
-      q = SearchQuery(query: text);
-    } else {
-      q = q.copyWith(query: text);
-    }
     final response = await http.postMethod<Map<String, Object?>>(
       '/indexes/$uid/search',
-      data: q.toMap(),
+      data: {
+        'q': text,
+        ...?q?.toMap(),
+      },
     );
     return Searcheable.createSearchResult(response.data!, indexUid: uid);
   }

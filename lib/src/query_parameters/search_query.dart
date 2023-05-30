@@ -1,7 +1,6 @@
 import 'package:meilisearch/meilisearch.dart';
 
 class SearchQuery {
-  final String? query;
   final int? offset;
   final int? limit;
   final int? page;
@@ -21,7 +20,6 @@ class SearchQuery {
   final MatchingStrategy? matchingStrategy;
 
   const SearchQuery({
-    this.query,
     this.offset,
     this.limit,
     this.page,
@@ -43,7 +41,6 @@ class SearchQuery {
 
   Map<String, Object> toMap() {
     return (<String, Object?>{
-      'q': query,
       'offset': offset,
       'limit': limit,
       'page': page,
@@ -65,7 +62,6 @@ class SearchQuery {
   }
 
   SearchQuery copyWith({
-    String? query,
     int? offset,
     int? limit,
     int? page,
@@ -85,7 +81,6 @@ class SearchQuery {
     MatchingStrategy? matchingStrategy,
   }) =>
       SearchQuery(
-        query: query ?? this.query,
         offset: offset ?? this.offset,
         limit: limit ?? this.limit,
         page: page ?? this.page,
