@@ -82,7 +82,7 @@ void main() {
 
         expect(() => JWT.verify(token, SecretKey(key)), returnsNormally);
         expect(() => JWT.verify(token, SecretKey('not-the-same-key')),
-            throwsA(isA<JWTError>()));
+            throwsA(isA<JWTException>()));
       });
 
       test('does not generate a signed token without a key', () {
