@@ -6,10 +6,14 @@ class DocumentsQuery extends Queryable {
   final int? offset;
   final int? limit;
   final List<String> fields;
-  @MeiliServerVersion('1.2.0')
+
+  @RequiredMeiliServerVersion('1.2.0')
   final Object? filter;
-  @MeiliServerVersion('1.2.0')
+
+  @RequiredMeiliServerVersion('1.2.0')
   final MeiliOperatorExpressionBase? filterExpression;
+
+  bool get containsFilter => filter != null || filterExpression != null;
 
   const DocumentsQuery({
     this.limit,

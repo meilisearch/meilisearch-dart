@@ -176,16 +176,14 @@ void main() {
 
         test('filter parameter is null', () async {
           var index = await createBooksIndex();
-          var response = await index
-              .updateSettings(IndexSettings(
-                filterableAttributes: ['tag'],
-              ))
-              .waitFor(client: client);
-          expect(response.status, 'succeeded');
+          await index
+              .updateFilterableAttributes(['tag']).waitFor(client: client);
+
           var result = await index.search(
             'The Hobbit',
             SearchQuery(filterExpression: 'tag'.toMeiliAttribute().isNull()),
           );
+
           expect(result.hits, hasLength(1));
           expect(result.hits.first["book_id"], equals(9999));
         });

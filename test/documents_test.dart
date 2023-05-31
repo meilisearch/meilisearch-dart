@@ -252,7 +252,9 @@ void main() {
         });
 
         test('multiple documents', () async {
-          await index.deleteDocuments([456, 4]).waitFor(client: client);
+          await index
+              .deleteDocuments(DeleteDocumentsQuery(ids: [456, 4]))
+              .waitFor(client: client);
 
           await expectLater(
             () => index.getDocument(4),
@@ -272,7 +274,7 @@ void main() {
               .updateFilterableAttributes([kbookId]).waitFor(client: client);
 
           await index
-              .deleteDocumentsByFilter(
+              .deleteDocuments(
                 DeleteDocumentsQuery(
                   filterExpression: kbookId
                       .toMeiliAttribute()

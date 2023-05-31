@@ -3,7 +3,7 @@ import '../filter_builder/_exports.dart';
 import '../matching_strategy_enum.dart';
 import 'search_query.dart';
 
-@MeiliServerVersion('1.1.0')
+@RequiredMeiliServerVersion('1.1.0')
 class IndexSearchQuery extends SearchQuery {
   final String indexUid;
   final String? query;

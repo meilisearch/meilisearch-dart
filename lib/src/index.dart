@@ -415,25 +415,34 @@ class MeiliSearchIndex {
     return await _getTask(http.deleteMethod('/indexes/$uid/documents/$id'));
   }
 
-  /// Delete a selection of documents by given [ids].
-  Future<Task> deleteDocuments(List<Object>? ids) async {
-    return await _getTask(
-      http.postMethod(
-        '/indexes/$uid/documents/delete-batch',
-        data: ids,
-      ),
-    );
-  }
+  /// Delete a selection of documents by given query.
+  Future<Task> deleteDocuments([DeleteDocumentsQuery? query]) async {
+    Object? deleteBatchData;
+    Object? deleteData;
+    if (query != null) {
+      if (query.ids != null) {
+        // if ids are available, fallback to the delete-batch route
+        deleteBatchData = query.ids;
+      } else {
+        // if ids are NOT available, use the new delete route
+        deleteData = query.toSparseMap();
+      }
+    }
 
-  /// Delete a selection of documents based on a filter.
-  @MeiliServerVersion('1.2.0')
-  Future<Task> deleteDocumentsByFilter(DeleteDocumentsQuery query) async {
-    return await _getTask(
-      http.postMethod(
+    Future<Response<Map<String, Object?>>> future;
+    if (deleteData != null) {
+      future = http.postMethod(
         '/indexes/$uid/documents/delete',
-        data: query.toQuery(),
-      ),
-    );
+        data: deleteData,
+      );
+    } else {
+      future = http.postMethod(
+        '/indexes/$uid/documents/delete-batch',
+        data: deleteBatchData,
+      );
+    }
+
+    return await _getTask(future);
   }
 
   /// Return the document in the index by given [id].
@@ -455,8 +464,7 @@ class MeiliSearchIndex {
     DocumentsQuery? params,
   }) async {
     if (params != null) {
-      if (params.filter != null || params.filterExpression != null) {
-        //use new postMethod
+      if (params.containsFilter) {
         final response = await http.postMethod<Map<String, Object?>>(
           '/indexes/$uid/documents/fetch',
           data: params.toQuery(),

@@ -294,7 +294,7 @@ class MeiliSearchClient {
   }
 
   /// does a Multi-index search
-  @MeiliServerVersion('1.1.0')
+  @RequiredMeiliServerVersion('1.1.0')
   Future<MultiSearchResult> multiSearch(MultiSearchQuery query) async {
     final response = await http.postMethod<Map<String, Object?>>(
       '/multi-search',

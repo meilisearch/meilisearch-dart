@@ -3,7 +3,7 @@ import 'package:meilisearch/src/query_parameters/queryable.dart';
 import '../annotations.dart';
 import 'index_search_query.dart';
 
-@MeiliServerVersion('1.1.0')
+@RequiredMeiliServerVersion('1.1.0')
 class MultiSearchQuery extends Queryable {
   final List<IndexSearchQuery> queries;
 

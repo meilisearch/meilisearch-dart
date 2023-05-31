@@ -73,7 +73,7 @@ class Meili {
         distanceInMeters,
       );
 
-  @MeiliServerVersion('1.1.0')
+  @RequiredMeiliServerVersion('1.1.0')
   static MeiliGeoBoundingBoxOperatorExpression geoBoundingBox(
     MeiliPoint p1,
     MeiliPoint p2,
@@ -87,25 +87,25 @@ class Meili {
           MeiliAttributeExpression attribute) =>
       MeiliNotExistsOperatorExpression(attribute);
 
-  @MeiliServerVersion('1.2.0')
+  @RequiredMeiliServerVersion('1.2.0')
   static MeiliIsNullOperatorExpression isNull(
     MeiliAttributeExpression attribute,
   ) =>
       MeiliIsNullOperatorExpression(attribute);
 
-  @MeiliServerVersion('1.2.0')
+  @RequiredMeiliServerVersion('1.2.0')
   static MeiliIsNotNullOperatorExpression isNotNull(
     MeiliAttributeExpression attribute,
   ) =>
       MeiliIsNotNullOperatorExpression(attribute);
 
-  @MeiliServerVersion('1.2.0')
+  @RequiredMeiliServerVersion('1.2.0')
   static MeiliIsEmptyOperatorExpression isEmpty(
     MeiliAttributeExpression attribute,
   ) =>
       MeiliIsEmptyOperatorExpression(attribute);
 
-  @MeiliServerVersion('1.2.0')
+  @RequiredMeiliServerVersion('1.2.0')
   static MeiliIsNotEmptyOperatorExpression isNotEmpty(
     MeiliAttributeExpression attribute,
   ) =>
@@ -172,33 +172,44 @@ extension MeiliFiltersOperatorsExt on MeiliOperatorExpressionBase {
 extension MeiliAttributesExt on MeiliAttributeExpression {
   MeiliEqualsOperatorExpression eq(MeiliValueExpressionBase value) =>
       Meili.eq(this, value);
+
   MeiliNotEqualsOperatorExpression notEq(MeiliValueExpressionBase value) =>
       Meili.notEq(this, value);
+
   MeiliGreaterThanOperatorExpression gt(MeiliValueExpressionBase value) =>
       Meili.gt(this, value);
+
   MeiliGreaterThanEqualsOperatorExpression gte(
-          MeiliValueExpressionBase value) =>
+    MeiliValueExpressionBase value,
+  ) =>
       Meili.gte(this, value);
+
   MeiliLessThanOperatorExpression lt(MeiliValueExpressionBase value) =>
       Meili.lt(this, value);
+
   MeiliLessThanEqualsOperatorExpression lte(MeiliValueExpressionBase value) =>
       Meili.lte(this, value);
+
   MeiliToOperatorExpression to(
-          MeiliValueExpressionBase min, MeiliValueExpressionBase max) =>
+    MeiliValueExpressionBase min,
+    MeiliValueExpressionBase max,
+  ) =>
       Meili.to(this, min, max);
 
   MeiliExistsOperatorExpression exists() => Meili.exists(this);
+
   MeiliNotExistsOperatorExpression notExists() => Meili.notExists(this);
 
-  @MeiliServerVersion('1.2.0')
+  @RequiredMeiliServerVersion('1.2.0')
   MeiliIsNullOperatorExpression isNull() => Meili.isNull(this);
-  @MeiliServerVersion('1.2.0')
+
+  @RequiredMeiliServerVersion('1.2.0')
   MeiliIsNotNullOperatorExpression isNotNull() => Meili.isNotNull(this);
 
-  @MeiliServerVersion('1.2.0')
+  @RequiredMeiliServerVersion('1.2.0')
   MeiliIsEmptyOperatorExpression isEmpty() => Meili.isEmpty(this);
 
-  @MeiliServerVersion('1.2.0')
+  @RequiredMeiliServerVersion('1.2.0')
   MeiliIsNotEmptyOperatorExpression isNotEmpty() => Meili.isNotEmpty(this);
 
   MeiliInOperatorExpression $in(List<MeiliValueExpressionBase> values) =>

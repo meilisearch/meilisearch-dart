@@ -123,7 +123,7 @@ class MeiliGeoRadiusOperatorExpression extends MeiliOperatorExpressionBase {
   }
 }
 
-@MeiliServerVersion('1.1.0')
+@RequiredMeiliServerVersion('1.1.0')
 class MeiliGeoBoundingBoxOperatorExpression
     extends MeiliOperatorExpressionBase {
   final MeiliPoint point1;
@@ -162,7 +162,7 @@ class MeiliNotExistsOperatorExpression extends MeiliOperatorExpressionBase {
   }
 }
 
-@MeiliServerVersion('1.2.0')
+@RequiredMeiliServerVersion('1.2.0')
 class MeiliIsNullOperatorExpression extends MeiliOperatorExpressionBase {
   final MeiliAttributeExpression attribute;
 
@@ -174,7 +174,7 @@ class MeiliIsNullOperatorExpression extends MeiliOperatorExpressionBase {
   }
 }
 
-@MeiliServerVersion('1.2.0')
+@RequiredMeiliServerVersion('1.2.0')
 class MeiliIsNotNullOperatorExpression extends MeiliOperatorExpressionBase {
   final MeiliAttributeExpression attribute;
 
@@ -186,7 +186,7 @@ class MeiliIsNotNullOperatorExpression extends MeiliOperatorExpressionBase {
   }
 }
 
-@MeiliServerVersion('1.2.0')
+@RequiredMeiliServerVersion('1.2.0')
 class MeiliIsEmptyOperatorExpression extends MeiliOperatorExpressionBase {
   final MeiliAttributeExpression attribute;
 
@@ -198,7 +198,7 @@ class MeiliIsEmptyOperatorExpression extends MeiliOperatorExpressionBase {
   }
 }
 
-@MeiliServerVersion('1.2.0')
+@RequiredMeiliServerVersion('1.2.0')
 class MeiliIsNotEmptyOperatorExpression extends MeiliOperatorExpressionBase {
   final MeiliAttributeExpression attribute;
 

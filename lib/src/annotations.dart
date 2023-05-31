@@ -1,5 +1,5 @@
-class MeiliServerVersion {
-  const MeiliServerVersion(this.version);
+class RequiredMeiliServerVersion {
+  const RequiredMeiliServerVersion(this.version);
 
   final String version;
 }

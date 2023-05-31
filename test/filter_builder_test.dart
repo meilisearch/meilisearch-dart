@@ -17,6 +17,7 @@ void main() {
       test('From Parts', () {
         final attr1 = Meili.attrFromParts(['contact', 'phone']);
         final attr2 = Meili.attr('contact.phone');
+
         expect(attr1, attr2);
       });
     });
