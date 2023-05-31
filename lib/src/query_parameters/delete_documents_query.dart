@@ -7,7 +7,7 @@ class DeleteDocumentsQuery extends Queryable {
 
   @RequiredMeiliServerVersion('1.2.0')
   final Object? filter;
-  
+
   @RequiredMeiliServerVersion('1.2.0')
   final MeiliOperatorExpressionBase? filterExpression;
 
