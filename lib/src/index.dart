@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:meilisearch/meilisearch.dart';
-import 'annotations.dart';
 import 'result.dart';
 import 'tasks_results.dart';
 import 'package:collection/collection.dart';
