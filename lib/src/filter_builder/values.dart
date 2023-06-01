@@ -24,8 +24,10 @@ class MeiliNumberValueExpression extends MeiliValueExpressionBase {
 class MeiliDateTimeValueExpression extends MeiliValueExpressionBase {
   final DateTime value;
   MeiliDateTimeValueExpression(this.value)
-      : assert(value.isUtc,
-            "DateTime passed to Meili must be in UTC to avoid inconsistency accross multiple devices");
+      : assert(
+          value.isUtc,
+          "DateTime passed to Meili must be in UTC to avoid inconsistency accross multiple devices",
+        );
 
   @override
   String transform() => value.millisecondsSinceEpoch.toString();

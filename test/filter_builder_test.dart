@@ -13,6 +13,13 @@ void main() {
         );
         expect(Meili.attr('   book.id.   ').transform(), equals("\"book.id\""));
       });
+
+      test('From Parts', () {
+        final attr1 = Meili.attrFromParts(['contact', 'phone']);
+        final attr2 = Meili.attr('contact.phone');
+
+        expect(attr1, attr2);
+      });
     });
 
     group("Values", () {
@@ -173,17 +180,49 @@ void main() {
       });
     });
 
-    test('geoBoundingBox', () {
-      final op = Meili.geoBoundingBox((lat: 10, lng: 5.3), (lat: 10, lng: 5));
+    group("Geo", () {
+      test('BoundingBox', () {
+        final op = Meili.geoBoundingBox((lat: 10, lng: 5.3), (lat: 10, lng: 5));
 
-      expect(op.transform(), '_geoBoundingBox([10,5.3],[10,5])');
+        expect(op.transform(), '_geoBoundingBox([10,5.3],[10,5])');
+      });
+
+      test('Radius', () {
+        final op = Meili.geoRadius((lat: 10, lng: 5.3), 15);
+
+        //in chrome, this will output (15), while in VM it will output (15.0)
+        expect(op.transform(), '_geoRadius(10,5.3,${15.0})');
+      });
     });
 
-    /// TODO(ahmednfwela): waiting for Meili V1.2.0
-    // test("[NULL]", () {
-    //   final expr = "tag".toMeiliAttribute().isNull();
-    //   expect(expr.transform(), "tag NULL");
-    // });
+    group('IS', () {
+      test("NULL", () {
+        final expr = "tag".toMeiliAttribute().isNull();
+        expect(expr.transform(), "\"tag\" IS NULL");
+      });
+
+      test("NOT NULL", () {
+        final expr = "tag".toMeiliAttribute().isNotNull();
+        expect(expr.transform(), "\"tag\" IS NOT NULL");
+      });
+
+      test("EMPTY", () {
+        final expr = "tag".toMeiliAttribute().isEmpty();
+        expect(expr.transform(), "\"tag\" IS EMPTY");
+      });
+
+      test("NOT EMPTY", () {
+        final expr = "tag".toMeiliAttribute().isNotEmpty();
+        expect(expr.transform(), "\"tag\" IS NOT EMPTY");
+      });
+    });
+
+    group('IN', () {
+      test('Mixed Types', () {
+        final expr = "tag".toMeiliAttribute().$in(Meili.values(["hello", 5]));
+        expect(expr.transform(), "\"tag\" IN [\"hello\",5]");
+      });
+    });
   });
 }
 
