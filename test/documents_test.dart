@@ -250,45 +250,80 @@ void main() {
             throwsA(isA<MeiliSearchApiException>()),
           );
         });
+        group('multiple documents', () {
+          test('with Bad inputs', () async {
+            final badObjects = [
+              () => DeleteDocumentsQuery(),
+              () => DeleteDocumentsQuery(ids: []),
+              () => DeleteDocumentsQuery(ids: [132], filter: 'a = b'),
+              () => DeleteDocumentsQuery(
+                    ids: [132],
+                    filterExpression: 'a'.toMeiliAttribute().eq(
+                          'b'.toMeiliValue(),
+                        ),
+                  ),
+              () => DeleteDocumentsQuery(
+                    ids: [132],
+                    filter: 'a = b',
+                    filterExpression: 'a'.toMeiliAttribute().eq(
+                          'b'.toMeiliValue(),
+                        ),
+                  ),
+            ];
 
-        test('multiple documents', () async {
-          await index
-              .deleteDocuments(DeleteDocumentsQuery(ids: [456, 4]))
-              .waitFor(client: client);
-
-          await expectLater(
-            () => index.getDocument(4),
-            throwsA(isA<MeiliSearchApiException>()),
-          );
-
-          await expectLater(
-            () => index.getDocument(456),
-            throwsA(isA<MeiliSearchApiException>()),
-          );
-        });
-
-        test('multiple documents by filter', () async {
-          const idsToDelete = [456, 4];
-          //IMPORTANT, the book_id field must be added to filterable attributes
-          await index
-              .updateFilterableAttributes([kbookId]).waitFor(client: client);
-
-          await index
-              .deleteDocuments(
-                DeleteDocumentsQuery(
-                  filterExpression: kbookId
-                      .toMeiliAttribute()
-                      .$in(idsToDelete.map(Meili.value).toList()),
+            for (var bad in badObjects) {
+              await expectLater(
+                () => index.deleteDocuments(bad()),
+                throwsA(
+                  isA<AssertionError>().having(
+                    (p0) => p0.message,
+                    "message",
+                    "DeleteDocumentsQuery must contain either [ids] or [filter]/[filterExpression]",
+                  ),
                 ),
-              )
-              .waitFor(client: client);
+              );
+            }
+          });
 
-          for (var id in idsToDelete) {
+          test('by ids', () async {
+            await index
+                .deleteDocuments(DeleteDocumentsQuery(ids: [456, 4]))
+                .waitFor(client: client);
+
             await expectLater(
-              () => index.getDocument(id),
+              () => index.getDocument(4),
               throwsA(isA<MeiliSearchApiException>()),
             );
-          }
+
+            await expectLater(
+              () => index.getDocument(456),
+              throwsA(isA<MeiliSearchApiException>()),
+            );
+          });
+
+          test('by filter', () async {
+            const idsToDelete = [456, 4];
+            //IMPORTANT, the book_id field must be added to filterable attributes
+            await index
+                .updateFilterableAttributes([kbookId]).waitFor(client: client);
+
+            await index
+                .deleteDocuments(
+                  DeleteDocumentsQuery(
+                    filterExpression: kbookId
+                        .toMeiliAttribute()
+                        .$in(idsToDelete.map(Meili.value).toList()),
+                  ),
+                )
+                .waitFor(client: client);
+
+            for (var id in idsToDelete) {
+              await expectLater(
+                () => index.getDocument(id),
+                throwsA(isA<MeiliSearchApiException>()),
+              );
+            }
+          });
         });
 
         test('all documents', () async {

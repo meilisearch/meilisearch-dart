@@ -13,11 +13,15 @@ class DeleteDocumentsQuery extends Queryable {
 
   bool get containsFilter => filter != null || filterExpression != null;
 
-  const DeleteDocumentsQuery({
+  DeleteDocumentsQuery({
     this.ids,
     this.filter,
     this.filterExpression,
-  });
+  }) : assert(
+          (ids != null && ids.isNotEmpty) ^
+              (filter != null || filterExpression != null),
+          'DeleteDocumentsQuery must contain either [ids] or [filter]/[filterExpression]',
+        );
 
   @override
   Map<String, Object?> buildMap() {

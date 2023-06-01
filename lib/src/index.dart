@@ -415,33 +415,26 @@ class MeiliSearchIndex {
   }
 
   /// Delete a selection of documents by given query.
-  Future<Task> deleteDocuments([DeleteDocumentsQuery? query]) async {
-    Object? deleteBatchData;
-    Object? deleteData;
-    if (query != null) {
-      if (query.ids != null) {
-        // if ids are available, fallback to the delete-batch route
-        deleteBatchData = query.ids;
-      } else {
-        // if ids are NOT available, use the new delete route
-        deleteData = query.toSparseMap();
-      }
-    }
+  Future<Task> deleteDocuments(DeleteDocumentsQuery query) async {
+    String route;
+    Object? data;
 
-    Future<Response<Map<String, Object?>>> future;
-    if (deleteData != null) {
-      future = http.postMethod(
-        '/indexes/$uid/documents/delete',
-        data: deleteData,
-      );
+    if (query.ids != null) {
+      // if ids are available, fallback to the delete-batch route
+      route = 'delete-batch';
+      data = query.ids;
     } else {
-      future = http.postMethod(
-        '/indexes/$uid/documents/delete-batch',
-        data: deleteBatchData,
-      );
+      // if ids are NOT available, use the new delete route
+      route = 'delete';
+      data = query.toSparseMap();
     }
 
-    return await _getTask(future);
+    return await _getTask(
+      http.postMethod(
+        '/indexes/$uid/documents/$route',
+        data: data,
+      ),
+    );
   }
 
   /// Return the document in the index by given [id].
@@ -462,15 +455,13 @@ class MeiliSearchIndex {
   Future<Result<Map<String, dynamic>>> getDocuments({
     DocumentsQuery? params,
   }) async {
-    if (params != null) {
-      if (params.containsFilter) {
-        final response = await http.postMethod<Map<String, Object?>>(
-          '/indexes/$uid/documents/fetch',
-          data: params.toQuery(),
-        );
+    if (params != null && params.containsFilter) {
+      final response = await http.postMethod<Map<String, Object?>>(
+        '/indexes/$uid/documents/fetch',
+        data: params.toSparseMap(),
+      );
 
-        return Result.fromMap(response.data!);
-      }
+      return Result.fromMap(response.data!);
     }
 
     final response = await http.getMethod<Map<String, Object?>>(
