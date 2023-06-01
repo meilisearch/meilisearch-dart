@@ -257,7 +257,7 @@ This version makes this package compatible with Meilisearch v0.25.0 and newer
 ## Changes
 - Add method to responds with raw information from API `client.getRawIndex` (#124) @brunoocasali
 - Run a `pub upgrade` in dependencies (#128) @brunoocasali
-- Add support to keys (according to v0.25.0 spec) [more](https://docs.meilisearch.com/reference/api/keys.html#keys) (#121) @brunoocasali
+- Add support to keys (according to v0.25.0 spec) [more](https://www.meilisearch.com/docs/reference/api/keys#keys) (#121) @brunoocasali
   - Create a new resource class `Key` to represent keys
   - Create methods to support keys:
     - `client.getKeys`
