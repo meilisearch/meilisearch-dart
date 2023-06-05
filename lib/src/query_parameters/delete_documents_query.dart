@@ -1,11 +1,9 @@
 import 'package:meilisearch/meilisearch.dart';
-import 'queryable.dart';
 import '../annotations.dart';
+import 'queryable.dart';
 
-class DocumentsQuery extends Queryable {
-  final int? offset;
-  final int? limit;
-  final List<String> fields;
+class DeleteDocumentsQuery extends Queryable {
+  final List<Object>? ids;
 
   @RequiredMeiliServerVersion('1.2.0')
   final Object? filter;
@@ -15,20 +13,19 @@ class DocumentsQuery extends Queryable {
 
   bool get containsFilter => filter != null || filterExpression != null;
 
-  const DocumentsQuery({
-    this.limit,
-    this.offset,
-    this.fields = const [],
+  DeleteDocumentsQuery({
+    this.ids,
     this.filter,
     this.filterExpression,
-  });
+  }) : assert(
+          (ids != null && ids.isNotEmpty) ^
+              (filter != null || filterExpression != null),
+          'DeleteDocumentsQuery must contain either [ids] or [filter]/[filterExpression]',
+        );
 
   @override
   Map<String, Object?> buildMap() {
     return {
-      'offset': offset,
-      'limit': limit,
-      'fields': fields,
       'filter': filter ?? filterExpression?.transform(),
     };
   }

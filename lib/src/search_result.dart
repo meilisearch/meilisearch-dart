@@ -52,17 +52,16 @@ class SearchResult<T> extends Searcheable<T> {
   @override
   SearchResult<TOther> map<TOther>(
     MeilisearchDocumentMapper<T, TOther> mapper,
-  ) {
-    return SearchResult<TOther>(
-      indexUid: indexUid,
-      facetDistribution: facetDistribution,
-      hits: hits.map(mapper).toList(),
-      estimatedTotalHits: estimatedTotalHits,
-      limit: limit,
-      offset: offset,
-      matchesPosition: matchesPosition,
-      processingTimeMs: processingTimeMs,
-      query: query,
-    );
-  }
+  ) =>
+      SearchResult<TOther>(
+        indexUid: indexUid,
+        facetDistribution: facetDistribution,
+        hits: hits.map(mapper).toList(),
+        estimatedTotalHits: estimatedTotalHits,
+        limit: limit,
+        offset: offset,
+        matchesPosition: matchesPosition,
+        processingTimeMs: processingTimeMs,
+        query: query,
+      );
 }

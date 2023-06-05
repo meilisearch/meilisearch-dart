@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:collection/collection.dart';
 import 'package:meilisearch/meilisearch.dart';
+import 'package:meilisearch/src/result.dart';
 import 'package:test/test.dart';
 import 'utils/books_data.dart';
 import 'utils/wait_for.dart';
@@ -244,16 +245,85 @@ void main() {
         test('one document', () async {
           await index.deleteDocument(456).waitFor(client: client);
 
-          expect(
-              index.getDocument(456), throwsA(isA<MeiliSearchApiException>()));
+          await expectLater(
+            () => index.getDocument(456),
+            throwsA(isA<MeiliSearchApiException>()),
+          );
         });
+        group('multiple documents', () {
+          test('with Bad inputs', () async {
+            final badObjects = [
+              () => DeleteDocumentsQuery(),
+              () => DeleteDocumentsQuery(ids: []),
+              () => DeleteDocumentsQuery(ids: [132], filter: 'a = b'),
+              () => DeleteDocumentsQuery(
+                    ids: [132],
+                    filterExpression: 'a'.toMeiliAttribute().eq(
+                          'b'.toMeiliValue(),
+                        ),
+                  ),
+              () => DeleteDocumentsQuery(
+                    ids: [132],
+                    filter: 'a = b',
+                    filterExpression: 'a'.toMeiliAttribute().eq(
+                          'b'.toMeiliValue(),
+                        ),
+                  ),
+            ];
 
-        test('multiple documents', () async {
-          await index.deleteDocuments([456, 4]).waitFor(client: client);
+            for (var bad in badObjects) {
+              await expectLater(
+                () => index.deleteDocuments(bad()),
+                throwsA(
+                  isA<AssertionError>().having(
+                    (p0) => p0.message,
+                    "message",
+                    "DeleteDocumentsQuery must contain either [ids] or [filter]/[filterExpression]",
+                  ),
+                ),
+              );
+            }
+          });
 
-          expect(index.getDocument(4), throwsA(isA<MeiliSearchApiException>()));
-          expect(
-              index.getDocument(456), throwsA(isA<MeiliSearchApiException>()));
+          test('by ids', () async {
+            await index
+                .deleteDocuments(DeleteDocumentsQuery(ids: [456, 4]))
+                .waitFor(client: client);
+
+            await expectLater(
+              () => index.getDocument(4),
+              throwsA(isA<MeiliSearchApiException>()),
+            );
+
+            await expectLater(
+              () => index.getDocument(456),
+              throwsA(isA<MeiliSearchApiException>()),
+            );
+          });
+
+          test('by filter', () async {
+            const idsToDelete = [456, 4];
+            //IMPORTANT, the book_id field must be added to filterable attributes
+            await index
+                .updateFilterableAttributes([kbookId]).waitFor(client: client);
+
+            await index
+                .deleteDocuments(
+                  DeleteDocumentsQuery(
+                    filterExpression: kbookId
+                        .toMeiliAttribute()
+                        .$in(idsToDelete.map(Meili.value).toList()),
+                  ),
+                )
+                .waitFor(client: client);
+
+            for (var id in idsToDelete) {
+              await expectLater(
+                () => index.getDocument(id),
+                throwsA(isA<MeiliSearchApiException>()),
+              );
+            }
+          });
         });
 
         test('all documents', () async {
@@ -284,6 +354,33 @@ void main() {
 
           expect(doc?[kbookId], isNotNull);
           expect(doc?[ktitle], isNull);
+        });
+
+        test('Fetch documents', () async {
+          await index
+              .updateFilterableAttributes([ktag]).waitFor(client: client);
+
+          final docs = await index
+              .getDocuments(
+                params: DocumentsQuery(
+                  limit: 5,
+                  offset: 1,
+                  filterExpression:
+                      ktag.toMeiliAttribute().eq('Tale'.toMeiliValue()),
+                ),
+              )
+              .map(BookDto.fromMap);
+
+          expect(docs.total, 2);
+          expect(docs.offset, 1);
+          expect(docs.limit, 5);
+          expect(docs.results.length, 1);
+          expect(
+            docs.results,
+            everyElement(
+              isA<BookDto>().having((p0) => p0.tag, "tag", equals('Tale')),
+            ),
+          );
         });
       });
     });

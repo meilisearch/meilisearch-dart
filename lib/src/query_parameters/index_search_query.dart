@@ -1,7 +1,9 @@
+import '../annotations.dart';
 import '../filter_builder/_exports.dart';
 import '../matching_strategy_enum.dart';
 import 'search_query.dart';
 
+@RequiredMeiliServerVersion('1.1.0')
 class IndexSearchQuery extends SearchQuery {
   final String indexUid;
   final String? query;
@@ -29,16 +31,11 @@ class IndexSearchQuery extends SearchQuery {
   });
 
   @override
-  Map<String, Object> toMap() {
-    final self = (<String, Object?>{
+  Map<String, Object?> buildMap() {
+    return {
       'indexUid': indexUid,
       'q': query,
-    }..removeWhere((key, value) => value == null))
-        .cast<String, Object>();
-
-    return {
-      ...self,
-      ...super.toMap(),
+      ...super.buildMap(),
     };
   }
 

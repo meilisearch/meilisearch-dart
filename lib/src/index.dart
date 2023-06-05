@@ -98,7 +98,7 @@ class MeiliSearchIndex {
       '/indexes/$uid/search',
       data: {
         'q': text,
-        ...?q?.toMap(),
+        ...?q?.toSparseMap(),
       },
     );
     return Searcheable.createSearchResult(response.data!, indexUid: uid);
@@ -414,33 +414,60 @@ class MeiliSearchIndex {
     return await _getTask(http.deleteMethod('/indexes/$uid/documents/$id'));
   }
 
-  /// Delete a selection of documents by given [ids].
-  Future<Task> deleteDocuments(List<Object> ids) async {
+  /// Delete a selection of documents by given query.
+  Future<Task> deleteDocuments(DeleteDocumentsQuery query) async {
+    String route;
+    Object? data;
+
+    if (query.ids != null) {
+      // if ids are available, fallback to the delete-batch route
+      route = 'delete-batch';
+      data = query.ids;
+    } else {
+      // if ids are NOT available, use the new delete route
+      route = 'delete';
+      data = query.toSparseMap();
+    }
+
     return await _getTask(
       http.postMethod(
-        '/indexes/$uid/documents/delete-batch',
-        data: ids,
+        '/indexes/$uid/documents/$route',
+        data: data,
       ),
     );
   }
 
   /// Return the document in the index by given [id].
-  Future<Map<String, dynamic>?> getDocument(Object id,
-      {List<String> fields = const []}) async {
+  Future<Map<String, dynamic>?> getDocument(
+    Object id, {
+    List<String> fields = const [],
+  }) async {
     final params = DocumentsQuery(fields: fields);
     final response = await http.getMethod<Map<String, dynamic>>(
-        '/indexes/$uid/documents/$id',
-        queryParameters: params.toQuery());
+      '/indexes/$uid/documents/$id',
+      queryParameters: params.toQuery(),
+    );
 
     return response.data;
   }
 
   /// Return a list of all existing documents in the index.
-  Future<Result<Map<String, dynamic>>> getDocuments(
-      {DocumentsQuery? params}) async {
+  Future<Result<Map<String, dynamic>>> getDocuments({
+    DocumentsQuery? params,
+  }) async {
+    if (params != null && params.containsFilter) {
+      final response = await http.postMethod<Map<String, Object?>>(
+        '/indexes/$uid/documents/fetch',
+        data: params.toSparseMap(),
+      );
+
+      return Result.fromMap(response.data!);
+    }
+
     final response = await http.getMethod<Map<String, Object?>>(
-        '/indexes/$uid/documents',
-        queryParameters: params?.toQuery());
+      '/indexes/$uid/documents',
+      queryParameters: params?.toQuery(),
+    );
 
     return Result.fromMap(response.data!);
   }
@@ -514,7 +541,8 @@ class MeiliSearchIndex {
 
   /// Update the displayed attributes of the index.
   Future<Task> updateDisplayedAttributes(
-      List<String> displayedAttributes) async {
+    List<String> displayedAttributes,
+  ) async {
     return await _getTask(
       http.putMethod(
         '/indexes/$uid/settings/displayed-attributes',

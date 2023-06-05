@@ -9,15 +9,11 @@ class KeysQuery extends Queryable {
     this.offset,
   });
 
+  @override
   Map<String, Object?> buildMap() {
     return {
       'offset': offset,
       'limit': limit,
     };
-  }
-
-  @override
-  Map<String, Object> toQuery() {
-    return removeEmptyOrNullsFromMap(buildMap())..updateAll(toURIString);
   }
 }

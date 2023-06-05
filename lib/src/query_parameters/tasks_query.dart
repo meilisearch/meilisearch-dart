@@ -55,6 +55,7 @@ class TasksQuery extends Queryable {
     );
   }
 
+  @override
   Map<String, Object?> buildMap() {
     return {
       'from': from,
@@ -71,10 +72,5 @@ class TasksQuery extends Queryable {
       'types': types,
       'indexUids': indexUids,
     };
-  }
-
-  @override
-  Map<String, Object> toQuery() {
-    return removeEmptyOrNullsFromMap(buildMap())..updateAll(toURIString);
   }
 }

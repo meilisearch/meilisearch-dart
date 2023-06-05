@@ -1,7 +1,21 @@
 import 'package:collection/collection.dart';
 import 'package:meilisearch/meilisearch.dart';
 
+import '../annotations.dart';
+
+const _eqUnordered = DeepCollectionEquality.unordered();
+
 typedef MeiliPoint = ({num lat, num lng});
+
+/// Represents an empty filter
+///
+/// works as a starting point for filter builders
+class MeiliEmptyExpression extends MeiliOperatorExpressionBase {
+  const MeiliEmptyExpression();
+
+  @override
+  String transform() => "";
+}
 
 class MeiliAndOperatorExpression extends MeiliOperatorExpressionBase {
   final List<MeiliOperatorExpressionBase> operands;
@@ -31,15 +45,13 @@ class MeiliAndOperatorExpression extends MeiliOperatorExpressionBase {
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
-    final listEquals = const DeepCollectionEquality().equals;
 
     return other is MeiliAndOperatorExpression &&
-        listEquals(other.operands, operands);
+        _eqUnordered.equals(other.operands, operands);
   }
 
   @override
-  int get hashCode =>
-      Object.hash("AND", const DeepCollectionEquality().hash(operands));
+  int get hashCode => Object.hash("AND", _eqUnordered.hash(operands));
 }
 
 class MeiliOrOperatorExpression extends MeiliOperatorExpressionBase {
@@ -69,15 +81,13 @@ class MeiliOrOperatorExpression extends MeiliOperatorExpressionBase {
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
-    final listEquals = const DeepCollectionEquality().equals;
 
     return other is MeiliOrOperatorExpression &&
-        listEquals(other.operands, operands);
+        _eqUnordered.equals(other.operands, operands);
   }
 
   @override
-  int get hashCode =>
-      Object.hash("OR", const DeepCollectionEquality().hash(operands));
+  int get hashCode => Object.hash("OR", _eqUnordered.hash(operands));
 }
 
 class MeiliToOperatorExpression extends MeiliOperatorExpressionBase {
@@ -113,6 +123,7 @@ class MeiliGeoRadiusOperatorExpression extends MeiliOperatorExpressionBase {
   }
 }
 
+@RequiredMeiliServerVersion('1.1.0')
 class MeiliGeoBoundingBoxOperatorExpression
     extends MeiliOperatorExpressionBase {
   final MeiliPoint point1;
@@ -151,27 +162,53 @@ class MeiliNotExistsOperatorExpression extends MeiliOperatorExpressionBase {
   }
 }
 
-/// TODO(ahmednfwela): waiting for Meili V1.2.0
-// class MeiliNullOperatorExpression extends MeiliOperatorExpressionBase {
-//   final MeiliAttributeExpression attribute;
+@RequiredMeiliServerVersion('1.2.0')
+class MeiliIsNullOperatorExpression extends MeiliOperatorExpressionBase {
+  final MeiliAttributeExpression attribute;
 
-//   const MeiliNullOperatorExpression(this.attribute);
+  const MeiliIsNullOperatorExpression(this.attribute);
 
-//   @override
-//   String transform() {
-//     return "${attribute.transform()} NULL";
-//   }
-// }
-// class MeiliNotNullOperatorExpression extends MeiliOperatorExpressionBase {
-//   final MeiliAttributeExpression attribute;
+  @override
+  String transform() {
+    return "${attribute.transform()} IS NULL";
+  }
+}
 
-//   const MeiliNotNullOperatorExpression(this.attribute);
+@RequiredMeiliServerVersion('1.2.0')
+class MeiliIsNotNullOperatorExpression extends MeiliOperatorExpressionBase {
+  final MeiliAttributeExpression attribute;
 
-//   @override
-//   String transform() {
-//     return "${attribute.transform()} NOT NULL";
-//   }
-// }
+  const MeiliIsNotNullOperatorExpression(this.attribute);
+
+  @override
+  String transform() {
+    return "${attribute.transform()} IS NOT NULL";
+  }
+}
+
+@RequiredMeiliServerVersion('1.2.0')
+class MeiliIsEmptyOperatorExpression extends MeiliOperatorExpressionBase {
+  final MeiliAttributeExpression attribute;
+
+  const MeiliIsEmptyOperatorExpression(this.attribute);
+
+  @override
+  String transform() {
+    return "${attribute.transform()} IS EMPTY";
+  }
+}
+
+@RequiredMeiliServerVersion('1.2.0')
+class MeiliIsNotEmptyOperatorExpression extends MeiliOperatorExpressionBase {
+  final MeiliAttributeExpression attribute;
+
+  const MeiliIsNotEmptyOperatorExpression(this.attribute);
+
+  @override
+  String transform() {
+    return "${attribute.transform()} IS NOT EMPTY";
+  }
+}
 
 class MeiliNotOperatorExpression extends MeiliOperatorExpressionBase {
   final MeiliOperatorExpressionBase operator;

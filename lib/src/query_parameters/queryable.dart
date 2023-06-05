@@ -1,9 +1,20 @@
 abstract class Queryable {
   const Queryable();
 
-  Map<String, Object> toQuery();
+  ///For use with POST methods that can handle JSON types
+  Map<String, Object?> buildMap();
 
-  Object toURIString(String key, Object value) {
+  ///For use with GET methods that require queryParameters
+  Map<String, Object> toQuery() {
+    return toSparseMap()..updateAll((key, value) => toURIString(value));
+  }
+
+  ///Returns a map with only non-null and non-empty fields
+  Map<String, Object> toSparseMap() {
+    return removeEmptyOrNullsFromMap(buildMap());
+  }
+
+  Object toURIString(Object value) {
     if (value is DateTime) {
       return value.toUtc().toIso8601String();
     } else if (value is List) {
@@ -13,11 +24,13 @@ abstract class Queryable {
     }
   }
 
-  Map<String, Object> removeEmptyOrNullsFromMap(Map<String, Object?> map) {
+  static Map<String, Object> removeEmptyOrNullsFromMap(
+    Map<String, Object?> map,
+  ) {
     return (map..removeWhere(isEmptyOrNull)).cast<String, Object>();
   }
 
-  bool isEmptyOrNull(String key, Object? value) {
+  static bool isEmptyOrNull(String key, Object? value) {
     return value == null || (value is Iterable && value.isEmpty);
   }
 }
