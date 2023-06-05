@@ -10,7 +10,7 @@ class IndexSearchQuery extends SearchQuery {
 
   const IndexSearchQuery({
     required this.indexUid,
-    required this.query,
+    this.query,
     super.offset,
     super.limit,
     super.page,
