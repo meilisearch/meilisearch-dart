@@ -3,6 +3,20 @@
 # the documentation on build
 # You can read more on https://github.com/meilisearch/documentation/tree/master/.vuepress/code-samples
 ---
+get_documents_post_1: |-
+  await client.index('movies').getDocuments(
+      params: DocumentsQuery(
+        filter: '(rating > 3 AND (genres = Adventure OR genres = Fiction)) AND language = English',
+        fields: ['title', 'genres', 'rating', 'language'],
+        limit: 3
+      )
+  );
+delete_documents_by_filter_1: |-
+  await client.index('movies')
+    .deleteDocuments(DeleteDocumentsQuery(filter: 'genres = action OR genres = adventure'));
+get_documents_1: |-
+  await client.index('movies')
+    .getDocuments(params: DocumentsQuery(limit: 2, filter: 'genres = action'));
 multi_search_1: |-
   await client.multiSearch(MultiSearchQuery(queries: [
       SearchQuery(
@@ -151,8 +165,9 @@ delete_all_documents_1: |-
   await client.index('movies').deleteAllDocuments();
 delete_one_document_1: |-
   await client.index('movies').deleteDocument(25684);
-delete_documents_1: |-
-  await client.index('movies').deleteDocuments([23488, 153738, 437035, 363869]);
+delete_documents_by_batch_1: |-
+  await client.index('movies')
+    .deleteDocuments(DeleteDocumentsQuery(ids: [23488, 153738, 437035, 363869]));
 search_post_1: |-
   await client.index('movies').search('American ninja');
 get_task_1: |-
