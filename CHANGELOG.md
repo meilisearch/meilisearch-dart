@@ -2,6 +2,67 @@
 
 # 0.14.0
 ### Breaking Changes:
+- Moved `indexUid`, `query` from `SearchQuery` to the new `IndexSearchQuery`.
+- Changed `deleteDocuments` signature:
+
+```diff
+// from:
+- Future<Task> deleteDocuments(List<Object> ids)
++ Future<Task> deleteDocuments(DeleteDocumentsQuery query)
+
+// to:
+- index.deleteDocuments([456, 4])
++ index.deleteDocuments(DeleteDocumentsQuery(ids: [456, 4]))
+```
+
+- `MeiliSearchIndex.search` now takes a `String query` and a `SearchQuery` object as the only inputs.
+  - Replace any ocurrence of search `index.search('xyz', ....)` with `index.search('xyz', SearchQuery(....))`
+
+```diff
+- await client.index('books').search('query', sort: [], filter: ...);
++ await client.index('books').search('query', SearchQuery(sort: [], filter: ...));
+```
+
+- `Meili.geoBoundingBox` and `Meili.geoRadius` now take record values to represent the `lat`/`lng` points:
+```diff
+// Confusing, unclear
+- Meili.geoBoundingBox(3,5.3,10,20)
+// Not Confusing :)
++ Meili.geoBoundingBox((lat: 3, lng: 5.3), (lat: 10, lng: 20))
+```
+```diff
+// Confusing, unclear
+- Meili.geoRadius(3, 5.3, 100)
+// Not Confusing :)
++ Meili.geoRadius((lat: 3, lng: 5.3), 100)
+```
+
+- Change `MultiSearchQuery.queries` to be a `List<IndexSearchQuery>` instead of a `List<SearchQuery>`:
+```diff
+final result = await client.multiSearch(MultiSearchQuery(queries: [
+-      SearchQuery(
++      IndexSearchQuery(
+          query: "",
+          indexUid: index1.uid,
+        ),
+-    SearchQuery(
++    IndexSearchQuery(
+          query: "",
+          indexUid: index2.uid,
+        ),
+];
+```
+
+### Changes:
+
+- Introduce a new annotation `RequiredMeiliServerVersion` which documents the version this members were introduced.
+- Introduce filter expressions for `IS NULL`, `IS NOT NULL`, `IS EMPTY`, `IS NOT EMPTY`.
+- Added `filter`, `filterExpression` parameter to `DocumentsQuery`.
+- Some internal `Queryable` refactoring to unify its behavior and avoid duplicating the code.
+- Added a workaround for https://github.com/meilisearch/meilisearch/issues/3740 by `jsonEncoding` attribute names when using `filterExpression`s
+- A new type is introduced `IndexSearchQuery` which extends `SearchQuery`.
+  - Added `copyWith` to `SearchQuery` and `IndexSearchQuery`
+
 
 # 0.13.0
 
@@ -19,7 +80,7 @@
 ```diff
 - final Object? facetDistribution;
 + final Map<String, Map<String, int>>? facetDistribution;
-- final Object? matchesPosition;   
+- final Object? matchesPosition;
 + final Map<String, List<MatchPosition>>? matchesPosition;
 + final Map<String, FacetStat>? facetStats;
 ```
@@ -40,7 +101,7 @@
 - Changes `Searcheable`, `SearchResult`, `PaginatedSearchResult` signatures to be generic `Searcheable<T>`, `SearchResult<T>`, `PaginatedSearchResult<T>`
 - Adds a new `map<TOther>` method to `Searcheable<T>` and its subclasses to map the search result to a different type.
 - All search operations produce `Searcheable<Map<String, dynamic>>` by default, which can be mapped to other types using the `map<TOther>` method.
-- Revert some of the `Object?` types that were changed from `dynamic`: 
+- Revert some of the `Object?` types that were changed from `dynamic`:
   - `MeiliSearchClient` class `Future<Map<String, dynamic>> health();`
   - `HttpRequest` class `Map<String, dynamic> headers();`
   - `MeiliSearchIndex` class `Future<Searcheable<Map<String, dynamic>>> search(...);`
@@ -48,7 +109,7 @@
   - `MeiliSearchIndex` class `Future<Result<Map<String, dynamic>>> getDocuments({DocumentsQuery? params});`
 - `Searcheable<T>.hits` is non-nullable now, and defaults to `const []`
 
-### Changes: 
+### Changes:
 
 - Introduced new extension methods to help consumers cast `Future<Searchable<T>>` to the corresponding type:
 ```dart
