@@ -31,8 +31,7 @@ void main() {
           filterExpression:
               ktag.toMeiliAttribute().eq("Romance".toMeiliValue()),
         ),
-        IndexSearchQuery(
-          query: "",
+        IndexSearchQuery(          
           indexUid: index2.uid,
           filterExpression: ktag.toMeiliAttribute().eq("Tale".toMeiliValue()),
         ),
