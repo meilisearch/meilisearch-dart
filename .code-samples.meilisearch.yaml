@@ -37,19 +37,16 @@ multi_search_1: |-
 faceted_search_2: |-
   await client.multiSearch(MultiSearchQuery(queries: [
       IndexSearchQuery(
-        query: '',
         indexUid: 'books',
         facets: ['language', 'genres', 'author', 'format'],
         filter: [['language = English', 'language = French'], ['genres = Fiction']]
       ),
       IndexSearchQuery(
-        query: '',
         indexUid: 'books',
         facets: ['language'],
         filter: [['genres = Fiction']]
       ),
       IndexSearchQuery(
-        query: '',
         indexUid: "books",
         facets: ['genres'],
         filter: [['language = English', 'language = French']]
