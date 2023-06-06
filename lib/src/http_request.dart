@@ -65,7 +65,7 @@ class HttpRequest {
         queryParameters: queryParameters,
         data: data,
       );
-    } on DioError catch (e) {
+    } on DioException catch (e) {
       return _throwException(e);
     }
   }
@@ -86,7 +86,7 @@ class HttpRequest {
           contentType: contentType,
         ),
       );
-    } on DioError catch (e) {
+    } on DioException catch (e) {
       return _throwException(e);
     }
   }
@@ -107,7 +107,7 @@ class HttpRequest {
           contentType: contentType,
         ),
       );
-    } on DioError catch (e) {
+    } on DioException catch (e) {
       return _throwException(e);
     }
   }
@@ -128,7 +128,7 @@ class HttpRequest {
           contentType: contentType,
         ),
       );
-    } on DioError catch (e) {
+    } on DioException catch (e) {
       return _throwException(e);
     }
   }
@@ -145,14 +145,14 @@ class HttpRequest {
         data: data,
         queryParameters: queryParameters,
       );
-    } on DioError catch (e) {
+    } on DioException catch (e) {
       return _throwException(e);
     }
   }
 
-  Never _throwException(DioError e) {
+  Never _throwException(DioException e) {
     final message = e.message ?? '';
-    if (e.type == DioErrorType.badResponse) {
+    if (e.type == DioExceptionType.badResponse) {
       throw MeiliSearchApiException.fromHttpBody(message, e.response?.data);
     } else {
       throw CommunicationException(message);
