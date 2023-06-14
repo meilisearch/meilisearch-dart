@@ -29,6 +29,7 @@
 ## Table of Contents <!-- omit in toc -->
 
 - [📖 Documentation](#-documentation)
+- [⚡ Supercharge your Meilisearch experience](#-supercharge-your-meilisearch-experience)
 - [🔧 Installation](#-installation)
 - [🚀 Getting started](#-getting-started)
 - [🤖 Compatibility with Meilisearch](#-compatibility-with-meilisearch)
@@ -41,6 +42,10 @@ This readme contains all the documentation you need to start using this Meilisea
 
 For general information on how to use Meilisearch—such as our API reference, tutorials, guides, and in-depth articles—refer to our [main documentation website](https://www.meilisearch.com/docs/).
 
+
+## ⚡ Supercharge your Meilisearch experience
+
+Say goodbye to server deployment and manual updates with [Meilisearch Cloud](https://meilisearch.com/pricing). No credit card required.
 
 ## 🔧 Installation
 
