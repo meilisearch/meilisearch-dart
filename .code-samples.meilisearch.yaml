@@ -343,9 +343,8 @@ primary_field_guide_add_document_primary_key: |-
     }
   ], primaryKey: 'reference_number');
 getting_started_add_documents_md: |-
-  ```yaml
-  dependencies:
-    meilisearch: ^0.14.0
+  ```bash
+  dart pub add meilisearch
   ```
 
   ```dart
