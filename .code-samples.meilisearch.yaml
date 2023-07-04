@@ -343,9 +343,8 @@ primary_field_guide_add_document_primary_key: |-
     }
   ], primaryKey: 'reference_number');
 getting_started_add_documents_md: |-
-  ```yaml
-  dependencies:
-    meilisearch: ^0.3.1
+  ```bash
+  dart pub add meilisearch
   ```
 
   ```dart
@@ -353,7 +352,7 @@ getting_started_add_documents_md: |-
   import 'dart:io';
   import 'dart:convert';
 
-  var client = MeiliSearchClient('http://localhost:7700', 'masterKey');
+  var client = MeiliSearchClient('http://localhost:7700', 'aSampleMasterKey');
 
   final json = await File('movies.json').readAsString();
 
