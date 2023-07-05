@@ -134,8 +134,6 @@ delete_an_index_1: |-
   await client.index('movies').delete();
 get_one_document_1: |-
   await client.index('movies').getDocument(25684, fields: ['id', 'title', 'poster', 'release_date']);
-get_documents_1: |-
-  await client.index('movies').getDocuments(params: DocumentsQuery(limit: 2));
 add_or_replace_documents_1: |-
   await client.index('movies').addDocuments([
     {
