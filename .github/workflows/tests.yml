@@ -56,6 +56,16 @@ jobs:
       - name: Run linter
         run: dart analyze --fatal-infos && dart format . --set-exit-if-changed
 
+  yaml-lint:
+    name: Yaml linting check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Yaml lint check
+        uses: ibiqlik/action-yamllint@v3
+        with:
+          config_file: .yamllint.yml
+
   pana:
     runs-on: ubuntu-latest
     timeout-minutes: 10
@@ -73,4 +83,3 @@ jobs:
       - name: Analyze pana output
         run: |
           echo "$PANA_OUTPUT" | grep "Supports 6 of 6 possible platforms"
-
