@@ -1,6 +1,6 @@
 import '../annotations.dart';
 import '../filter_builder/_exports.dart';
-import '../matching_strategy_enum.dart';
+import '../results/matching_strategy_enum.dart';
 import 'search_query.dart';
 
 @RequiredMeiliServerVersion('1.1.0')
