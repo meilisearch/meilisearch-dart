@@ -1,11 +1,9 @@
 import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:meilisearch/meilisearch.dart';
-import 'result.dart';
-import 'tasks_results.dart';
+import 'annotations.dart';
 import 'package:collection/collection.dart';
 import 'http_request.dart';
-import 'stats.dart' show IndexStats;
 
 const _ndjsonContentType = 'application/x-ndjson';
 const _csvContentType = 'text/csv';
@@ -104,6 +102,15 @@ class MeiliSearchIndex {
     return Searcheable.createSearchResult(response.data!, indexUid: uid);
   }
 
+  @RequiredMeiliServerVersion('1.3.0')
+  Future<FacetSearchResult> facetSearch(FacetSearchQuery query) async {
+    final response = await http.postMethod<Map<String, Object?>>(
+      '/indexes/$uid/facet-search',
+      data: query.toSparseMap(),
+    );
+    return FacetSearchResult.fromMap(response.data!);
+  }
+  
   //
   // Document endpoints
   //
