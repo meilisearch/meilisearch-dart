@@ -84,6 +84,6 @@ class IndexSearchQuery extends SearchQuery {
         highlightPreTag: highlightPreTag ?? this.highlightPreTag,
         highlightPostTag: highlightPostTag ?? this.highlightPostTag,
         matchingStrategy: matchingStrategy ?? this.matchingStrategy,
-        attributesToSearchOn: attributesToSearchOn ?? this.attributesToSearchOn,        
+        attributesToSearchOn: attributesToSearchOn ?? this.attributesToSearchOn,
       );
 }
