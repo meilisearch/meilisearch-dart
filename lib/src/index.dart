@@ -110,7 +110,7 @@ class MeiliSearchIndex {
     );
     return FacetSearchResult.fromMap(response.data!);
   }
-  
+
   //
   // Document endpoints
   //
