@@ -35,6 +35,7 @@ void main() {
           ),
         );
         expect(queryRes.results.first.uid, task.uid);
+        expect(queryRes.total, isPositive);
       }
     });
     test('cancels given an input', () async {

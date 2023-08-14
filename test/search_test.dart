@@ -391,6 +391,38 @@ void main() {
           },
         });
       });
+      group('attributesToSearchOn', () {
+        setUp(() async {
+          await index.updateSearchableAttributes(
+            ['title', 'info.comment'],
+          ).waitFor(client: client);
+        });
+
+        test('empty result', () async {
+          var response = await index.search(
+            'An awesome',
+            SearchQuery(attributesToSearchOn: ['title']),
+          );
+
+          expect(response.hits, isEmpty);
+        });
+
+        test('non-empty result', () async {
+          var response = await index.search(
+            'An awesome',
+            SearchQuery(attributesToSearchOn: ['info.comment']),
+          );
+
+          expect(response.hits[0], {
+            "id": 5,
+            "title": 'The Hobbit',
+            "info": {
+              "comment": 'An awesome book',
+              "reviewNb": 900,
+            },
+          });
+        });
+      });
 
       test('searches on nested content with content with sort', () async {
         await index
