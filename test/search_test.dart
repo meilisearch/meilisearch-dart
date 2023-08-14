@@ -223,6 +223,37 @@ void main() {
           expect(result.facetStats?['year']?.max, 2028);
         });
 
+        group('facet search', () {
+          setUp(() async {
+            await index.updateFilterableAttributes(
+              ['tag', 'book_id'],
+            ).waitFor(client: client);
+          });
+
+          test('basic', () async {
+            final facetSearchRes = await index.facetSearch(
+              FacetSearchQuery(
+                facetName: 'tag',
+                facetQuery: 't',
+              ),
+            );
+
+            expect(facetSearchRes.facetHits, hasLength(1));
+            expect(facetSearchRes.facetHits[0].count, 2);
+            expect(facetSearchRes.facetHits[0].value, "Tale");
+            expect(facetSearchRes.facetQuery, "t");
+          });
+
+          test('With additional search params', () async {
+            final facetSearchRes = await index.facetSearch(
+              FacetSearchQuery(facetName: 'tag', facetQuery: 't', q: 'hobbit'),
+            );
+
+            expect(facetSearchRes.facetHits, hasLength(0));
+            expect(facetSearchRes.facetQuery, "t");
+          });
+        });
+
         test('filter parameter with number', () async {
           await index.updateFilterableAttributes(
             ['tag', 'book_id'],

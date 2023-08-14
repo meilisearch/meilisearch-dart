@@ -2,7 +2,6 @@ import 'dart:convert';
 
 import 'package:collection/collection.dart';
 import 'package:meilisearch/meilisearch.dart';
-import 'package:meilisearch/src/result.dart';
 import 'package:test/test.dart';
 import 'utils/books_data.dart';
 import 'utils/wait_for.dart';

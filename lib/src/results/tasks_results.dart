@@ -1,10 +1,13 @@
-import 'package:meilisearch/src/task.dart';
+import 'task.dart';
+
+import '../annotations.dart';
 
 class TasksResults {
   final List<Task> results;
   final int? next;
   final int? limit;
   final int? from;
+  @RequiredMeiliServerVersion('1.3.0')
   final int? total;
   const TasksResults({
     this.results = const [],

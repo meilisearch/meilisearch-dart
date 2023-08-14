@@ -9,3 +9,5 @@ export 'index_search_query.dart';
 export 'search_query.dart';
 export 'multi_search_query.dart';
 export 'delete_documents_query.dart';
+export 'facet_search_query.dart';
+export 'swap_index.dart';
