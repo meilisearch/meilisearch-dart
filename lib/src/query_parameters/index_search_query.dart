@@ -28,6 +28,7 @@ class IndexSearchQuery extends SearchQuery {
     super.highlightPreTag,
     super.highlightPostTag,
     super.matchingStrategy,
+    super.attributesToSearchOn,
   });
 
   @override
@@ -60,6 +61,7 @@ class IndexSearchQuery extends SearchQuery {
     String? highlightPreTag,
     String? highlightPostTag,
     MatchingStrategy? matchingStrategy,
+    List<String>? attributesToSearchOn,
   }) =>
       IndexSearchQuery(
         query: query ?? this.query,
@@ -82,5 +84,6 @@ class IndexSearchQuery extends SearchQuery {
         highlightPreTag: highlightPreTag ?? this.highlightPreTag,
         highlightPostTag: highlightPostTag ?? this.highlightPostTag,
         matchingStrategy: matchingStrategy ?? this.matchingStrategy,
+        attributesToSearchOn: attributesToSearchOn ?? this.attributesToSearchOn,
       );
 }
