@@ -1,4 +1,4 @@
-import 'package:meilisearch/src/query_parameters/queryable.dart';
+import 'queryable.dart';
 
 class CancelTasksQuery extends Queryable {
   final DateTime? beforeEnqueuedAt;

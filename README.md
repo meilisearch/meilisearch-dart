@@ -106,7 +106,7 @@ void main() async {
 }
 ```
 
-With the `uid`, you can check the status (`enqueued`, `processing`, `succeeded` or `failed`) of your documents addition using the [task](https://www.meilisearch.com/docs/learn/advanced/asynchronous_operations#task-status).
+With the `uid`, you can check the status (`enqueued`, `canceled`, `processing`, `succeeded` or `failed`) of your documents addition using the [task](https://www.meilisearch.com/docs/learn/advanced/asynchronous_operations#task-status).
 
 #### Basic Search <!-- omit in toc -->
 
