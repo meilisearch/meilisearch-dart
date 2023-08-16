@@ -24,7 +24,6 @@ jobs:
       matrix:
         version: ['3.0.0']
     name: integration-tests (dart ${{ matrix.version }})
-
     services:
       meilisearch:
         image: getmeili/meilisearch:latest
@@ -40,9 +39,19 @@ jobs:
         with:
           sdk: ${{ matrix.version }}
       - name: Install dependencies
-        run: dart pub get
+        run: |
+          dart pub get
+          dart pub global activate coverage
       - name: Run integration tests
-        run: dart test --concurrency=4
+        run: dart test --concurrency=4 --reporter=github --coverage=./coverage/reports
+      - name: Generate coverage reports
+        run: dart pub global run coverage:format_coverage --report-on=./lib --lcov --in=./coverage/reports --out=coverage/lcov.info
+      - name: Report to Codecov
+        uses: codecov/codecov-action@v3
+        with:
+          file: coverage/lcov.info
+          fail_ci_if_error: true
+
 
   linter:
     name: linter-check
