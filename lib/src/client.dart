@@ -1,18 +1,8 @@
+import 'package:meilisearch/meilisearch.dart';
 import 'package:dio/dio.dart';
 import 'annotations.dart';
-import 'query_parameters/_exports.dart';
-import 'result.dart';
-import 'swap_index.dart';
-import 'tasks_results.dart';
-import 'task.dart';
 import 'tenant_token.dart';
-
-import 'multi_search_result.dart';
 import 'http_request.dart';
-import 'index.dart';
-
-import 'key.dart';
-import 'stats.dart' show AllStats;
 
 class MeiliSearchClient {
   MeiliSearchClient(

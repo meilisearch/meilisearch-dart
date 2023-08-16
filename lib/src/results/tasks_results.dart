@@ -1,16 +1,20 @@
-import 'package:meilisearch/src/task.dart';
+import 'task.dart';
+
+import '../annotations.dart';
 
 class TasksResults {
   final List<Task> results;
   final int? next;
   final int? limit;
   final int? from;
-
+  @RequiredMeiliServerVersion('1.3.0')
+  final int? total;
   const TasksResults({
     this.results = const [],
     this.limit,
     this.from,
     this.next,
+    this.total,
   });
 
   factory TasksResults.fromMap(Map<String, Object?> map) => TasksResults(
@@ -21,5 +25,6 @@ class TasksResults {
         next: map['next'] as int?,
         from: map['from'] as int?,
         limit: map['limit'] as int?,
+        total: map['total'] as int?,
       );
 }

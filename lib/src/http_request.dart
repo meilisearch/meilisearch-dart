@@ -1,5 +1,5 @@
 import 'package:dio/dio.dart';
-import 'package:meilisearch/src/version.dart';
+import 'version.dart';
 
 import 'exception.dart';
 

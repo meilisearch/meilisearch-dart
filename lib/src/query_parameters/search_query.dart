@@ -19,6 +19,7 @@ class SearchQuery extends Queryable {
   final String? highlightPreTag;
   final String? highlightPostTag;
   final MatchingStrategy? matchingStrategy;
+  final List<String>? attributesToSearchOn;
 
   const SearchQuery({
     this.offset,
@@ -38,6 +39,7 @@ class SearchQuery extends Queryable {
     this.highlightPreTag,
     this.highlightPostTag,
     this.matchingStrategy,
+    this.attributesToSearchOn,
   });
 
   @override
@@ -59,6 +61,7 @@ class SearchQuery extends Queryable {
       'highlightPreTag': highlightPreTag,
       'highlightPostTag': highlightPostTag,
       'matchingStrategy': matchingStrategy?.name,
+      'attributesToSearchOn': attributesToSearchOn,
     };
   }
 
@@ -80,6 +83,7 @@ class SearchQuery extends Queryable {
     String? highlightPreTag,
     String? highlightPostTag,
     MatchingStrategy? matchingStrategy,
+    List<String>? attributesToSearchOn,
   }) =>
       SearchQuery(
         offset: offset ?? this.offset,
@@ -100,5 +104,6 @@ class SearchQuery extends Queryable {
         highlightPreTag: highlightPreTag ?? this.highlightPreTag,
         highlightPostTag: highlightPostTag ?? this.highlightPostTag,
         matchingStrategy: matchingStrategy ?? this.matchingStrategy,
+        attributesToSearchOn: attributesToSearchOn ?? this.attributesToSearchOn,
       );
 }
