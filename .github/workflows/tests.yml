@@ -41,7 +41,7 @@ jobs:
       - name: Install dependencies
         run: |
           dart pub get
-          dart pub global activate coverage          
+          dart pub global activate coverage
       - name: Run integration tests
         run: dart test --concurrency=4 --reporter=github --coverage=./coverage/reports
       - name: Generate coverage reports
@@ -51,7 +51,7 @@ jobs:
         with:
           file: coverage/lcov.info
           fail_ci_if_error: true
-        
+
 
   linter:
     name: linter-check
