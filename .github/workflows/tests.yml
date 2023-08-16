@@ -18,14 +18,12 @@ jobs:
     # Will still run for each push to bump-meilisearch-v*
     if: github.event_name != 'pull_request' || !startsWith(github.base_ref, 'bump-meilisearch-v')
     timeout-minutes: 10
-    runs-on: ${{ matrix.os }}
+    runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
-        os: [ ubuntu-latest, macos-latest, windows-latest ]
         version: ['3.0.0']
-    name: integration-tests (dart ${{ matrix.version }}) (${{ matrix.os }})
-
+    name: integration-tests (dart ${{ matrix.version }})
     services:
       meilisearch:
         image: getmeili/meilisearch:latest
