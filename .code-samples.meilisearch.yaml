@@ -41,21 +41,21 @@ faceted_search_2: |-
       IndexSearchQuery(
         indexUid: 'books',
         facets: ['language', 'genres', 'author', 'format'],
-        filter: [['language = English', 'language = French'], ['genres = Fiction']]
+        filter: '(language = English AND language = French) OR genres = Fiction'
       ),
       IndexSearchQuery(
         indexUid: 'books',
         facets: ['language'],
-        filter: [['genres = Fiction']]
+        filter: 'genres = Fiction'
       ),
       IndexSearchQuery(
         indexUid: "books",
         facets: ['genres'],
-        filter: [['language = English', 'language = French']]
+        filter: 'language = English OR language = French'
       ),
     ]));
 faceted_search_update_settings_1: |-
-  await client.index('books').updateFilterableAttributes(['genres', 'rating', 'language']);
+  await client.index('movie_ratings').updateFilterableAttributes(['genres', 'rating', 'language']);
 search_parameter_guide_facet_stats_1: |-
   await client.index('movie_ratings').search('Batman', SearchQuery(facets: ['genres', 'rating']));
 faceted_search_1: |-
@@ -281,18 +281,18 @@ field_properties_guide_searchable_1: |-
 field_properties_guide_displayed_1: |-
   await client.index('movies').updateDisplayedAttributes(['title', 'overview', 'genres', 'release_date']);
 filtering_guide_1: |-
-  await await client
-      .index('movies')
+  await client
+      .index('movie_ratings')
       .search('Avengers', SearchQuery(filter: 'release_date > 795484800'));
 filtering_guide_2: |-
-  await client.index('movies')
+  await client.index('movie_ratings')
     .search('Batman',
       SearchQuery(filter: 'release_date > 795484800 AND (director = "Tim Burton" OR director = "Christopher Nolan")'
     )
   );
 filtering_guide_3: |-
-  await client.index('movies').search('Planet of the Apes',
-      SearchQuery(filter: 'rating >= 3 AND (NOT director = "Tim Burton")'));
+  await client.index('movie_ratings').search('Planet of the Apes',
+      SearchQuery(filter: 'release_date > 1577884550 AND (NOT director = "Tim Burton")'));
 search_parameter_guide_query_1: |-
   await client.index('movies').search('shifu');
 search_parameter_guide_offset_1: |-
@@ -421,11 +421,6 @@ filtering_update_settings_1: |-
     'director',
     'genres',
   ]);
-faceted_search_filter_1: |-
-  await client.index('movies').search('thriller', SearchQuery(filter: [
-    ['genres = Horror', 'genres = Mystery'],
-    'director = "Jordan Peele"'
-  ]));
 faceted_search_facets_1: |-
   await client.index('movies').search('Batman', SearchQuery(facets: ['genres']));
 faceted_search_walkthrough_filter_1: |-
@@ -562,3 +557,7 @@ search_parameter_guide_highlight_tag_1: |-
           attributesToHighlight: ['overview'],
           highlightPreTag: '<span class="highlight">',
           highlightPostTag: '</span>'));
+geosearch_guide_filter_usage_3: |-
+  await client.index('restaurants')
+    .search('', SearchQuery(filter: '_geoBoundingBox([45.494181, 9.214024], [45.449484, 9.179175])')),
+  })
