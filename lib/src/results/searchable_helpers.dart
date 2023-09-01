@@ -37,8 +37,6 @@ Map<String, Map<String, int>>? _readFacetDistribution(
   );
 }
 
-
-
 typedef MeilisearchDocumentMapper<TSrc, TOther> = TOther Function(TSrc src);
 
 extension SearchableMapExt on Future<Searcheable<Map<String, dynamic>>> {

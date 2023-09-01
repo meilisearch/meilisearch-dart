@@ -34,7 +34,7 @@ class SearchResult<T> extends Searcheable<T> {
       vector: map['vector'] as List?,
       limit: map['limit'] as int?,
       offset: map['offset'] as int?,
-      estimatedTotalHits: map['estimatedTotalHits'] as int?,      
+      estimatedTotalHits: map['estimatedTotalHits'] as int?,
       hits: _readHits(map),
       query: _readQuery(map),
       processingTimeMs: _readProcessingTimeMs(map),
