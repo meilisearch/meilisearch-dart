@@ -5,6 +5,12 @@
 ---
 search_parameter_guide_show_ranking_score_1: |-
   await client.index('movies').search('dragon', SearchQuery(showRankingScore: true));
+facet_search_2: |-
+  await client.index('books').updateFaceting(Faceting(sortFacetValuesBy: {'genres': 'count'}));
+getting_started_faceting: |-
+  await client.index('books').updateFaceting(Faceting(maxValuesPerFacet: 2, sortFacetValuesBy: {'*': 'count'}));
+update_faceting_settings_1: |-
+  await client.index('books').updateFaceting(Faceting(maxValuesPerFacet: 2, sortFacetValuesBy: {'*': 'alpha', 'genres': 'count'}));
 search_parameter_guide_attributes_to_search_on_1: |-
   await client.index('movies').search('adventure', SearchQuery(attributesToSearchOn: ['overview']));
 get_documents_post_1: |-
@@ -90,7 +96,6 @@ search_parameter_guide_hitsperpage_1: |-
   await client.index('movies').search('', SearchQuery(hitsPerPage: 15)) as PaginatedSearchResult;
 search_parameter_guide_page_1: |-
   await client.index('movies').search('', SearchQuery(page: 2)) as PaginatedSearchResult;
-getting_started_faceting: |-
 getting_started_pagination: |-
 synonyms_guide_1: |-
   await client.index('movies').updateSynonyms({
@@ -124,7 +129,7 @@ get_pagination_settings_1: |-
 update_pagination_settings_1: |-
 reset_pagination_settings_1: |-
 get_faceting_settings_1: |-
-update_faceting_settings_1: |-
+
 reset_faceting_settings_1: |-
 get_one_index_1: |-
   await client.getIndex('movies');

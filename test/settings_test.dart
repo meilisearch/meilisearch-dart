@@ -45,6 +45,10 @@ void main() {
               ),
               faceting: Faceting(
                 maxValuesPerFacet: 200,
+                sortFacetValuesBy: {
+                  '*': FacetingSortTypes.count,
+                  'genres': FacetingSortTypes.alpha,
+                },
               ),
             ),
           )
@@ -67,6 +71,15 @@ void main() {
       expect(settings.typoTolerance?.disableOnWords, contains('prince'));
       expect(settings.typoTolerance?.minWordSizeForTypos?.oneTypo, equals(3));
       expect(settings.faceting?.maxValuesPerFacet, equals(200));
+      expect(
+        settings.faceting?.sortFacetValuesBy,
+        allOf(
+          isNotNull,
+          isNotEmpty,
+          containsPair('*', FacetingSortTypes.count),
+          containsPair('genres', FacetingSortTypes.alpha),
+        ),
+      );
     });
 
     test('Reseting the settings', () async {
@@ -314,9 +327,20 @@ void main() {
     });
 
     group('Faceting', () {
+      const defaultFaceting = Faceting(
+        maxValuesPerFacet: 100,
+        sortFacetValuesBy: {
+          '*': FacetingSortTypes.alpha,
+        },
+      );
+
       Future<Faceting> doUpdate() async {
         final toUpdate = Faceting(
           maxValuesPerFacet: 200,
+          sortFacetValuesBy: {
+            '*': FacetingSortTypes.count,
+            'genres': FacetingSortTypes.alpha,
+          },
         );
         var response =
             await index.updateFaceting(toUpdate).waitFor(client: client);
@@ -332,7 +356,11 @@ void main() {
 
         expect(
           initial.toMap(),
-          equals(initialFromSettings?.toMap()),
+          initialFromSettings?.toMap(),
+        );
+        expect(
+          initial.toMap(),
+          defaultFaceting.toMap(),
         );
       });
 
@@ -363,11 +391,11 @@ void main() {
             await index.getSettings().then((value) => value.faceting);
         expect(
           afterReset.toMap(),
-          equals(Faceting().toMap()),
+          equals(defaultFaceting.toMap()),
         );
         expect(
           afterResetFromSettings?.toMap(),
-          equals(Faceting().toMap()),
+          equals(defaultFaceting.toMap()),
         );
       });
     });
