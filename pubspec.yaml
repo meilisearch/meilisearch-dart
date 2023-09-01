@@ -12,11 +12,15 @@ dependencies:
   dio: ^5.0.0
   crypto: ^3.0.1
   collection: ^1.17.0
+  json_annotation: ^4.8.1
 
 dev_dependencies:
   test: ^1.0.0
   dart_jsonwebtoken: ^2.3.2
   lints: ^2.1.0
+  json_serializable: ^6.7.1
+  meta: ^1.9.1
+  build_runner: ^2.4.6
 
 screenshots:
   - description: The Meilisearch logo.
