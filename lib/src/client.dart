@@ -1,6 +1,5 @@
 import 'package:meilisearch/meilisearch.dart';
 import 'package:dio/dio.dart';
-import 'package:meta/meta.dart';
 import 'annotations.dart';
 import 'tenant_token.dart';
 import 'http_request.dart';
@@ -124,37 +123,6 @@ class MeiliSearchClient {
         .postMethod<Map<String, Object?>>('/swap-indexes', data: query);
 
     return Task.fromMap(response.data!);
-  }
-
-  /// Get the status of all experimental features that can be toggled at runtime
-  @RequiredMeiliServerVersion('1.3.0')
-  @visibleForTesting
-  Future<ExperimentalFeatures> getExperimentalFeatures() async {
-    final response = await http.getMethod<Map<String, Object?>>(
-      '/experimental-features',
-    );
-    return ExperimentalFeatures.fromJson(response.data!);
-  }
-
-  /// Set the status of experimental features that can be toggled at runtime
-  @RequiredMeiliServerVersion('1.3.0')
-  @visibleForTesting
-  Future<ExperimentalFeatures> updateExperimentalFeatures(
-    UpdateExperimentalFeatures input,
-  ) async {
-    final inputJson = input.toJson();
-    if (inputJson.isEmpty) {
-      throw ArgumentError.value(
-        input,
-        'input',
-        'input must contain at least one entry',
-      );
-    }
-    final response = await http.patchMethod<Map<String, Object?>>(
-      '/experimental-features',
-      data: input.toJson(),
-    );
-    return ExperimentalFeatures.fromJson(response.data!);
   }
 
   /// Return health of the Meilisearch server.

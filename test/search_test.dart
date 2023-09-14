@@ -1,4 +1,5 @@
 import 'package:meilisearch/meilisearch.dart';
+import 'package:meilisearch/src/results/experimental_features.dart';
 import 'package:test/test.dart';
 
 import 'utils/books.dart';
@@ -454,7 +455,7 @@ void main() {
     late MeiliSearchIndex index;
     late ExperimentalFeatures features;
     setUp(() async {
-      features = await client.updateExperimentalFeatures(
+      features = await client.http.updateExperimentalFeatures(
         UpdateExperimentalFeatures(
           scoreDetails: true,
           vectorStore: true,
