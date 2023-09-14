@@ -1,5 +1,6 @@
 import 'package:meilisearch/meilisearch.dart';
 import 'package:dio/dio.dart';
+import 'package:meta/meta.dart';
 import 'annotations.dart';
 import 'tenant_token.dart';
 import 'http_request.dart';
@@ -127,6 +128,7 @@ class MeiliSearchClient {
 
   /// Get the status of all experimental features that can be toggled at runtime
   @RequiredMeiliServerVersion('1.3.0')
+  @visibleForTesting
   Future<ExperimentalFeatures> getExperimentalFeatures() async {
     final response = await http.getMethod<Map<String, Object?>>(
       '/experimental-features',
@@ -136,6 +138,7 @@ class MeiliSearchClient {
 
   /// Set the status of experimental features that can be toggled at runtime
   @RequiredMeiliServerVersion('1.3.0')
+  @visibleForTesting
   Future<ExperimentalFeatures> updateExperimentalFeatures(
     UpdateExperimentalFeatures input,
   ) async {

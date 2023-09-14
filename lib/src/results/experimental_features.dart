@@ -1,7 +1,9 @@
 import 'package:json_annotation/json_annotation.dart';
+import 'package:meta/meta.dart';
 
 part 'experimental_features.g.dart';
 
+@visibleForTesting
 @JsonSerializable(
   createFactory: true,
   createToJson: false,
