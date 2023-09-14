@@ -56,6 +56,29 @@ final books = [
   {kbookId: 9999, ktitle: 'The Hobbit', ktag: null},
 ];
 
+final vectorBooks = [
+  {
+    "id": 0,
+    "title": "Across The Universe",
+    "_vectors": [0, 0.8, -0.2],
+  },
+  {
+    "id": 1,
+    "title": "All Things Must Pass",
+    "_vectors": [1, -0.2, 0],
+  },
+  {
+    "id": 2,
+    "title": "And Your Bird Can Sing",
+    "_vectors": [-0.2, 4, 6],
+  },
+  {
+    "id": 3,
+    "title": "The Matrix",
+    "_vectors": [5, -0.5, 0.3],
+  },
+];
+
 enum CSVHeaderTypes {
   string,
   boolean,

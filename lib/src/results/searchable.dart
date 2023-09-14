@@ -4,7 +4,14 @@ part 'search_result.dart';
 part 'paginated_search_result.dart';
 part 'searchable_helpers.dart';
 
+/// Represents a search result.
+///
+/// Can be one of:
+/// - [SearchResult] if offset, limit are used.
+/// - [PaginatedSearchResult] if page, hitsPerPage are used.
 abstract class Searcheable<T> {
+  final Map<String, dynamic> src;
+
   final String indexUid;
 
   /// Query originating the response
@@ -19,20 +26,19 @@ abstract class Searcheable<T> {
   /// Distribution of the given facets
   final Map<String, FacetStat>? facetStats;
 
-  /// Contains the location of each occurrence of queried terms across all fields
-  final Map<String, List<MatchPosition>>? matchesPosition;
-
   /// Processing time of the query
   final int? processingTimeMs;
+  final List<dynamic /*double | List<double>*/ >? vector;
 
   const Searcheable({
+    required this.src,
     required this.indexUid,
-    this.query,
-    this.hits = const [],
-    this.facetDistribution,
-    this.matchesPosition,
-    this.processingTimeMs,
-    this.facetStats,
+    required this.query,
+    required this.hits,
+    required this.facetDistribution,
+    required this.processingTimeMs,
+    required this.facetStats,
+    required this.vector,
   });
 
   static Searcheable<Map<String, dynamic>> createSearchResult(
@@ -59,4 +65,20 @@ abstract class Searcheable<T> {
     assert(src is SearchResult<T>);
     return src as SearchResult<T>;
   }
+}
+
+extension MapSearcheable on Searcheable<Map<String, dynamic>> {
+  Searcheable<MeiliDocumentContainer<Map<String, dynamic>>> mapToContainer() =>
+      map(MeiliDocumentContainer.fromJson);
+}
+
+extension MapSearcheableSearchResult on SearchResult<Map<String, dynamic>> {
+  SearchResult<MeiliDocumentContainer<Map<String, dynamic>>> mapToContainer() =>
+      map(MeiliDocumentContainer.fromJson);
+}
+
+extension MapSearcheablePaginatedSearchResult
+    on PaginatedSearchResult<Map<String, dynamic>> {
+  PaginatedSearchResult<MeiliDocumentContainer<Map<String, dynamic>>>
+      mapToContainer() => map(MeiliDocumentContainer.fromJson);
 }

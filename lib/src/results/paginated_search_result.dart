@@ -2,26 +2,19 @@ part of 'searchable.dart';
 
 class PaginatedSearchResult<T> extends Searcheable<T> {
   const PaginatedSearchResult({
-    List<T> hits = const [],
-    Map<String, Map<String, int>>? facetDistribution,
-    Map<String, List<MatchPosition>>? matchesPosition,
-    int? processingTimeMs,
-    String? query,
-    Map<String, FacetStat>? facetStats,
-    required String indexUid,
-    this.hitsPerPage,
-    this.page,
-    this.totalHits,
-    this.totalPages,
-  }) : super(
-          facetDistribution: facetDistribution,
-          hits: hits,
-          matchesPosition: matchesPosition,
-          processingTimeMs: processingTimeMs,
-          query: query,
-          indexUid: indexUid,
-          facetStats: facetStats,
-        );
+    required super.src,
+    required super.indexUid,
+    required super.hits,
+    required super.facetDistribution,
+    required super.processingTimeMs,
+    required super.query,
+    required super.facetStats,
+    required super.vector,
+    required this.hitsPerPage,
+    required this.page,
+    required this.totalHits,
+    required this.totalPages,
+  });
 
   /// Number of documents skipped
   final int? hitsPerPage;
@@ -40,6 +33,7 @@ class PaginatedSearchResult<T> extends Searcheable<T> {
     String? indexUid,
   }) {
     return PaginatedSearchResult(
+      src: map,
       page: map['page'] as int?,
       hitsPerPage: map['hitsPerPage'] as int?,
       totalHits: map['totalHits'] as int?,
@@ -48,9 +42,9 @@ class PaginatedSearchResult<T> extends Searcheable<T> {
       query: _readQuery(map),
       processingTimeMs: _readProcessingTimeMs(map),
       facetDistribution: _readFacetDistribution(map),
-      matchesPosition: _readMatchesPosition(map),
       facetStats: _readFacetStats(map),
       indexUid: indexUid ?? _readIndexUid(map),
+      vector: map['vector'] as List?,
     );
   }
 
@@ -59,11 +53,13 @@ class PaginatedSearchResult<T> extends Searcheable<T> {
     MeilisearchDocumentMapper<T, TOther> mapper,
   ) {
     return PaginatedSearchResult<TOther>(
+      facetStats: facetStats,
+      src: src,
       indexUid: indexUid,
+      vector: vector,
       facetDistribution: facetDistribution,
       hits: hits.map(mapper).toList(),
       hitsPerPage: hitsPerPage,
-      matchesPosition: matchesPosition,
       page: page,
       processingTimeMs: processingTimeMs,
       query: query,

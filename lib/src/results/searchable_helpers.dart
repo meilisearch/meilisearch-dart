@@ -37,24 +37,23 @@ Map<String, Map<String, int>>? _readFacetDistribution(
   );
 }
 
-Map<String, List<MatchPosition>>? _readMatchesPosition(
-  Map<String, Object?> map,
-) {
-  final src = map['_matchesPosition'];
+typedef MeilisearchDocumentMapper<TSrc, TOther> = TOther Function(TSrc src);
 
-  if (src == null) return null;
-
-  return (src as Map<String, Object?>).map(
-    (key, value) => MapEntry(
-      key,
-      (value as List<Object?>)
-          .map((e) => MatchPosition.fromMap(e as Map<String, Object?>))
-          .toList(),
-    ),
-  );
+extension SearchableMapExt on Future<Searcheable<Map<String, dynamic>>> {
+  Future<Searcheable<MeiliDocumentContainer<Map<String, dynamic>>>>
+      mapToContainer() => then((value) => value.mapToContainer());
 }
 
-typedef MeilisearchDocumentMapper<TSrc, TOther> = TOther Function(TSrc src);
+extension SearchResultMapExt on Future<SearchResult<Map<String, dynamic>>> {
+  Future<SearchResult<MeiliDocumentContainer<Map<String, dynamic>>>>
+      mapToContainer() => then((value) => value.mapToContainer());
+}
+
+extension PaginatedSearchResultMapExt
+    on Future<PaginatedSearchResult<Map<String, dynamic>>> {
+  Future<PaginatedSearchResult<MeiliDocumentContainer<Map<String, dynamic>>>>
+      mapToContainer() => then((value) => value.mapToContainer());
+}
 
 extension SearchableExt<T> on Future<Searcheable<T>> {
   Future<PaginatedSearchResult<T>> asPaginatedResult() =>

@@ -29,6 +29,9 @@ class IndexSearchQuery extends SearchQuery {
     super.highlightPostTag,
     super.matchingStrategy,
     super.attributesToSearchOn,
+    super.showRankingScore,
+    super.vector,
+    super.showRankingScoreDetails,
   });
 
   @override
@@ -62,6 +65,9 @@ class IndexSearchQuery extends SearchQuery {
     String? highlightPostTag,
     MatchingStrategy? matchingStrategy,
     List<String>? attributesToSearchOn,
+    bool? showRankingScore,
+    List<dynamic /* double | List<double> */ >? vector,
+    bool? showRankingScoreDetails,
   }) =>
       IndexSearchQuery(
         query: query ?? this.query,
@@ -85,5 +91,9 @@ class IndexSearchQuery extends SearchQuery {
         highlightPostTag: highlightPostTag ?? this.highlightPostTag,
         matchingStrategy: matchingStrategy ?? this.matchingStrategy,
         attributesToSearchOn: attributesToSearchOn ?? this.attributesToSearchOn,
+        showRankingScore: showRankingScore ?? this.showRankingScore,
+        vector: vector ?? this.vector,
+        showRankingScoreDetails:
+            showRankingScoreDetails ?? this.showRankingScoreDetails,
       );
 }

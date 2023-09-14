@@ -40,7 +40,7 @@ First of all, thank you for contributing to Meilisearch! The goal of this docume
 
 Install the official [Dart SDK](https://dart.dev/get-dart) or the [Flutter SDK](https://flutter.dev/docs/get-started/install) (which includes Dart SDK) using guides on the official website.
 
-Both of them include `pub`. But if you want to run the linter you need to install the Flutter SDK.
+Both of them include `pub`.
 
 ### Setup <!-- omit in TOC -->
 
@@ -54,13 +54,13 @@ docker-compose run --rm package bash -c "dart pub get && dart run test --concurr
 To install dependencies:
 
 ```bash
-pub get
+dart pub get
 ```
 
-Or if you are using Flutter SDK:
+This package relies on [build_runner](https://pub.dev/packages/build_runner) to generate serialization information for some models, to re-generate files after making any changes, run:
 
 ```bash
-flutter pub get
+dart run build_runner build
 ```
 
 ### Tests and Linter <!-- omit in TOC -->
@@ -71,9 +71,9 @@ Each PR should pass the tests and the linter to be accepted.
 # Tests
 curl -L https://install.meilisearch.com | sh # download Meilisearch
 ./meilisearch --master-key=masterKey --no-analytics # run Meilisearch
-pub run test --concurrency=4
+dart test
 # Linter
-flutter analyze
+dart analyze
 ```
 
 ## Git Guidelines
