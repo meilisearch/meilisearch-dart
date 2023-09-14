@@ -1,5 +1,8 @@
 [comment]: <> (All notable changes to this project will be documented in this file.)
 
+# 0.14.1
+### Breaking Changes:
+
 # 0.14.0
 ### Breaking Changes:
 - Moved `indexUid`, `query` from `SearchQuery` to the new `IndexSearchQuery`.
