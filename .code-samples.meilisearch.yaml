@@ -7,10 +7,6 @@ search_parameter_guide_show_ranking_score_1: |-
   await client.index('movies').search('dragon', SearchQuery(showRankingScore: true));
 facet_search_2: |-
   await client.index('books').updateFaceting(Faceting(sortFacetValuesBy: {'genres': 'count'}));
-getting_started_faceting: |-
-  await client.index('books').updateFaceting(Faceting(maxValuesPerFacet: 2, sortFacetValuesBy: {'*': 'count'}));
-update_faceting_settings_1: |-
-  await client.index('books').updateFaceting(Faceting(maxValuesPerFacet: 2, sortFacetValuesBy: {'*': 'alpha', 'genres': 'count'}));
 search_parameter_guide_attributes_to_search_on_1: |-
   await client.index('movies').search('adventure', SearchQuery(attributesToSearchOn: ['overview']));
 get_documents_post_1: |-
@@ -96,7 +92,6 @@ search_parameter_guide_hitsperpage_1: |-
   await client.index('movies').search('', SearchQuery(hitsPerPage: 15)) as PaginatedSearchResult;
 search_parameter_guide_page_1: |-
   await client.index('movies').search('', SearchQuery(page: 2)) as PaginatedSearchResult;
-getting_started_pagination: |-
 synonyms_guide_1: |-
   await client.index('movies').updateSynonyms({
     'great': ['fantastic'],
@@ -119,18 +114,22 @@ date_guide_sortable_attributes_1: |-
   await client.index('games').updateSortableAttributes(['release_timestamp']);
 date_guide_sort_1: |-
   await client.index('games').search('', SearchQuery(sort: ['release_timestamp:desc']));
-getting_started_typo_tolerance: |-
-
 get_all_tasks_paginating_1: |-
   await client.getTasks(params: TasksQuery(limit: 2, from: 10));
 get_all_tasks_paginating_2: |-
   await client.getTasks(params: TasksQuery(limit: 2, from: 8));
 get_pagination_settings_1: |-
+  await client.index('movies').getPagination();
 update_pagination_settings_1: |-
+  await client.index('books').updatePagination(Pagination(maxTotalHits: 100));
 reset_pagination_settings_1: |-
+  await client.index('movies').resetPagination();
 get_faceting_settings_1: |-
-
+  await client.index('movies').getFaceting();
+update_faceting_settings_1: |-
+  await client.index('books').updateFaceting(Faceting(maxValuesPerFacet: 2, sortFacetValuesBy: {'*': 'alpha', 'genres': 'count'}));
 reset_faceting_settings_1: |-
+  await client.index('movies').resetFaceting();
 get_one_index_1: |-
   await client.getIndex('movies');
 list_all_indexes_1: |-
@@ -423,6 +422,15 @@ getting_started_sorting: |-
   await client.index('meteorites').search('', SearchQuery(sort: ['mass:asc'], filter: 'mass < 200'));
 getting_started_filtering: |-
   await client.index('meteorites').search('', SearchQuery(filter: 'mass < 200'));
+getting_started_faceting: |-
+  await client.index('books').updateFaceting(Faceting(maxValuesPerFacet: 2, sortFacetValuesBy: {'*': 'count'}));
+getting_started_typo_tolerance: |-
+  final toUpdate = TypoTolerance(
+    minWordSizeForTypos: MinWordSizeForTypos(oneTypo: 4),
+  );
+  await client.index('movies').updateTypoTolerance(toUpdate);
+getting_started_pagination: |-
+  await client.index('books').updatePagination(Pagination(maxTotalHits: 500));
 filtering_update_settings_1: |-
   await client.index('movies').updateFilterableAttributes([
     'director',
