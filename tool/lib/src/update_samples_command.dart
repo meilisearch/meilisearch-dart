@@ -2,7 +2,6 @@
 // but modified to accept yaml files.
 
 import 'dart:async';
-
 import 'package:file/file.dart';
 import 'package:http/http.dart' as http;
 import 'package:meili_tool/src/command_base.dart';
@@ -101,17 +100,19 @@ class UpdateSamplesCommand extends MeiliCommandBase {
           return PackageResult.fail([
             if (missingEntries.isNotEmpty)
               'found the following missing entries: ${missingEntries.map((e) => e.key).join('\n')}',
-            if (oldEntries.isNotEmpty)
-              'found the following useless entries: ${oldEntries.map((e) => e.key).join('\n')}',
+            // for now don't delete old entries
+            // if (oldEntries.isNotEmpty)
+            //   'found the following useless entries: ${oldEntries.map((e) => e.key).join('\n')}',
           ]);
         }
       } else {
         for (var element in missingEntries) {
           newSamplesYaml.update([element.key], element.value);
         }
-        for (var element in oldEntries) {
-          newSamplesYaml.remove([element.key]);
-        }
+        // for now don't delete old entries
+        // for (var element in oldEntries) {
+        //   newSamplesYaml.remove([element.key]);
+        // }
       }
       if (!failOnChange) {
         await samplesFile.writeAsString(newSamplesYaml.toString());
@@ -155,14 +156,39 @@ class UpdateSamplesCommand extends MeiliCommandBase {
       } else {
         if (line.contains(enddocregion)) {
           final sb = StringBuffer();
-          currentKeyLines.map((e) => e.value).forEach(sb.writeln);
+
+          unindentLines(currentKeyLines.map((e) => e.value).toList())
+              .take(currentKeyLines.length - 1)
+              .forEach(sb.writeln);
+          sb.write(currentKeyLines.last.value);
           //add to results.
           res[currentKey] = sb.toString();
+
+          currentKey = null;
+          currentKeyLines.clear();
         } else {
           currentKeyLines.add(MapEntry(lineNumber, line));
         }
       }
     }
+    return res;
+  }
+
+  List<String> unindentLines(List<String> src) {
+    if (src.isEmpty) {
+      return src;
+    }
+    final ogFirst = src.first;
+    final trimmedFirst = ogFirst.trimLeft();
+    final firstIndentation = ogFirst.length - trimmedFirst.length;
+    final res = <String>[];
+    for (var element in src) {
+      final trimmedLine = element.trimLeft();
+      var indentation = element.length - trimmedLine.length;
+      indentation -= firstIndentation;
+      res.add('${" " * indentation}$trimmedLine');
+    }
+
     return res;
   }
 

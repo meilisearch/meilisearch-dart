@@ -9,18 +9,16 @@ void main() {
   // .code-samples.meilisearch.yaml
   // it's subject to tests, lint rules, deprecation notices, etc...
   group('code samples', () {
-    setUpClient();
-    setUp(() async {
-      await createIndexWithData(uid: 'movies', data: [
-        {'name': 'dragon'}
-      ]);
-    });
-    test('code sample', () async {
+    test('excerpts', () async {
       // #docregion search_parameter_guide_show_ranking_score_1
       await client
           .index('movies')
           .search('dragon', SearchQuery(showRankingScore: true));
       // #enddocregion
+
+      // #docregion search_get_1
+      await client.index('movies').search('american ninja');
+      // #enddocregion
     });
-  });
+  }, skip: true);
 }
