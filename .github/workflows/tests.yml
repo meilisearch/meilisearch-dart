@@ -75,7 +75,7 @@ jobs:
         uses: ibiqlik/action-yamllint@v3
         with:
           config_file: .yamllint.yml
-  
+
   check-code-samples:
     name: check .code-samples.meilisearch.yaml
     runs-on: ubuntu-latest
