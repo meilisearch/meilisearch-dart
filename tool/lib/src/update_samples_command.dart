@@ -4,6 +4,7 @@
 import 'dart:async';
 
 import 'package:file/file.dart';
+import 'package:http/http.dart' as http;
 import 'package:meili_tool/src/command_base.dart';
 import 'package:meili_tool/src/result.dart';
 import 'package:yaml/yaml.dart';
@@ -59,6 +60,8 @@ class UpdateSamplesCommand extends MeiliCommandBase {
         print(samplesYaml.runtimeType);
         return PackageResult.fail(['samples yaml must be an YamlMap']);
       }
+      final fullSamplesYaml = await getFullCorrectSamples();
+
       final newSamplesYaml = YamlEditor(samplesContentRaw);
       final sourceFiles = await _discoverSourceFiles();
       for (var sourceFile in sourceFiles) {
@@ -87,6 +90,29 @@ class UpdateSamplesCommand extends MeiliCommandBase {
           }
         }
       }
+
+      final missingEntries = fullSamplesYaml.entries
+          .where((element) => !samplesYaml.containsKey(element.key));
+      final oldEntries = samplesYaml.entries
+          .where((element) => !fullSamplesYaml.containsKey(element.key));
+
+      if (failOnChange) {
+        if (missingEntries.isNotEmpty || oldEntries.isNotEmpty) {
+          return PackageResult.fail([
+            if (missingEntries.isNotEmpty)
+              'found the following missing entries: ${missingEntries.map((e) => e.key).join('\n')}',
+            if (oldEntries.isNotEmpty)
+              'found the following useless entries: ${oldEntries.map((e) => e.key).join('\n')}',
+          ]);
+        }
+      } else {
+        for (var element in missingEntries) {
+          newSamplesYaml.update([element.key], element.value);
+        }
+        for (var element in oldEntries) {
+          newSamplesYaml.remove([element.key]);
+        }
+      }
       if (!failOnChange) {
         await samplesFile.writeAsString(newSamplesYaml.toString());
       }
@@ -94,6 +120,14 @@ class UpdateSamplesCommand extends MeiliCommandBase {
     } on PackageResult catch (e) {
       return e;
     }
+  }
+
+  Future<YamlMap> getFullCorrectSamples() async {
+    final uri = Uri.parse(
+        'https://raw.githubusercontent.com/meilisearch/documentation/main/.code-samples.meilisearch.yaml');
+    final data = await http.get(uri);
+    final parsed = loadYaml(data.body, sourceUrl: uri);
+    return parsed as YamlMap;
   }
 
   Map<String, String> _runInFile(_SourceFile file) {
