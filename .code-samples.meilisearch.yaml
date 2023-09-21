@@ -1,11 +1,23 @@
-# This code-samples file is used by the Meilisearch documentation
+# This code-samples file is used by the Meilisearch documentation & landing page.
 # Every example written here will be automatically fetched by
-# the documentation on build
-# You can read more on https://github.com/meilisearch/documentation/tree/master/.vuepress/code-samples
+# the documentation and the landing page on build
 ---
 search_parameter_guide_show_ranking_score_1: "await client\n    .index('movies')\n          .search('dragon', SearchQuery(showRankingScore: true));"
+facet_search_1: |-
+  await client.index('books').facetSearch(FacetSearchQuery(
+      facetQuery: 'fiction',
+      facetName: 'genres',
+      filter: 'rating > 3'
+    ),
+  );
 facet_search_2: |-
   await client.index('books').updateFaceting(Faceting(sortFacetValuesBy: {'genres': 'count'}));
+facet_search_3: |-
+  await client.index('books').facetSearch(FacetSearchQuery(
+      facetQuery: 'c',
+      facetName: 'genres',
+    ),
+  );
 search_parameter_guide_attributes_to_search_on_1: |-
   await client.index('movies').search('adventure', SearchQuery(attributesToSearchOn: ['overview']));
 get_documents_post_1: |-
@@ -24,21 +36,21 @@ get_documents_1: |-
     .getDocuments(params: DocumentsQuery(limit: 2, filter: 'genres = action'));
 multi_search_1: |-
   await client.multiSearch(MultiSearchQuery(queries: [
-      IndexSearchQuery(
-        query: "pooh",
-        indexUid: "movies",
-        limit: 5
-      ),
-      IndexSearchQuery(
-        query: "nemo",
-        indexUid: "movies",
-        limit: 5
-      ),
-      IndexSearchQuery(
-        query: "us",
-        indexUid: "movies_ratings"
-      ),
-    ]));
+    IndexSearchQuery(
+      query: 'pooh',
+      indexUid: 'movies',
+      limit: 5
+    ),
+    IndexSearchQuery(
+      query: 'nemo',
+      indexUid: 'movies',
+      limit: 5
+    ),
+    IndexSearchQuery(
+      query: 'us',
+      indexUid: 'movies_ratings'
+    ),
+  ]));
 faceted_search_update_settings_1: |-
   await client.index('movie_ratings').updateFilterableAttributes(['genres', 'rating', 'language']);
 search_parameter_guide_facet_stats_1: |-
@@ -48,7 +60,7 @@ faceted_search_1: |-
 filtering_guide_nested_1: |-
   await client.index('movie_ratings').search('thriller', SearchQuery(filter: 'rating.users >= 90'));
 sorting_guide_sort_nested_1: |-
-  await client.index('movie_ratings').search('thriller', SearchQuery(sort: ["rating.users:asc"]));
+  await client.index('movie_ratings').search('thriller', SearchQuery(sort: ['rating.users:asc']));
 async_guide_filter_by_date_1: |-
   await client.getTasks(params: TasksQuery(afterEnqueuedAt: DateTime(2020, 10, 11, 11, 49, 53)));
 async_guide_multiple_filters_1: |-
@@ -65,6 +77,8 @@ delete_tasks_1: |-
   await client.deleteTasks(params: DeleteTasksQuery(uids: [1, 2]));
 cancel_tasks_1: |-
   await client.cancelTasks(params: CancelTasksQuery(uids: [1, 2]));
+async_guide_canceled_by_1: |-
+  await client.getTasks(params: TasksQuery(canceledBy: [9, 15]));
 swap_indexes_1: |-
   await client.swapIndexes([SwapIndex(['indexA', 'indexB']), SwapIndex(['indexX', 'indexY'])]);
 search_parameter_guide_hitsperpage_1: |-
@@ -249,6 +263,19 @@ update_displayed_attributes_1: |-
   ]);
 reset_displayed_attributes_1: |-
   await client.index('movies').resetDisplayedAttributes();
+get_typo_tolerance_1: |-
+  await client.index('books').getTypoTolerance();
+update_typo_tolerance_1: |-
+  final toUpdate = TypoTolerance(
+    minWordSizeForTypos: MinWordSizeForTypos(
+      oneTypo: 4,
+      twoTypos: 10,
+    ),
+    disableOnAttributes: ['title'],
+  );
+  await client.index('books').updateTypoTolerance(toUpdate);
+reset_typo_tolerance_1: |-
+  await client.index('books').resetTypoTolerance();
 get_index_stats_1: |-
   await client.index('movies').getStats();
 get_indexes_stats_1: |-
@@ -321,6 +348,27 @@ primary_field_guide_add_document_primary_key: |-
       'price': 5.00
     }
   ], primaryKey: 'reference_number');
+typo_tolerance_guide_1: |-
+  final toUpdate = TypoTolerance(enabled: false);
+  await client.index('movies').updateTypoTolerance(toUpdate);
+typo_tolerance_guide_2: |-
+  final toUpdate = TypoTolerance(
+    disableOnAttributes: ['title'],
+  );
+  await client.index('movies').updateTypoTolerance(toUpdate);
+typo_tolerance_guide_3: |-
+  final toUpdate = TypoTolerance(
+    disableOnWords: ['shrek'],
+  );
+  await client.index('movies').updateTypoTolerance(toUpdate);
+typo_tolerance_guide_4: |-
+  final toUpdate = TypoTolerance(
+    minWordSizeForTypos: MinWordSizeForTypos(
+      oneTypo: 4,
+      twoTypos: 10,
+    ),
+  );
+  await client.index('movies').updateTypoTolerance(toUpdate);
 getting_started_add_documents_md: |-
   ```bash
   dart pub add meilisearch
@@ -502,7 +550,7 @@ security_guide_delete_key_1: |-
 search_parameter_guide_crop_marker_1: |-
   await client
       .index('movies')
-      .search('shifu', SearchQuery(attributesToCrop: ['overview'], cropMarker: "[…]"));
+      .search('shifu', SearchQuery(attributesToCrop: ['overview'], cropMarker: '[…]'));
 search_parameter_guide_highlight_tag_1: |-
   await client.index('movies').search(
       'winter feast',
@@ -513,23 +561,13 @@ search_parameter_guide_highlight_tag_1: |-
 geosearch_guide_filter_usage_3: |-
   await client.index('restaurants')
     .search('', SearchQuery(filter: '_geoBoundingBox([45.494181, 9.214024], [45.449484, 9.179175])')),
-  })
-search_get_1: "      await client.index('movies').search('american ninja');"
+  });
+search_get_1: "curl \\\n  -X GET 'http:\/\/localhost:7700\/indexes\/movies\/search?q=american%20ninja'"
 tenant_token_guide_search_no_sdk_1: "curl \\\n  -X POST 'http:\/\/localhost:7700\/indexes\/patient_medical_records\/search' \\\n  -H 'Authorization: Bearer TENANT_TOKEN'"
-get_typo_tolerance_1: "curl \\\n  -X GET 'http:\/\/localhost:7700\/indexes\/books\/settings\/typo-tolerance'"
-update_typo_tolerance_1: "curl \\\n  -X PATCH 'http:\/\/localhost:7700\/indexes\/books\/settings\/typo-tolerance' \\\n  -H 'Content-Type: application\/json' \\\n  --data-binary '{\n    \"minWordSizeForTypos\": {\n      \"oneTypo\": 4,\n      \"twoTypos\": 10\n    },\n    \"disableOnAttributes\": [\"title\"]\n  }'"
-reset_typo_tolerance_1: "curl \\\n  -X DELETE 'http:\/\/localhost:7700\/indexes\/books\/settings\/typo-tolerance'"
-typo_tolerance_guide_1: "curl \\\n  -X PATCH 'http:\/\/localhost:7700\/indexes\/movies\/settings\/typo-tolerance' \\\n  -H 'Content-Type: application\/json' \\\n  --data-binary '{ \"enabled\": false }'"
-typo_tolerance_guide_2: "curl \\\n  -X PATCH 'http:\/\/localhost:7700\/indexes\/movies\/settings\/typo-tolerance' \\\n  -H 'Content-Type: application\/json' \\\n  --data-binary '{ \"disableOnAttributes\": [\"title\"] }'"
-typo_tolerance_guide_3: "curl \\\n  -X PATCH 'http:\/\/localhost:7700\/indexes\/movies\/settings\/typo-tolerance' \\\n  -H 'Content-Type: application\/json' \\\n  --data-binary '{\n    \"disableOnWords\": [\n      \"shrek\"\n    ]\n  }'"
-typo_tolerance_guide_4: "curl \\\n  -X PATCH 'http:\/\/localhost:7700\/indexes\/movies\/settings\/typo-tolerance' \\\n  -H 'Content-Type: application\/json' \\\n  --data-binary '{\n    \"minWordSizeForTypos\": {\n      \"oneTypo\": 4,\n      \"twoTypos\": 10\n    }\n  }'"
 updating_guide_check_version_new_authorization_header: "curl \\\n  -X GET 'http:\/\/<your-domain-name>\/version' \\\n  -H 'Authorization: Bearer API_KEY'"
 updating_guide_check_version_old_authorization_header: "curl \\\n  -X GET 'http:\/\/<your-domain-name>\/version' \\\n  -H 'X-Meili-API-Key: API_KEY'"
 updating_guide_get_displayed_attributes_old_authorization_header: "# whenever you see {index_uid}, replace it with your index's unique id\ncurl \\\n  -X GET 'http:\/\/<your-domain-name>\/indexes\/{index_uid}\/settings\/displayed-attributes' \\\n  -H 'X-Meili-API-Key: API_KEY'"
 updating_guide_reset_displayed_attributes_old_authorization_header: "curl \\\n  -X DELETE 'http:\/\/<your-domain-name>\/indexes\/{index_uid}\/settings\/displayed-attributes' \\\n  -H 'X-Meili-API-Key: API_KEY'"
 updating_guide_create_dump: "curl \\\n  -X POST 'http:\/\/<your-domain-name>\/dumps' \\\n  -H 'Authorization: Bearer API_KEY'\n# -H 'X-Meili-API-Key: API_KEY' for v0.24 or below"
-async_guide_canceled_by_1: "curl \\\n  -X GET 'http:\/\/localhost:7700\/tasks?canceledBy=9,15'"
 get_experimental_features_1: "curl \\\n  -X GET 'http:\/\/localhost:7700\/experimental-features\/'"
 update_experimental_features_1: "curl \\\n  -X PATCH 'http:\/\/localhost:7700\/experimental-features\/' \\\n  -H 'Content-Type: application\/json'  \\\n  --data-binary '{\n    \"scoreDetails\": true\n  }'"
-facet_search_1: "curl \\\n  -X POST 'http:\/\/localhost:7700\/indexes\/books\/facet-search' \\\n  -H 'Content-Type: application\/json' \\\n  --data-binary '{\n    \"facetQuery\": \"fiction\",\n    \"facetName\": \"genres\",\n    \"filter\": \"rating > 3\"\n  }'"
-facet_search_3: "curl \\\n  -X POST 'http:\/\/localhost:7700\/indexes\/books\/facet-search' \\\n  -H 'Content-Type: application\/json' \\\n  --data-binary '{\n    \"facetQuery\": \"c\",\n    \"facetName\": \"genres\"\n}'"
