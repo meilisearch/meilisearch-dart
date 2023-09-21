@@ -22,6 +22,8 @@ class _SourceFile {
 
 class UpdateSamplesCommand extends MeiliCommandBase {
   static const String _failOnChangeFlag = 'fail-on-change';
+  static const String _checkRemoteRepoFlag = 'check-remote-repository';
+  static const String _generateMissingExcerpts = 'generate-missing-excerpts';
 
   UpdateSamplesCommand(
     super.packageDirectory, {
@@ -31,6 +33,17 @@ class UpdateSamplesCommand extends MeiliCommandBase {
       _failOnChangeFlag,
       help: 'Fail if the command does anything. '
           '(Used in CI to ensure excerpts are up to date.)',
+    );
+    argParser.addFlag(
+      _checkRemoteRepoFlag,
+      hide: true,
+      help:
+          'Check the remote code samples to see if there are missing/useless keys',
+    );
+    argParser.addFlag(
+      _generateMissingExcerpts,
+      hide: true,
+      help: 'Generate entries that are found in code samples, but not in code',
     );
   }
 
@@ -49,6 +62,8 @@ class UpdateSamplesCommand extends MeiliCommandBase {
   Future<PackageResult> run() async {
     try {
       final failOnChange = getBoolArg(_failOnChangeFlag);
+      final checkRemoteRepo = getBoolArg(_checkRemoteRepoFlag);
+      final generateMissingExcerpts = getBoolArg(_generateMissingExcerpts);
       //read the samples yaml file
       final changedKeys = <String, String>{};
       final File samplesFile =
@@ -59,12 +74,14 @@ class UpdateSamplesCommand extends MeiliCommandBase {
         print(samplesYaml.runtimeType);
         return PackageResult.fail(['samples yaml must be an YamlMap']);
       }
-      final fullSamplesYaml = await getFullCorrectSamples();
 
       final newSamplesYaml = YamlEditor(samplesContentRaw);
+      final foundCodeSamples = <String, String>{};
+      final missingSamples = <String, String>{};
       final sourceFiles = await _discoverSourceFiles();
       for (var sourceFile in sourceFiles) {
         final newValues = _runInFile(sourceFile);
+        foundCodeSamples.addAll(newValues);
         sourceFile.result = newValues;
         for (var element in newValues.entries) {
           final existingValue = samplesYaml[element.key];
@@ -83,6 +100,7 @@ class UpdateSamplesCommand extends MeiliCommandBase {
             'found changed keys: ${changedKeys.keys.toList()}',
           ]);
         }
+
         if (!failOnChange) {
           for (var changedEntry in changedKeys.entries) {
             newSamplesYaml.update([changedEntry.key], changedEntry.value);
@@ -90,31 +108,58 @@ class UpdateSamplesCommand extends MeiliCommandBase {
         }
       }
 
-      final missingEntries = fullSamplesYaml.entries
-          .where((element) => !samplesYaml.containsKey(element.key));
-      final oldEntries = samplesYaml.entries
-          .where((element) => !fullSamplesYaml.containsKey(element.key));
-
-      if (failOnChange) {
-        if (missingEntries.isNotEmpty || oldEntries.isNotEmpty) {
-          return PackageResult.fail([
-            if (missingEntries.isNotEmpty)
-              'found the following missing entries: ${missingEntries.map((e) => e.key).join('\n')}',
-            // for now don't delete old entries
-            // if (oldEntries.isNotEmpty)
-            //   'found the following useless entries: ${oldEntries.map((e) => e.key).join('\n')}',
-          ]);
+      for (var entry in samplesYaml.entries) {
+        if (foundCodeSamples.containsKey(entry.key)) {
+          continue;
         }
-      } else {
-        for (var element in missingEntries) {
-          newSamplesYaml.update([element.key], element.value);
-        }
-        // for now don't delete old entries
-        // for (var element in oldEntries) {
-        //   newSamplesYaml.remove([element.key]);
-        // }
+        missingSamples[entry.key] = entry.value;
       }
-      if (!failOnChange) {
+      if (generateMissingExcerpts) {
+        final targetFile = packageDirectory
+            .childDirectory('test')
+            .childFile('missing_samples.dart');
+        final sb = StringBuffer();
+
+        sb.writeln(r"import 'package:meilisearch/meilisearch.dart';");
+        sb.writeln('late MeiliSearchClient client;');
+        sb.writeln('void main() async {');
+        for (var element in missingSamples.entries) {
+          sb.writeln('// #docregion ${element.key}');
+          sb.writeln(element.value);
+          sb.writeln('// #enddocregion');
+          sb.writeln();
+        }
+        sb.writeln('}');
+        await targetFile.writeAsString(sb.toString());
+      }
+
+      // for now don't check remote repository
+      if (checkRemoteRepo) {
+        final fullSamplesYaml = await getFullCorrectSamples();
+        final missingEntries = fullSamplesYaml.entries
+            .where((element) => !samplesYaml.containsKey(element.key));
+        final oldEntries = samplesYaml.entries
+            .where((element) => !fullSamplesYaml.containsKey(element.key));
+        if (failOnChange) {
+          if (missingEntries.isNotEmpty || oldEntries.isNotEmpty) {
+            return PackageResult.fail([
+              if (missingEntries.isNotEmpty)
+                'found the following missing entries: ${missingEntries.map((e) => e.key).join('\n')}',
+              if (oldEntries.isNotEmpty)
+                'found the following useless entries: ${oldEntries.map((e) => e.key).join('\n')}',
+            ]);
+          }
+        } else {
+          for (var element in missingEntries) {
+            newSamplesYaml.update([element.key], element.value);
+          }
+          for (var element in oldEntries) {
+            newSamplesYaml.remove([element.key]);
+          }
+        }
+      }
+
+      if (!failOnChange && !generateMissingExcerpts) {
         await samplesFile.writeAsString(newSamplesYaml.toString());
       }
       return PackageResult.success();
@@ -156,11 +201,10 @@ class UpdateSamplesCommand extends MeiliCommandBase {
       } else {
         if (line.contains(enddocregion)) {
           final sb = StringBuffer();
-
-          unindentLines(currentKeyLines.map((e) => e.value).toList())
-              .take(currentKeyLines.length - 1)
-              .forEach(sb.writeln);
-          sb.write(currentKeyLines.last.value);
+          final unindentedLines =
+              unindentLines(currentKeyLines.map((e) => e.value).toList())
+                  .join('\n');
+          sb.write(unindentedLines);
           //add to results.
           res[currentKey] = sb.toString();
 
@@ -184,6 +228,9 @@ class UpdateSamplesCommand extends MeiliCommandBase {
     final res = <String>[];
     for (var element in src) {
       final trimmedLine = element.trimLeft();
+      if (trimmedLine.isEmpty) {
+        continue;
+      }
       var indentation = element.length - trimmedLine.length;
       indentation -= firstIndentation;
       res.add('${" " * indentation}$trimmedLine');

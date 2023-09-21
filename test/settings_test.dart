@@ -400,4 +400,19 @@ void main() {
       });
     });
   });
+
+  test('code samples', () async {
+    // #docregion faceted_search_update_settings_1
+    await client
+        .index('movie_ratings')
+        .updateFilterableAttributes(['genres', 'rating', 'language']);
+    // #enddocregion
+
+    // #docregion synonyms_guide_1
+    await client.index('movies').updateSynonyms({
+      'great': ['fantastic'],
+      'fantastic': ['great'],
+    });
+    // #enddocregion
+  });
 }

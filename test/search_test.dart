@@ -604,4 +604,102 @@ void main() {
       );
     });
   });
+
+  test('search code samples', () async {
+    // #docregion search_get_1
+    await client.index('movies').search('American ninja');
+    // #enddocregion
+
+    // #docregion search_parameter_guide_show_ranking_score_1
+    await client
+        .index('movies')
+        .search('dragon', SearchQuery(showRankingScore: true));
+    // #enddocregion
+  }, skip: true);
+
+  test('facet search code samples', () async {
+    // #docregion facet_search_1
+    await client.index('books').facetSearch(
+          FacetSearchQuery(
+            facetQuery: 'fiction',
+            facetName: 'genres',
+            filter: 'rating > 3',
+          ),
+        );
+    // #enddocregion
+
+    // #docregion facet_search_2
+    await client.index('books').updateFaceting(
+          Faceting(
+            sortFacetValuesBy: {
+              'genres': FacetingSortTypes.count,
+            },
+          ),
+        );
+    // #enddocregion
+
+    // #docregion facet_search_3
+    await client.index('books').facetSearch(
+          FacetSearchQuery(
+            facetQuery: 'c',
+            facetName: 'genres',
+          ),
+        );
+    // #enddocregion
+
+    // #docregion search_parameter_guide_attributes_to_search_on_1
+    await client.index('books').facetSearch(
+          FacetSearchQuery(
+            facetQuery: 'c',
+            facetName: 'genres',
+          ),
+        );
+    // #enddocregion
+
+    // #docregion search_parameter_guide_facet_stats_1
+    await client
+        .index('movie_ratings')
+        .search('Batman', SearchQuery(facets: ['genres', 'rating']));
+    // #enddocregion
+
+    // #docregion faceted_search_1
+    await client
+        .index('books')
+        .search('', SearchQuery(facets: ['genres', 'rating', 'language']));
+    // #enddocregion
+
+    // #docregion filtering_guide_nested_1
+    await client.index('movie_ratings').search(
+          'thriller',
+          SearchQuery(
+            filterExpression: Meili.gte(
+              //or Meili.attr('rating.users')
+              //or 'rating.users'.toMeiliAttribute()
+              Meili.attrFromParts(['rating', 'users']),
+              Meili.value(90),
+            ),
+          ),
+        );
+    // #enddocregion
+
+    // #docregion sorting_guide_sort_nested_1
+    await client
+        .index('movie_ratings')
+        .search('thriller', SearchQuery(sort: ['rating.users:asc']));
+    // #enddocregion
+
+    // #docregion search_parameter_guide_page_1
+    await client
+        .index('movies')
+        .search('', SearchQuery(page: 2))
+        .asPaginatedResult();
+    // #enddocregion
+
+    // #docregion search_parameter_guide_hitsperpage_1
+    await client
+        .index('movies')
+        .search('', SearchQuery(hitsPerPage: 15))
+        .asPaginatedResult();
+    // #enddocregion
+  }, skip: true);
 }

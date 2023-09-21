@@ -557,4 +557,49 @@ void main() {
       });
     });
   });
+
+  test(
+    'documents code samples',
+    () async {
+      // #docregion delete_documents_by_filter_1
+      await client.index('movies').deleteDocuments(
+            DeleteDocumentsQuery(
+              filterExpression: Meili.or([
+                Meili.attr('genres').eq(Meili.value('action')),
+                Meili.attr('genres').eq(Meili.value('adventure')),
+              ]),
+            ),
+          );
+      // #enddocregion
+
+      // #docregion get_documents_1
+      await client.index('movies').getDocuments(
+            params: DocumentsQuery(
+              limit: 2,
+              filter: Meili.attr('genres').eq('action'.toMeiliValue()),
+            ),
+          );
+      // #enddocregion
+
+      // #docregion get_documents_post_1
+      await client.index('movies').getDocuments(
+            params: DocumentsQuery(
+              filterExpression: Meili.and([
+                'language'.toMeiliAttribute().eq('English'.toMeiliValue()),
+                Meili.and([
+                  'rating'.toMeiliAttribute().gt(3.toMeiliValue()),
+                  Meili.or([
+                    'genres'.toMeiliAttribute().eq('Adventure'.toMeiliValue()),
+                    'genres'.toMeiliAttribute().eq('Fiction'.toMeiliValue()),
+                  ]),
+                ]),
+              ]),
+              fields: ['title', 'genres', 'rating', 'language'],
+              limit: 3,
+            ),
+          );
+      // #enddocregion
+    },
+    skip: true,
+  );
 }
