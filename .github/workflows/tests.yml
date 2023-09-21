@@ -74,7 +74,19 @@ jobs:
         uses: ibiqlik/action-yamllint@v3
         with:
           config_file: .yamllint.yml
-
+  
+  check-code-samples:
+    name: check .code-samples.meilisearch.yaml
+    runs-on: ubuntu-latest
+    needs: yaml-lint
+    steps:
+      - uses: actions/checkout@v3
+      - uses: dart-lang/setup-dart@v1
+        with:
+          sdk: '3.0.0'
+      - name: check if samples changed
+        run: |
+          dart run ./tool/bin/meili.dart update-samples --fail-on-change
   pana:
     runs-on: ubuntu-latest
     timeout-minutes: 10
