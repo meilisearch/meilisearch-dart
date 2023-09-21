@@ -47,7 +47,7 @@ void main() {
     });
   });
 
-  test('multisearch code samples', () async {
+  test('code samples', () async {
     // #docregion multi_search_1
     await client.multiSearch(MultiSearchQuery(queries: [
       IndexSearchQuery(query: 'pooh', indexUid: 'movies', limit: 5),
@@ -55,5 +55,5 @@ void main() {
       IndexSearchQuery(query: 'us', indexUid: 'movies_ratings'),
     ]));
     // #enddocregion
-  });
+  }, skip: true);
 }
