@@ -86,6 +86,9 @@ jobs:
           sdk: '3.0.0'
       - name: check if samples changed
         run: |
+          pushd tool
+          dart pub get
+          popd
           dart run ./tool/bin/meili.dart update-samples --fail-on-change
   pana:
     runs-on: ubuntu-latest
