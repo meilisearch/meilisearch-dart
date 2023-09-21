@@ -24,7 +24,7 @@ jobs:
       matrix:
         os: [ ubuntu-latest, macos-latest, windows-latest ]
         version: ['3.0.0']
-    name: integration-tests (dart ${{ matrix.version }})
+    name: integration-tests (dart ${{ matrix.version }}) (os ${{ matrix.os }})
     services:
       meilisearch:
         image: getmeili/meilisearch:latest
@@ -48,6 +48,7 @@ jobs:
       - name: Generate coverage reports
         run: dart pub global run coverage:format_coverage --report-on=./lib --lcov --in=./coverage/reports --out=coverage/lcov.info
       - name: Report to Codecov
+        if: ${{ matrix.os == 'linux'}}
         uses: codecov/codecov-action@v3
         with:
           file: coverage/lcov.info
