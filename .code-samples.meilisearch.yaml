@@ -3,8 +3,7 @@
 # the documentation on build
 # You can read more on https://github.com/meilisearch/documentation/tree/master/.vuepress/code-samples
 ---
-search_parameter_guide_show_ranking_score_1: |-
-  await client.index('movies').search('dragon', SearchQuery(showRankingScore: true));
+search_parameter_guide_show_ranking_score_1: "      await client\n          .index('movies')\n          .search('dragon', SearchQuery(showRankingScore: true));\n"
 facet_search_2: |-
   await client.index('books').updateFaceting(Faceting(sortFacetValuesBy: {'genres': 'count'}));
 search_parameter_guide_attributes_to_search_on_1: |-
