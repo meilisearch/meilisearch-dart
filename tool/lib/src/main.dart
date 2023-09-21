@@ -37,6 +37,7 @@ void main(List<String> arguments) {
         if (value.details.isNotEmpty) {
           printError(value.details.join('\n'));
         }
+        io.exit(255);
     }
   }).catchError((Object e) {
     final ToolExit toolExit = e as ToolExit;
