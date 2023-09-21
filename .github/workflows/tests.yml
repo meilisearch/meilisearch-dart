@@ -41,6 +41,7 @@ jobs:
       - name: Install dependencies
         run: |
           dart pub get
+          dart pub get -C tool
           dart pub global activate coverage
       - name: Run integration tests
         run: dart test --concurrency=4 --reporter=github --coverage=./coverage/reports
@@ -59,7 +60,9 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Install dependencies
-        run: dart pub get
+        run: |
+          dart pub get
+          dart pub get -C tool
       - name: Run linter
         run: dart analyze --fatal-infos && dart format . --set-exit-if-changed
 
@@ -83,9 +86,8 @@ jobs:
           sdk: '3.0.0'
       - name: check if samples changed
         run: |
-          pushd tool
           dart pub get
-          popd
+          dart pub get -C tool
           dart run ./tool/bin/meili.dart update-samples --fail-on-change
   pana:
     runs-on: ubuntu-latest
