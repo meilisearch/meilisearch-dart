@@ -1,12 +1,24 @@
-# This code-samples file is used by the Meilisearch documentation
+# This code-samples file is used by the Meilisearch documentation & landing page.
 # Every example written here will be automatically fetched by
-# the documentation on build
-# You can read more on https://github.com/meilisearch/documentation/tree/master/.vuepress/code-samples
+# the documentation and the landing page on build
 ---
 search_parameter_guide_show_ranking_score_1: |-
   await client.index('movies').search('dragon', SearchQuery(showRankingScore: true));
+facet_search_1: |-
+  await client.index('books').facetSearch(FacetSearchQuery(
+      facetQuery: 'fiction',
+      facetName: 'genres',
+      filter: 'rating > 3'
+    ),
+  );
 facet_search_2: |-
   await client.index('books').updateFaceting(Faceting(sortFacetValuesBy: {'genres': 'count'}));
+facet_search_3: |-
+  await client.index('books').facetSearch(FacetSearchQuery(
+      facetQuery: 'c',
+      facetName: 'genres',
+    ),
+  );
 search_parameter_guide_attributes_to_search_on_1: |-
   await client.index('movies').search('adventure', SearchQuery(attributesToSearchOn: ['overview']));
 get_documents_post_1: |-
@@ -25,39 +37,21 @@ get_documents_1: |-
     .getDocuments(params: DocumentsQuery(limit: 2, filter: 'genres = action'));
 multi_search_1: |-
   await client.multiSearch(MultiSearchQuery(queries: [
-      IndexSearchQuery(
-        query: "pooh",
-        indexUid: "movies",
-        limit: 5
-      ),
-      IndexSearchQuery(
-        query: "nemo",
-        indexUid: "movies",
-        limit: 5
-      ),
-      IndexSearchQuery(
-        query: "us",
-        indexUid: "movies_ratings"
-      ),
-    ]));
-faceted_search_2: |-
-  await client.multiSearch(MultiSearchQuery(queries: [
-      IndexSearchQuery(
-        indexUid: 'books',
-        facets: ['language', 'genres', 'author', 'format'],
-        filter: '(language = English AND language = French) OR genres = Fiction'
-      ),
-      IndexSearchQuery(
-        indexUid: 'books',
-        facets: ['language'],
-        filter: 'genres = Fiction'
-      ),
-      IndexSearchQuery(
-        indexUid: "books",
-        facets: ['genres'],
-        filter: 'language = English OR language = French'
-      ),
-    ]));
+    IndexSearchQuery(
+      query: 'pooh',
+      indexUid: 'movies',
+      limit: 5
+    ),
+    IndexSearchQuery(
+      query: 'nemo',
+      indexUid: 'movies',
+      limit: 5
+    ),
+    IndexSearchQuery(
+      query: 'us',
+      indexUid: 'movies_ratings'
+    ),
+  ]));
 faceted_search_update_settings_1: |-
   await client.index('movie_ratings').updateFilterableAttributes(['genres', 'rating', 'language']);
 search_parameter_guide_facet_stats_1: |-
@@ -67,7 +61,7 @@ faceted_search_1: |-
 filtering_guide_nested_1: |-
   await client.index('movie_ratings').search('thriller', SearchQuery(filter: 'rating.users >= 90'));
 sorting_guide_sort_nested_1: |-
-  await client.index('movie_ratings').search('thriller', SearchQuery(sort: ["rating.users:asc"]));
+  await client.index('movie_ratings').search('thriller', SearchQuery(sort: ['rating.users:asc']));
 async_guide_filter_by_date_1: |-
   await client.getTasks(params: TasksQuery(afterEnqueuedAt: DateTime(2020, 10, 11, 11, 49, 53)));
 async_guide_multiple_filters_1: |-
@@ -84,8 +78,8 @@ delete_tasks_1: |-
   await client.deleteTasks(params: DeleteTasksQuery(uids: [1, 2]));
 cancel_tasks_1: |-
   await client.cancelTasks(params: CancelTasksQuery(uids: [1, 2]));
-async_guide_canceled_by: |-
-  await client.getTasks(params: TasksQuery(canceledBy: [9]));
+async_guide_canceled_by_1: |-
+  await client.getTasks(params: TasksQuery(canceledBy: [9, 15]));
 swap_indexes_1: |-
   await client.swapIndexes([SwapIndex(['indexA', 'indexB']), SwapIndex(['indexX', 'indexY'])]);
 search_parameter_guide_hitsperpage_1: |-
@@ -175,8 +169,6 @@ get_task_1: |-
   await client.getTask(1);
 get_all_tasks_1: |-
   await client.getTasks();
-get_keys_1: |-
-  await client.getKeys();
 get_settings_1: |-
   await client.index('movies').getSettings();
 update_settings_1: |-
@@ -272,6 +264,19 @@ update_displayed_attributes_1: |-
   ]);
 reset_displayed_attributes_1: |-
   await client.index('movies').resetDisplayedAttributes();
+get_typo_tolerance_1: |-
+  await client.index('books').getTypoTolerance();
+update_typo_tolerance_1: |-
+  final toUpdate = TypoTolerance(
+    minWordSizeForTypos: MinWordSizeForTypos(
+      oneTypo: 4,
+      twoTypos: 10,
+    ),
+    disableOnAttributes: ['title'],
+  );
+  await client.index('books').updateTypoTolerance(toUpdate);
+reset_typo_tolerance_1: |-
+  await client.index('books').resetTypoTolerance();
 get_index_stats_1: |-
   await client.index('movies').getStats();
 get_indexes_stats_1: |-
@@ -330,10 +335,6 @@ add_movies_json_1: |-
   final json = await File('movies.json').readAsString();
 
   await client.index('movies').addDocumentsJson(json);
-documents_guide_add_movie_1: |-
-  await client.index('movies').addDocuments([
-    { 'movie_id': '123sq178', 'title': 'Amélie Poulain' }
-  ]);
 primary_field_guide_create_index_primary_key: |-
   await client.createIndex('books', primaryKey: 'reference_number');
 primary_field_guide_update_document_primary_key: |-
@@ -348,6 +349,27 @@ primary_field_guide_add_document_primary_key: |-
       'price': 5.00
     }
   ], primaryKey: 'reference_number');
+typo_tolerance_guide_1: |-
+  final toUpdate = TypoTolerance(enabled: false);
+  await client.index('movies').updateTypoTolerance(toUpdate);
+typo_tolerance_guide_2: |-
+  final toUpdate = TypoTolerance(
+    disableOnAttributes: ['title'],
+  );
+  await client.index('movies').updateTypoTolerance(toUpdate);
+typo_tolerance_guide_3: |-
+  final toUpdate = TypoTolerance(
+    disableOnWords: ['shrek'],
+  );
+  await client.index('movies').updateTypoTolerance(toUpdate);
+typo_tolerance_guide_4: |-
+  final toUpdate = TypoTolerance(
+    minWordSizeForTypos: MinWordSizeForTypos(
+      oneTypo: 4,
+      twoTypos: 10,
+    ),
+  );
+  await client.index('movies').updateTypoTolerance(toUpdate);
 getting_started_add_documents_md: |-
   ```bash
   dart pub add meilisearch
@@ -402,9 +424,6 @@ getting_started_update_displayed_attributes: |-
     'overview',
     'poster'
   ]);
-getting_started_communicating_with_a_protected_instance: |-
-  var client = MeiliSearchClient('http://localhost:7700', 'apiKey');
-  await client.index('movies').search('');
 getting_started_add_meteorites: |-
   final json = await File('meteorites.json').readAsString();
 
@@ -436,8 +455,6 @@ filtering_update_settings_1: |-
     'director',
     'genres',
   ]);
-faceted_search_facets_1: |-
-  await client.index('movies').search('Batman', SearchQuery(facets: ['genres']));
 faceted_search_walkthrough_filter_1: |-
   await client.index('movies').search('thriller', SearchQuery(filter: [
     ['genres = Horror', 'genres = Mystery'],
@@ -564,7 +581,7 @@ landing_getting_started_1: |-
 search_parameter_guide_crop_marker_1: |-
   await client
       .index('movies')
-      .search('shifu', SearchQuery(attributesToCrop: ['overview'], cropMarker: "[…]"));
+      .search('shifu', SearchQuery(attributesToCrop: ['overview'], cropMarker: '[…]'));
 search_parameter_guide_highlight_tag_1: |-
   await client.index('movies').search(
       'winter feast',
@@ -575,4 +592,4 @@ search_parameter_guide_highlight_tag_1: |-
 geosearch_guide_filter_usage_3: |-
   await client.index('restaurants')
     .search('', SearchQuery(filter: '_geoBoundingBox([45.494181, 9.214024], [45.449484, 9.179175])')),
-  })
+  });
