@@ -1,7 +1,6 @@
-# This code-samples file is used by the Meilisearch documentation
+# This code-samples file is used by the Meilisearch documentation & landing page.
 # Every example written here will be automatically fetched by
-# the documentation on build
-# You can read more on https://github.com/meilisearch/documentation/tree/master/.vuepress/code-samples
+# the documentation and the landing page on build
 ---
 search_parameter_guide_show_ranking_score_1: |-
   await client.index('movies').search('dragon', SearchQuery(showRankingScore: true));
