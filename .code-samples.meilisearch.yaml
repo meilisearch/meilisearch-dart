@@ -207,27 +207,13 @@ typo_tolerance_guide_4: |-
   await client.index('movies').updateTypoTolerance(toUpdate);
 getting_started_add_documents_md: "```bash\ndart pub add meilisearch\n```\n```dart\nimport 'package:meilisearch\/meilisearch.dart';\nimport 'dart:io';\nimport 'dart:convert';\nvar client = MeiliSearchClient('http:\/\/localhost:7700', 'aSampleMasterKey');\nfinal json = await File('movies.json').readAsString();\nawait client.index('movies').addDocumentsJson(json);\n```\n[About this SDK](https:\/\/github.com\/meilisearch\/meilisearch-dart\/)"
 getting_started_search_md: "```dart\nawait client.index('movies').search('botman');\n```\n[About this SDK](https:\/\/github.com\/meilisearch\/meilisearch-dart\/)"
-getting_started_update_ranking_rules: |-
-  await client.index('movies').updateRankingRules([
-    'exactness',
-    'words',
-    'typo',
-    'proximity',
-    'attribute',
-    'sort',
-    'release_date:asc',
-    'rank:desc'
-  ]);
+getting_started_update_ranking_rules: "await client.index('movies').updateRankingRules([\n  'exactness',\n  'words',\n  'typo',\n  'proximity',\n  'attribute',\n  'sort',\n  'release_date:asc',\n  'rank:desc',\n]);"
 getting_started_update_searchable_attributes: "await client.index('movies').updateSearchableAttributes(['title']);"
 getting_started_update_stop_words: |-
   await client.index('movies').updateStopWords(['the']);
 getting_started_check_task_status: |-
   await client.getTask(0);
-getting_started_synonyms: |-
-  await client.index('movies').updateSynonyms({
-    'winnie': ['piglet'],
-    'piglet': ['winnie']
-  });
+getting_started_synonyms: "await client.index('movies').updateSynonyms({\n  'winnie': ['piglet'],\n  'piglet': ['winnie'],\n});"
 getting_started_update_displayed_attributes: "await client\n    .index('movies')\n    .updateDisplayedAttributes(['title', 'overview', 'poster']);"
 getting_started_add_meteorites: "final json = await File('meteorites.json').readAsString();\nawait client.index('meteorites').addDocumentsJson(json);"
 getting_started_configure_settings: "await client.index('meteorites').updateSettings(IndexSettings(\n    filterableAttributes: ['mass', '_geo'],\n    sortableAttributes: ['mass', '_geo']));"
