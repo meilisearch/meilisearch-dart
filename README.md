@@ -36,7 +36,6 @@
 
 ## Table of Contents <!-- omit in toc -->
 
-
 - [📖 Documentation](#-documentation)
 - [⚡ Supercharge your Meilisearch experience](#-supercharge-your-meilisearch-experience)
 - [🔧 Installation](#-installation)
