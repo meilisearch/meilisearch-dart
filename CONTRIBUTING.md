@@ -9,6 +9,7 @@ First of all, thank you for contributing to Meilisearch! The goal of this docume
     - [Requirements ](#requirements-)
     - [Setup ](#setup-)
     - [Tests and Linter ](#tests-and-linter-)
+    - [Updating code samples](#updating-code-samples)
   - [Git Guidelines](#git-guidelines)
     - [Git Branches ](#git-branches-)
     - [Git Commits ](#git-commits-)
@@ -76,6 +77,31 @@ dart test
 dart analyze
 ```
 
+### Updating code samples
+
+Some PRs require updating the code samples (found in `.code-samples.meilisearch.yaml`), this is done automatically using code excerpts, which are actual pieces of code subject to testing and linting.
+
+A lot of them are placed in `test/code_samples.dart`.
+
+Also most of the tests in that file are skipped, since they are mostly duplicated in other test files.
+
+The process to define a new code sample is as follows:
+1. Add the piece of code in `test/code_samples.dart`
+2. surround it with `#docregion key` and `#enddocregion`, e.g.
+    ```
+    // #docregion meilisearch_contributing_1
+    final client = MeilisearchClient();
+    anything();    
+    // #enddocregion
+    ```
+3. run this command to update the code samples
+    ```bash
+    dart run ./tool/bin/meili.dart update-samples
+    ```
+4. to test if the code samples are updated correctly, run: 
+    ```bash
+    dart run ./tool/bin/meili.dart update-samples --fail-on-change
+    ```
 ## Git Guidelines
 
 ### Git Branches <!-- omit in TOC -->
