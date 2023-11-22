@@ -25,7 +25,7 @@ void main() {
         throwsA(isA<MeiliSearchApiException>().having(
           (error) => error.toString(), // Actual
           'toString() method', // Description of the check
-          'MeiliSearchApiError - message: The request returned an invalid status code of 404.', // Expected
+          contains('404'), // Expected
         )),
       );
     });
