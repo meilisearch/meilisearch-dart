@@ -28,7 +28,7 @@
 
 **Meilisearch** is an open-source search engine. [Learn more about Meilisearch.](https://github.com/meilisearch/meilisearch)
 
-## Table of Contents <!-- omit in toc -->
+## Table of Contents <!-- omit in TOC -->
 
 - [📖 Documentation](#-documentation)
 - [⚡ Supercharge your Meilisearch experience](#-supercharge-your-meilisearch-experience)

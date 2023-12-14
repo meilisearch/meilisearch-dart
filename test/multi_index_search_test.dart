@@ -46,4 +46,14 @@ void main() {
       expect(result.results.last.hits.length, 2);
     });
   });
+
+  test('code samples', () async {
+    // #docregion multi_search_1
+    await client.multiSearch(MultiSearchQuery(queries: [
+      IndexSearchQuery(query: 'pooh', indexUid: 'movies', limit: 5),
+      IndexSearchQuery(query: 'nemo', indexUid: 'movies', limit: 5),
+      IndexSearchQuery(query: 'us', indexUid: 'movies_ratings'),
+    ]));
+    // #enddocregion
+  }, skip: true);
 }
