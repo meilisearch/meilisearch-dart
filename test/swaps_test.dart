@@ -30,4 +30,13 @@ void main() {
       ]);
     });
   });
+
+  test('code samples', () async {
+    // #docregion swap_indexes_1
+    await client.swapIndexes([
+      SwapIndex(['indexA', 'indexB']),
+      SwapIndex(['indexX', 'indexY']),
+    ]);
+    // #enddocregion
+  }, skip: true);
 }

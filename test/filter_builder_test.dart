@@ -75,7 +75,7 @@ void main() {
       });
       test("Dates", () {
         final testData = [
-          [DateTime.utc(1999, 12, 14, 18, 53, 56), '945197636000'],
+          [DateTime.utc(1999, 12, 14, 18, 53, 56), '945197636'],
         ];
 
         for (var element in testData) {

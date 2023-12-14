@@ -29,8 +29,10 @@ class MeiliDateTimeValueExpression extends MeiliValueExpressionBase {
           "DateTime passed to Meili must be in UTC to avoid inconsistency accross multiple devices",
         );
 
+  /// Unix epoch time is seconds since epoch
   @override
-  String transform() => value.millisecondsSinceEpoch.toString();
+  String transform() =>
+      (value.millisecondsSinceEpoch / 1000).floor().toString();
 
   @override
   bool operator ==(Object other) {
