@@ -1,4 +1,4 @@
-part of tenant_token;
+part of '../tenant_token.dart';
 
 final _jsonEncoder = json.fuse(utf8.fuse(base64Url));
 

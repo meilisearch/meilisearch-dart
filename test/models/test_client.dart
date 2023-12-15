@@ -4,18 +4,12 @@ import 'package:meilisearch/meilisearch.dart';
 
 class TestMeiliSearchClient extends MeiliSearchClient {
   TestMeiliSearchClient(
-    String serverUrl, [
-    String? apiKey,
-    Duration? connectTimeout,
-    HttpClientAdapter? adapter,
-    List<Interceptor>? interceptors,
-  ]) : super(
-          serverUrl,
-          apiKey,
-          connectTimeout,
-          adapter,
-          interceptors,
-        );
+    super.serverUrl, [
+    super.apiKey,
+    super.connectTimeout,
+    super.adapter,
+    super.interceptors,
+  ]);
 
   factory TestMeiliSearchClient.withCustomDio(
     String serverUrl, {
