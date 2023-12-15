@@ -261,9 +261,9 @@ abstract class MeiliValueOperandOperatorExpressionBase
 class MeiliEqualsOperatorExpression
     extends MeiliValueOperandOperatorExpressionBase {
   const MeiliEqualsOperatorExpression({
-    required MeiliAttributeExpression property,
-    required MeiliValueExpressionBase value,
-  }) : super(property: property, value: value);
+    required super.property,
+    required super.value,
+  });
 
   @override
   final String operator = "=";
@@ -272,9 +272,9 @@ class MeiliEqualsOperatorExpression
 class MeiliNotEqualsOperatorExpression
     extends MeiliValueOperandOperatorExpressionBase {
   const MeiliNotEqualsOperatorExpression({
-    required MeiliAttributeExpression property,
-    required MeiliValueExpressionBase value,
-  }) : super(property: property, value: value);
+    required super.property,
+    required super.value,
+  });
 
   @override
   final String operator = "!=";
@@ -283,9 +283,9 @@ class MeiliNotEqualsOperatorExpression
 class MeiliGreaterThanOperatorExpression
     extends MeiliValueOperandOperatorExpressionBase {
   const MeiliGreaterThanOperatorExpression({
-    required MeiliAttributeExpression property,
-    required MeiliValueExpressionBase value,
-  }) : super(property: property, value: value);
+    required super.property,
+    required super.value,
+  });
 
   @override
   final String operator = ">";
@@ -294,9 +294,9 @@ class MeiliGreaterThanOperatorExpression
 class MeiliGreaterThanEqualsOperatorExpression
     extends MeiliValueOperandOperatorExpressionBase {
   const MeiliGreaterThanEqualsOperatorExpression({
-    required MeiliAttributeExpression property,
-    required MeiliValueExpressionBase value,
-  }) : super(property: property, value: value);
+    required super.property,
+    required super.value,
+  });
 
   @override
   final String operator = ">=";
@@ -305,9 +305,9 @@ class MeiliGreaterThanEqualsOperatorExpression
 class MeiliLessThanOperatorExpression
     extends MeiliValueOperandOperatorExpressionBase {
   const MeiliLessThanOperatorExpression({
-    required MeiliAttributeExpression property,
-    required MeiliValueExpressionBase value,
-  }) : super(property: property, value: value);
+    required super.property,
+    required super.value,
+  });
 
   @override
   final String operator = "<";
@@ -316,9 +316,9 @@ class MeiliLessThanOperatorExpression
 class MeiliLessThanEqualsOperatorExpression
     extends MeiliValueOperandOperatorExpressionBase {
   const MeiliLessThanEqualsOperatorExpression({
-    required MeiliAttributeExpression property,
-    required MeiliValueExpressionBase value,
-  }) : super(property: property, value: value);
+    required super.property,
+    required super.value,
+  });
 
   @override
   final String operator = "<=";

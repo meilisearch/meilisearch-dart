@@ -1,4 +1,4 @@
-part of tenant_token;
+part of '../tenant_token.dart';
 
 class ExpiredSignatureException implements Exception {
   const ExpiredSignatureException();
