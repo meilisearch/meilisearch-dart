@@ -108,14 +108,10 @@ class TestMeiliSearchClient extends MeiliSearchClient {
   }
 
   Future<void> disposeUsedResources() async {
-    final indexesCopy = usedIndexes.toList();
     await Future.wait([
       _deleteUsedIndexes(),
       _deleteUsedKeys(),
     ]);
-    if (indexesCopy.isNotEmpty) {
-      await _deleteTasksForDeletedIndexes(indexesCopy);
-    }
   }
 
   Future<void> _deleteUsedIndexes() async {
@@ -130,9 +126,5 @@ class TestMeiliSearchClient extends MeiliSearchClient {
             (e) => deleteKey(e).onError((error, stackTrace) => false),
           ),
     );
-  }
-
-  Future<void> _deleteTasksForDeletedIndexes(List<String> indexes) async {
-    await deleteTasks(params: DeleteTasksQuery(indexUids: indexes));
   }
 }
