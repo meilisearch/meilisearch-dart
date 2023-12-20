@@ -22,7 +22,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        version: ['3.0.0']
+        version: ['latest']
     name: integration-tests (dart ${{ matrix.version }})
     services:
       meilisearch:
@@ -82,10 +82,10 @@ jobs:
     name: check .code-samples.meilisearch.yaml
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - uses: dart-lang/setup-dart@v1
         with:
-          sdk: '3.0.0'
+          sdk: 'latest'
       - name: check if samples changed
         run: |
           dart pub get
