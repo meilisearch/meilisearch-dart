@@ -97,8 +97,8 @@ jobs:
   pana:
     runs-on: ubuntu-latest
     timeout-minutes: 10
-    container:
-      image: dart:latest
+    # container:
+    #   image: dart:latest
     steps:
       - uses: actions/checkout@v4
       - run: git config --system --add safe.directory '*'
