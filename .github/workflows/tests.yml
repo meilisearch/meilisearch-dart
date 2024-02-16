@@ -108,7 +108,7 @@ jobs:
       - name: Run pana
         id: pana-run
         run: |
-          git config --global --add safe.directory '*'
+          git config --system --add safe.directory '*'
           echo "PANA_OUTPUT<<EOF" >> $GITHUB_ENV
           dart pub global run pana --no-warning --exit-code-threshold 130 >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV
