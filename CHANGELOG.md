@@ -1,5 +1,28 @@
 [comment]: <> (All notable changes to this project will be documented in this file.)
 
+# 0.15.0
+### Breaking Changes:
+
+- Change members of `Faceting` to be `final`, and remove the default values
+- Mark all `Searcheable<T>` fields in the constructor as `required`
+- Bug Fix `Searcheable<T>` had a wrong `matchesPosition` property, which was moved into `MeiliDocumentContainer<T>`
+
+### Changes:
+
+- Add `int? total` to `TasksResults`
+- Add `attributesToSearchOn` to `SearchQuery` and `IndexSearchQuery`
+- Add `Future<FacetSearchResult> facetSearch(FacetSearchQuery query)` to `MeiliSearchIndex`
+- Add `enum FacetingSortTypes`
+- Add `Map<String, FacetingSortTypes>? sortFacetValuesBy` to `Faceting`
+- [experimental]* Add `List? vector` to `SearchQuery` and `IndexSearchQuery`
+- [experimental]* Add `bool? showRankingScoreDetails` to `SearchQuery` and `IndexSearchQuery`
+- Add `bool? showRankingScore` to `SearchQuery` and `IndexSearchQuery`
+- Add `MeiliDocumentContainer<T>`
+- Add `Map<String, dynamic> src` to `Searchable` which exposes the raw json object returned from the server.
+  Just in case we don't keep up with new meilisearch releases, the user has a way to access new features.
+
+[experimental]* To adopt a experimental [change you must opt-in manually](https://www.meilisearch.com/docs/learn/experimental/overview#activating-experimental-features)
+
 # 0.14.0
 ### Breaking Changes:
 - Moved `indexUid`, `query` from `SearchQuery` to the new `IndexSearchQuery`.

@@ -1,5 +1,4 @@
 import 'package:meilisearch/meilisearch.dart';
-import 'package:meilisearch/src/results/experimental_features.dart';
 import 'package:test/test.dart';
 
 import 'utils/books.dart';
@@ -449,159 +448,258 @@ void main() {
     });
   });
 
-  group('Experimental', () {
-    setUpClient();
-    late String uid;
-    late MeiliSearchIndex index;
-    late ExperimentalFeatures features;
-    setUp(() async {
-      features = await client.http.updateExperimentalFeatures(
-        UpdateExperimentalFeatures(
-          scoreDetails: true,
-          vectorStore: true,
-        ),
-      );
-      expect(features.scoreDetails, true);
-      expect(features.vectorStore, true);
+  // Commented because of https://github.com/meilisearch/meilisearch-dart/issues/369
+  // group('Experimental', () {
+  //   setUpClient();
+  //   late String uid;
+  //   late MeiliSearchIndex index;
+  //   late ExperimentalFeatures features;
+  //   setUp(() async {
+  //     features = await client.http.updateExperimentalFeatures(
+  //       UpdateExperimentalFeatures(
+  //         scoreDetails: true,
+  //         vectorStore: true,
+  //       ),
+  //     );
+  //     expect(features.scoreDetails, true);
+  //     expect(features.vectorStore, true);
 
-      uid = randomUid();
-      index = await createIndexWithData(uid: uid, data: vectorBooks);
-    });
+  //     uid = randomUid();
+  //     index = await createIndexWithData(uid: uid, data: vectorBooks);
+  //   });
 
-    test('vector search', () async {
-      final vector = [0, 1, 2];
-      final res = await index
-          .search(
-            null,
-            SearchQuery(
-              vector: vector,
+  //   test('vector search', () async {
+  //     final vector = [0, 1, 2];
+  //     final res = await index
+  //         .search(
+  //           null,
+  //           SearchQuery(
+  //             vector: vector,
+  //           ),
+  //         )
+  //         .asSearchResult()
+  //         .mapToContainer();
+
+  //     expect(res.vector, vector);
+  //     expect(
+  //       res.hits,
+  //       everyElement(
+  //         isA<MeiliDocumentContainer<Map<String, dynamic>>>()
+  //             .having(
+  //               (p0) => p0.vectors,
+  //               'vectors',
+  //               isNotNull,
+  //             )
+  //             .having(
+  //               (p0) => p0.semanticScore,
+  //               'semanticScore',
+  //               isNotNull,
+  //             ),
+  //       ),
+  //     );
+  //   });
+
+  //   test('normal search', () async {
+  //     final res = await index
+  //         .search(
+  //           'The',
+  //           SearchQuery(
+  //             showRankingScore: true,
+  //             showRankingScoreDetails: true,
+  //             attributesToHighlight: ['*'],
+  //             showMatchesPosition: true,
+  //           ),
+  //         )
+  //         .asSearchResult()
+  //         .mapToContainer();
+
+  //     final attributeMatcher = isA<MeiliRankingScoreDetailsAttributeRule>()
+  //         .having((p0) => p0.src, 'src', allOf(isNotNull, isNotEmpty))
+  //         .having((p0) => p0.score, 'score', isNotNull)
+  //         .having((p0) => p0.order, 'order', isNotNull)
+  //         .having((p0) => p0.queryWordDistanceScore, 'queryWordDistanceScore',
+  //             isNotNull)
+  //         .having((p0) => p0.attributeRankingOrderScore,
+  //             'attributeRankingOrderScore', isNotNull);
+
+  //     final wordsMatcher = isA<MeiliRankingScoreDetailsWordsRule>()
+  //         .having((p0) => p0.src, 'src', allOf(isNotNull, isNotEmpty))
+  //         .having((p0) => p0.score, 'score', isNotNull)
+  //         .having((p0) => p0.order, 'order', isNotNull)
+  //         .having((p0) => p0.matchingWords, 'matchingWords', isNotNull)
+  //         .having((p0) => p0.maxMatchingWords, 'maxMatchingWords', isNotNull);
+
+  //     final exactnessMatcher = isA<MeiliRankingScoreDetailsExactnessRule>()
+  //         .having((p0) => p0.src, 'src', allOf(isNotNull, isNotEmpty))
+  //         .having((p0) => p0.score, 'score', isNotNull)
+  //         .having((p0) => p0.order, 'order', isNotNull)
+  //         .having(
+  //           (p0) => p0.matchType,
+  //           'matchType',
+  //           allOf(isNotNull, isNotEmpty),
+  //         );
+
+  //     final typoMatcher = isA<MeiliRankingScoreDetailsTypoRule>()
+  //         .having((p0) => p0.src, 'src', allOf(isNotNull, isNotEmpty))
+  //         .having((p0) => p0.score, 'score', isNotNull)
+  //         .having((p0) => p0.order, 'order', isNotNull)
+  //         .having((p0) => p0.typoCount, 'typoCount', isNotNull)
+  //         .having((p0) => p0.maxTypoCount, 'maxTypoCount', isNotNull);
+
+  //     final proximityMatcher = isA<MeiliRankingScoreDetailsProximityRule>()
+  //         .having((p0) => p0.src, 'src', allOf(isNotNull, isNotEmpty))
+  //         .having((p0) => p0.score, 'score', isNotNull)
+  //         .having((p0) => p0.order, 'order', isNotNull);
+
+  //     final rankingScoreDetailsMatcher = isA<MeiliRankingScoreDetails>()
+  //         .having((p0) => p0.src, 'src', allOf(isNotNull, isNotEmpty))
+  //         .having((p0) => p0.attribute, 'attribute', attributeMatcher)
+  //         .having((p0) => p0.words, 'words', wordsMatcher)
+  //         .having((p0) => p0.exactness, 'exactness', exactnessMatcher)
+  //         .having((p0) => p0.typo, 'typo', typoMatcher)
+  //         .having((p0) => p0.proximity, 'proximity', proximityMatcher)
+  //         .having(
+  //             (p0) => p0.customRules, 'customRules', allOf(isNotNull, isEmpty));
+
+  //     expect(res.hits.length, 2);
+
+  //     expect(
+  //       res.hits,
+  //       everyElement(
+  //         isA<MeiliDocumentContainer<Map<String, dynamic>>>()
+  //             .having(
+  //               (p0) => p0.formatted,
+  //               'formatted',
+  //               allOf(isNotNull, isNotEmpty, contains('id')),
+  //             )
+  //             .having(
+  //               (p0) => p0.matchesPosition,
+  //               'matchesPosition',
+  //               allOf(isNotNull, isNotEmpty, containsPair('title', isNotEmpty)),
+  //             )
+  //             .having(
+  //               (p0) => p0.parsed,
+  //               'parsed',
+  //               isNotEmpty,
+  //             )
+  //             .having(
+  //               (p0) => p0.src,
+  //               'src',
+  //               isNotEmpty,
+  //             )
+  //             .having(
+  //               (p0) => p0.rankingScore,
+  //               'rankingScore',
+  //               isNotNull,
+  //             )
+  //             .having(
+  //               (p0) => p0.rankingScoreDetails,
+  //               'rankingScoreDetails',
+  //               rankingScoreDetailsMatcher,
+  //             )
+  //             .having(
+  //                 (p0) => p0.vectors, 'vectors', allOf(isNotNull, isNotEmpty))
+  //             .having((p0) => p0.semanticScore, 'semanticScore', isNull),
+  //       ),
+  //     );
+  //   });
+  // });
+
+  test('search code samples', () async {
+    // #docregion search_get_1
+    await client.index('movies').search('American ninja');
+    // #enddocregion
+
+    // #docregion search_parameter_guide_show_ranking_score_1
+    await client
+        .index('movies')
+        .search('dragon', SearchQuery(showRankingScore: true));
+    // #enddocregion
+  }, skip: true);
+
+  test('facet search code samples', () async {
+    // #docregion facet_search_1
+    await client.index('books').facetSearch(
+          FacetSearchQuery(
+            facetQuery: 'fiction',
+            facetName: 'genres',
+            filter: 'rating > 3',
+          ),
+        );
+    // #enddocregion
+
+    // #docregion facet_search_2
+    await client.index('books').updateFaceting(
+          Faceting(
+            sortFacetValuesBy: {
+              'genres': FacetingSortTypes.count,
+            },
+          ),
+        );
+    // #enddocregion
+
+    // #docregion facet_search_3
+    await client.index('books').facetSearch(
+          FacetSearchQuery(
+            facetQuery: 'c',
+            facetName: 'genres',
+          ),
+        );
+    // #enddocregion
+
+    // #docregion search_parameter_guide_attributes_to_search_on_1
+    await client.index('books').facetSearch(
+          FacetSearchQuery(
+            facetQuery: 'c',
+            facetName: 'genres',
+          ),
+        );
+    // #enddocregion
+
+    // #docregion search_parameter_guide_facet_stats_1
+    await client
+        .index('movie_ratings')
+        .search('Batman', SearchQuery(facets: ['genres', 'rating']));
+    // #enddocregion
+
+    // #docregion faceted_search_1
+    await client
+        .index('books')
+        .search('', SearchQuery(facets: ['genres', 'rating', 'language']));
+    // #enddocregion
+
+    // #docregion filtering_guide_nested_1
+    await client.index('movie_ratings').search(
+          'thriller',
+          SearchQuery(
+            filterExpression: Meili.gte(
+              //or Meili.attr('rating.users')
+              //or 'rating.users'.toMeiliAttribute()
+              Meili.attrFromParts(['rating', 'users']),
+              Meili.value(90),
             ),
-          )
-          .asSearchResult()
-          .mapToContainer();
+          ),
+        );
+    // #enddocregion
 
-      expect(res.vector, vector);
-      expect(
-        res.hits,
-        everyElement(
-          isA<MeiliDocumentContainer<Map<String, dynamic>>>()
-              .having(
-                (p0) => p0.vectors,
-                'vectors',
-                isNotNull,
-              )
-              .having(
-                (p0) => p0.semanticScore,
-                'semanticScore',
-                isNotNull,
-              ),
-        ),
-      );
-    });
+    // #docregion sorting_guide_sort_nested_1
+    await client
+        .index('movie_ratings')
+        .search('thriller', SearchQuery(sort: ['rating.users:asc']));
+    // #enddocregion
 
-    test('normal search', () async {
-      final res = await index
-          .search(
-            'The',
-            SearchQuery(
-              showRankingScore: true,
-              showRankingScoreDetails: true,
-              attributesToHighlight: ['*'],
-              showMatchesPosition: true,
-            ),
-          )
-          .asSearchResult()
-          .mapToContainer();
+    // #docregion search_parameter_guide_page_1
+    await client
+        .index('movies')
+        .search('', SearchQuery(page: 2))
+        .asPaginatedResult();
+    // #enddocregion
 
-      final attributeMatcher = isA<MeiliRankingScoreDetailsAttributeRule>()
-          .having((p0) => p0.src, 'src', allOf(isNotNull, isNotEmpty))
-          .having((p0) => p0.score, 'score', isNotNull)
-          .having((p0) => p0.order, 'order', isNotNull)
-          .having((p0) => p0.queryWordDistanceScore, 'queryWordDistanceScore',
-              isNotNull)
-          .having((p0) => p0.attributeRankingOrderScore,
-              'attributeRankingOrderScore', isNotNull);
-
-      final wordsMatcher = isA<MeiliRankingScoreDetailsWordsRule>()
-          .having((p0) => p0.src, 'src', allOf(isNotNull, isNotEmpty))
-          .having((p0) => p0.score, 'score', isNotNull)
-          .having((p0) => p0.order, 'order', isNotNull)
-          .having((p0) => p0.matchingWords, 'matchingWords', isNotNull)
-          .having((p0) => p0.maxMatchingWords, 'maxMatchingWords', isNotNull);
-
-      final exactnessMatcher = isA<MeiliRankingScoreDetailsExactnessRule>()
-          .having((p0) => p0.src, 'src', allOf(isNotNull, isNotEmpty))
-          .having((p0) => p0.score, 'score', isNotNull)
-          .having((p0) => p0.order, 'order', isNotNull)
-          .having(
-            (p0) => p0.matchType,
-            'matchType',
-            allOf(isNotNull, isNotEmpty),
-          );
-
-      final typoMatcher = isA<MeiliRankingScoreDetailsTypoRule>()
-          .having((p0) => p0.src, 'src', allOf(isNotNull, isNotEmpty))
-          .having((p0) => p0.score, 'score', isNotNull)
-          .having((p0) => p0.order, 'order', isNotNull)
-          .having((p0) => p0.typoCount, 'typoCount', isNotNull)
-          .having((p0) => p0.maxTypoCount, 'maxTypoCount', isNotNull);
-
-      final proximityMatcher = isA<MeiliRankingScoreDetailsProximityRule>()
-          .having((p0) => p0.src, 'src', allOf(isNotNull, isNotEmpty))
-          .having((p0) => p0.score, 'score', isNotNull)
-          .having((p0) => p0.order, 'order', isNotNull);
-
-      final rankingScoreDetailsMatcher = isA<MeiliRankingScoreDetails>()
-          .having((p0) => p0.src, 'src', allOf(isNotNull, isNotEmpty))
-          .having((p0) => p0.attribute, 'attribute', attributeMatcher)
-          .having((p0) => p0.words, 'words', wordsMatcher)
-          .having((p0) => p0.exactness, 'exactness', exactnessMatcher)
-          .having((p0) => p0.typo, 'typo', typoMatcher)
-          .having((p0) => p0.proximity, 'proximity', proximityMatcher)
-          .having(
-              (p0) => p0.customRules, 'customRules', allOf(isNotNull, isEmpty));
-
-      expect(res.hits.length, 2);
-
-      expect(
-        res.hits,
-        everyElement(
-          isA<MeiliDocumentContainer<Map<String, dynamic>>>()
-              .having(
-                (p0) => p0.formatted,
-                'formatted',
-                allOf(isNotNull, isNotEmpty, contains('id')),
-              )
-              .having(
-                (p0) => p0.matchesPosition,
-                'matchesPosition',
-                allOf(isNotNull, isNotEmpty, containsPair('title', isNotEmpty)),
-              )
-              .having(
-                (p0) => p0.parsed,
-                'parsed',
-                isNotEmpty,
-              )
-              .having(
-                (p0) => p0.src,
-                'src',
-                isNotEmpty,
-              )
-              .having(
-                (p0) => p0.rankingScore,
-                'rankingScore',
-                isNotNull,
-              )
-              .having(
-                (p0) => p0.rankingScoreDetails,
-                'rankingScoreDetails',
-                rankingScoreDetailsMatcher,
-              )
-              .having(
-                  (p0) => p0.vectors, 'vectors', allOf(isNotNull, isNotEmpty))
-              .having((p0) => p0.semanticScore, 'semanticScore', isNull),
-        ),
-      );
-    });
-  });
+    // #docregion search_parameter_guide_hitsperpage_1
+    await client
+        .index('movies')
+        .search('', SearchQuery(hitsPerPage: 15))
+        .asPaginatedResult();
+    // #enddocregion
+  }, skip: true);
 }

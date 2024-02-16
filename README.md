@@ -28,7 +28,7 @@
 
 **Meilisearch** is an open-source search engine. [Learn more about Meilisearch.](https://github.com/meilisearch/meilisearch)
 
-## Table of Contents <!-- omit in toc -->
+## Table of Contents <!-- omit in TOC -->
 
 - [📖 Documentation](#-documentation)
 - [⚡ Supercharge your Meilisearch experience](#-supercharge-your-meilisearch-experience)
@@ -55,7 +55,7 @@ You can install the **meilisearch** package by adding a few lines into `pubspec.
 
 ```yaml
 dependencies:
-  meilisearch: ^0.14.0
+  meilisearch: ^0.15.0
 ```
 
 Then open your terminal and update dart packages.
@@ -201,6 +201,8 @@ await index.search('wonder', filter: ['id > 1 AND genres = Action']);
 ## 🤖 Compatibility with Meilisearch
 
 This package guarantees compatibility with [version v1.x of Meilisearch](https://github.com/meilisearch/meilisearch/releases/tag/latest), but some features may not be present. Please check the [issues](https://github.com/meilisearch/meilisearch-dart/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22+label%3Aenhancement) for more info.
+
+⚠️ This package is not compatible with the [`vectoreStore` experimental feature](https://www.meilisearch.com/docs/learn/experimental/vector_search) of Meilisearch v1.6.0 and later. More information on this [issue](https://github.com/meilisearch/meilisearch-dart/issues/369).
 
 ## 💡 Learn more
 

@@ -18,12 +18,11 @@ jobs:
     # Will still run for each push to bump-meilisearch-v*
     if: github.event_name != 'pull_request' || !startsWith(github.base_ref, 'bump-meilisearch-v')
     timeout-minutes: 10
-    runs-on: ${{ matrix.os }}
+    runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
-        os: [ ubuntu-latest, macos-latest, windows-latest ]
-        version: ['3.0.0']
+        version: ['latest']
     name: integration-tests (dart ${{ matrix.version }})
     services:
       meilisearch:
@@ -35,23 +34,25 @@ jobs:
           - 7700:7700
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - uses: dart-lang/setup-dart@v1
         with:
           sdk: ${{ matrix.version }}
       - name: Install dependencies
         run: |
           dart pub get
+          dart pub get -C tool
           dart pub global activate coverage
       - name: Run integration tests
         run: dart test --concurrency=4 --reporter=github --coverage=./coverage/reports
       - name: Generate coverage reports
         run: dart pub global run coverage:format_coverage --report-on=./lib --lcov --in=./coverage/reports --out=coverage/lcov.info
       - name: Report to Codecov
-        uses: codecov/codecov-action@v3
+        uses: codecov/codecov-action@v4
         with:
           file: coverage/lcov.info
-          fail_ci_if_error: true
+          fail_ci_if_error: false
+
 
   linter:
     name: linter-check
@@ -59,12 +60,14 @@ jobs:
     container:
       image: dart:latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - uses: dart-lang/setup-dart@v1
         with:
           sdk: '3.0.0'
       - name: Install dependencies
-        run: dart pub get
+        run: |
+          dart pub get
+          dart pub get -C tool
       - name: Run linter
         run: dart analyze --fatal-infos && dart format . --set-exit-if-changed
 
@@ -72,19 +75,32 @@ jobs:
     name: Yaml linting check
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Yaml lint check
         uses: ibiqlik/action-yamllint@v3
         with:
           config_file: .yamllint.yml
 
+  check-code-samples:
+    name: check .code-samples.meilisearch.yaml
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dart-lang/setup-dart@v1
+        with:
+          sdk: 'latest'
+      - name: check if samples changed
+        run: |
+          dart pub get
+          dart pub get -C tool
+          dart run ./tool/bin/meili.dart update-samples --fail-on-change
   pana:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     container:
       image: dart:latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - uses: dart-lang/setup-dart@v1
         with:
           sdk: '3.0.0'

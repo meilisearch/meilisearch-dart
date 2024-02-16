@@ -4,18 +4,12 @@ import 'package:meilisearch/meilisearch.dart';
 
 class TestMeiliSearchClient extends MeiliSearchClient {
   TestMeiliSearchClient(
-    String serverUrl, [
-    String? apiKey,
-    Duration? connectTimeout,
-    HttpClientAdapter? adapter,
-    List<Interceptor>? interceptors,
-  ]) : super(
-          serverUrl,
-          apiKey,
-          connectTimeout,
-          adapter,
-          interceptors,
-        );
+    super.serverUrl, [
+    super.apiKey,
+    super.connectTimeout,
+    super.adapter,
+    super.interceptors,
+  ]);
 
   factory TestMeiliSearchClient.withCustomDio(
     String serverUrl, {
@@ -114,14 +108,10 @@ class TestMeiliSearchClient extends MeiliSearchClient {
   }
 
   Future<void> disposeUsedResources() async {
-    final indexesCopy = usedIndexes.toList();
     await Future.wait([
       _deleteUsedIndexes(),
       _deleteUsedKeys(),
     ]);
-    if (indexesCopy.isNotEmpty) {
-      await _deleteTasksForDeletedIndexes(indexesCopy);
-    }
   }
 
   Future<void> _deleteUsedIndexes() async {
@@ -136,9 +126,5 @@ class TestMeiliSearchClient extends MeiliSearchClient {
             (e) => deleteKey(e).onError((error, stackTrace) => false),
           ),
     );
-  }
-
-  Future<void> _deleteTasksForDeletedIndexes(List<String> indexes) async {
-    await deleteTasks(params: DeleteTasksQuery(indexUids: indexes));
   }
 }
