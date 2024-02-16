@@ -101,7 +101,6 @@ jobs:
     #   image: dart:latest
     steps:
       - uses: actions/checkout@v4
-      - run: git config --system --add safe.directory '*'
       - uses: dart-lang/setup-dart@v1
         with:
           sdk: '3.0.0'
