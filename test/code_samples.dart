@@ -846,12 +846,33 @@ void main() {
 
       // #docregion geosearch_guide_filter_usage_3
       await client.index('restaurants').search(
-          '',
-          SearchQuery(
+            '',
+            SearchQuery(
               filter:
-                  '_geoBoundingBox([45.494181, 9.214024], [45.449484, 9.179175])'));
+                  '_geoBoundingBox([45.494181, 9.214024], [45.449484, 9.179175])',
+            ),
+          );
+      // #enddocregion
+      // #docregion get_separator_tokens_1
+      await client.index('articles').getSeparatorTokens();
+      // #enddocregion
+      // #docregion update_separator_tokens_1
+      await client.index('articles').updateSeparatorTokens(["|", "&hellip;"]);
+      // #enddocregion
+      // #docregion reset_separator_tokens_1
+      await client.index('articles').resetSeparatorTokens();
+      // #enddocregion
+      // #docregion get_non_separator_tokens_1
+      await client.index('articles').getNonSeparatorTokens();
+      // #enddocregion
+      // #docregion update_non_separator_tokens_1
+      await client.index('articles').updateNonSeparatorTokens(["@", "#"]);
+      // #enddocregion
+      // #docregion reset_non_separator_tokens_1
+      await client.index('articles').resetNonSeparatorTokens();
+      // #enddocregion
     });
-    // #enddocregion
+
     // skip this test, since it's only used for generating code samples
   }, skip: true);
 
