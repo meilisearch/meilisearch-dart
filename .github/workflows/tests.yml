@@ -101,6 +101,7 @@ jobs:
       image: dart:latest
     steps:
       - uses: actions/checkout@v4
+      - run: git config --system --add safe.directory '*'
       - uses: dart-lang/setup-dart@v1
         with:
           sdk: '3.0.0'
@@ -108,7 +109,6 @@ jobs:
       - name: Run pana
         id: pana-run
         run: |
-          git config --system --add safe.directory '*'
           echo "PANA_OUTPUT<<EOF" >> $GITHUB_ENV
           dart pub global run pana --no-warning --exit-code-threshold 130 >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV
