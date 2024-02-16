@@ -61,9 +61,6 @@ jobs:
       image: dart:latest
     steps:
       - uses: actions/checkout@v4
-      - uses: dart-lang/setup-dart@v1
-        with:
-          sdk: '3.0.0'
       - name: Install dependencies
         run: |
           dart pub get
@@ -97,8 +94,6 @@ jobs:
   pana:
     runs-on: ubuntu-latest
     timeout-minutes: 10
-    # container:
-    #   image: dart:latest
     steps:
       - uses: actions/checkout@v4
       - uses: dart-lang/setup-dart@v1
