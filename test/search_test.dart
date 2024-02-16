@@ -54,6 +54,98 @@ void main() {
         expect(result.hits, hasLength(1));
       });
 
+      test('Show ranking score details', () async {
+      final res = await index
+          .search(
+            'The',
+            SearchQuery(
+              showRankingScore: true,
+              showRankingScoreDetails: true,
+              attributesToHighlight: ['*'],
+              showMatchesPosition: true,
+            ),
+          )
+          .asSearchResult()
+          .mapToContainer();
+
+      final attributeMatcher = isA<MeiliRankingScoreDetailsAttributeRule>()
+          .having((p0) => p0.src, 'src', allOf(isNotNull, isNotEmpty))
+          .having((p0) => p0.score, 'score', isNotNull)
+          .having((p0) => p0.order, 'order', isNotNull)
+          .having((p0) => p0.queryWordDistanceScore, 'queryWordDistanceScore',
+              isNotNull)
+          .having((p0) => p0.attributeRankingOrderScore,
+              'attributeRankingOrderScore', isNotNull);
+
+      final wordsMatcher = isA<MeiliRankingScoreDetailsWordsRule>()
+          .having((p0) => p0.src, 'src', allOf(isNotNull, isNotEmpty))
+          .having((p0) => p0.score, 'score', isNotNull)
+          .having((p0) => p0.order, 'order', isNotNull)
+          .having((p0) => p0.matchingWords, 'matchingWords', isNotNull)
+          .having((p0) => p0.maxMatchingWords, 'maxMatchingWords', isNotNull);
+
+      final exactnessMatcher = isA<MeiliRankingScoreDetailsExactnessRule>()
+          .having((p0) => p0.src, 'src', allOf(isNotNull, isNotEmpty))
+          .having((p0) => p0.score, 'score', isNotNull)
+          .having((p0) => p0.order, 'order', isNotNull)
+          .having(
+            (p0) => p0.matchType,
+            'matchType',
+            allOf(isNotNull, isNotEmpty),
+          );
+
+      final typoMatcher = isA<MeiliRankingScoreDetailsTypoRule>()
+          .having((p0) => p0.src, 'src', allOf(isNotNull, isNotEmpty))
+          .having((p0) => p0.score, 'score', isNotNull)
+          .having((p0) => p0.order, 'order', isNotNull)
+          .having((p0) => p0.typoCount, 'typoCount', isNotNull)
+          .having((p0) => p0.maxTypoCount, 'maxTypoCount', isNotNull);
+
+      final proximityMatcher = isA<MeiliRankingScoreDetailsProximityRule>()
+          .having((p0) => p0.src, 'src', allOf(isNotNull, isNotEmpty))
+          .having((p0) => p0.score, 'score', isNotNull)
+          .having((p0) => p0.order, 'order', isNotNull);
+
+      final rankingScoreDetailsMatcher = isA<MeiliRankingScoreDetails>()
+          .having((p0) => p0.src, 'src', allOf(isNotNull, isNotEmpty))
+          .having((p0) => p0.attribute, 'attribute', attributeMatcher)
+          .having((p0) => p0.words, 'words', wordsMatcher)
+          .having((p0) => p0.exactness, 'exactness', exactnessMatcher)
+          .having((p0) => p0.typo, 'typo', typoMatcher)
+          .having((p0) => p0.proximity, 'proximity', proximityMatcher)
+          .having(
+              (p0) => p0.customRules, 'customRules', allOf(isNotNull, isEmpty));
+
+      expect(res.hits.length, 4);
+
+      expect(
+        res.hits,
+        everyElement(
+          isA<MeiliDocumentContainer<Map<String, dynamic>>>()
+              .having(
+                (p0) => p0.parsed,
+                'parsed',
+                isNotEmpty,
+              )
+              .having(
+                (p0) => p0.src,
+                'src',
+                isNotEmpty,
+              )
+              .having(
+                (p0) => p0.rankingScore,
+                'rankingScore',
+                isNotNull,
+              )
+              .having(
+                (p0) => p0.rankingScoreDetails,
+                'rankingScoreDetails',
+                rankingScoreDetailsMatcher,
+              ),
+        ),
+      );
+    });
+
       group('with', () {
         test('offset parameter', () async {
           final result =
@@ -448,6 +540,7 @@ void main() {
     });
   });
 
+
   // Commented because of https://github.com/meilisearch/meilisearch-dart/issues/369
   // group('Experimental', () {
   //   setUpClient();
@@ -493,111 +586,6 @@ void main() {
   //               'semanticScore',
   //               isNotNull,
   //             ),
-  //       ),
-  //     );
-  //   });
-
-  //   test('normal search', () async {
-  //     final res = await index
-  //         .search(
-  //           'The',
-  //           SearchQuery(
-  //             showRankingScore: true,
-  //             showRankingScoreDetails: true,
-  //             attributesToHighlight: ['*'],
-  //             showMatchesPosition: true,
-  //           ),
-  //         )
-  //         .asSearchResult()
-  //         .mapToContainer();
-
-  //     final attributeMatcher = isA<MeiliRankingScoreDetailsAttributeRule>()
-  //         .having((p0) => p0.src, 'src', allOf(isNotNull, isNotEmpty))
-  //         .having((p0) => p0.score, 'score', isNotNull)
-  //         .having((p0) => p0.order, 'order', isNotNull)
-  //         .having((p0) => p0.queryWordDistanceScore, 'queryWordDistanceScore',
-  //             isNotNull)
-  //         .having((p0) => p0.attributeRankingOrderScore,
-  //             'attributeRankingOrderScore', isNotNull);
-
-  //     final wordsMatcher = isA<MeiliRankingScoreDetailsWordsRule>()
-  //         .having((p0) => p0.src, 'src', allOf(isNotNull, isNotEmpty))
-  //         .having((p0) => p0.score, 'score', isNotNull)
-  //         .having((p0) => p0.order, 'order', isNotNull)
-  //         .having((p0) => p0.matchingWords, 'matchingWords', isNotNull)
-  //         .having((p0) => p0.maxMatchingWords, 'maxMatchingWords', isNotNull);
-
-  //     final exactnessMatcher = isA<MeiliRankingScoreDetailsExactnessRule>()
-  //         .having((p0) => p0.src, 'src', allOf(isNotNull, isNotEmpty))
-  //         .having((p0) => p0.score, 'score', isNotNull)
-  //         .having((p0) => p0.order, 'order', isNotNull)
-  //         .having(
-  //           (p0) => p0.matchType,
-  //           'matchType',
-  //           allOf(isNotNull, isNotEmpty),
-  //         );
-
-  //     final typoMatcher = isA<MeiliRankingScoreDetailsTypoRule>()
-  //         .having((p0) => p0.src, 'src', allOf(isNotNull, isNotEmpty))
-  //         .having((p0) => p0.score, 'score', isNotNull)
-  //         .having((p0) => p0.order, 'order', isNotNull)
-  //         .having((p0) => p0.typoCount, 'typoCount', isNotNull)
-  //         .having((p0) => p0.maxTypoCount, 'maxTypoCount', isNotNull);
-
-  //     final proximityMatcher = isA<MeiliRankingScoreDetailsProximityRule>()
-  //         .having((p0) => p0.src, 'src', allOf(isNotNull, isNotEmpty))
-  //         .having((p0) => p0.score, 'score', isNotNull)
-  //         .having((p0) => p0.order, 'order', isNotNull);
-
-  //     final rankingScoreDetailsMatcher = isA<MeiliRankingScoreDetails>()
-  //         .having((p0) => p0.src, 'src', allOf(isNotNull, isNotEmpty))
-  //         .having((p0) => p0.attribute, 'attribute', attributeMatcher)
-  //         .having((p0) => p0.words, 'words', wordsMatcher)
-  //         .having((p0) => p0.exactness, 'exactness', exactnessMatcher)
-  //         .having((p0) => p0.typo, 'typo', typoMatcher)
-  //         .having((p0) => p0.proximity, 'proximity', proximityMatcher)
-  //         .having(
-  //             (p0) => p0.customRules, 'customRules', allOf(isNotNull, isEmpty));
-
-  //     expect(res.hits.length, 2);
-
-  //     expect(
-  //       res.hits,
-  //       everyElement(
-  //         isA<MeiliDocumentContainer<Map<String, dynamic>>>()
-  //             .having(
-  //               (p0) => p0.formatted,
-  //               'formatted',
-  //               allOf(isNotNull, isNotEmpty, contains('id')),
-  //             )
-  //             .having(
-  //               (p0) => p0.matchesPosition,
-  //               'matchesPosition',
-  //               allOf(isNotNull, isNotEmpty, containsPair('title', isNotEmpty)),
-  //             )
-  //             .having(
-  //               (p0) => p0.parsed,
-  //               'parsed',
-  //               isNotEmpty,
-  //             )
-  //             .having(
-  //               (p0) => p0.src,
-  //               'src',
-  //               isNotEmpty,
-  //             )
-  //             .having(
-  //               (p0) => p0.rankingScore,
-  //               'rankingScore',
-  //               isNotNull,
-  //             )
-  //             .having(
-  //               (p0) => p0.rankingScoreDetails,
-  //               'rankingScoreDetails',
-  //               rankingScoreDetailsMatcher,
-  //             )
-  //             .having(
-  //                 (p0) => p0.vectors, 'vectors', allOf(isNotNull, isNotEmpty))
-  //             .having((p0) => p0.semanticScore, 'semanticScore', isNull),
   //       ),
   //     );
   //   });
