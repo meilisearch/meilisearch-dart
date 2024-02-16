@@ -457,11 +457,9 @@ void main() {
   //   setUp(() async {
   //     features = await client.http.updateExperimentalFeatures(
   //       UpdateExperimentalFeatures(
-  //         scoreDetails: true,
   //         vectorStore: true,
   //       ),
   //     );
-  //     expect(features.scoreDetails, true);
   //     expect(features.vectorStore, true);
 
   //     uid = randomUid();

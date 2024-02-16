@@ -10,7 +10,6 @@ ExperimentalFeatures _$ExperimentalFeaturesFromJson(
         Map<String, dynamic> json) =>
     ExperimentalFeatures(
       vectorStore: json['vectorStore'] as bool,
-      scoreDetails: json['scoreDetails'] as bool,
     );
 
 Map<String, dynamic> _$UpdateExperimentalFeaturesToJson(
@@ -24,6 +23,5 @@ Map<String, dynamic> _$UpdateExperimentalFeaturesToJson(
   }
 
   writeNotNull('vectorStore', instance.vectorStore);
-  writeNotNull('scoreDetails', instance.scoreDetails);
   return val;
 }
