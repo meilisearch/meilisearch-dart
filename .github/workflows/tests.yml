@@ -108,7 +108,7 @@ jobs:
       - run: dart pub global activate pana
       - name: Run pana
         id: pana-run
-        run: |          
+        run: |
           echo "PANA_OUTPUT<<EOF" >> $GITHUB_ENV
           dart pub global run pana --no-warning --exit-code-threshold 130 >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV
