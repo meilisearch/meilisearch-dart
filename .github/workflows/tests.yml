@@ -60,6 +60,9 @@ jobs:
       image: dart:latest
     steps:
       - uses: actions/checkout@v3
+      - uses: dart-lang/setup-dart@v1
+        with:
+          sdk: '3.0.0'
       - name: Install dependencies
         run: dart pub get
       - name: Run linter
@@ -82,6 +85,9 @@ jobs:
       image: dart:latest
     steps:
       - uses: actions/checkout@v3
+      - uses: dart-lang/setup-dart@v1
+        with:
+          sdk: '3.0.0'
       - run: dart pub global activate pana
       - name: Run pana
         id: pana-run
