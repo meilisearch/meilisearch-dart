@@ -36,6 +36,7 @@
 - [🚀 Getting started](#-getting-started)
 - [Advanced Configuration](#advanced-configuration)
   - [Customizing the dio instance](#customizing-the-dio-instance)
+  - [Using MeiliDocumentContainer](#using-meilidocumentcontainer)
 - [🤖 Compatibility with Meilisearch](#-compatibility-with-meilisearch)
 - [💡 Learn more](#-learn-more)
 - [⚙️ Contributing](#️-contributing)
@@ -205,6 +206,19 @@ await index.search('wonder', filter: ['id > 1 AND genres = Action']);
 ### Customizing the dio instance
 
 Meilisearch uses [dio](https://pub.dev/packages/dio) internally to send requests, you can provide it with your own interceptors or adapter using the `MeiliSearchClient.withCustomDio` constructor.
+
+### Using MeiliDocumentContainer
+
+The `MeiliDocumentContainer<T>` class contains meilisearch-specific fields (e.g. `rankingScoreDetails`, `_formatted`, `matchesPosition`, etc...).
+
+We define the `mapToContainer()` extension to help you quickly opt-in to this class, example:
+
+```dart
+final res = await index 
+      .search("hello world") 
+      .asSearchResult() //or .asPaginatedResult() if using page parameters
+      .mapToContainer(); 
+```
 
 ## 🤖 Compatibility with Meilisearch
 
