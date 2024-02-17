@@ -204,7 +204,7 @@ await index.search('wonder', filter: ['id > 1 AND genres = Action']);
 
 ### Customizing the dio instance
 
-Meilisearch uses [dio](https://pub.dev/packages/dio) internally to send requests, you can provide it with your own interceptors or adapter useing the `MeiliSearchClient.withCustomDio` constructor.
+Meilisearch uses [dio](https://pub.dev/packages/dio) internally to send requests, you can provide it with your own interceptors or adapter using the `MeiliSearchClient.withCustomDio` constructor.
 
 ## 🤖 Compatibility with Meilisearch
 
