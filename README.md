@@ -28,12 +28,14 @@
 
 **Meilisearch** is an open-source search engine. [Learn more about Meilisearch.](https://github.com/meilisearch/meilisearch)
 
-## Table of Contents <!-- omit in TOC -->
+## Table of Contents <!-- omit from toc -->
 
 - [📖 Documentation](#-documentation)
 - [⚡ Supercharge your Meilisearch experience](#-supercharge-your-meilisearch-experience)
 - [🔧 Installation](#-installation)
 - [🚀 Getting started](#-getting-started)
+- [Advanced Configuration](#advanced-configuration)
+  - [Customizing the dio instance](#customizing-the-dio-instance)
 - [🤖 Compatibility with Meilisearch](#-compatibility-with-meilisearch)
 - [💡 Learn more](#-learn-more)
 - [⚙️ Contributing](#️-contributing)
@@ -197,6 +199,12 @@ await index.search('wonder', filter: ['id > 1 AND genres = Action']);
   "query": "wonder"
 }
 ```
+
+## Advanced Configuration
+
+### Customizing the dio instance
+
+Meilisearch uses [dio](https://pub.dev/packages/dio) internally to send requests, you can provide it with your own interceptors or adapter useing the `MeiliSearchClient.withCustomDio` constructor.
 
 ## 🤖 Compatibility with Meilisearch
 
