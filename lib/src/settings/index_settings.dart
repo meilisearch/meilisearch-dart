@@ -15,6 +15,8 @@ class IndexSettings {
     this.typoTolerance,
     this.pagination,
     this.faceting,
+    this.separatorTokens,
+    this.nonSeparatorTokens,
   });
 
   static const allAttributes = <String>['*'];
@@ -27,6 +29,12 @@ class IndexSettings {
 
   /// List of ranking rules sorted by order of importance
   List<String>? rankingRules;
+
+  /// List of tokens that will be considered as word separators by Meilisearch.
+  List<String>? separatorTokens;
+
+  /// List of tokens that will not be considered as word separators by Meilisearch.
+  List<String>? nonSeparatorTokens;
 
   /// Attributes to use in [filters](https://www.meilisearch.com/docs/reference/api/search#filter)
   List<String>? filterableAttributes;
@@ -64,6 +72,8 @@ class IndexSettings {
         'typoTolerance': typoTolerance?.toMap(),
         'pagination': pagination?.toMap(),
         'faceting': faceting?.toMap(),
+        'separatorTokens': separatorTokens,
+        'nonSeparatorTokens': nonSeparatorTokens
       };
 
   factory IndexSettings.fromMap(Map<String, Object?> map) {
@@ -77,6 +87,8 @@ class IndexSettings {
     final searchableAttributes = map['searchableAttributes'];
     final displayedAttributes = map['displayedAttributes'];
     final sortableAttributes = map['sortableAttributes'];
+    final separatorTokens = map['separatorTokens'];
+    final nonSeparatorTokens = map['nonSeparatorTokens'];
 
     return IndexSettings(
       synonyms: synonyms is Map<String, Object?>
@@ -109,6 +121,12 @@ class IndexSettings {
           : null,
       faceting:
           faceting is Map<String, Object?> ? Faceting.fromMap(faceting) : null,
+      nonSeparatorTokens: nonSeparatorTokens is List<Object?>
+          ? nonSeparatorTokens.cast<String>()
+          : null,
+      separatorTokens: separatorTokens is List<Object?>
+          ? separatorTokens.cast<String>()
+          : null,
     );
   }
 }

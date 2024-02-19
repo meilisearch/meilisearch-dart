@@ -608,6 +608,56 @@ class MeiliSearchIndex {
     );
   }
 
+  /// Get separator tokens of the index.
+  Future<List<String>> getSeparatorTokens() async {
+    final response = await http
+        .getMethod<List<Object?>>('/indexes/$uid/settings/separator-tokens');
+
+    return response.data!.cast<String>();
+  }
+
+  /// Reset separator tokens of the index.
+  Future<Task> resetSeparatorTokens() async {
+    return await _getTask(
+      http.deleteMethod('/indexes/$uid/settings/separator-tokens'),
+    );
+  }
+
+  /// Update separator tokens of the index.
+  Future<Task> updateSeparatorTokens(List<String> separatorTokens) async {
+    return await _getTask(
+      http.putMethod(
+        '/indexes/$uid/settings/separator-tokens',
+        data: separatorTokens,
+      ),
+    );
+  }
+
+  /// Get non separator tokens of the index.
+  Future<List<String>> getNonSeparatorTokens() async {
+    final response = await http.getMethod<List<Object?>>(
+        '/indexes/$uid/settings/non-separator-tokens');
+
+    return response.data!.cast<String>();
+  }
+
+  /// Reset separator tokens of the index.
+  Future<Task> resetNonSeparatorTokens() async {
+    return await _getTask(
+      http.deleteMethod('/indexes/$uid/settings/non-separator-tokens'),
+    );
+  }
+
+  /// Update separator tokens of the index.
+  Future<Task> updateNonSeparatorTokens(List<String> nonSeparatorTokens) async {
+    return await _getTask(
+      http.putMethod(
+        '/indexes/$uid/settings/non-separator-tokens',
+        data: nonSeparatorTokens,
+      ),
+    );
+  }
+
   /// Get searchable attributes of the index.
   Future<List<String>> getSearchableAttributes() async {
     final response = await http.getMethod<List<Object?>>(
