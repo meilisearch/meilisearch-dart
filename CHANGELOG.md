@@ -1,5 +1,10 @@
 [comment]: <> (All notable changes to this project will be documented in this file.)
 
+# 0.16.0
+### Breaking Changes:
+
+- `scoreDetails` feature is not experimental anymore. You can directly use showRankingScoreDetails during a search without activating the experimental feature
+
 # 0.15.0
 ### Breaking Changes:
 
