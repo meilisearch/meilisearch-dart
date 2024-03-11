@@ -149,6 +149,122 @@ void main() {
       expect(resetRules, defaultRankingRules);
     });
 
+    group('separator tokens', () {
+      Future<List<String>> doUpdate() async {
+        final toUpdate = <String>['zz', 'ff'];
+        var response =
+            await index.updateSeparatorTokens(toUpdate).waitFor(client: client);
+
+        expect(response.status, "succeeded");
+        return toUpdate;
+      }
+
+      test("Get", () async {
+        final initial = await index.getSeparatorTokens();
+        final initialFromSettings =
+            await index.getSettings().then((value) => value.separatorTokens);
+
+        expect(
+          initial,
+          equals(initialFromSettings),
+        );
+      });
+
+      test("Update", () async {
+        final toUpdate = await doUpdate();
+
+        final afterUpdate = await index.getSeparatorTokens();
+        final afterUpdateFromSettings =
+            await index.getSettings().then((value) => value.separatorTokens);
+        expect(
+          afterUpdateFromSettings,
+          unorderedEquals(toUpdate),
+        );
+        expect(
+          afterUpdate,
+          unorderedEquals(toUpdate),
+        );
+      });
+
+      test("Reset", () async {
+        //first update, then reset
+        await doUpdate();
+        final response =
+            await index.resetSeparatorTokens().waitFor(client: client);
+
+        expect(response.status, 'succeeded');
+        final afterReset = await index.getSeparatorTokens();
+        final afterResetFromSettings =
+            await index.getSettings().then((value) => value.separatorTokens);
+        expect(
+          afterReset,
+          equals(<String>[]),
+        );
+        expect(
+          afterResetFromSettings,
+          equals(<String>[]),
+        );
+      });
+    });
+    group('Non separator tokens', () {
+      Future<List<String>> doUpdate() async {
+        final toUpdate = <String>['/'];
+        var response = await index
+            .updateNonSeparatorTokens(toUpdate)
+            .waitFor(client: client);
+
+        expect(response.status, "succeeded");
+        return toUpdate;
+      }
+
+      test("Get", () async {
+        final initial = await index.getNonSeparatorTokens();
+        final initialFromSettings =
+            await index.getSettings().then((value) => value.nonSeparatorTokens);
+
+        expect(
+          initial,
+          equals(initialFromSettings),
+        );
+      });
+
+      test("Update", () async {
+        final toUpdate = await doUpdate();
+
+        final afterUpdate = await index.getNonSeparatorTokens();
+        final afterUpdateFromSettings =
+            await index.getSettings().then((value) => value.nonSeparatorTokens);
+        expect(
+          afterUpdateFromSettings,
+          unorderedEquals(toUpdate),
+        );
+        expect(
+          afterUpdate,
+          unorderedEquals(toUpdate),
+        );
+      });
+
+      test("Reset", () async {
+        //first update, then reset
+        await doUpdate();
+        final response =
+            await index.resetNonSeparatorTokens().waitFor(client: client);
+
+        expect(response.status, 'succeeded');
+        final afterReset = await index.getNonSeparatorTokens();
+        final afterResetFromSettings =
+            await index.getSettings().then((value) => value.nonSeparatorTokens);
+        expect(
+          afterReset,
+          equals(<String>[]),
+        );
+        expect(
+          afterResetFromSettings,
+          equals(<String>[]),
+        );
+      });
+    });
+
     test('Getting, setting, and deleting searchable attributes', () async {
       final updatedSearchableAttributes = ['title', 'id'];
       await index

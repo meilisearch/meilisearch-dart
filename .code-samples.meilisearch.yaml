@@ -288,5 +288,11 @@ security_guide_delete_key_1: |-
   await client.deleteKey('ac5cd97d-5a4b-4226-a868-2d0eb6d197ab');
 search_parameter_guide_crop_marker_1: "await client.index('movies').search(\n      'shifu',\n      SearchQuery(\n        attributesToCrop: ['overview'],\n        cropMarker: '[…]',\n      ),\n    );"
 search_parameter_guide_highlight_tag_1: "await client.index('movies').search(\n      'winter feast',\n      SearchQuery(\n        attributesToHighlight: ['overview'],\n        highlightPreTag: '<span class=\"highlight\">',\n        highlightPostTag: '<\/span>',\n      ),\n    );"
-geosearch_guide_filter_usage_3: "await client.index('restaurants').search(\n    '',\n    SearchQuery(\n        filter:\n            '_geoBoundingBox([45.494181, 9.214024], [45.449484, 9.179175])'));\n});"
+geosearch_guide_filter_usage_3: "await client.index('restaurants').search(\n      '',\n      SearchQuery(\n        filter:\n            '_geoBoundingBox([45.494181, 9.214024], [45.449484, 9.179175])',\n      ),\n    );"
 search_get_1: await client.index('movies').search('American ninja');
+get_separator_tokens_1: await client.index('articles').getSeparatorTokens();
+update_separator_tokens_1: "await client.index('articles').updateSeparatorTokens([\"|\", \"&hellip;\"]);"
+reset_separator_tokens_1: await client.index('articles').resetSeparatorTokens();
+get_non_separator_tokens_1: await client.index('articles').getNonSeparatorTokens();
+update_non_separator_tokens_1: "await client.index('articles').updateNonSeparatorTokens([\"@\", \"#\"]);"
+reset_non_separator_tokens_1: await client.index('articles').resetNonSeparatorTokens();
