@@ -1,3 +1,5 @@
+import '../annotations.dart';
+import 'embedder.dart';
 import 'faceting.dart';
 import 'pagination.dart';
 import 'typo_tolerance.dart';
@@ -17,6 +19,7 @@ class IndexSettings {
     this.faceting,
     this.separatorTokens,
     this.nonSeparatorTokens,
+    this.embedders,
   });
 
   static const allAttributes = <String>['*'];
@@ -60,6 +63,10 @@ class IndexSettings {
   ///Customize faceting feature.
   Faceting? faceting;
 
+  /// Set of embedders
+  @RequiredMeiliServerVersion('1.6.0')
+  Map<String, Embedder>? embedders;
+
   Map<String, Object?> toMap() => <String, Object?>{
         'synonyms': synonyms,
         'stopWords': stopWords,
@@ -73,7 +80,8 @@ class IndexSettings {
         'pagination': pagination?.toMap(),
         'faceting': faceting?.toMap(),
         'separatorTokens': separatorTokens,
-        'nonSeparatorTokens': nonSeparatorTokens
+        'nonSeparatorTokens': nonSeparatorTokens,
+        'embedders': embedders?.map((k, v) => MapEntry(k, v.toMap())),
       };
 
   factory IndexSettings.fromMap(Map<String, Object?> map) {
@@ -89,6 +97,7 @@ class IndexSettings {
     final sortableAttributes = map['sortableAttributes'];
     final separatorTokens = map['separatorTokens'];
     final nonSeparatorTokens = map['nonSeparatorTokens'];
+    final embedders = map['embedders'];
 
     return IndexSettings(
       synonyms: synonyms is Map<String, Object?>
@@ -126,6 +135,10 @@ class IndexSettings {
           : null,
       separatorTokens: separatorTokens is List<Object?>
           ? separatorTokens.cast<String>()
+          : null,
+      embedders: embedders is Map<String, Object?>
+          ? embedders.map((k, v) =>
+              MapEntry(k, Embedder.fromMap(v as Map<String, Object?>)))
           : null,
     );
   }

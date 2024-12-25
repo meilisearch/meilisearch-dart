@@ -8,3 +8,5 @@ export 'src/client.dart';
 export 'src/index.dart';
 export 'src/exception.dart';
 export 'src/facade.dart';
+export 'src/settings/distribution.dart';
+export 'src/settings/embedder.dart';

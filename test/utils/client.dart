@@ -26,6 +26,10 @@ String get testApiKey {
   return 'masterKey';
 }
 
+String? get openAiKey {
+  return Platform.environment['OPEN_AI_API_KEY'];
+}
+
 void setUpClient() {
   setUp(() {
     client = TestMeiliSearchClient(testServer, testApiKey);

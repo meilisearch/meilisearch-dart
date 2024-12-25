@@ -1,6 +1,7 @@
 import '../annotations.dart';
 import '../filter_builder/_exports.dart';
 import '../results/matching_strategy_enum.dart';
+import 'hybrid_search.dart';
 import 'search_query.dart';
 
 @RequiredMeiliServerVersion('1.1.0')
@@ -29,6 +30,7 @@ class IndexSearchQuery extends SearchQuery {
     super.highlightPostTag,
     super.matchingStrategy,
     super.attributesToSearchOn,
+    super.hybrid,
     super.showRankingScore,
     super.vector,
     super.showRankingScoreDetails,
@@ -65,6 +67,7 @@ class IndexSearchQuery extends SearchQuery {
     String? highlightPostTag,
     MatchingStrategy? matchingStrategy,
     List<String>? attributesToSearchOn,
+    HybridSearch? hybrid,
     bool? showRankingScore,
     List<dynamic /* double | List<double> */ >? vector,
     bool? showRankingScoreDetails,
@@ -91,6 +94,7 @@ class IndexSearchQuery extends SearchQuery {
         highlightPostTag: highlightPostTag ?? this.highlightPostTag,
         matchingStrategy: matchingStrategy ?? this.matchingStrategy,
         attributesToSearchOn: attributesToSearchOn ?? this.attributesToSearchOn,
+        hybrid: hybrid ?? this.hybrid,
         showRankingScore: showRankingScore ?? this.showRankingScore,
         vector: vector ?? this.vector,
         showRankingScoreDetails:
