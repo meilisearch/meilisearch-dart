@@ -26,8 +26,13 @@ String get testApiKey {
   return 'masterKey';
 }
 
-String? get openAiKey {
-  return Platform.environment['OPEN_AI_API_KEY'];
+String get openAiKey {
+  const openaiApiKey = '<OPEN_AI_API_KEY>';
+  if (_kIsWeb) {
+    return openaiApiKey;
+  } else {
+    return Platform.environment['OPEN_AI_API_KEY'] ?? openaiApiKey;
+  }
 }
 
 void setUpClient() {

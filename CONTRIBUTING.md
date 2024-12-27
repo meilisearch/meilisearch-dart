@@ -10,6 +10,7 @@ First of all, thank you for contributing to Meilisearch! The goal of this docume
     - [Setup ](#setup-)
     - [Tests and Linter ](#tests-and-linter-)
     - [Updating code samples](#updating-code-samples)
+    - [Run unit tests for embedders](#run-unit-tests-for-embedders)
   - [Git Guidelines](#git-guidelines)
     - [Git Branches ](#git-branches-)
     - [Git Commits ](#git-commits-)
@@ -102,6 +103,22 @@ The process to define a new code sample is as follows:
     ```bash
     dart run ./tool/bin/meili.dart update-samples --fail-on-change
     ```
+
+### Run unit tests for embedders
+
+Unit tests for embedders are located in `test/search_test.dart`
+
+#### OpenAI Model Integration
+The tests utilize OpenAI models for embedding functionalities. Ensure you have a valid OpenAI API key to run these tests.
+
+- Generate an OpenAI API Key
+- Provide the API Key
+  - You can provide the OpenAI API key in one of two ways:
+  - Pass the key via terminal by setting an environment variable: `export OPEN_AI_API_KEY=your_openai_api_key`
+    - This will not work for flutter web when running unit tests
+  - Set the key directly in the `openAiKey` variable located in: `test/utils/client.dart`
+- You can run and find the embedders unit tests in `test/search_test.dart`
+
 ## Git Guidelines
 
 ### Git Branches <!-- omit in TOC -->
