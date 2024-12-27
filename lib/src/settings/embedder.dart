@@ -1,15 +1,9 @@
 import './distribution.dart';
 
 sealed class Embedder {
-  final String source;
+  const Embedder();
 
-  const Embedder({
-    required this.source,
-  });
-
-  Map<String, Object?> toMap() => {
-        'source': source,
-      };
+  Map<String, Object?> toMap();
 
   factory Embedder.fromMap(Map<String, Object?> map) {
     final source = map['source'];
@@ -20,12 +14,13 @@ sealed class Embedder {
       'userProvided' => UserProvidedEmbedder.fromMap(map),
       'rest' => RestEmbedder.fromMap(map),
       'ollama' => OllamaEmbedder.fromMap(map),
-      _ => throw Exception('unexpected embedder source'),
+      _ => UnknownEmbedder(data: map),
     };
   }
 }
 
 class OpenAiEmbedder extends Embedder {
+  final String source;
   final String? model;
   final String? apiKey;
   final String? documentTemplate;
@@ -36,6 +31,7 @@ class OpenAiEmbedder extends Embedder {
   final bool? binaryQuantized;
 
   const OpenAiEmbedder({
+    required this.source,
     this.model,
     this.apiKey,
     this.documentTemplate,
@@ -44,11 +40,11 @@ class OpenAiEmbedder extends Embedder {
     this.url,
     this.documentTemplateMaxBytes,
     this.binaryQuantized,
-  }) : super(source: 'openAi');
+  });
 
   @override
   Map<String, Object?> toMap() => {
-        ...super.toMap(),
+        'source': source,
         'model': model,
         'apiKey': apiKey,
         'documentTemplate': documentTemplate,
@@ -63,6 +59,7 @@ class OpenAiEmbedder extends Embedder {
     final distribution = map['distribution'];
 
     return OpenAiEmbedder(
+      source: map['source'] as String,
       model: map['model'] as String?,
       apiKey: map['apiKey'] as String?,
       documentTemplate: map['documentTemplate'] as String?,
@@ -78,6 +75,7 @@ class OpenAiEmbedder extends Embedder {
 }
 
 class HuggingFaceEmbedder extends Embedder {
+  final String source;
   final String? model;
   final String? revision;
   final String? documentTemplate;
@@ -86,17 +84,18 @@ class HuggingFaceEmbedder extends Embedder {
   final bool? binaryQuantized;
 
   const HuggingFaceEmbedder({
+    required this.source,
     this.model,
     this.revision,
     this.documentTemplate,
     this.distribution,
     this.documentTemplateMaxBytes,
     this.binaryQuantized,
-  }) : super(source: 'huggingFace');
+  });
 
   @override
   Map<String, Object?> toMap() => {
-        ...super.toMap(),
+        'source': source,
         'model': model,
         'documentTemplate': documentTemplate,
         'distribution': distribution?.toMap(),
@@ -108,6 +107,7 @@ class HuggingFaceEmbedder extends Embedder {
     final distribution = map['distribution'];
 
     return HuggingFaceEmbedder(
+      source: map['source'] as String,
       model: map['model'] as String?,
       documentTemplate: map['documentTemplate'] as String?,
       distribution: distribution is Map<String, Object?>
@@ -120,19 +120,21 @@ class HuggingFaceEmbedder extends Embedder {
 }
 
 class UserProvidedEmbedder extends Embedder {
+  final String source;
   final int dimensions;
   final Distribution? distribution;
   final bool? binaryQuantized;
 
   const UserProvidedEmbedder({
+    required this.source,
     required this.dimensions,
     this.distribution,
     this.binaryQuantized,
-  }) : super(source: 'userProvided');
+  });
 
   @override
   Map<String, Object?> toMap() => {
-        ...super.toMap(),
+        'source': source,
         'dimensions': dimensions,
         'distribution': distribution?.toMap(),
         'binaryQuantized': binaryQuantized,
@@ -142,6 +144,7 @@ class UserProvidedEmbedder extends Embedder {
     final distribution = map['distribution'];
 
     return UserProvidedEmbedder(
+      source: map['source'] as String,
       dimensions: map['dimensions'] as int,
       distribution: distribution is Map<String, Object?>
           ? Distribution.fromMap(distribution)
@@ -152,6 +155,7 @@ class UserProvidedEmbedder extends Embedder {
 }
 
 class RestEmbedder extends Embedder {
+  final String source;
   final String url;
   final Map<String, Object?> request;
   final Map<String, Object?> response;
@@ -164,6 +168,7 @@ class RestEmbedder extends Embedder {
   final bool? binaryQuantized;
 
   const RestEmbedder({
+    required this.source,
     required this.url,
     required this.request,
     required this.response,
@@ -174,11 +179,11 @@ class RestEmbedder extends Embedder {
     this.headers,
     this.documentTemplateMaxBytes,
     this.binaryQuantized,
-  }) : super(source: 'rest');
+  });
 
   @override
   Map<String, Object?> toMap() => {
-        ...super.toMap(),
+        'source': source,
         'url': url,
         'request': request,
         'response': response,
@@ -195,6 +200,7 @@ class RestEmbedder extends Embedder {
     final distribution = map['distribution'];
 
     return RestEmbedder(
+      source: map['source'] as String,
       url: map['url'] as String,
       request: map['request'] as Map<String, Object?>,
       response: map['response'] as Map<String, Object?>,
@@ -212,6 +218,7 @@ class RestEmbedder extends Embedder {
 }
 
 class OllamaEmbedder extends Embedder {
+  final String source;
   final String? url;
   final String? apiKey;
   final String? model;
@@ -222,6 +229,7 @@ class OllamaEmbedder extends Embedder {
   final bool? binaryQuantized;
 
   const OllamaEmbedder({
+    required this.source,
     this.url,
     this.apiKey,
     this.model,
@@ -230,11 +238,11 @@ class OllamaEmbedder extends Embedder {
     this.dimensions,
     this.documentTemplateMaxBytes,
     this.binaryQuantized,
-  }) : super(source: 'ollama');
+  });
 
   @override
   Map<String, Object?> toMap() => {
-        ...super.toMap(),
+        'source': source,
         'url': url,
         'apiKey': apiKey,
         'model': model,
@@ -249,6 +257,7 @@ class OllamaEmbedder extends Embedder {
     final distribution = map['distribution'];
 
     return OllamaEmbedder(
+      source: map['source'] as String,
       url: map['url'] as String?,
       apiKey: map['apiKey'] as String?,
       model: map['model'] as String?,
@@ -260,5 +269,20 @@ class OllamaEmbedder extends Embedder {
       documentTemplateMaxBytes: map['documentTemplateMaxBytes'] as int?,
       binaryQuantized: map['binaryQuantized'] as bool?,
     );
+  }
+}
+
+class UnknownEmbedder extends Embedder {
+  final Map<String, Object?> data;
+
+  const UnknownEmbedder({
+    required this.data,
+  });
+
+  @override
+  Map<String, Object?> toMap() => data;
+
+  factory UnknownEmbedder.fromMap(String source, Map<String, Object?> map) {
+    return UnknownEmbedder(data: map);
   }
 }
