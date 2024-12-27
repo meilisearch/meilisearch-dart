@@ -7,7 +7,9 @@ sealed class Embedder {
     required this.source,
   });
 
-  Map<String, Object?> toMap();
+  Map<String, Object?> toMap() => {
+        'source': source,
+      };
 
   factory Embedder.fromMap(Map<String, Object?> map) {
     final source = map['source'];
@@ -46,7 +48,7 @@ class OpenAiEmbedder extends Embedder {
 
   @override
   Map<String, Object?> toMap() => {
-        'source': source,
+        ...super.toMap(),
         'model': model,
         'apiKey': apiKey,
         'documentTemplate': documentTemplate,
@@ -94,7 +96,7 @@ class HuggingFaceEmbedder extends Embedder {
 
   @override
   Map<String, Object?> toMap() => {
-        'source': source,
+        ...super.toMap(),
         'model': model,
         'documentTemplate': documentTemplate,
         'distribution': distribution?.toMap(),
@@ -130,7 +132,7 @@ class UserProvidedEmbedder extends Embedder {
 
   @override
   Map<String, Object?> toMap() => {
-        'source': source,
+        ...super.toMap(),
         'dimensions': dimensions,
         'distribution': distribution?.toMap(),
         'binaryQuantized': binaryQuantized,
@@ -176,7 +178,7 @@ class RestEmbedder extends Embedder {
 
   @override
   Map<String, Object?> toMap() => {
-        'source': source,
+        ...super.toMap(),
         'url': url,
         'request': request,
         'response': response,
@@ -232,7 +234,7 @@ class OllamaEmbedder extends Embedder {
 
   @override
   Map<String, Object?> toMap() => {
-        'source': source,
+        ...super.toMap(),
         'url': url,
         'apiKey': apiKey,
         'model': model,
