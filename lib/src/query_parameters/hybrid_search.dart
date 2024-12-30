@@ -6,8 +6,8 @@ class HybridSearch {
     required this.embedder,
     required this.semanticRatio,
   }) : assert(
-          semanticRatio > 0.0 && semanticRatio < 1.0,
-          "'semanticRatio' must be greater than 0.0 and less than 1.0",
+          semanticRatio >= 0.0 && semanticRatio <= 1.0,
+          "'semanticRatio' must be between 0.0 and 1.0",
         );
 
   Map<String, Object?> toMap() => {
