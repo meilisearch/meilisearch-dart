@@ -68,6 +68,7 @@ pub get
 ⚡️ **Launch, scale, and streamline in minutes with Meilisearch Cloud**—no maintenance, no commitment, cancel anytime. [Try it free now](https://cloud.meilisearch.com/login?utm_campaign=oss&utm_source=github&utm_medium=meilisearch-XXX).
 
 🪨  Prefer to self-host? [Download and deploy](https://www.meilisearch.com/docs/learn/self_hosted/getting_started_with_self_hosted_meilisearch?utm_campaign=oss&utm_source=github&utm_medium=meilisearch-XXX) our fast, open-source search engine on your own infrastructure.
+
 ## 🚀 Getting started
 
 #### Add Documents <!-- omit in toc -->
