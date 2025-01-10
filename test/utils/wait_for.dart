@@ -68,10 +68,7 @@ extension TaskWaiterForLists on Iterable<Task> {
           .removeWhere((element) => completedTasks.containsKey(element));
 
       if (remainingUids.isEmpty) {
-        return originalUids
-            .map((e) => completedTasks[e.uid])
-            .nonNulls
-            .toList();
+        return originalUids.map((e) => completedTasks[e.uid]).nonNulls.toList();
       }
       await Future<void>.delayed(interval);
     }
