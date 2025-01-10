@@ -10,8 +10,6 @@ extension MatchingStrategyExtension on MatchingStrategy {
         return 'all';
       case MatchingStrategy.last:
         return 'last';
-      default:
-        return 'last';
     }
   }
 }
