@@ -37,7 +37,8 @@ class UpdateSamplesCommand extends PackageCommand {
   @override
   Future<PackageResult> run() async {
     final failOnChange = argResults?[_failOnChangeFlag] as bool? ?? false;
-    final generateMissing = argResults?[_generateMissingExcerpts] as bool? ?? false;
+    final generateMissing =
+        argResults?[_generateMissingExcerpts] as bool? ?? false;
 
     final workingDir = Directory.current;
 
@@ -49,7 +50,8 @@ class UpdateSamplesCommand extends PackageCommand {
       }
 
       if (failOnChange) {
-        return PackageResult.failure('Changes needed in the following files:\n${changes.join('\n')}');
+        return PackageResult.failure(
+            'Changes needed in the following files:\n${changes.join('\n')}');
       }
 
       return PackageResult.success();
@@ -58,10 +60,13 @@ class UpdateSamplesCommand extends PackageCommand {
     }
   }
 
-  Future<List<String>> _processFiles(Directory dir, bool generateMissing) async {
+  Future<List<String>> _processFiles(
+      Directory dir, bool generateMissing) async {
     final changes = <String>[];
-    final files = await dir.list(recursive: true).where((entity) =>
-      entity is File && entity.path.endsWith('.dart')).toList();
+    final files = await dir
+        .list(recursive: true)
+        .where((entity) => entity is File && entity.path.endsWith('.dart'))
+        .toList();
 
     for (final file in files) {
       if (await _processFile(file as File, generateMissing)) {
