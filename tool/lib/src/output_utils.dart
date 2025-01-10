@@ -24,26 +24,17 @@ String _colorizeIfAppropriate(String string, Styles color) {
 
 /// Prints [message] in green, if the environment supports color.
 void printSuccess(String message) {
-  final colorized = Colorize(message)..green();
-  print(colorized);
+  print(_colorizeIfAppropriate(message, Styles.GREEN));
 }
 
 /// Prints [message] in yellow, if the environment supports color.
 void printWarning(String message) {
-  final colorized = Colorize(message)..yellow();
-  print(colorized);
+  print(_colorizeIfAppropriate(message, Styles.YELLOW));
 }
 
 /// Prints [message] in red, if the environment supports color.
 void printError(String message) {
-  final colorized = Colorize(message)..red();
-  print(colorized);
-}
-
-/// Prints [message] in blue, if the environment supports color.
-void printInfo(String message) {
-  final colorized = Colorize(message)..blue();
-  print(colorized);
+  print(_colorizeIfAppropriate(message, Styles.RED));
 }
 
 /// Returns [message] with escapes to print it in [color], if the environment

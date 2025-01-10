@@ -40,13 +40,8 @@ extension TaskWaiterForLists on Iterable<Task> {
     bool throwFailed = true,
   }) async {
     final endingTime = DateTime.now().add(timeout);
-    final originalUids = List<Task>.from(this);
-    final remainingUids = <int>[];
-    for (final task in this) {
-      if (task.uid != null) {
-        remainingUids.add(task.uid!);
-      }
-    }
+    final originalUids = toList();
+    final remainingUids = map((e) => e.uid).nonNulls.toList();
     final completedTasks = <int, Task>{};
     final statuses = ['enqueued', 'processing'];
 
@@ -54,10 +49,10 @@ extension TaskWaiterForLists on Iterable<Task> {
       final taskRes =
           await client.getTasks(params: TasksQuery(uids: remainingUids));
       final tasks = taskRes.results;
-      final completed = tasks.where((Task e) => !statuses.contains(e.status));
+      final completed = tasks.where((e) => !statuses.contains(e.status));
       if (throwFailed) {
         final failed = completed
-            .firstWhereOrNull((Task element) => element.status != 'succeeded');
+            .firstWhereOrNull((element) => element.status != 'succeeded');
         if (failed != null) {
           throw MeiliSearchApiException(
             "Task (${failed.uid}) failed",
@@ -68,15 +63,12 @@ extension TaskWaiterForLists on Iterable<Task> {
         }
       }
 
-      completedTasks.addEntries(completed.map((Task e) => MapEntry(e.uid!, e)));
+      completedTasks.addEntries(completed.map((e) => MapEntry(e.uid!, e)));
       remainingUids
-          .removeWhere((int element) => completedTasks.containsKey(element));
+          .removeWhere((element) => completedTasks.containsKey(element));
 
       if (remainingUids.isEmpty) {
-        return originalUids
-            .map((Task e) => completedTasks[e.uid])
-            .nonNulls
-            .toList();
+        return originalUids.map((e) => completedTasks[e.uid]).nonNulls.toList();
       }
       await Future<void>.delayed(interval);
     }
