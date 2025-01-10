@@ -41,7 +41,7 @@ extension TaskWaiterForLists on Iterable<Task> {
   }) async {
     final endingTime = DateTime.now().add(timeout);
     final originalUids = toList();
-    final remainingUids = map((e) => e.uid).whereNotNull().toList();
+    final remainingUids = map((e) => e.uid).nonNulls.toList();
     final completedTasks = <int, Task>{};
     final statuses = ['enqueued', 'processing'];
 
@@ -70,7 +70,7 @@ extension TaskWaiterForLists on Iterable<Task> {
       if (remainingUids.isEmpty) {
         return originalUids
             .map((e) => completedTasks[e.uid])
-            .whereNotNull()
+            .nonNulls
             .toList();
       }
       await Future<void>.delayed(interval);
