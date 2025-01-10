@@ -118,7 +118,7 @@ The tests utilize OpenAI models for embedding functionalities. Ensure you have a
   - Pass the key via terminal by setting an environment variable: `export OPEN_AI_API_KEY=your_openai_api_key`
     - This will not work for flutter web when running unit tests
   - Set the key directly in the `openAiKey` variable located in: `test/utils/client.dart`
-- You can run and find the embedders unit tests in `test/search_test.dart`
+- You can uncomment and run the embedders unit tests in `test/search_test.dart`
 
 ## Git Guidelines
 

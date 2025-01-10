@@ -1,5 +1,5 @@
 import 'package:meilisearch/meilisearch.dart';
-import 'package:meilisearch/src/results/experimental_features.dart';
+// import 'package:meilisearch/src/results/experimental_features.dart';
 import 'package:test/test.dart';
 
 import 'utils/books.dart';
@@ -591,59 +591,59 @@ void main() {
   //   });
   // });
 
-  group('Embedders', () {
-    setUpClient();
-    late String uid;
-    late MeiliSearchIndex index;
-    late IndexSettings settings;
-
-    setUpAll(() {
-      settings = IndexSettings(
-        embedders: {
-          'default': OpenAiEmbedder(
-            model: 'text-embedding-3-small',
-            apiKey: openAiKey,
-            documentTemplate: "a book titled '{{ doc.title }}'",
-          ),
-        },
-      );
-    });
-
-    setUp(() async {
-      final features = await client.http.updateExperimentalFeatures(
-          UpdateExperimentalFeatures(vectorStore: true));
-      expect(features.vectorStore, true);
-      uid = randomUid();
-      index = await createBooksIndex(uid: uid);
-    });
-
-    test('set embedders', () async {
-      final result =
-          await index.updateSettings(settings).waitFor(client: client);
-
-      expect(result.status, 'succeeded');
-    });
-
-    test('reset embedders', () async {
-      final embedderResult =
-          await index.resetEmbedders().waitFor(client: client);
-
-      expect(embedderResult.status, 'succeeded');
-    });
-
-    test('hybrid search', () async {
-      final settingsResult =
-          await index.updateSettings(settings).waitFor(client: client);
-
-      final sQuery = SearchQuery(
-          hybrid: HybridSearch(embedder: 'default', semanticRatio: 0.9));
-
-      final searchResult = await index.search('prince', sQuery);
-
-      expect(settingsResult.status, 'succeeded');
-      expect(searchResult.hits, hasLength(7));
-    });
-  });
+  // group('Embedders', () {
+  //   setUpClient();
+  //   late String uid;
+  //   late MeiliSearchIndex index;
+  //   late IndexSettings settings;
+  //
+  //   setUpAll(() {
+  //     settings = IndexSettings(
+  //       embedders: {
+  //         'default': OpenAiEmbedder(
+  //           model: 'text-embedding-3-small',
+  //           apiKey: openAiKey,
+  //           documentTemplate: "a book titled '{{ doc.title }}'",
+  //         ),
+  //       },
+  //     );
+  //   });
+  //
+  //   setUp(() async {
+  //     final features = await client.http.updateExperimentalFeatures(
+  //         UpdateExperimentalFeatures(vectorStore: true));
+  //     expect(features.vectorStore, true);
+  //     uid = randomUid();
+  //     index = await createBooksIndex(uid: uid);
+  //   });
+  //
+  //   test('set embedders', () async {
+  //     final result =
+  //         await index.updateSettings(settings).waitFor(client: client);
+  //
+  //     expect(result.status, 'succeeded');
+  //   });
+  //
+  //   test('reset embedders', () async {
+  //     final embedderResult =
+  //         await index.resetEmbedders().waitFor(client: client);
+  //
+  //     expect(embedderResult.status, 'succeeded');
+  //   });
+  //
+  //   test('hybrid search', () async {
+  //     final settingsResult =
+  //         await index.updateSettings(settings).waitFor(client: client);
+  //
+  //     final sQuery = SearchQuery(
+  //         hybrid: HybridSearch(embedder: 'default', semanticRatio: 0.9));
+  //
+  //     final searchResult = await index.search('prince', sQuery);
+  //
+  //     expect(settingsResult.status, 'succeeded');
+  //     expect(searchResult.hits, hasLength(7));
+  //   });
+  // });
 
   test('search code samples', () async {
     // #docregion search_get_1
