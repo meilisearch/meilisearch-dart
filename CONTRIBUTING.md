@@ -50,13 +50,14 @@ You can set up your local environment natively or using `docker`, check out the 
 
 Example of running all the checks with docker:
 ```bash
-docker-compose run --rm package bash -c "dart pub get && dart run test --concurrency=4 && dart analyze && dart format . --set-exit-if-changed"
+docker-compose run --rm package bash -c "dart pub get && dart pub get -C tool && dart run test --concurrency=4 && dart analyze && dart format . --set-exit-if-changed"
 ```
 
 To install dependencies:
 
 ```bash
 dart pub get
+dart pub get -C tool
 ```
 
 This package relies on [build_runner](https://pub.dev/packages/build_runner) to generate serialization information for some models, to re-generate files after making any changes, run:
@@ -92,14 +93,14 @@ The process to define a new code sample is as follows:
     ```
     // #docregion meilisearch_contributing_1
     final client = MeilisearchClient();
-    anything();    
+    anything();
     // #enddocregion
     ```
 3. run this command to update the code samples
     ```bash
     dart run ./tool/bin/meili.dart update-samples
     ```
-4. to test if the code samples are updated correctly, run: 
+4. to test if the code samples are updated correctly, run:
     ```bash
     dart run ./tool/bin/meili.dart update-samples --fail-on-change
     ```
