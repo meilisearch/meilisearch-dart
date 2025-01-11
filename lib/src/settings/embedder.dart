@@ -1,6 +1,6 @@
 import './distribution.dart';
 
-sealed class Embedder {
+abstract class Embedder {
   const Embedder();
 
   Map<String, Object?> toMap();
@@ -25,7 +25,7 @@ class OpenAiEmbedder extends Embedder {
   final String? apiKey;
   final String? documentTemplate;
   final int? dimensions;
-  final Distribution? distribution;
+  final DistributionShift? distribution;
   final String? url;
   final int? documentTemplateMaxBytes;
   final bool? binaryQuantized;
@@ -63,7 +63,7 @@ class OpenAiEmbedder extends Embedder {
       documentTemplate: map['documentTemplate'] as String?,
       dimensions: map['dimensions'] as int?,
       distribution: distribution is Map<String, Object?>
-          ? Distribution.fromMap(distribution)
+          ? DistributionShift.fromMap(distribution)
           : null,
       url: map['url'] as String?,
       documentTemplateMaxBytes: map['documentTemplateMaxBytes'] as int?,
@@ -77,7 +77,7 @@ class HuggingFaceEmbedder extends Embedder {
   final String? model;
   final String? revision;
   final String? documentTemplate;
-  final Distribution? distribution;
+  final DistributionShift? distribution;
   final int? documentTemplateMaxBytes;
   final bool? binaryQuantized;
 
@@ -107,7 +107,7 @@ class HuggingFaceEmbedder extends Embedder {
       model: map['model'] as String?,
       documentTemplate: map['documentTemplate'] as String?,
       distribution: distribution is Map<String, Object?>
-          ? Distribution.fromMap(distribution)
+          ? DistributionShift.fromMap(distribution)
           : null,
       documentTemplateMaxBytes: map['documentTemplateMaxBytes'] as int?,
       binaryQuantized: map['binaryQuantized'] as bool?,
@@ -118,7 +118,7 @@ class HuggingFaceEmbedder extends Embedder {
 class UserProvidedEmbedder extends Embedder {
   static const source = 'userProvided';
   final int dimensions;
-  final Distribution? distribution;
+  final DistributionShift? distribution;
   final bool? binaryQuantized;
 
   const UserProvidedEmbedder({
@@ -141,7 +141,7 @@ class UserProvidedEmbedder extends Embedder {
     return UserProvidedEmbedder(
       dimensions: map['dimensions'] as int,
       distribution: distribution is Map<String, Object?>
-          ? Distribution.fromMap(distribution)
+          ? DistributionShift.fromMap(distribution)
           : null,
       binaryQuantized: map['binaryQuantized'] as bool?,
     );
@@ -156,7 +156,7 @@ class RestEmbedder extends Embedder {
   final String? apiKey;
   final int? dimensions;
   final String? documentTemplate;
-  final Distribution? distribution;
+  final DistributionShift? distribution;
   final Map<String, Object?>? headers;
   final int? documentTemplateMaxBytes;
   final bool? binaryQuantized;
@@ -200,7 +200,7 @@ class RestEmbedder extends Embedder {
       dimensions: map['dimensions'] as int?,
       documentTemplate: map['documentTemplate'] as String?,
       distribution: distribution is Map<String, Object?>
-          ? Distribution.fromMap(distribution)
+          ? DistributionShift.fromMap(distribution)
           : null,
       headers: map['headers'] as Map<String, Object?>?,
       documentTemplateMaxBytes: map['documentTemplateMaxBytes'] as int?,
@@ -215,7 +215,7 @@ class OllamaEmbedder extends Embedder {
   final String? apiKey;
   final String? model;
   final String? documentTemplate;
-  final Distribution? distribution;
+  final DistributionShift? distribution;
   final int? dimensions;
   final int? documentTemplateMaxBytes;
   final bool? binaryQuantized;
@@ -253,7 +253,7 @@ class OllamaEmbedder extends Embedder {
       model: map['model'] as String?,
       documentTemplate: map['documentTemplate'] as String?,
       distribution: distribution is Map<String, Object?>
-          ? Distribution.fromMap(distribution)
+          ? DistributionShift.fromMap(distribution)
           : null,
       dimensions: map['dimensions'] as int?,
       documentTemplateMaxBytes: map['documentTemplateMaxBytes'] as int?,
