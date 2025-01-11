@@ -685,6 +685,35 @@ class MeiliSearchIndex {
     );
   }
 
+  /// Get the embedders settings of a Meilisearch index.
+  @RequiredMeiliServerVersion('1.6.0')
+  Future<Map<String, Embedder>?> getEmbedders() async {
+    final response = await http
+        .getMethod<Map<String, Object?>>('/indexes/$uid/settings/embedders');
+
+    return response.data?.map(
+        (k, v) => MapEntry(k, Embedder.fromMap(v as Map<String, Object?>)));
+  }
+
+  /// Update the embedders settings. Overwrite the old settings.
+  @RequiredMeiliServerVersion('1.6.0')
+  Future<Task> updateEmbedders(Map<String, Embedder>? embedders) async {
+    return await _getTask(
+      http.putMethod(
+        '/indexes/$uid/settings/embedders',
+        data: embedders?.map((k, v) => MapEntry(k, v.toMap())),
+      ),
+    );
+  }
+
+  /// Reset the embedders settings to its default value
+  @RequiredMeiliServerVersion('1.6.0')
+  Future<Task> resetEmbedders() async {
+    return await _getTask(
+      http.deleteMethod('/indexes/$uid/settings/embedders'),
+    );
+  }
+
   //
   // StopWords endpoints
   //

@@ -10,6 +10,8 @@ First of all, thank you for contributing to Meilisearch! The goal of this docume
     - [Setup ](#setup-)
     - [Tests and Linter ](#tests-and-linter-)
     - [Updating code samples](#updating-code-samples)
+    - [Run integration tests for embedders](#run-integration-tests-for-embedders)
+      - [OpenAI Model Integration](#openai-model-integration)
   - [Git Guidelines](#git-guidelines)
     - [Git Branches ](#git-branches-)
     - [Git Commits ](#git-commits-)
@@ -103,6 +105,19 @@ The process to define a new code sample is as follows:
     ```bash
     dart run ./tool/bin/meili.dart update-samples --fail-on-change
     ```
+
+### Run integration tests for embedders
+
+Integration tests for embedders are located in `test/search_test.dart`
+
+#### OpenAI Model Integration
+The tests utilize OpenAI models for embedding functionalities. Ensure you have a valid OpenAI API key to run these tests.
+
+- Generate an OpenAI API Key
+- Provide the API Key in one of two ways:
+  - Pass the key via environment variable: `export OPEN_AI_API_KEY=your_openai_api_key` (will not work on dart web)
+  - Pass the key via dart define: `dart --define=OPEN_AI_API_KEY=your_openai_api_key test --use-data-isolate-strategy` (Works on both web and native)
+
 ## Git Guidelines
 
 ### Git Branches <!-- omit in TOC -->

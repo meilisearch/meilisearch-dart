@@ -21,6 +21,8 @@ class SearchQuery extends Queryable {
   final String? highlightPostTag;
   final MatchingStrategy? matchingStrategy;
   final List<String>? attributesToSearchOn;
+  @RequiredMeiliServerVersion('1.6.0')
+  final HybridSearch? hybrid;
   @RequiredMeiliServerVersion('1.3.0')
   final bool? showRankingScore;
   @RequiredMeiliServerVersion('1.3.0')
@@ -47,6 +49,7 @@ class SearchQuery extends Queryable {
     this.highlightPostTag,
     this.matchingStrategy,
     this.attributesToSearchOn,
+    this.hybrid,
     this.showRankingScore,
     this.showRankingScoreDetails,
     this.vector,
@@ -72,6 +75,7 @@ class SearchQuery extends Queryable {
       'highlightPostTag': highlightPostTag,
       'matchingStrategy': matchingStrategy?.name,
       'attributesToSearchOn': attributesToSearchOn,
+      'hybrid': hybrid?.toMap(),
       'showRankingScore': showRankingScore,
       'showRankingScoreDetails': showRankingScoreDetails,
       'vector': vector,
@@ -97,6 +101,7 @@ class SearchQuery extends Queryable {
     String? highlightPostTag,
     MatchingStrategy? matchingStrategy,
     List<String>? attributesToSearchOn,
+    HybridSearch? hybrid,
     bool? showRankingScore,
     List<dynamic>? vector,
     bool? showRankingScoreDetails,
@@ -121,6 +126,7 @@ class SearchQuery extends Queryable {
         highlightPostTag: highlightPostTag ?? this.highlightPostTag,
         matchingStrategy: matchingStrategy ?? this.matchingStrategy,
         attributesToSearchOn: attributesToSearchOn ?? this.attributesToSearchOn,
+        hybrid: hybrid ?? this.hybrid,
         showRankingScore: showRankingScore ?? this.showRankingScore,
         vector: vector ?? this.vector,
         showRankingScoreDetails:

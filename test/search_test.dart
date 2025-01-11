@@ -1,4 +1,5 @@
 import 'package:meilisearch/meilisearch.dart';
+import 'package:meilisearch/src/results/experimental_features.dart';
 import 'package:test/test.dart';
 
 import 'utils/books.dart';
@@ -541,54 +542,168 @@ void main() {
   });
 
   // Commented because of https://github.com/meilisearch/meilisearch-dart/issues/369
-  // group('Experimental', () {
-  //   setUpClient();
-  //   late String uid;
-  //   late MeiliSearchIndex index;
-  //   late ExperimentalFeatures features;
-  //   setUp(() async {
-  //     features = await client.http.updateExperimentalFeatures(
-  //       UpdateExperimentalFeatures(
-  //         vectorStore: true,
-  //       ),
-  //     );
-  //     expect(features.vectorStore, true);
+  group('Experimental', () {
+    setUpClient();
+    late String uid;
+    late MeiliSearchIndex index;
+    late ExperimentalFeatures features;
+    setUp(() async {
+      features = await client.http.updateExperimentalFeatures(
+        UpdateExperimentalFeatures(
+          vectorStore: true,
+        ),
+      );
+      expect(features.vectorStore, true);
 
-  //     uid = randomUid();
-  //     index = await createIndexWithData(uid: uid, data: vectorBooks);
-  //   });
+      uid = randomUid();
+      index = await createIndexWithData(uid: uid, data: vectorBooks);
+    });
 
-  //   test('vector search', () async {
-  //     final vector = [0, 1, 2];
-  //     final res = await index
-  //         .search(
-  //           null,
-  //           SearchQuery(
-  //             vector: vector,
-  //           ),
-  //         )
-  //         .asSearchResult()
-  //         .mapToContainer();
+    test('vector search', () async {
+      final vector = [0, 1, 2];
+      final res = await index
+          .search(
+            null,
+            SearchQuery(
+              vector: vector,
+            ),
+          )
+          .asSearchResult()
+          .mapToContainer();
 
-  //     expect(res.vector, vector);
-  //     expect(
-  //       res.hits,
-  //       everyElement(
-  //         isA<MeiliDocumentContainer<Map<String, dynamic>>>()
-  //             .having(
-  //               (p0) => p0.vectors,
-  //               'vectors',
-  //               isNotNull,
-  //             )
-  //             .having(
-  //               (p0) => p0.semanticScore,
-  //               'semanticScore',
-  //               isNotNull,
-  //             ),
-  //       ),
-  //     );
-  //   });
-  // });
+      expect(res.vector, vector);
+      expect(
+        res.hits,
+        everyElement(
+          isA<MeiliDocumentContainer<Map<String, dynamic>>>()
+              .having(
+                (p0) => p0.vectors,
+                'vectors',
+                isNotNull,
+              )
+              .having(
+                (p0) => p0.semanticScore,
+                'semanticScore',
+                isNotNull,
+              ),
+        ),
+      );
+    });
+  }, skip: "Requires Experimental API");
+  final openAiKeyValue = openAiKey;
+  group('Embedders', () {
+    group(
+      'Unit test',
+      () {
+        // test serialization of models
+        test(OpenAiEmbedder, () {
+          final embedder = OpenAiEmbedder(
+            model: 'text-embedding-3-small',
+            apiKey: 'key',
+            documentTemplate: 'a book titled {{ doc.title }}',
+            binaryQuantized: true,
+            dimensions: 100,
+            distribution: DistributionShift(
+              currentMean: 20,
+              currentSigma: 5,
+            ),
+            url: 'https://example.com',
+            documentTemplateMaxBytes: 200,
+          );
+
+          final map = embedder.toMap();
+
+          expect(map, {
+            'model': 'text-embedding-3-small',
+            'apiKey': 'key',
+            'documentTemplate': 'a book titled {{ doc.title }}',
+            'dimensions': 100,
+            'distribution': {
+              'current_mean': 20,
+              'current_sigma': 5,
+            },
+            'url': 'https://example.com',
+            'documentTemplateMaxBytes': 200,
+            'binaryQuantized': true,
+            'source': 'openAi',
+          });
+
+          final deserialized = OpenAiEmbedder.fromMap(map);
+
+          expect(deserialized.model, 'text-embedding-3-small');
+          expect(deserialized.apiKey, 'key');
+          expect(
+              deserialized.documentTemplate, 'a book titled {{ doc.title }}');
+          expect(deserialized.dimensions, 100);
+          expect(deserialized.distribution?.currentMean, 20);
+          expect(deserialized.distribution?.currentSigma, 5);
+          expect(deserialized.url, 'https://example.com');
+          expect(deserialized.documentTemplateMaxBytes, 200);
+          expect(deserialized.binaryQuantized, true);
+        });
+
+        test(HuggingFaceEmbedder, () {});
+      },
+    );
+
+    group(
+      'Integration test',
+      () {
+        setUpClient();
+        late String uid;
+        late MeiliSearchIndex index;
+        late IndexSettings settings;
+
+        setUpAll(() {
+          settings = IndexSettings(embedders: {
+            'default': OpenAiEmbedder(
+              model: 'text-embedding-3-small',
+              apiKey: openAiKeyValue,
+              documentTemplate: "a book titled '{{ doc.title }}'",
+            ),
+          });
+        });
+
+        setUp(() async {
+          final features = await client.http.updateExperimentalFeatures(
+              UpdateExperimentalFeatures(vectorStore: true));
+          expect(features.vectorStore, true);
+          uid = randomUid();
+          index = await createBooksIndex(uid: uid);
+        });
+
+        test('set embedders', () async {
+          final result =
+              await index.updateSettings(settings).waitFor(client: client);
+
+          expect(result.status, 'succeeded');
+        });
+
+        test('reset embedders', () async {
+          final embedderResult =
+              await index.resetEmbedders().waitFor(client: client);
+
+          expect(embedderResult.status, 'succeeded');
+        });
+
+        test('hybrid search', () async {
+          final settingsResult =
+              await index.updateSettings(settings).waitFor(client: client);
+
+          final sQuery = SearchQuery(
+              hybrid: HybridSearch(embedder: 'default', semanticRatio: 0.9));
+
+          final searchResult = await index.search('prince', sQuery);
+
+          expect(settingsResult.status, 'succeeded');
+          expect(searchResult.hits, hasLength(7));
+        });
+      },
+      skip: openAiKeyValue == null || openAiKeyValue.isEmpty
+          ? "Requires OPEN_AI_API_KEY environment variable"
+          : null,
+    );
+  });
 
   test('search code samples', () async {
     // #docregion search_get_1
