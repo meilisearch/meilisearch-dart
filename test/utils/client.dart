@@ -4,6 +4,7 @@ import 'dart:math';
 
 import 'package:crypto/crypto.dart';
 import 'package:meilisearch/src/http_request.dart';
+import 'package:pub_semver/pub_semver.dart';
 import 'package:test/test.dart';
 
 import '../models/test_client.dart';
@@ -26,12 +27,35 @@ String get testApiKey {
   return 'masterKey';
 }
 
-String get openAiKey {
-  const openaiApiKey = '<OPEN_AI_API_KEY>';
+Version? get meiliServerVersion {
+  const meilisearchVersionKey = 'MEILISEARCH_VERSION';
+  String? compileTimeValue = String.fromEnvironment(meilisearchVersionKey);
+  if (compileTimeValue.isEmpty) {
+    compileTimeValue = null;
+  }
   if (_kIsWeb) {
-    return openaiApiKey;
+    if (compileTimeValue != null) {
+      return Version.parse(compileTimeValue);
+    }
   } else {
-    return Platform.environment['OPEN_AI_API_KEY'] ?? openaiApiKey;
+    var str = Platform.environment[meilisearchVersionKey] ?? compileTimeValue;
+    if (str != null && str.isNotEmpty) {
+      return Version.parse(str);
+    }
+  }
+  return null;
+}
+
+String? get openAiKey {
+  const keyName = "OPEN_AI_API_KEY";
+  String? compileTimeValue = String.fromEnvironment(keyName);
+  if (compileTimeValue.isEmpty) {
+    compileTimeValue = null;
+  }
+  if (_kIsWeb) {
+    return compileTimeValue;
+  } else {
+    return Platform.environment[keyName] ?? compileTimeValue;
   }
 }
 
