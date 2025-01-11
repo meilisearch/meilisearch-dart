@@ -589,7 +589,7 @@ void main() {
         ),
       );
     });
-  });
+  }, skip: "Requires Experimental API");
   final openAiKeyValue = openAiKey;
   group('Embedders', () {
     group(
