@@ -5,27 +5,27 @@
 class DistributionShift {
   /// Value where the results are "packed".
   /// Similarity scores are translated so that they are packed around 0.5 instead
-  final double currentMean;
+  final double mean;
 
   /// standard deviation of a similarity score.
   ///
   /// Set below 0.4 to make the results less packed around the mean, and above 0.4 to make them more packed.
-  final double currentSigma;
+  final double sigma;
 
   DistributionShift({
-    required this.currentMean,
-    required this.currentSigma,
+    required this.mean,
+    required this.sigma,
   });
 
   factory DistributionShift.fromMap(Map<String, Object?> map) {
     return DistributionShift(
-      currentMean: map['current_mean'] as double,
-      currentSigma: map['current_sigma'] as double,
+      mean: map['mean'] as double,
+      sigma: map['sigma'] as double,
     );
   }
 
   Map<String, Object?> toMap() => {
-        'current_mean': currentMean,
-        'current_sigma': currentSigma,
+        'mean': mean,
+        'sigma': sigma,
       };
 }

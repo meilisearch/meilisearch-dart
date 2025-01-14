@@ -604,8 +604,8 @@ void main() {
             binaryQuantized: true,
             dimensions: 100,
             distribution: DistributionShift(
-              currentMean: 20,
-              currentSigma: 5,
+              mean: 20,
+              sigma: 5,
             ),
             url: 'https://example.com',
             documentTemplateMaxBytes: 200,
@@ -619,8 +619,8 @@ void main() {
             'documentTemplate': 'a book titled {{ doc.title }}',
             'dimensions': 100,
             'distribution': {
-              'current_mean': 20,
-              'current_sigma': 5,
+              'mean': 20,
+              'sigma': 5,
             },
             'url': 'https://example.com',
             'documentTemplateMaxBytes': 200,
@@ -635,8 +635,8 @@ void main() {
           expect(
               deserialized.documentTemplate, 'a book titled {{ doc.title }}');
           expect(deserialized.dimensions, 100);
-          expect(deserialized.distribution?.currentMean, 20);
-          expect(deserialized.distribution?.currentSigma, 5);
+          expect(deserialized.distribution?.mean, 20);
+          expect(deserialized.distribution?.sigma, 5);
           expect(deserialized.url, 'https://example.com');
           expect(deserialized.documentTemplateMaxBytes, 200);
           expect(deserialized.binaryQuantized, true);
