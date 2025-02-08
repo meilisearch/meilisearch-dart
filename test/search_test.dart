@@ -542,19 +542,11 @@ void main() {
   });
 
   // Commented because of https://github.com/meilisearch/meilisearch-dart/issues/369
-  group('Experimental', () {
+  group('Vector search', () {
     setUpClient();
     late String uid;
     late MeiliSearchIndex index;
-    late ExperimentalFeatures features;
     setUp(() async {
-      features = await client.http.updateExperimentalFeatures(
-        UpdateExperimentalFeatures(
-          vectorStore: true,
-        ),
-      );
-      expect(features.vectorStore, true);
-
       uid = randomUid();
       index = await createIndexWithData(uid: uid, data: vectorBooks);
     });
@@ -589,7 +581,8 @@ void main() {
         ),
       );
     });
-  }, skip: "Requires Experimental API");
+  });
+
   final openAiKeyValue = openAiKey;
   group('Embedders', () {
     group(
@@ -665,9 +658,6 @@ void main() {
         });
 
         setUp(() async {
-          final features = await client.http.updateExperimentalFeatures(
-              UpdateExperimentalFeatures(vectorStore: true));
-          expect(features.vectorStore, true);
           uid = randomUid();
           index = await createBooksIndex(uid: uid);
         });
