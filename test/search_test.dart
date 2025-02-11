@@ -586,18 +586,18 @@ void main() {
       expect(
         res.hits,
         everyElement(
-          isA<MeiliDocumentContainer<Map<String, dynamic>>>()
-              .having(
-                (p0) => p0.parsed,
-                'parsed',
-                isNotNull,
-              ),
+          isA<MeiliDocumentContainer<Map<String, dynamic>>>().having(
+            (p0) => p0.parsed,
+            'parsed',
+            isNotNull,
+          ),
         ),
       );
     });
-  }, skip: openAiKeyValue == null || openAiKeyValue.isEmpty
-      ? "Requires OPEN_AI_API_KEY environment variable"
-      : null);
+  },
+      skip: openAiKeyValue == null || openAiKeyValue.isEmpty
+          ? "Requires OPEN_AI_API_KEY environment variable"
+          : null);
 
   group('Embedders', () {
     group(
