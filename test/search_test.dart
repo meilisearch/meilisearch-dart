@@ -1,5 +1,4 @@
 import 'package:meilisearch/meilisearch.dart';
-import 'package:meilisearch/src/results/experimental_features.dart';
 import 'package:test/test.dart';
 
 import 'utils/books.dart';
@@ -8,6 +7,8 @@ import 'utils/client.dart';
 import 'utils/wait_for.dart';
 
 void main() {
+  final openAiKeyValue = openAiKey;
+
   group('Search', () {
     setUpClient();
     late String uid;
@@ -542,55 +543,62 @@ void main() {
   });
 
   // Commented because of https://github.com/meilisearch/meilisearch-dart/issues/369
-  group('Experimental', () {
+  group('Vector search', () {
     setUpClient();
     late String uid;
     late MeiliSearchIndex index;
-    late ExperimentalFeatures features;
-    setUp(() async {
-      features = await client.http.updateExperimentalFeatures(
-        UpdateExperimentalFeatures(
-          vectorStore: true,
-        ),
-      );
-      expect(features.vectorStore, true);
+    late IndexSettings settings;
 
+    setUpAll(() {
+      settings = IndexSettings(embedders: {
+        'default': OpenAiEmbedder(
+          model: 'text-embedding-3-small',
+          apiKey: openAiKeyValue,
+          documentTemplate: "a book titled '{{ doc.title }}'",
+        ),
+      });
+    });
+
+    setUp(() async {
       uid = randomUid();
       index = await createIndexWithData(uid: uid, data: vectorBooks);
+      // Configure embedder before running vector search
+      await index.updateSettings(settings).waitFor(client: client);
     });
 
     test('vector search', () async {
-      final vector = [0, 1, 2];
+      // Create a vector with 1536 dimensions (filled with zeros for test purposes)
+      final vector = List.filled(1536, 0.0);
       final res = await index
           .search(
             null,
             SearchQuery(
               vector: vector,
+              hybrid: HybridSearch(
+                embedder: 'default',
+                semanticRatio: 1.0,
+              ),
             ),
           )
           .asSearchResult()
           .mapToContainer();
 
-      expect(res.vector, vector);
       expect(
         res.hits,
         everyElement(
-          isA<MeiliDocumentContainer<Map<String, dynamic>>>()
-              .having(
-                (p0) => p0.vectors,
-                'vectors',
-                isNotNull,
-              )
-              .having(
-                (p0) => p0.semanticScore,
-                'semanticScore',
-                isNotNull,
-              ),
+          isA<MeiliDocumentContainer<Map<String, dynamic>>>().having(
+            (p0) => p0.parsed,
+            'parsed',
+            isNotNull,
+          ),
         ),
       );
     });
-  }, skip: "Requires Experimental API");
-  final openAiKeyValue = openAiKey;
+  },
+      skip: openAiKeyValue == null || openAiKeyValue.isEmpty
+          ? "Requires OPEN_AI_API_KEY environment variable"
+          : null);
+
   group('Embedders', () {
     group(
       'Unit test',
@@ -665,9 +673,6 @@ void main() {
         });
 
         setUp(() async {
-          final features = await client.http.updateExperimentalFeatures(
-              UpdateExperimentalFeatures(vectorStore: true));
-          expect(features.vectorStore, true);
           uid = randomUid();
           index = await createBooksIndex(uid: uid);
         });

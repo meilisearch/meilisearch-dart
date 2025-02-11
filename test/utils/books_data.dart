@@ -60,23 +60,43 @@ final vectorBooks = [
   {
     "id": 0,
     "title": "Across The Universe",
-    "_vectors": [0, 0.8, -0.2],
+    "_vectors": {
+      "default": {
+        "embeddings": [0, 0.8, -0.2],
+        "regenerate": false,
+      }
+    }
   },
   {
     "id": 1,
     "title": "All Things Must Pass",
-    "_vectors": [1, -0.2, 0],
+    "_vectors": {
+      "default": {
+        "embeddings": [1, -0.2, 0],
+        "regenerate": false,
+      }
+    }
   },
   {
     "id": 2,
     "title": "And Your Bird Can Sing",
-    "_vectors": [-0.2, 4, 6],
+    "_vectors": {
+      "default": {
+        "embeddings": [-0.2, 4, 6],
+        "regenerate": false,
+      }
+    }
   },
   {
     "id": 3,
     "title": "The Matrix",
-    "_vectors": [5, -0.5, 0.3],
-  },
+    "_vectors": {
+      "default": {
+        "embeddings": [5, -0.5, 0.3],
+        "regenerate": false,
+      }
+    },
+  }
 ];
 
 enum CSVHeaderTypes {

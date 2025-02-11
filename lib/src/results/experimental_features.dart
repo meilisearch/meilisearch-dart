@@ -11,12 +11,7 @@ part 'experimental_features.g.dart';
   createToJson: false,
 )
 class ExperimentalFeatures {
-  @JsonKey(name: 'vectorStore')
-  final bool vectorStore;
-
-  const ExperimentalFeatures({
-    required this.vectorStore,
-  });
+  const ExperimentalFeatures();
 
   factory ExperimentalFeatures.fromJson(Map<String, dynamic> src) {
     return _$ExperimentalFeaturesFromJson(src);
@@ -29,12 +24,7 @@ class ExperimentalFeatures {
   createFactory: false,
 )
 class UpdateExperimentalFeatures {
-  @JsonKey(name: 'vectorStore')
-  final bool? vectorStore;
-
-  const UpdateExperimentalFeatures({
-    this.vectorStore,
-  });
+  const UpdateExperimentalFeatures();
 
   Map<String, dynamic> toJson() => _$UpdateExperimentalFeaturesToJson(this);
 }
