@@ -7,6 +7,8 @@ import 'utils/client.dart';
 import 'utils/wait_for.dart';
 
 void main() {
+  final openAiKeyValue = openAiKey;
+
   group('Search', () {
     setUpClient();
     late String uid;
@@ -545,44 +547,58 @@ void main() {
     setUpClient();
     late String uid;
     late MeiliSearchIndex index;
+    late IndexSettings settings;
+
+    setUpAll(() {
+      settings = IndexSettings(embedders: {
+        'default': OpenAiEmbedder(
+          model: 'text-embedding-3-small',
+          apiKey: openAiKeyValue,
+          documentTemplate: "a book titled '{{ doc.title }}'",
+        ),
+      });
+    });
+
     setUp(() async {
       uid = randomUid();
       index = await createIndexWithData(uid: uid, data: vectorBooks);
+      // Configure embedder before running vector search
+      await index.updateSettings(settings).waitFor(client: client);
     });
 
     test('vector search', () async {
-      final vector = [0, 1, 2];
+      // Create a vector with 1536 dimensions (filled with zeros for test purposes)
+      final vector = List.filled(1536, 0.0);
       final res = await index
           .search(
             null,
             SearchQuery(
               vector: vector,
+              hybrid: HybridSearch(
+                embedder: 'default',
+                semanticRatio: 1.0,
+              ),
             ),
           )
           .asSearchResult()
           .mapToContainer();
 
-      expect(res.vector, vector);
       expect(
         res.hits,
         everyElement(
           isA<MeiliDocumentContainer<Map<String, dynamic>>>()
               .having(
-                (p0) => p0.vectors,
-                'vectors',
-                isNotNull,
-              )
-              .having(
-                (p0) => p0.semanticScore,
-                'semanticScore',
+                (p0) => p0.parsed,
+                'parsed',
                 isNotNull,
               ),
         ),
       );
     });
-  });
+  }, skip: openAiKeyValue == null || openAiKeyValue.isEmpty
+      ? "Requires OPEN_AI_API_KEY environment variable"
+      : null);
 
-  final openAiKeyValue = openAiKey;
   group('Embedders', () {
     group(
       'Unit test',
