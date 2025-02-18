@@ -3,6 +3,8 @@
 # 0.17
 ### Breaking Changes:
 
+- [AI-powered search](https://www.meilisearch.com/docs/learn/ai_powered_search/getting_started_with_ai_search) is now stable. Use it without activating the experimental feature.
+
 # 0.16.0
 ### Breaking Changes:
 
