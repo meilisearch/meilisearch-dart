@@ -215,7 +215,8 @@ getting_started_add_documents: |-
   import 'dart:convert';
 
   var client = MeiliSearchClient('http://localhost:7700', 'aSampleMasterKey');
-  final json = await File('movies.json').readAsString();\nawait client.index('movies').addDocumentsJson(json);
+  final json = await File('movies.json').readAsString();
+  await client.index('movies').addDocumentsJson(json);
 getting_started_search: |-
   await client.index('movies').search('botman');
 getting_started_update_ranking_rules: "await client.index('movies').updateRankingRules([\n  'exactness',\n  'words',\n  'typo',\n  'proximity',\n  'attribute',\n  'sort',\n  'release_date:asc',\n  'rank:desc',\n]);"
