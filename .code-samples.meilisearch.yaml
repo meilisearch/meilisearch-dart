@@ -211,7 +211,9 @@ getting_started_add_documents: |-
 
   // In your .dart file:
   import 'package:meilisearch\/meilisearch.dart';
-  import 'dart:io';\nimport 'dart:convert';
+  import 'dart:io';
+  import 'dart:convert';
+
   var client = MeiliSearchClient('http://localhost:7700', 'aSampleMasterKey');
   final json = await File('movies.json').readAsString();\nawait client.index('movies').addDocumentsJson(json);
 getting_started_search: |-
