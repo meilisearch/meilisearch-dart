@@ -1,6 +1,6 @@
 [comment]: <> (All notable changes to this project will be documented in this file.)
 
-# 0.17
+# 0.17.0
 ### Breaking Changes:
 
 - [AI-powered search](https://www.meilisearch.com/docs/learn/ai_powered_search/getting_started_with_ai_search) is now stable. Use it without activating the experimental feature.
