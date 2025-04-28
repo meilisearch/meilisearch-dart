@@ -871,6 +871,9 @@ void main() {
       // #docregion reset_non_separator_tokens_1
       await client.index('articles').resetNonSeparatorTokens();
       // #enddocregion
+      // #docregion getting_started_search
+      await client.index('movies').search('botman');
+      // #enddocregion
     });
 
     // skip this test, since it's only used for generating code samples
@@ -878,20 +881,11 @@ void main() {
 
 // unformatted examples
 /*
-    // #docregion getting_started_search_md
-    ```dart
-    await client.index('movies').search('botman');
-    ```
+    // #docregion getting_started_add_documents
+    // In the command line:
+    // dart pub add meilisearch
 
-    [About this SDK](https://github.com/meilisearch/meilisearch-dart/)
-    // #enddocregion
-
-    // #docregion getting_started_add_documents_md
-    ```bash
-    dart pub add meilisearch
-    ```
-
-    ```dart
+    // In your .dart file:
     import 'package:meilisearch/meilisearch.dart';
     import 'dart:io';
     import 'dart:convert';
@@ -901,9 +895,6 @@ void main() {
     final json = await File('movies.json').readAsString();
 
     await client.index('movies').addDocumentsJson(json);
-    ```
-
-    [About this SDK](https://github.com/meilisearch/meilisearch-dart/)
     // #enddocregion
 */
 }
