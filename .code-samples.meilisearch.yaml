@@ -205,8 +205,9 @@ typo_tolerance_guide_4: |-
     ),
   );
   await client.index('movies').updateTypoTolerance(toUpdate);
-getting_started_add_documents_md: "```bash\ndart pub add meilisearch\n```\n```dart\nimport 'package:meilisearch\/meilisearch.dart';\nimport 'dart:io';\nimport 'dart:convert';\nvar client = MeiliSearchClient('http:\/\/localhost:7700', 'aSampleMasterKey');\nfinal json = await File('movies.json').readAsString();\nawait client.index('movies').addDocumentsJson(json);\n```\n[About this SDK](https:\/\/github.com\/meilisearch\/meilisearch-dart\/)"
-getting_started_search_md: "```dart\nawait client.index('movies').search('botman');\n```\n[About this SDK](https:\/\/github.com\/meilisearch\/meilisearch-dart\/)"
+getting_started_add_documents: "\/\/ In the command line:\n\/\/ dart pub add meilisearch\n\/\/ In your .dart file:\nimport 'package:meilisearch\/meilisearch.dart';\nimport 'dart:io';\nimport 'dart:convert';\nvar client = MeiliSearchClient('http:\/\/localhost:7700', 'aSampleMasterKey');\nfinal json = await File('movies.json').readAsString();\nawait client.index('movies').addDocumentsJson(json);"
+getting_started_search: |-
+  await client.index('movies').search('botman');
 getting_started_update_ranking_rules: "await client.index('movies').updateRankingRules([\n  'exactness',\n  'words',\n  'typo',\n  'proximity',\n  'attribute',\n  'sort',\n  'release_date:asc',\n  'rank:desc',\n]);"
 getting_started_update_searchable_attributes: "await client.index('movies').updateSearchableAttributes(['title']);"
 getting_started_update_stop_words: |-
