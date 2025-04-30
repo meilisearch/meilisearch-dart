@@ -6,14 +6,16 @@ on:
       - v*
 
 jobs:
-  publishing:
-    permissions:
-      id-token: write # Required for authentication using OIDC
+  check_release:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v4
       - name: Check release validity
         run: sh .github/scripts/check-release.sh
-      - name: Publish
-        uses: dart-lang/setup-dart/.github/workflows/publish.yml@v1
+
+  publishing:
+    needs: check_release
+    permissions:
+      id-token: write # Required for authentication using OIDC
+    uses: dart-lang/setup-dart/.github/workflows/publish.yml@v1
