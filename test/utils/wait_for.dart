@@ -16,7 +16,7 @@ extension TaskWaiter on Task {
       if (task.status != 'enqueued' && task.status != 'processing') {
         if (throwFailed && task.status != 'succeeded') {
           throw MeiliSearchApiException(
-            "Task ($uid) failed",
+            "Task ($uid) failed, error: ${task.error}",
             code: task.error?.code,
             link: task.error?.link,
             type: task.error?.type,
@@ -55,7 +55,7 @@ extension TaskWaiterForLists on Iterable<Task> {
             .firstWhereOrNull((element) => element.status != 'succeeded');
         if (failed != null) {
           throw MeiliSearchApiException(
-            "Task (${failed.uid}) failed",
+            "Task (${failed.uid}) failed, error: ${failed.error}",
             code: failed.error?.code,
             link: failed.error?.link,
             type: failed.error?.type,

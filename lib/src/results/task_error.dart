@@ -17,4 +17,9 @@ class TaskError {
         type: map['type'] as String?,
         link: map['link'] as String?,
       );
+
+  @override
+  String toString() {
+    return 'TaskError{message: $message, code: $code, type: $type, link: $link}';
+  }
 }
