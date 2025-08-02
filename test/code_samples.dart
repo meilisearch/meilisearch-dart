@@ -874,6 +874,11 @@ void main() {
       // #docregion getting_started_search
       await client.index('movies').search('botman');
       // #enddocregion
+      // #docregion ranking_score_threshold
+      await client
+          .index('movies')
+          .search('winter feast', SearchQuery(rankingScoreThreshold: 0.9));
+      // #enddocregion
     });
 
     // skip this test, since it's only used for generating code samples
