@@ -31,10 +31,10 @@ void main() {
       expect(response.type, 'indexSwap');
       expect(response.error, null);
       expect(response.status, 'succeeded');
-      expect(response.details!['swaps'], [
-        {'indexes': books},
-        {'indexes': movies}
-      ]);
+      var responseSwaps = response.details!['swaps'] as List;
+      expect(responseSwaps, hasLength(2));
+      expect(responseSwaps[0]['indexes'], books);
+      expect(responseSwaps[1]['indexes'], movies);
     });
   });
 
