@@ -876,8 +876,8 @@ void main() {
       // #enddocregion
       // #docregion ranking_score_threshold
       await client
-          .index('movies')
-          .search('winter feast', SearchQuery(rankingScoreThreshold: 0.9));
+          .index('INDEX_NAME')
+          .search('badman', SearchQuery(rankingScoreThreshold: 0.2));
       // #enddocregion
     });
 
