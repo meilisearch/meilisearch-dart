@@ -1,5 +1,3 @@
-library meilisearch;
-
 export 'src/settings/_exports.dart';
 export 'src/results/_exports.dart';
 export 'src/query_parameters/_exports.dart';
