@@ -27,6 +27,8 @@ class SearchQuery extends Queryable {
   final bool? showRankingScore;
   @RequiredMeiliServerVersion('1.3.0')
   final bool? showRankingScoreDetails;
+  @RequiredMeiliServerVersion('1.9.0')
+  final double? rankingScoreThreshold;
   @RequiredMeiliServerVersion('1.3.0')
   final List<dynamic /* double | List<double> */ >? vector;
 
@@ -52,6 +54,7 @@ class SearchQuery extends Queryable {
     this.hybrid,
     this.showRankingScore,
     this.showRankingScoreDetails,
+    this.rankingScoreThreshold,
     this.vector,
   });
 
@@ -78,6 +81,7 @@ class SearchQuery extends Queryable {
       'hybrid': hybrid?.toMap(),
       'showRankingScore': showRankingScore,
       'showRankingScoreDetails': showRankingScoreDetails,
+      'rankingScoreThreshold': rankingScoreThreshold,
       'vector': vector,
     };
   }
@@ -105,6 +109,7 @@ class SearchQuery extends Queryable {
     bool? showRankingScore,
     List<dynamic>? vector,
     bool? showRankingScoreDetails,
+    double? rankingScoreThreshold,
   }) =>
       SearchQuery(
         offset: offset ?? this.offset,
@@ -131,5 +136,7 @@ class SearchQuery extends Queryable {
         vector: vector ?? this.vector,
         showRankingScoreDetails:
             showRankingScoreDetails ?? this.showRankingScoreDetails,
+        rankingScoreThreshold:
+            rankingScoreThreshold ?? this.rankingScoreThreshold,
       );
 }

@@ -447,6 +447,32 @@ void main() {
           });
         });
       });
+
+      test('use rankingScoreThreshold', () async {
+        final res = await index
+            .search(
+              'The',
+              SearchQuery(
+                showRankingScore: true,
+                rankingScoreThreshold: 0.9,
+              ),
+            )
+            .asSearchResult()
+            .mapToContainer();
+
+        expect(res.hits.length, 3);
+
+        expect(
+          res.hits,
+          everyElement(
+            isA<MeiliDocumentContainer<Map<String, dynamic>>>().having(
+              (p0) => p0.rankingScore,
+              'rankingScore',
+              greaterThanOrEqualTo(0.9),
+            ),
+          ),
+        );
+      });
     });
 
     group('Nested Books', () {
