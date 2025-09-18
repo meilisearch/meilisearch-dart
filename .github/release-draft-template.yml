@@ -20,6 +20,7 @@ categories:
     label:
       - 'maintenance'
       - 'documentation'
+      - 'dependencies'
 template: |
   $CHANGES
 
