@@ -21,7 +21,7 @@ jobs:
     name: integration-tests-against-rc (dart ${{ matrix.version }})
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
       - name: Get the latest Meilisearch RC
         run: echo "MEILISEARCH_VERSION=$(curl https://raw.githubusercontent.com/meilisearch/integration-guides/main/scripts/get-latest-meilisearch-rc.sh | bash)" >> $GITHUB_ENV
       - name: Meilisearch (${{ env.MEILISEARCH_VERSION }}) setup with Docker
