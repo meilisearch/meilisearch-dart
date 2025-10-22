@@ -131,8 +131,8 @@ void main() {
         final key = sha1RandomString();
         final uid = sha1RandomString();
         final token = generateToken(uid, searchRules, key);
-        final claims = JWT.verify(token, SecretKey(key)).payload;
-
+        final claims =
+            JWT.verify(token, SecretKey(key)).payload as Map<String, Object?>;
         expect(claims['apiKeyUid'], equals(uid));
         expect(claims['searchRules'], equals(searchRules));
       });
