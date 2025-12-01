@@ -18,7 +18,6 @@
   <a href="https://pub.dev/packages/meilisearch"><img src="https://img.shields.io/pub/v/meilisearch" alt="Pub Version"></a>
   <a href="https://github.com/meilisearch/meilisearch-dart/actions"><img src="https://github.com/meilisearch/meilisearch-dart/workflows/Tests/badge.svg" alt="GitHub Workflow Status"></a>
   <a href="https://github.com/meilisearch/meilisearch-dart/blob/main/LICENSE"><img src="https://img.shields.io/badge/license-MIT-informational" alt="License"></a>
-  <a href="https://ms-bors.herokuapp.com/repositories/66"><img src="https://bors.tech/images/badge_small.svg" alt="Bors enabled"></a>
   <a href="https://codecov.io/gh/meilisearch/meilisearch-dart"><img src="https://codecov.io/gh/meilisearch/meilisearch-dart/branch/main/graph/badge.svg" alt="Code Coverage"></a>
 </p>
 
@@ -200,10 +199,10 @@ The `MeiliDocumentContainer<T>` class contains meilisearch-specific fields (e.g.
 We define the `mapToContainer()` extension to help you quickly opt-in to this class, example:
 
 ```dart
-final res = await index 
-      .search("hello world") 
+final res = await index
+      .search("hello world")
       .asSearchResult() //or .asPaginatedResult() if using page parameters
-      .mapToContainer(); 
+      .mapToContainer();
 ```
 
 ## 🤖 Compatibility with Meilisearch
