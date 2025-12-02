@@ -1,7 +1,0 @@
-status = [
-  'integration-tests (dart latest)',
-  'linter-check',
-  'pana'
-]
-# 1 hour timeout
-timeout-sec = 3600
