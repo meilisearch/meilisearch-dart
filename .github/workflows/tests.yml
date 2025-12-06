@@ -24,7 +24,7 @@ jobs:
     name: integration-tests (dart ${{ matrix.version }})
     services:
       meilisearch:
-        image: getmeili/meilisearch:latest
+        image: getmeili/meilisearch-enterprise:latest
         env:
           MEILI_MASTER_KEY: "masterKey"
           MEILI_NO_ANALYTICS: "true"
