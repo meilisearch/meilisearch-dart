@@ -32,7 +32,7 @@ jobs:
           - 7700:7700
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - uses: dart-lang/setup-dart@v1
         with:
           sdk: ${{ matrix.version }}
@@ -58,7 +58,7 @@ jobs:
     container:
       image: dart:latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - name: Install dependencies
         run: |
           dart pub get
@@ -70,7 +70,7 @@ jobs:
     name: Yaml linting check
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - name: Yaml lint check
         uses: ibiqlik/action-yamllint@v3
         with:
@@ -80,7 +80,7 @@ jobs:
     name: check .code-samples.meilisearch.yaml
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - uses: dart-lang/setup-dart@v1
         with:
           sdk: 'latest'
@@ -93,7 +93,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - uses: dart-lang/setup-dart@v1
         with:
           sdk: '3.0.0'
