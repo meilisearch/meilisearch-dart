@@ -7,6 +7,9 @@ class DocumentsQuery extends Queryable {
   final int? limit;
   final List<String> fields;
 
+  @RequiredMeiliServerVersion('1.14.0')
+  final List<int> ids;
+
   @RequiredMeiliServerVersion('1.2.0')
   final Object? filter;
 
@@ -19,6 +22,7 @@ class DocumentsQuery extends Queryable {
     this.limit,
     this.offset,
     this.fields = const [],
+    this.ids = const [],
     this.filter,
     this.filterExpression,
   });
@@ -29,6 +33,7 @@ class DocumentsQuery extends Queryable {
       'offset': offset,
       'limit': limit,
       'fields': fields,
+      'ids': ids,
       'filter': filter ?? filterExpression?.transform(),
     };
   }

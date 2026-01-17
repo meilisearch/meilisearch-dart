@@ -348,6 +348,23 @@ void main() {
           expect(docs.results[0][ktitle], isNull);
         });
 
+        test('documents by ids', () async {
+          List<Map<String, Object?>> booksForTest = [books[0], books[2]];
+          final docs = await index.getDocuments(
+            params: DocumentsQuery(
+              ids: booksForTest.map((book) => book[kbookId] as int).toList(),
+            ),
+          );
+
+          expect(docs.total, equals(2));
+
+          expect(docs.limit, greaterThan(0));
+          expect(docs.results[0][kbookId], booksForTest[0][kbookId]);
+          expect(docs.results[0][ktitle], booksForTest[0][ktitle]);
+          expect(docs.results[1][kbookId], booksForTest[1][kbookId]);
+          expect(docs.results[1][ktitle], booksForTest[1][ktitle]);
+        });
+
         test('document with fields', () async {
           final doc = await index.getDocument(1, fields: [kbookId]);
 
