@@ -63,19 +63,8 @@ update_an_index_1: |-
 delete_an_index_1: |-
   await client.index('movies').delete();
 get_one_document_1: "await client.index('movies').getDocument(25684,\n    fields: ['id', 'title', 'poster', 'release_date']);"
-add_or_replace_documents_1: |-
-  await client.index('movies').addDocuments([
-    {
-      'id': 287947,
-      'title': 'Shazam',
-      'poster':
-          'https://image.tmdb.org/t/p/w1280/xnopI5Xtky18MPhK40cZAGAOVeV.jpg',
-      'overview':
-          'A boy is given the ability to become an adult superhero in times of need with a single magic word.',
-      'release_date': '2019-03-23'
-    }
-  ]);
-add_or_update_documents_1: "await client.index('movies').updateDocuments([\n  {\n    'id': 287947,\n    'title': 'Shazam ⚡️',\n    'genres': 'comedy',\n  }\n]);"
+add_or_replace_documents_1: "await client.index('movies').addDocuments(\n  [\n    {\n      'id': 287947,\n      'title': 'Shazam',\n      'poster':\n          'https:\/\/image.tmdb.org\/t\/p\/w1280\/xnopI5Xtky18MPhK40cZAGAOVeV.jpg',\n      'overview':\n          'A boy is given the ability to become an adult superhero in times of need with a single magic word.',\n      'release_date': '2019-03-23'\n    }\n  ],\n  skipCreation: false,\n);"
+add_or_update_documents_1: "await client.index('movies').updateDocuments(\n  [\n    {\n      'id': 287947,\n      'title': 'Shazam ⚡️',\n      'genres': 'comedy',\n    }\n  ],\n  skipCreation: true,\n);"
 delete_all_documents_1: |-
   await client.index('movies').deleteAllDocuments();
 delete_one_document_1: |-

@@ -229,27 +229,33 @@ void main() {
       // #enddocregion
 
       // #docregion add_or_replace_documents_1
-      await client.index('movies').addDocuments([
-        {
-          'id': 287947,
-          'title': 'Shazam',
-          'poster':
-              'https://image.tmdb.org/t/p/w1280/xnopI5Xtky18MPhK40cZAGAOVeV.jpg',
-          'overview':
-              'A boy is given the ability to become an adult superhero in times of need with a single magic word.',
-          'release_date': '2019-03-23'
-        }
-      ]);
+      await client.index('movies').addDocuments(
+        [
+          {
+            'id': 287947,
+            'title': 'Shazam',
+            'poster':
+                'https://image.tmdb.org/t/p/w1280/xnopI5Xtky18MPhK40cZAGAOVeV.jpg',
+            'overview':
+                'A boy is given the ability to become an adult superhero in times of need with a single magic word.',
+            'release_date': '2019-03-23'
+          }
+        ],
+        skipCreation: false,
+      );
       // #enddocregion
 
       // #docregion add_or_update_documents_1
-      await client.index('movies').updateDocuments([
-        {
-          'id': 287947,
-          'title': 'Shazam ⚡️',
-          'genres': 'comedy',
-        }
-      ]);
+      await client.index('movies').updateDocuments(
+        [
+          {
+            'id': 287947,
+            'title': 'Shazam ⚡️',
+            'genres': 'comedy',
+          }
+        ],
+        skipCreation: true,
+      );
       // #enddocregion
 
       // #docregion delete_all_documents_1
