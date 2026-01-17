@@ -8,7 +8,7 @@ class DocumentsQuery extends Queryable {
   final List<String> fields;
 
   @RequiredMeiliServerVersion('1.14.0')
-  final List<int> ids;
+  final List<Object> ids;
 
   @RequiredMeiliServerVersion('1.2.0')
   final Object? filter;

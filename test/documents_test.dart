@@ -357,12 +357,10 @@ void main() {
           );
 
           expect(docs.total, equals(2));
-
           expect(docs.limit, greaterThan(0));
-          expect(docs.results[0][kbookId], booksForTest[0][kbookId]);
-          expect(docs.results[0][ktitle], booksForTest[0][ktitle]);
-          expect(docs.results[1][kbookId], booksForTest[1][kbookId]);
-          expect(docs.results[1][ktitle], booksForTest[1][ktitle]);
+          const itemEq = MapEquality<String, Object?>();
+          final listEq = UnorderedIterableEquality(itemEq);
+          expect(listEq.equals(docs.results, booksForTest), isTrue);
         });
 
         test('document with fields', () async {
