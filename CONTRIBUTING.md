@@ -3,7 +3,8 @@
 First of all, thank you for contributing to Meilisearch! The goal of this document is to provide everything you need to know in order to contribute to Meilisearch and its different integrations.
 
 - [Contributing ](#contributing-)
-  - [Assumptions](#assumptions)
+  - [Coding with AI](#coding-with-ai)
+- [Assumptions](#assumptions)
   - [How to Contribute](#how-to-contribute)
   - [Development Workflow](#development-workflow)
     - [Requirements ](#requirements-)
@@ -21,6 +22,17 @@ First of all, thank you for contributing to Meilisearch! The goal of this docume
     - [Automated Changelogs ](#automated-changelogs-)
     - [How to Publish the Release ](#how-to-publish-the-release-)
 
+## Coding with AI
+
+We welcome contributions that use AI-powered tools! If you use any AI assistant (such as GitHub Copilot, ChatGPT, Claude, Cursor, or similar tools) while working on your contribution, whether for code, tests, documentation, or anything else, please mention it in your PR description.
+
+Here's what we ask:
+- **Disclose AI usage**: A simple note like "Used GitHub Copilot for autocompletion" or "Generated initial test structure with ChatGPT" is enough.
+- **Describe the scope**: Let us know what parts of your contribution involved AI assistance.
+- **Review AI-generated content**: Make sure you understand and have reviewed any AI-generated code before submitting.
+
+**AI usage is completely allowed as long as it is disclosed.** We believe in transparency and want to understand how our community works. This also helps maintainers during code review.
+
 ## Assumptions
 
 1. **You're familiar with [GitHub](https://github.com) and the [Pull Request](https://help.github.com/en/github/collaborating-with-issues-and-pull-requests/about-pull-requests) (PR) workflow.**
@@ -33,7 +45,7 @@ First of all, thank you for contributing to Meilisearch! The goal of this docume
 2. Once done, [fork the meilisearch-dart repository](https://help.github.com/en/github/getting-started-with-github/fork-a-repo) in your own GitHub account. Ask a maintainer if you want your issue to be checked before making a PR.
 3. [Create a new Git branch](https://help.github.com/en/github/collaborating-with-issues-and-pull-requests/creating-and-deleting-branches-within-your-repository).
 4. Review the [Development Workflow](#development-workflow) section that describes the steps to maintain the repository.
-5. Make the changes on your branch.
+5. Make the changes on your branch. If you use AI tools during your work, remember to disclose it in your PR description (see [Coding with AI](#coding-with-ai)).
 6. [Submit the branch as a PR](https://help.github.com/en/github/collaborating-with-issues-and-pull-requests/creating-a-pull-request-from-a-fork) pointing to the `main` branch of the main meilisearch-dart repository. A maintainer should comment and/or review your Pull Request within a few days. Although depending on the circumstances, it may take longer.<br>
  We do not enforce a naming convention for the PRs, but **please use something descriptive of your changes**, having in mind that the title of your PR will be automatically added to the next [release changelog](https://github.com/meilisearch/meilisearch-dart/releases/).
 
