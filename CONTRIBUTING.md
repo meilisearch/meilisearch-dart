@@ -2,24 +2,11 @@
 
 First of all, thank you for contributing to Meilisearch! The goal of this document is to provide everything you need to know in order to contribute to Meilisearch and its different integrations.
 
-- [Contributing ](#contributing-)
-  - [Assumptions](#assumptions)
-  - [How to Contribute](#how-to-contribute)
-  - [Development Workflow](#development-workflow)
-    - [Requirements ](#requirements-)
-    - [Setup ](#setup-)
-    - [Tests and Linter ](#tests-and-linter-)
-    - [Updating code samples](#updating-code-samples)
-    - [Run integration tests for embedders](#run-integration-tests-for-embedders)
-      - [OpenAI Model Integration](#openai-model-integration)
-  - [Git Guidelines](#git-guidelines)
-    - [Git Branches ](#git-branches-)
-    - [Git Commits ](#git-commits-)
-    - [GitHub Pull Requests ](#github-pull-requests-)
-  - [Release Process (for the internal team only)](#release-process-for-the-internal-team-only)
-    - [Automation to Rebase and Merge the PRs ](#automation-to-rebase-and-merge-the-prs-)
-    - [Automated Changelogs ](#automated-changelogs-)
-    - [How to Publish the Release ](#how-to-publish-the-release-)
+- [Assumptions](#assumptions)
+- [How to Contribute](#how-to-contribute)
+- [Development Workflow](#development-workflow)
+- [Git Guidelines](#git-guidelines)
+- [Release Process (for the internal team only)](#release-process-for-the-internal-team-only)
 
 ## Assumptions
 
