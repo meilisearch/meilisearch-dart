@@ -12,3 +12,4 @@ export 'delete_documents_query.dart';
 export 'facet_search_query.dart';
 export 'swap_index.dart';
 export 'hybrid_search.dart';
+export 'export_query.dart';

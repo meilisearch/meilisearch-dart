@@ -293,4 +293,17 @@ class MeiliSearchClient {
 
     return MultiSearchResult.fromMap(response.data!);
   }
+
+  ///
+  ///Export Endpoint
+  ///
+
+  @RequiredMeiliServerVersion('1.16.0')
+  Future<Task> export(ExportQuery query) async {
+    final response = await http.postMethod<Map<String, Object?>>(
+      '/export',
+      data: query.toSparseMap(),
+    );
+    return Task.fromMap(response.data!);
+  }
 }
