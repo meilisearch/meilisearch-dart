@@ -2,6 +2,9 @@
 
 # 0.18.0
 ### Breaking Changes:
+No breaking change but addition of new features
+- export API
+- Add ID as a parameter for GetDocuments
 
 # 0.17.1
 ### Breaking Changes:
