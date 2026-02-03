@@ -879,6 +879,29 @@ void main() {
           .index('INDEX_NAME')
           .search('badman', SearchQuery(rankingScoreThreshold: 0.2));
       // #enddocregion
+      // #docregion export_post_1
+      await client.export(
+        ExportQuery(
+          url: 'new_instance_url',
+          apiKey: 'new_instance_api_key',
+          payloadSize: "100 MiB",
+        ),
+      );
+      // #enddocregion
+      // #docregion export_post_2
+      await client.export(
+        ExportQuery(
+          url: 'new_instance_url',
+          apiKey: 'new_instance_api_key',
+          indexes: {
+            "index_1_uid": ExportIndexOptions(
+              filter: "filter",
+              overrideSettings: true,
+            ),
+          },
+        ),
+      );
+      // #enddocregion
     });
 
     // skip this test, since it's only used for generating code samples
