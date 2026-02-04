@@ -22,6 +22,9 @@ Map<String, FacetStat>? _readFacetStats(
   );
 }
 
+Map<String, dynamic>? _readPerformanceDetails(Map<String, Object?> map) =>
+    (map['performanceDetails'] as Map<String, dynamic>?);
+
 Map<String, Map<String, int>>? _readFacetDistribution(
   Map<String, Object?> map,
 ) {

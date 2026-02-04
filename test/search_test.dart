@@ -148,6 +148,32 @@ void main() {
         );
       });
 
+      test('Show performance details', () async {
+        final result = await index.search(
+          'prince',
+          SearchQuery(showPerformanceDetails: true),
+        );
+
+        expect(result.performanceDetails, isNotNull);
+        expect(result.performanceDetails, isA<Map<String, dynamic>>());
+        expect(result.performanceDetails, isNotEmpty);
+      });
+
+      test('performanceDetails is null when not requested', () async {
+        final result = await index.search('prince');
+
+        expect(result.performanceDetails, isNull);
+      });
+
+      test('performanceDetails is null when set to false', () async {
+        final result = await index.search(
+          'prince',
+          SearchQuery(showPerformanceDetails: false),
+        );
+
+        expect(result.performanceDetails, isNull);
+      });
+
       group('with', () {
         test('offset parameter', () async {
           final result =

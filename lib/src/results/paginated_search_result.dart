@@ -10,6 +10,7 @@ class PaginatedSearchResult<T> extends Searcheable<T> {
     required super.query,
     required super.facetStats,
     required super.vector,
+    required super.performanceDetails,
     required this.hitsPerPage,
     required this.page,
     required this.totalHits,
@@ -45,6 +46,7 @@ class PaginatedSearchResult<T> extends Searcheable<T> {
       facetStats: _readFacetStats(map),
       indexUid: indexUid ?? _readIndexUid(map),
       vector: map['vector'] as List?,
+      performanceDetails: _readPerformanceDetails(map),
     );
   }
 
@@ -65,6 +67,7 @@ class PaginatedSearchResult<T> extends Searcheable<T> {
       query: query,
       totalHits: totalHits,
       totalPages: totalPages,
+      performanceDetails: performanceDetails,
     );
   }
 }
