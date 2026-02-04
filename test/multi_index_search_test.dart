@@ -45,6 +45,53 @@ void main() {
       expect(result.results.last.indexUid, index2.uid);
       expect(result.results.last.hits.length, 2);
     });
+
+    test("Multi search with showPerformanceDetails", () async {
+      final result = await client.multiSearch(MultiSearchQuery(queries: [
+        IndexSearchQuery(
+          query: "prince",
+          indexUid: index1.uid,
+          showPerformanceDetails: true,
+        ),
+        IndexSearchQuery(
+          query: "hobbit",
+          indexUid: index2.uid,
+          showPerformanceDetails: true,
+        ),
+      ]));
+
+      expect(result.results, hasLength(2));
+      expect(result.results.first.performanceDetails, isNotNull);
+      expect(
+          result.results.first.performanceDetails, isA<Map<String, dynamic>>());
+      expect(result.results.last.performanceDetails, isNotNull);
+      expect(
+          result.results.last.performanceDetails, isA<Map<String, dynamic>>());
+    });
+
+    test("Multi search performanceDetails is null when not requested",
+        () async {
+      final result = await client.multiSearch(MultiSearchQuery(queries: [
+        IndexSearchQuery(
+          query: "prince",
+          indexUid: index1.uid,
+        ),
+      ]));
+
+      expect(result.results.first.performanceDetails, isNull);
+    });
+
+    test("Multi search performanceDetails is null when set to false", () async {
+      final result = await client.multiSearch(MultiSearchQuery(queries: [
+        IndexSearchQuery(
+          query: "prince",
+          indexUid: index1.uid,
+          showPerformanceDetails: false,
+        ),
+      ]));
+
+      expect(result.results.first.performanceDetails, isNull);
+    });
   });
 
   test('code samples', () async {
