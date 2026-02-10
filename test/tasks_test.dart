@@ -70,26 +70,12 @@ void main() {
   test(
     'code samples',
     () async {
-      // #docregion async_guide_filter_by_date_1
-      await client.getTasks(
-        params: TasksQuery(
-          afterEnqueuedAt: DateTime(2020, 10, 11, 11, 49, 53),
-        ),
-      );
-      // #enddocregion
       // #docregion async_guide_multiple_filters_1
       await client.getTasks(
         params: TasksQuery(
           indexUids: ['movies'],
           types: ['documentAdditionOrUpdate', 'documentDeletion'],
           statuses: ['processing'],
-        ),
-      );
-      // #enddocregion
-      // #docregion async_guide_filter_by_ids_1
-      await client.getTasks(
-        params: TasksQuery(
-          uids: [5, 10, 13],
         ),
       );
       // #enddocregion
@@ -100,24 +86,11 @@ void main() {
         ),
       );
       // #enddocregion
-      // #docregion async_guide_filter_by_types_1
-      await client.getTasks(
-        params: TasksQuery(
-          types: ['dumpCreation', 'indexSwap'],
-        ),
-      );
-      // #enddocregion
-      // #docregion async_guide_filter_by_index_uids_1
-      await client.getTasks(params: TasksQuery(indexUids: ['movies']));
-      // #enddocregion
       // #docregion delete_tasks_1
       await client.deleteTasks(params: DeleteTasksQuery(uids: [1, 2]));
       // #enddocregion
       // #docregion cancel_tasks_1
       await client.cancelTasks(params: CancelTasksQuery(uids: [1, 2]));
-      // #enddocregion
-      // #docregion async_guide_canceled_by_1
-      await client.getTasks(params: TasksQuery(canceledBy: [9, 15]));
       // #enddocregion
     },
     skip: true,
