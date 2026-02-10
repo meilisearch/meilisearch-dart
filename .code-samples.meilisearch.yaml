@@ -16,19 +16,12 @@ search_parameter_guide_facet_stats_1: "await client\n    .index('movie_ratings')
 faceted_search_1: "await client\n    .index('books')\n    .search('', SearchQuery(facets: ['genres', 'rating', 'language']));"
 filtering_guide_nested_1: "await client.index('movie_ratings').search(\n      'thriller',\n      SearchQuery(\n        filterExpression: Meili.gte(\n          \/\/or Meili.attr('rating.users')\n          \/\/or 'rating.users'.toMeiliAttribute()\n          Meili.attrFromParts(['rating', 'users']),\n          Meili.value(90),\n        ),\n      ),\n    );"
 sorting_guide_sort_nested_1: "await client\n    .index('movie_ratings')\n    .search('thriller', SearchQuery(sort: ['rating.users:asc']));"
-async_guide_filter_by_date_1: "await client.getTasks(\n  params: TasksQuery(\n    afterEnqueuedAt: DateTime(2020, 10, 11, 11, 49, 53),\n  ),\n);"
 async_guide_multiple_filters_1: "await client.getTasks(\n  params: TasksQuery(\n    indexUids: ['movies'],\n    types: ['documentAdditionOrUpdate', 'documentDeletion'],\n    statuses: ['processing'],\n  ),\n);"
-async_guide_filter_by_ids_1: "await client.getTasks(\n  params: TasksQuery(\n    uids: [5, 10, 13],\n  ),\n);"
 async_guide_filter_by_statuses_1: "await client.getTasks(\n  params: TasksQuery(\n    statuses: ['failed', 'canceled'],\n  ),\n);"
-async_guide_filter_by_types_1: "await client.getTasks(\n  params: TasksQuery(\n    types: ['dumpCreation', 'indexSwap'],\n  ),\n);"
-async_guide_filter_by_index_uids_1: |-
-  await client.getTasks(params: TasksQuery(indexUids: ['movies']));
 delete_tasks_1: |-
   await client.deleteTasks(params: DeleteTasksQuery(uids: [1, 2]));
 cancel_tasks_1: |-
   await client.cancelTasks(params: CancelTasksQuery(uids: [1, 2]));
-async_guide_canceled_by_1: |-
-  await client.getTasks(params: TasksQuery(canceledBy: [9, 15]));
 swap_indexes_1: "await client.swapIndexes([\n  SwapIndex(['indexA', 'indexB']),\n  SwapIndex(['indexX', 'indexY']),\n]);"
 search_parameter_guide_hitsperpage_1: "await client\n    .index('movies')\n    .search('', SearchQuery(hitsPerPage: 15))\n    .asPaginatedResult();"
 search_parameter_guide_page_1: "await client\n    .index('movies')\n    .search('', SearchQuery(page: 2))\n    .asPaginatedResult();"
@@ -208,27 +201,8 @@ typo_tolerance_guide_4: |-
 getting_started_add_documents: "\/\/ In the command line:\n\/\/ dart pub add meilisearch\n\/\/ In your .dart file:\nimport 'package:meilisearch\/meilisearch.dart';\nimport 'dart:io';\nimport 'dart:convert';\nvar client = MeiliSearchClient('http:\/\/localhost:7700', 'aSampleMasterKey');\nfinal json = await File('movies.json').readAsString();\nawait client.index('movies').addDocumentsJson(json);"
 getting_started_search: |-
   await client.index('movies').search('botman');
-getting_started_update_ranking_rules: "await client.index('movies').updateRankingRules([\n  'exactness',\n  'words',\n  'typo',\n  'proximity',\n  'attribute',\n  'sort',\n  'release_date:asc',\n  'rank:desc',\n]);"
-getting_started_update_searchable_attributes: "await client.index('movies').updateSearchableAttributes(['title']);"
-getting_started_update_stop_words: |-
-  await client.index('movies').updateStopWords(['the']);
 getting_started_check_task_status: |-
   await client.getTask(0);
-getting_started_synonyms: "await client.index('movies').updateSynonyms({\n  'winnie': ['piglet'],\n  'piglet': ['winnie'],\n});"
-getting_started_update_displayed_attributes: "await client\n    .index('movies')\n    .updateDisplayedAttributes(['title', 'overview', 'poster']);"
-getting_started_add_meteorites: "final json = await File('meteorites.json').readAsString();\nawait client.index('meteorites').addDocumentsJson(json);"
-getting_started_configure_settings: "await client.index('meteorites').updateSettings(IndexSettings(\n    filterableAttributes: ['mass', '_geo'],\n    sortableAttributes: ['mass', '_geo']));"
-getting_started_geo_radius: "await client.index('meteorites').search(\n      '',\n      SearchQuery(\n        filterExpression: Meili.geoRadius(\n          (lat: 46.9480, lng: 7.4474),\n          210000,\n        ),\n      ),\n    );"
-getting_started_geo_point: "await client.index('meteorites').search(\n    '', SearchQuery(sort: ['_geoPoint(48.8583701, 2.2922926):asc']));"
-getting_started_sorting: "await client.index('meteorites').search(\n      '',\n      SearchQuery(\n        sort: ['mass:asc'],\n        filterExpression: Meili.attr('mass').lt(200.toMeiliValue()),\n      ),\n    );"
-getting_started_filtering: "await client\n    .index('meteorites')\n    .search('', SearchQuery(filter: 'mass < 200'));"
-getting_started_faceting: "await client.index('books').updateFaceting(Faceting(\n    maxValuesPerFacet: 2,\n    sortFacetValuesBy: {'*': FacetingSortTypes.count}));"
-getting_started_typo_tolerance: |-
-  final toUpdate = TypoTolerance(
-    minWordSizeForTypos: MinWordSizeForTypos(oneTypo: 4),
-  );
-  await client.index('movies').updateTypoTolerance(toUpdate);
-getting_started_pagination: "await client\n    .index('books')\n    .updatePagination(Pagination(maxTotalHits: 500));"
 filtering_update_settings_1: |-
   await client.index('movies').updateFilterableAttributes([
     'director',
@@ -269,24 +243,6 @@ create_a_key_1: "await client.createKey(\n    description: 'Add documents: Produ
 update_a_key_1: "await client.updateKey(\n  '6062abda-a5aa-4414-ac91-ecd7944c0f8d',\n  description: 'Manage documents: Products\/Reviews API key',\n  name: 'Products\/Reviews API key',\n);"
 delete_a_key_1: |-
   await client.deleteKey('6062abda-a5aa-4414-ac91-ecd7944c0f8d');
-security_guide_search_key_1: |-
-  var client = MeiliSearchClient('http://localhost:7700', 'apiKey');
-  await client.index('patient_medical_records').search('');
-security_guide_update_key_1: "var client = MeiliSearchClient('http:\/\/localhost:7700', 'masterKey');\nawait client.updateKey(\n  '74c9c733-3368-4738-bbe5-1d18a5fecb37',\n  description: 'Default Search API Key',\n);"
-security_guide_create_key_1: |-
-  var client = MeiliSearchClient('http://localhost:7700', 'masterKey');
-  await client.createKey(
-    description: 'Search patient records key',
-    actions: ['search'],
-    indexes: ['patient_medical_records'],
-    expiresAt: DateTime(2023, 01, 01),
-  );
-security_guide_list_keys_1: |-
-  var client = MeiliSearchClient('http://localhost:7700', 'masterKey');
-  await client.getKeys();
-security_guide_delete_key_1: |-
-  var client = MeiliSearchClient('http://localhost:7700', 'masterKey');
-  await client.deleteKey('ac5cd97d-5a4b-4226-a868-2d0eb6d197ab');
 search_parameter_guide_crop_marker_1: "await client.index('movies').search(\n      'shifu',\n      SearchQuery(\n        attributesToCrop: ['overview'],\n        cropMarker: '[…]',\n      ),\n    );"
 search_parameter_guide_highlight_tag_1: "await client.index('movies').search(\n      'winter feast',\n      SearchQuery(\n        attributesToHighlight: ['overview'],\n        highlightPreTag: '<span class=\"highlight\">',\n        highlightPostTag: '<\/span>',\n      ),\n    );"
 geosearch_guide_filter_usage_3: "await client.index('restaurants').search(\n      '',\n      SearchQuery(\n        filter:\n            '_geoBoundingBox([45.494181, 9.214024], [45.449484, 9.179175])',\n      ),\n    );"
@@ -297,6 +253,4 @@ reset_separator_tokens_1: await client.index('articles').resetSeparatorTokens();
 get_non_separator_tokens_1: await client.index('articles').getNonSeparatorTokens();
 update_non_separator_tokens_1: "await client.index('articles').updateNonSeparatorTokens([\"@\", \"#\"]);"
 reset_non_separator_tokens_1: await client.index('articles').resetNonSeparatorTokens();
-ranking_score_threshold: "await client\n    .index('INDEX_NAME')\n    .search('badman', SearchQuery(rankingScoreThreshold: 0.2));"
 export_post_1: "await client.export(\n  ExportQuery(\n    url: 'new_instance_url',\n    apiKey: 'new_instance_api_key',\n    payloadSize: \"200 MiB\",\n  ),\n);"
-export_post_2: "await client.export(\n  ExportQuery(\n    url: 'new_instance_url',\n    apiKey: 'new_instance_api_key',\n    indexes: {\n      \"index_1_uid\": ExportIndexOptions(\n        filter: \"filter\",\n        overrideSettings: true,\n      ),\n    },\n  ),\n);"
