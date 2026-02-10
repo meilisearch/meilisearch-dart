@@ -52,14 +52,6 @@ void main() {
         // #enddocregion
       }
 
-      void a8() async {
-        // #docregion getting_started_add_meteorites
-        final json = await File('meteorites.json').readAsString();
-
-        await client.index('meteorites').addDocumentsJson(json);
-        // #enddocregion
-      }
-
       void a10() async {
         // #docregion add_movies_json_1
         // import 'dart:io';
@@ -69,53 +61,10 @@ void main() {
         // #enddocregion
       }
 
-      void a11() async {
-        // #docregion security_guide_delete_key_1
-        var client = MeiliSearchClient('http://localhost:7700', 'masterKey');
-        await client.deleteKey('ac5cd97d-5a4b-4226-a868-2d0eb6d197ab');
-        // #enddocregion
-      }
-
-      void a12() async {
-        // #docregion security_guide_list_keys_1
-        var client = MeiliSearchClient('http://localhost:7700', 'masterKey');
-        await client.getKeys();
-        // #enddocregion
-      }
-
-      void a13() async {
-        // #docregion security_guide_create_key_1
-        var client = MeiliSearchClient('http://localhost:7700', 'masterKey');
-        await client.createKey(
-          description: 'Search patient records key',
-          actions: ['search'],
-          indexes: ['patient_medical_records'],
-          expiresAt: DateTime(2023, 01, 01),
-        );
-        // #enddocregion
-      }
-
       void a14() async {
         // #docregion authorization_header_1
         var client = MeiliSearchClient('http://localhost:7700', 'masterKey');
         await client.getKeys();
-        // #enddocregion
-      }
-
-      void a15() async {
-        // #docregion security_guide_search_key_1
-        var client = MeiliSearchClient('http://localhost:7700', 'apiKey');
-        await client.index('patient_medical_records').search('');
-        // #enddocregion
-      }
-
-      void a16() async {
-        // #docregion security_guide_update_key_1
-        var client = MeiliSearchClient('http://localhost:7700', 'masterKey');
-        await client.updateKey(
-          '74c9c733-3368-4738-bbe5-1d18a5fecb37',
-          description: 'Default Search API Key',
-        );
         // #enddocregion
       }
 
@@ -587,102 +536,8 @@ void main() {
       ], primaryKey: 'reference_number');
       // #enddocregion
 
-      // #docregion getting_started_update_ranking_rules
-      await client.index('movies').updateRankingRules([
-        'exactness',
-        'words',
-        'typo',
-        'proximity',
-        'attribute',
-        'sort',
-        'release_date:asc',
-        'rank:desc',
-      ]);
-      // #enddocregion
-
-      // #docregion getting_started_update_searchable_attributes
-      await client.index('movies').updateSearchableAttributes(['title']);
-      // #enddocregion
-
-      // #docregion getting_started_update_stop_words
-      await client.index('movies').updateStopWords(['the']);
-      // #enddocregion
-
       // #docregion getting_started_check_task_status
       await client.getTask(0);
-      // #enddocregion
-
-      // #docregion getting_started_synonyms
-      await client.index('movies').updateSynonyms({
-        'winnie': ['piglet'],
-        'piglet': ['winnie'],
-      });
-      // #enddocregion
-
-      // #docregion getting_started_update_displayed_attributes
-      await client
-          .index('movies')
-          .updateDisplayedAttributes(['title', 'overview', 'poster']);
-      // #enddocregion
-
-      // #docregion getting_started_configure_settings
-      await client.index('meteorites').updateSettings(IndexSettings(
-          filterableAttributes: ['mass', '_geo'],
-          sortableAttributes: ['mass', '_geo']));
-      // #enddocregion
-
-      // #docregion getting_started_geo_radius
-      await client.index('meteorites').search(
-            '',
-            SearchQuery(
-              filterExpression: Meili.geoRadius(
-                (lat: 46.9480, lng: 7.4474),
-                210000,
-              ),
-            ),
-          );
-      // #enddocregion
-
-      // #docregion getting_started_geo_point
-      await client.index('meteorites').search(
-          '', SearchQuery(sort: ['_geoPoint(48.8583701, 2.2922926):asc']));
-      // #enddocregion
-
-      // #docregion getting_started_sorting
-      await client.index('meteorites').search(
-            '',
-            SearchQuery(
-              sort: ['mass:asc'],
-              filterExpression: Meili.attr('mass').lt(200.toMeiliValue()),
-            ),
-          );
-      // #enddocregion
-
-      // #docregion getting_started_filtering
-      await client
-          .index('meteorites')
-          .search('', SearchQuery(filter: 'mass < 200'));
-      // #enddocregion
-
-      // #docregion getting_started_faceting
-      await client.index('books').updateFaceting(Faceting(
-          maxValuesPerFacet: 2,
-          sortFacetValuesBy: {'*': FacetingSortTypes.count}));
-      // #enddocregion
-
-      void a9() async {
-        // #docregion getting_started_typo_tolerance
-        final toUpdate = TypoTolerance(
-          minWordSizeForTypos: MinWordSizeForTypos(oneTypo: 4),
-        );
-        await client.index('movies').updateTypoTolerance(toUpdate);
-        // #enddocregion
-      }
-
-      // #docregion getting_started_pagination
-      await client
-          .index('books')
-          .updatePagination(Pagination(maxTotalHits: 500));
       // #enddocregion
 
       // #docregion filtering_update_settings_1
@@ -874,31 +729,12 @@ void main() {
       // #docregion getting_started_search
       await client.index('movies').search('botman');
       // #enddocregion
-      // #docregion ranking_score_threshold
-      await client
-          .index('INDEX_NAME')
-          .search('badman', SearchQuery(rankingScoreThreshold: 0.2));
-      // #enddocregion
       // #docregion export_post_1
       await client.export(
         ExportQuery(
           url: 'new_instance_url',
           apiKey: 'new_instance_api_key',
           payloadSize: "100 MiB",
-        ),
-      );
-      // #enddocregion
-      // #docregion export_post_2
-      await client.export(
-        ExportQuery(
-          url: 'new_instance_url',
-          apiKey: 'new_instance_api_key',
-          indexes: {
-            "index_1_uid": ExportIndexOptions(
-              filter: "filter",
-              overrideSettings: true,
-            ),
-          },
         ),
       );
       // #enddocregion
