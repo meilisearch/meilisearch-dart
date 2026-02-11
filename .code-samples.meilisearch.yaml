@@ -243,6 +243,25 @@ create_a_key_1: "await client.createKey(\n    description: 'Add documents: Produ
 update_a_key_1: "await client.updateKey(\n  '6062abda-a5aa-4414-ac91-ecd7944c0f8d',\n  description: 'Manage documents: Products\/Reviews API key',\n  name: 'Products\/Reviews API key',\n);"
 delete_a_key_1: |-
   await client.deleteKey('6062abda-a5aa-4414-ac91-ecd7944c0f8d');
+tenant_token_guide_generate_sdk_1: |-
+  final uid = '85c3c2f9-bdd6-41f1-abd8-11fcf80e0f76';
+  final apiKey = 'B5KdX2MY2jV6EXfUs6scSfmC...';
+  final expiresAt = DateTime.utc(2025, 12, 20);
+  final searchRules = {
+    'patient_medical_records': {
+      'filter': 'user_id = 1'
+    }
+  };
+
+  final token = client.generateTenantToken(
+    uid,
+    searchRules,
+    apiKey: apiKey, // optional
+    expiresAt: expiresAt // optional
+  );
+tenant_token_guide_search_sdk_1: |-
+  final frontEndClient = MeiliSearchClient('http://localhost:7700', token);
+  await frontEndClient.index('patient_medical_records').search('blood test');
 search_parameter_guide_crop_marker_1: "await client.index('movies').search(\n      'shifu',\n      SearchQuery(\n        attributesToCrop: ['overview'],\n        cropMarker: '[…]',\n      ),\n    );"
 search_parameter_guide_highlight_tag_1: "await client.index('movies').search(\n      'winter feast',\n      SearchQuery(\n        attributesToHighlight: ['overview'],\n        highlightPreTag: '<span class=\"highlight\">',\n        highlightPostTag: '<\/span>',\n      ),\n    );"
 geosearch_guide_filter_usage_3: "await client.index('restaurants').search(\n      '',\n      SearchQuery(\n        filter:\n            '_geoBoundingBox([45.494181, 9.214024], [45.449484, 9.179175])',\n      ),\n    );"
