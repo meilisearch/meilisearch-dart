@@ -63,7 +63,7 @@ void main() {
 
       void a14() async {
         // #docregion authorization_header_1
-        var client = MeiliSearchClient('http://localhost:7700', 'masterKey');
+        var client = MeiliSearchClient('MEILISEARCH_URL', 'masterKey');
         await client.getKeys();
         // #enddocregion
       }
@@ -754,7 +754,7 @@ void main() {
     import 'dart:io';
     import 'dart:convert';
 
-    var client = MeiliSearchClient('http://localhost:7700', 'aSampleMasterKey');
+    var client = MeiliSearchClient('MEILISEARCH_URL', 'aSampleMasterKey');
 
     final json = await File('movies.json').readAsString();
 
