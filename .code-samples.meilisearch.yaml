@@ -2,17 +2,14 @@
 # Every example written here will be automatically fetched by
 # the documentation and the landing page on build
 ---
-search_parameter_guide_show_ranking_score_1: "await client\n    .index('movies')\n    .search('dragon', SearchQuery(showRankingScore: true));"
 facet_search_1: "await client.index('books').facetSearch(\n      FacetSearchQuery(\n        facetQuery: 'fiction',\n        facetName: 'genres',\n        filter: 'rating > 3',\n      ),\n    );"
 facet_search_2: "await client.index('books').updateFaceting(\n      Faceting(\n        sortFacetValuesBy: {\n          'genres': FacetingSortTypes.count,\n        },\n      ),\n    );"
 facet_search_3: "await client.index('books').facetSearch(\n      FacetSearchQuery(\n        facetQuery: 'c',\n        facetName: 'genres',\n      ),\n    );"
-search_parameter_guide_attributes_to_search_on_1: "await client.index('books').facetSearch(\n      FacetSearchQuery(\n        facetQuery: 'c',\n        facetName: 'genres',\n      ),\n    );"
 get_documents_post_1: "await client.index('movies').getDocuments(\n      params: DocumentsQuery(\n        filterExpression: Meili.and([\n          'language'.toMeiliAttribute().eq('English'.toMeiliValue()),\n          Meili.and([\n            'rating'.toMeiliAttribute().gt(3.toMeiliValue()),\n            Meili.or([\n              'genres'.toMeiliAttribute().eq('Adventure'.toMeiliValue()),\n              'genres'.toMeiliAttribute().eq('Fiction'.toMeiliValue()),\n            ]),\n          ]),\n        ]),\n        fields: ['title', 'genres', 'rating', 'language'],\n        limit: 3,\n      ),\n    );"
 delete_documents_by_filter_1: "await client.index('movies').deleteDocuments(\n      DeleteDocumentsQuery(\n        filterExpression: Meili.or([\n          Meili.attr('genres').eq(Meili.value('action')),\n          Meili.attr('genres').eq(Meili.value('adventure')),\n        ]),\n      ),\n    );"
 get_documents_1: "await client.index('movies').getDocuments(\n      params: DocumentsQuery(\n        limit: 2,\n        filter: Meili.attr('genres').eq('action'.toMeiliValue()),\n      ),\n    );"
 multi_search_1: "await client.multiSearch(MultiSearchQuery(queries: [\n  IndexSearchQuery(query: 'pooh', indexUid: 'movies', limit: 5),\n  IndexSearchQuery(query: 'nemo', indexUid: 'movies', limit: 5),\n  IndexSearchQuery(query: 'us', indexUid: 'movies_ratings'),\n]));"
 faceted_search_update_settings_1: "await client\n    .index('movie_ratings')\n    .updateFilterableAttributes(['genres', 'rating', 'language']);"
-search_parameter_guide_facet_stats_1: "await client\n    .index('movie_ratings')\n    .search('Batman', SearchQuery(facets: ['genres', 'rating']));"
 faceted_search_1: "await client\n    .index('books')\n    .search('', SearchQuery(facets: ['genres', 'rating', 'language']));"
 filtering_guide_nested_1: "await client.index('movie_ratings').search(\n      'thriller',\n      SearchQuery(\n        filterExpression: Meili.gte(\n          \/\/or Meili.attr('rating.users')\n          \/\/or 'rating.users'.toMeiliAttribute()\n          Meili.attrFromParts(['rating', 'users']),\n          Meili.value(90),\n        ),\n      ),\n    );"
 sorting_guide_sort_nested_1: "await client\n    .index('movie_ratings')\n    .search('thriller', SearchQuery(sort: ['rating.users:asc']));"
@@ -23,8 +20,6 @@ delete_tasks_1: |-
 cancel_tasks_1: |-
   await client.cancelTasks(params: CancelTasksQuery(uids: [1, 2]));
 swap_indexes_1: "await client.swapIndexes([\n  SwapIndex(['indexA', 'indexB']),\n  SwapIndex(['indexX', 'indexY']),\n]);"
-search_parameter_guide_hitsperpage_1: "await client\n    .index('movies')\n    .search('', SearchQuery(hitsPerPage: 15))\n    .asPaginatedResult();"
-search_parameter_guide_page_1: "await client\n    .index('movies')\n    .search('', SearchQuery(page: 2))\n    .asPaginatedResult();"
 synonyms_guide_1: "await client.index('movies').updateSynonyms({\n  'great': ['fantastic'],\n  'fantastic': ['great'],\n});"
 date_guide_index_1: "\/\/import 'dart:io';\n\/\/import 'dart:convert';\nfinal json = await File('games.json').readAsString();\nawait client.index('games').addDocumentsJson(json);"
 date_guide_filterable_attributes_1: "await client\n    .index('games')\n    .updateFilterableAttributes(['release_timestamp']);"
@@ -150,18 +145,6 @@ field_properties_guide_displayed_1: "await client.index('movies').updateDisplaye
 filtering_guide_1: "await client.index('movie_ratings').search(\n      'Avengers',\n      SearchQuery(\n        filterExpression: Meili.gt(\n          Meili.attr('release_date'),\n          DateTime.utc(1995, 3, 18).toMeiliValue(),\n        ),\n      ),\n    );"
 filtering_guide_2: "await client.index('movie_ratings').search(\n      'Batman',\n      SearchQuery(\n        filterExpression: Meili.and([\n          Meili.attr('release_date')\n              .gt(DateTime.utc(1995, 3, 18).toMeiliValue()),\n          Meili.or([\n            'director'.toMeiliAttribute().eq('Tim Burton'.toMeiliValue()),\n            'director'\n                .toMeiliAttribute()\n                .eq('Christopher Nolan'.toMeiliValue()),\n          ]),\n        ]),\n      ),\n    );"
 filtering_guide_3: "await client.index('movie_ratings').search(\n      'Planet of the Apes',\n      SearchQuery(\n        filterExpression: Meili.and([\n          Meili.attr('release_date')\n              .gt(DateTime.utc(2020, 1, 1, 13, 15, 50).toMeiliValue()),\n          Meili.not(\n            Meili.attr('director').eq(\"Tim Burton\".toMeiliValue()),\n          ),\n        ]),\n      ),\n    );"
-search_parameter_guide_query_1: |-
-  await client.index('movies').search('shifu');
-search_parameter_guide_offset_1: |-
-  await client.index('movies').search('shifu', SearchQuery(offset: 1));
-search_parameter_guide_limit_1: |-
-  await client.index('movies').search('shifu', SearchQuery(limit: 2));
-search_parameter_guide_matching_strategy_1: "await client.index('movies').search(\n    'big fat liar', SearchQuery(matchingStrategy: MatchingStrategy.last));"
-search_parameter_guide_matching_strategy_2: "await client.index('movies').search(\n    'big fat liar', SearchQuery(matchingStrategy: MatchingStrategy.all));"
-search_parameter_guide_retrieve_1: "await client.index('movies').search(\n    'shifu', SearchQuery(attributesToRetrieve: ['overview', 'title']));"
-search_parameter_guide_crop_1: "await client.index('movies').search(\n    'shifu', SearchQuery(attributesToCrop: ['overview'], cropLength: 5));"
-search_parameter_guide_highlight_1: "await client.index('movies').search(\n    'winter feast', SearchQuery(attributesToHighlight: ['overview']));"
-search_parameter_guide_show_matches_position_1: "await client\n    .index('movies')\n    .search('winter feast', SearchQuery(showMatchesPosition: true));"
 add_movies_json_1: "\/\/ import 'dart:io';\n\/\/ import 'dart:convert';\nfinal json = await File('movies.json').readAsString();\nawait client.index('movies').addDocumentsJson(json);"
 primary_field_guide_create_index_primary_key: |-
   await client.createIndex('books', primaryKey: 'reference_number');
@@ -208,11 +191,8 @@ filtering_update_settings_1: |-
     'director',
     'genres',
   ]);
-faceted_search_walkthrough_filter_1: "await client.index('movies').search(\n    'thriller',\n    SearchQuery(filter: [\n      ['genres = Horror', 'genres = Mystery'],\n      'director = \"Jordan Peele\"'\n    ]));"
 post_dump_1: |-
   await client.createDump();
-phrase_search_1: |-
-  await client.index('movies').search('"african american" horror');
 sorting_guide_update_sortable_attributes_1: |-
   await client.index('books').updateSortableAttributes(['author', 'price']);
 sorting_guide_update_ranking_rules_1: "await client.index('books').updateRankingRules(\n    ['words', 'sort', 'typo', 'proximity', 'attribute', 'exactness']);"
@@ -223,7 +203,6 @@ get_sortable_attributes_1: |-
 update_sortable_attributes_1: "await client.index('books').updateSortableAttributes(['price', 'author']);"
 reset_sortable_attributes_1: |-
   await client.index('books').resetSortableAttributes();
-search_parameter_guide_sort_1: "await client\n    .index('books')\n    .search('science fiction', SearchQuery(sort: ['price:asc']));"
 geosearch_guide_filter_settings_1: |-
   await client.index('restaurants').updateFilterableAttributes(['_geo']);
 geosearch_guide_filter_usage_1: "await client.index('restaurants').search(\n      '',\n      SearchQuery(\n        filterExpression: Meili.geoRadius(\n          (lat: 45.472735, lng: 9.184019),\n          2000,\n        ),\n      ),\n    );"
@@ -262,8 +241,6 @@ tenant_token_guide_generate_sdk_1: |-
 tenant_token_guide_search_sdk_1: |-
   final frontEndClient = MeiliSearchClient('http://localhost:7700', token);
   await frontEndClient.index('patient_medical_records').search('blood test');
-search_parameter_guide_crop_marker_1: "await client.index('movies').search(\n      'shifu',\n      SearchQuery(\n        attributesToCrop: ['overview'],\n        cropMarker: '[…]',\n      ),\n    );"
-search_parameter_guide_highlight_tag_1: "await client.index('movies').search(\n      'winter feast',\n      SearchQuery(\n        attributesToHighlight: ['overview'],\n        highlightPreTag: '<span class=\"highlight\">',\n        highlightPostTag: '<\/span>',\n      ),\n    );"
 geosearch_guide_filter_usage_3: "await client.index('restaurants').search(\n      '',\n      SearchQuery(\n        filter:\n            '_geoBoundingBox([45.494181, 9.214024], [45.449484, 9.179175])',\n      ),\n    );"
 search_get_1: await client.index('movies').search('American ninja');
 get_separator_tokens_1: await client.index('articles').getSeparatorTokens();
