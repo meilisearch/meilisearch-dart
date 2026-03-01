@@ -740,7 +740,6 @@ void main() {
     // #docregion search_get_1
     await client.index('movies').search('American ninja');
     // #enddocregion
-
   }, skip: true);
 
   test('facet search code samples', () async {
@@ -798,6 +797,5 @@ void main() {
         .index('movie_ratings')
         .search('thriller', SearchQuery(sort: ['rating.users:asc']));
     // #enddocregion
-
   }, skip: true);
 }
