@@ -473,49 +473,6 @@ void main() {
           );
       // #enddocregion
 
-      // #docregion search_parameter_guide_query_1
-      await client.index('movies').search('shifu');
-      // #enddocregion
-
-      // #docregion search_parameter_guide_offset_1
-      await client.index('movies').search('shifu', SearchQuery(offset: 1));
-      // #enddocregion
-
-      // #docregion search_parameter_guide_limit_1
-      await client.index('movies').search('shifu', SearchQuery(limit: 2));
-      // #enddocregion
-
-      // #docregion search_parameter_guide_matching_strategy_1
-      await client.index('movies').search(
-          'big fat liar', SearchQuery(matchingStrategy: MatchingStrategy.last));
-      // #enddocregion
-
-      // #docregion search_parameter_guide_matching_strategy_2
-      await client.index('movies').search(
-          'big fat liar', SearchQuery(matchingStrategy: MatchingStrategy.all));
-      // #enddocregion
-
-      // #docregion search_parameter_guide_retrieve_1
-      await client.index('movies').search(
-          'shifu', SearchQuery(attributesToRetrieve: ['overview', 'title']));
-      // #enddocregion
-
-      // #docregion search_parameter_guide_crop_1
-      await client.index('movies').search(
-          'shifu', SearchQuery(attributesToCrop: ['overview'], cropLength: 5));
-      // #enddocregion
-
-      // #docregion search_parameter_guide_highlight_1
-      await client.index('movies').search(
-          'winter feast', SearchQuery(attributesToHighlight: ['overview']));
-      // #enddocregion
-
-      // #docregion search_parameter_guide_show_matches_position_1
-      await client
-          .index('movies')
-          .search('winter feast', SearchQuery(showMatchesPosition: true));
-      // #enddocregion
-
       // #docregion primary_field_guide_create_index_primary_key
       await client.createIndex('books', primaryKey: 'reference_number');
       // #enddocregion
@@ -547,21 +504,8 @@ void main() {
       ]);
       // #enddocregion
 
-      // #docregion faceted_search_walkthrough_filter_1
-      await client.index('movies').search(
-          'thriller',
-          SearchQuery(filter: [
-            ['genres = Horror', 'genres = Mystery'],
-            'director = "Jordan Peele"'
-          ]));
-      // #enddocregion
-
       // #docregion post_dump_1
       await client.createDump();
-      // #enddocregion
-
-      // #docregion phrase_search_1
-      await client.index('movies').search('"african american" horror');
       // #enddocregion
 
       // #docregion sorting_guide_update_sortable_attributes_1
@@ -595,12 +539,6 @@ void main() {
 
       // #docregion reset_sortable_attributes_1
       await client.index('books').resetSortableAttributes();
-      // #enddocregion
-
-      // #docregion search_parameter_guide_sort_1
-      await client
-          .index('books')
-          .search('science fiction', SearchQuery(sort: ['price:asc']));
       // #enddocregion
 
       // #docregion geosearch_guide_filter_settings_1
@@ -676,27 +614,6 @@ void main() {
 
       // #docregion delete_a_key_1
       await client.deleteKey('6062abda-a5aa-4414-ac91-ecd7944c0f8d');
-      // #enddocregion
-
-      // #docregion search_parameter_guide_crop_marker_1
-      await client.index('movies').search(
-            'shifu',
-            SearchQuery(
-              attributesToCrop: ['overview'],
-              cropMarker: '[…]',
-            ),
-          );
-      // #enddocregion
-
-      // #docregion search_parameter_guide_highlight_tag_1
-      await client.index('movies').search(
-            'winter feast',
-            SearchQuery(
-              attributesToHighlight: ['overview'],
-              highlightPreTag: '<span class="highlight">',
-              highlightPostTag: '</span>',
-            ),
-          );
       // #enddocregion
 
       // #docregion geosearch_guide_filter_usage_3
