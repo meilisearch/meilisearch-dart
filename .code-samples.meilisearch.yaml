@@ -181,7 +181,7 @@ typo_tolerance_guide_4: |-
     ),
   );
   await client.index('movies').updateTypoTolerance(toUpdate);
-getting_started_add_documents: "\/\/ In the command line:\n\/\/ dart pub add meilisearch\n\/\/ In your .dart file:\nimport 'package:meilisearch\/meilisearch.dart';\nimport 'dart:io';\nimport 'dart:convert';\nvar client = MeiliSearchClient('http:\/\/localhost:7700', 'aSampleMasterKey');\nfinal json = await File('movies.json').readAsString();\nawait client.index('movies').addDocumentsJson(json);"
+getting_started_add_documents: "\/\/ In the command line:\n\/\/ dart pub add meilisearch\n\/\/ In your .dart file:\nimport 'package:meilisearch\/meilisearch.dart';\nimport 'dart:io';\nimport 'dart:convert';\nvar client = MeiliSearchClient('MEILISEARCH_URL', 'aSampleMasterKey');\nfinal json = await File('movies.json').readAsString();\nawait client.index('movies').addDocumentsJson(json);"
 getting_started_search: |-
   await client.index('movies').search('botman');
 getting_started_check_task_status: |-
@@ -212,7 +212,7 @@ geosearch_guide_sort_settings_1: |-
 geosearch_guide_sort_usage_1: "await client.index('restaurants').search(\n    '', SearchQuery(sort: ['_geoPoint(48.8561446, 2.2978204):asc']));"
 geosearch_guide_sort_usage_2: "await client.index('restaurants').search(\n    '',\n    SearchQuery(\n        sort: ['_geoPoint(48.8561446, 2.2978204):asc', 'rating:desc']));"
 authorization_header_1: |-
-  var client = MeiliSearchClient('http://localhost:7700', 'masterKey');
+  var client = MeiliSearchClient('MEILISEARCH_URL', 'masterKey');
   await client.getKeys();
 get_one_key_1: |-
   await client.getKey('6062abda-a5aa-4414-ac91-ecd7944c0f8d');
@@ -239,7 +239,7 @@ tenant_token_guide_generate_sdk_1: |-
     expiresAt: expiresAt // optional
   );
 tenant_token_guide_search_sdk_1: |-
-  final frontEndClient = MeiliSearchClient('http://localhost:7700', token);
+  final frontEndClient = MeiliSearchClient('MEILISEARCH_URL', token);
   await frontEndClient.index('patient_medical_records').search('blood test');
 geosearch_guide_filter_usage_3: "await client.index('restaurants').search(\n      '',\n      SearchQuery(\n        filter:\n            '_geoBoundingBox([45.494181, 9.214024], [45.449484, 9.179175])',\n      ),\n    );"
 search_get_1: await client.index('movies').search('American ninja');
