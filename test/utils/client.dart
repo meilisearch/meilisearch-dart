@@ -23,6 +23,10 @@ String get testServer {
   }
 }
 
+/// Local path that 404s quickly. Use as export destination in tests to avoid
+/// outbound HTTP / task-queue blocking (see export_test.dart).
+String get exportSinkUrl => '$testServer/__sdk_test_export_sink';
+
 String get testApiKey {
   return 'masterKey';
 }

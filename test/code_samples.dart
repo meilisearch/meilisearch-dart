@@ -649,7 +649,11 @@ void main() {
       // #docregion export_post_1
       await client.export(
         ExportQuery(
-          url: 'http://127.0.0.1:7700/health',
+          // We only assert the export task is enqueued.
+          // The Meilisearch export worker performs an outbound HTTP request to `url`;
+          // using an external URL (e.g. example.com) can hang and block the task queue,
+          // cascading into unrelated test timeouts. Point to a local, fast-failing endpoint.
+          url: exportSinkUrl,
           apiKey: 'new_instance_api_key',
           payloadSize: "100 MiB",
         ),
