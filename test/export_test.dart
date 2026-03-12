@@ -8,10 +8,6 @@ void main() {
 
     test("Export enqueues a task without external network", () async {
       final result = await client.export(ExportQuery(
-        // We only assert the export task is enqueued.
-        // The Meilisearch export worker performs an outbound HTTP request to `url`;
-        // using an external URL (e.g. example.com) can hang and block the task queue,
-        // cascading into unrelated test timeouts. Point to a local, fast-failing endpoint.
         url: exportSinkUrl,
       ));
       expect(result.uid, greaterThan(0));
