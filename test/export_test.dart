@@ -8,7 +8,7 @@ void main() {
 
     test("Export data to random URL", () async {
       final result = await client.export(ExportQuery(
-        url: 'https://example.com',
+        url: 'http://127.0.0.1:7700/health',
       ));
       expect(result.uid, greaterThan(0));
       expect(result.indexUid, isNull);
