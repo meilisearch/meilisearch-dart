@@ -80,25 +80,53 @@ class MeiliRankingScoreDetails {
     required this.words,
     required this.typo,
     required this.proximity,
+    required this.attributeRank,
+    required this.wordPosition,
     required this.attribute,
     required this.exactness,
+    required this.sort,
     required this.customRules,
   });
   final Map<String, dynamic> src;
   final MeiliRankingScoreDetailsWordsRule? words;
   final MeiliRankingScoreDetailsTypoRule? typo;
   final MeiliRankingScoreDetailsProximityRule? proximity;
+  final MeiliRankingScoreDetailsAttributeRankRule? attributeRank;
+  final MeiliRankingScoreDetailsWordPositionRule? wordPosition;
   final MeiliRankingScoreDetailsAttributeRule? attribute;
   final MeiliRankingScoreDetailsExactnessRule? exactness;
+  final Map<String, MeiliRankingScoreDetailsSortRule>? sort;
   final Map<String, MeiliRankingScoreDetailsCustomRule> customRules;
 
   factory MeiliRankingScoreDetails.fromJson(Map<String, dynamic> src) {
+    bool isSortRuleEntry(MapEntry<String, dynamic> entry) {
+      final value = entry.value;
+
+      if (value is! Map<String, dynamic>) {
+        return false;
+      }
+
+      return (entry.key == 'sort' || entry.key.contains(':')) &&
+          value.containsKey('order') &&
+          value.containsKey('value');
+    }
+
+    final sortEntries = {
+      for (final sortRule in src.entries.where(isSortRuleEntry))
+        sortRule.key: MeiliRankingScoreDetailsSortRule.fromJson(
+          sortRule.value as Map<String, dynamic>,
+        ),
+    };
+
     final reservedKeys = {
       'attribute',
+      'attributeRank',
       'words',
       'exactness',
       'proximity',
+      'sort',
       'typo',
+      'wordPosition',
     };
 
     T? ruleGuarded<T>(
@@ -114,6 +142,14 @@ class MeiliRankingScoreDetails {
 
     return MeiliRankingScoreDetails._(
       src: src,
+      attributeRank: ruleGuarded(
+        'attributeRank',
+        MeiliRankingScoreDetailsAttributeRankRule.fromJson,
+      ),
+      wordPosition: ruleGuarded(
+        'wordPosition',
+        MeiliRankingScoreDetailsWordPositionRule.fromJson,
+      ),
       attribute: ruleGuarded(
         'attribute',
         MeiliRankingScoreDetailsAttributeRule.fromJson,
@@ -134,9 +170,10 @@ class MeiliRankingScoreDetails {
         'typo',
         MeiliRankingScoreDetailsTypoRule.fromJson,
       ),
+      sort: sortEntries.isEmpty ? null : sortEntries,
       customRules: {
-        for (var custom in src.entries
-            .where((element) => !reservedKeys.contains(element.key)))
+        for (var custom in src.entries.where((element) =>
+            !reservedKeys.contains(element.key) && !isSortRuleEntry(element)))
           custom.key: MeiliRankingScoreDetailsCustomRule.fromJson(
             custom.value as Map<String, dynamic>,
           )

@@ -1,8 +1,11 @@
 part 'attribute.dart';
+part 'attribute_rank.dart';
 part 'exactness.dart';
 part 'proximity.dart';
 part 'typo.dart';
+part 'sort.dart';
 part 'words.dart';
+part 'word_position.dart';
 
 abstract class MeiliRankingScoreDetailsRuleBase {
   /// The source json object this was created from.
