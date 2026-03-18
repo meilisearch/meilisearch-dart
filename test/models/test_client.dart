@@ -46,11 +46,6 @@ class TestMeiliSearchClient extends MeiliSearchClient {
   }
 
   @override
-  Future<Task> deleteIndex(String uid) {
-    return super.deleteIndex(uid);
-  }
-
-  @override
   Future<Map<String, Object?>> getRawIndex(
     String uid, {
     bool deleteWhenDone = true,
