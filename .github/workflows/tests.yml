@@ -9,6 +9,7 @@ on:
 
 env:
   MEILISEARCH_URL: http://localhost:7700
+  MEILISEARCH_VERSION: v1.38
 
 jobs:
   integration-tests:
@@ -24,7 +25,7 @@ jobs:
     name: integration-tests (dart ${{ matrix.version }})
     services:
       meilisearch:
-        image: getmeili/meilisearch-enterprise:latest
+        image: getmeili/meilisearch-enterprise:v1.38
         env:
           MEILI_MASTER_KEY: "masterKey"
           MEILI_NO_ANALYTICS: "true"
@@ -41,6 +42,19 @@ jobs:
           dart pub get
           dart pub get -C tool
           dart pub global activate coverage
+      - name: Wait for Meilisearch readiness
+        run: |
+          for i in {1..60}; do
+            if curl -fsS "$MEILISEARCH_URL/health" > /dev/null; then
+              echo "Meilisearch is ready at version $MEILISEARCH_VERSION"
+              break
+            fi
+            if [ "$i" -eq 60 ]; then
+              echo "Meilisearch did not become ready in time"
+              exit 1
+            fi
+            sleep 1
+          done
       - name: Run integration tests
         run: dart test --concurrency=2 --reporter=github --coverage=./coverage/reports
       - name: Generate coverage reports

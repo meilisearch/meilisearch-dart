@@ -1,6 +1,7 @@
 import 'package:meilisearch/meilisearch.dart';
 import 'package:test/test.dart';
 import 'utils/client.dart';
+import 'utils/wait_for.dart';
 
 void main() {
   group("Export", () {
@@ -10,6 +11,13 @@ void main() {
       final result = await client.export(ExportQuery(
         url: exportSinkUrl,
       ));
+      addTearDown(() async {
+        await client
+            .cancelTasks(params: CancelTasksQuery(uids: [result.uid!]))
+            .waitFor(client: client);
+        await result.waitFor(client: client, throwFailed: false);
+      });
+
       expect(result.uid, greaterThan(0));
       expect(result.indexUid, isNull);
       expect(result.status, equals("enqueued"));

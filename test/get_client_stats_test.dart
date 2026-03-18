@@ -38,7 +38,7 @@ void main() {
 
     test('gets all tasks', () async {
       final uid = randomUid();
-      await client.createIndex(uid);
+      await client.createIndex(uid).waitFor(client: client);
 
       final tasks = await client.getTasks();
 
@@ -48,7 +48,7 @@ void main() {
 
     test('gets a task by taskId', () async {
       final uid = randomUid();
-      final info = await client.createIndex(uid);
+      final info = await client.createIndex(uid).waitFor(client: client);
 
       final task = await client.getTask(info.uid!);
 

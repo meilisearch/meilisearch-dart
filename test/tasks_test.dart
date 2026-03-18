@@ -18,7 +18,7 @@ void main() {
 
     test('Query by type', () async {
       final docs = books;
-      final task = await index.addDocuments(docs);
+      final task = await index.addDocuments(docs).waitFor(client: client);
 
       expect(task.type, 'documentAdditionOrUpdate');
       //test several permutations of indexUids

@@ -2,6 +2,8 @@ import 'package:collection/collection.dart';
 import 'package:dio/dio.dart';
 import 'package:meilisearch/meilisearch.dart';
 
+import '../utils/wait_for.dart';
+
 class TestMeiliSearchClient extends MeiliSearchClient {
   TestMeiliSearchClient(
     super.serverUrl, [
@@ -45,7 +47,6 @@ class TestMeiliSearchClient extends MeiliSearchClient {
 
   @override
   Future<Task> deleteIndex(String uid) {
-    usedIndexes.remove(uid);
     return super.deleteIndex(uid);
   }
 
@@ -115,9 +116,61 @@ class TestMeiliSearchClient extends MeiliSearchClient {
   }
 
   Future<void> _deleteUsedIndexes() async {
-    await Future.wait(
-      usedIndexes.toSet().map((e) => deleteIndex(e)),
-    );
+    final indexUids = usedIndexes.toSet();
+    final deletedOrMissing = <String>{};
+    final deletionTasks = <Task>[];
+    final taskUidToIndexUid = <int, String>{};
+
+    for (final indexUid in indexUids) {
+      try {
+        final task = await deleteIndex(indexUid);
+        deletionTasks.add(task);
+        if (task.uid != null) {
+          taskUidToIndexUid[task.uid!] = indexUid;
+        }
+      } on MeiliSearchApiException catch (error) {
+        if (error.code == 'index_not_found') {
+          deletedOrMissing.add(indexUid);
+          continue;
+        }
+        rethrow;
+      }
+    }
+
+    if (deletionTasks.isNotEmpty) {
+      final completedTasks = await Future.wait(
+        deletionTasks.map(
+          (task) => task.waitFor(
+            client: this,
+            throwFailed: false,
+          ),
+        ),
+      );
+
+      for (final task in completedTasks) {
+        final indexUid = task.indexUid ??
+            (task.uid != null ? taskUidToIndexUid[task.uid!] : null);
+
+        if (indexUid == null) {
+          continue;
+        }
+
+        if (task.status == 'succeeded' ||
+            task.error?.code == 'index_not_found') {
+          deletedOrMissing.add(indexUid);
+          continue;
+        }
+
+        throw MeiliSearchApiException(
+          'Task (${task.uid}) failed, error: ${task.error}',
+          code: task.error?.code,
+          link: task.error?.link,
+          type: task.error?.type,
+        );
+      }
+    }
+
+    usedIndexes.removeAll(deletedOrMissing);
   }
 
   Future<void> _deleteUsedKeys() async {
