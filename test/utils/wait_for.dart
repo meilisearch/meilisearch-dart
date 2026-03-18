@@ -30,7 +30,7 @@ extension TaskWaiter on Task {
     Task? lastSeenTask;
 
     while (DateTime.now().isBefore(endingTime)) {
-      final task = await client.getTask(uid!);
+      final task = await _getTaskOrThrowDiagnostic(client: client, task: this);
       lastSeenTask = task;
 
       if (task.status != 'enqueued' && task.status != 'processing') {
@@ -53,6 +53,23 @@ extension TaskWaiter on Task {
       'Task wait timed out for task uid=$uid after ${timeout.inMilliseconds}ms '
       '(${_taskDiagnostics(lastSeenTask)}).',
     );
+  }
+}
+
+Future<Task> _getTaskOrThrowDiagnostic({
+  required MeiliSearchClient client,
+  required Task task,
+}) async {
+  try {
+    return await client.getTask(task.uid!);
+  } on MeiliSearchApiException catch (e) {
+    if (e.code == 'task_not_found') {
+      throw Exception(
+        'Task ${task.uid} disappeared while waiting; '
+        'tests may be deleting tasks concurrently.',
+      );
+    }
+    rethrow;
   }
 }
 

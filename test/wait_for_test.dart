@@ -30,6 +30,20 @@ class _AlwaysEnqueuedTaskClient extends MeiliSearchClient {
   }
 }
 
+class _TaskNotFoundClient extends MeiliSearchClient {
+  _TaskNotFoundClient() : super('http://localhost:7700');
+
+  @override
+  Future<Task> getTask(int uid) async {
+    throw MeiliSearchApiException(
+      'Task `$uid` not found.',
+      code: 'task_not_found',
+      type: 'invalid_request',
+      link: 'https://docs.meilisearch.com/errors#task_not_found',
+    );
+  }
+}
+
 void main() {
   group('Task.waitFor timeout diagnostics', () {
     final client = _AlwaysEnqueuedTaskClient();
@@ -85,6 +99,37 @@ void main() {
             predicate(
               (error) => error.toString().contains('${tasks.last.uid}'),
               'contains second task uid in timeout diagnostics',
+            ),
+          ),
+        ),
+      );
+    });
+  });
+
+  group('Task.waitFor task-not-found diagnostics', () {
+    final client = _TaskNotFoundClient();
+
+    test('single task surfaces a clearer concurrency hint', () async {
+      final task = Task(uid: 42, status: 'enqueued');
+
+      await expectLater(
+        () => task.waitFor(
+          client: client,
+          timeout: const Duration(milliseconds: 1),
+          interval: const Duration(milliseconds: 1),
+        ),
+        throwsA(
+          allOf(
+            isA<Exception>(),
+            predicate(
+              (error) => error
+                  .toString()
+                  .contains('tests may be deleting tasks concurrently'),
+              'contains concurrency cleanup hint',
+            ),
+            predicate(
+              (error) => error.toString().contains('${task.uid}'),
+              'contains task uid',
             ),
           ),
         ),
