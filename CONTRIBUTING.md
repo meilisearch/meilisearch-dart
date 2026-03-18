@@ -50,7 +50,7 @@ You can set up your local environment natively or using `docker`, check out the 
 
 Example of running all the checks with docker:
 ```bash
-docker-compose run --rm package bash -c "dart pub get && dart pub get -C tool && dart run test --concurrency=4 && dart analyze && dart format . --set-exit-if-changed"
+docker-compose run --rm package bash -c "dart pub get && dart pub get -C tool && dart run test --concurrency=2 && dart analyze && dart format . --set-exit-if-changed"
 ```
 
 To install dependencies:
