@@ -40,7 +40,7 @@ No breaking change but addition of new features
 - Add `Map<String, dynamic> src` to `Searchable` which exposes the raw json object returned from the server.
   Just in case we don't keep up with new meilisearch releases, the user has a way to access new features.
 
-[experimental]* To adopt a experimental [change you must opt-in manually](https://www.meilisearch.com/docs/learn/experimental/overview#activating-experimental-features)
+[experimental]* To adopt a experimental [change you must opt-in manually](https://www.meilisearch.com/docs/learn/resources/experimental_features_overview#activating-experimental-features)
 
 # 0.14.0
 ### Breaking Changes:
@@ -363,7 +363,7 @@ This version makes this package compatible with Meilisearch v0.25.0 and newer
 ## Changes
 - Add method to responds with raw information from API `client.getRawIndex` (#124) @brunoocasali
 - Run a `pub upgrade` in dependencies (#128) @brunoocasali
-- Add support to keys (according to v0.25.0 spec) [more](https://www.meilisearch.com/docs/reference/api/keys#keys) (#121) @brunoocasali
+- Add support to keys (according to v0.25.0 spec) [more](https://www.meilisearch.com/docs/reference/api/keys/list-api-keys#keys) (#121) @brunoocasali
   - Create a new resource class `Key` to represent keys
   - Create methods to support keys:
     - `client.getKeys`
