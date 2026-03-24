@@ -31,6 +31,7 @@ class SearchQuery extends Queryable {
   final double? rankingScoreThreshold;
   @RequiredMeiliServerVersion('1.3.0')
   final List<dynamic /* double | List<double> */ >? vector;
+  @RequiredMeiliServerVersion('1.37.0')
   final bool? useNetwork;
 
   const SearchQuery({

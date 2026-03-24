@@ -4,7 +4,7 @@ import 'package:test/test.dart';
 
 void main() {
   group('Network models', () {
-    test('Network.fromMap parses self, leader, remotes, shards, previous*', () {
+    test('Network.fromMap parses self, leader, remotes, shards', () {
       final json = <String, Object?>{
         'self': 'ms-0',
         'leader': 'ms-0',
@@ -18,14 +18,6 @@ void main() {
         'shards': <String, Object?>{
           'shard-a': <String, Object?>{
             'remotes': <Object?>['ms-0', 'ms-1'],
-          },
-        },
-        'previousRemotes': <String, Object?>{
-          'old': <String, Object?>{'url': 'http://old'},
-        },
-        'previousShards': <String, Object?>{
-          'shard-p': <String, Object?>{
-            'remotes': <Object?>['ms-0'],
           },
         },
       };
@@ -43,11 +35,6 @@ void main() {
       expect(n.shards!['shard-a']!.remotes, ['ms-0', 'ms-1']);
       expect(n.shards!['shard-a']!.addRemotes, isNull);
       expect(n.shards!['shard-a']!.removeRemotes, isNull);
-
-      expect(n.previousRemotes, isNotNull);
-      expect(n.previousRemotes!['old']!.url, 'http://old');
-      expect(n.previousShards, isNotNull);
-      expect(n.previousShards!['shard-p']!.remotes, ['ms-0']);
     });
 
     test('Remote.toPatchMap is sparse', () {

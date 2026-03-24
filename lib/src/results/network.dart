@@ -27,7 +27,7 @@ Map<String, Object?>? _asObjectMap(Object? raw) {
 }
 
 /// Remote Meilisearch instance in a [Network] topology.
-@RequiredMeiliServerVersion('1.13.0')
+@RequiredMeiliServerVersion('1.37.0')
 class Remote {
   const Remote({
     this.url,
@@ -58,7 +58,7 @@ class Remote {
 }
 
 /// Shard ownership configuration within a [Network].
-@RequiredMeiliServerVersion('1.13.0')
+@RequiredMeiliServerVersion('1.37.0')
 class Shard {
   const Shard({
     this.remotes,
@@ -88,23 +88,19 @@ class Shard {
 }
 
 /// Network topology returned by `GET /network` / `PATCH /network`.
-@RequiredMeiliServerVersion('1.13.0')
+@RequiredMeiliServerVersion('1.37.0')
 class Network {
   const Network({
     this.self,
     this.leader,
     this.remotes,
     this.shards,
-    this.previousRemotes,
-    this.previousShards,
   });
 
   final String? self;
   final String? leader;
   final Map<String, Remote>? remotes;
   final Map<String, Shard>? shards;
-  final Map<String, Remote>? previousRemotes;
-  final Map<String, Shard>? previousShards;
 
   factory Network.fromMap(Map<String, Object?> json) {
     Map<String, Remote>? remotes;
@@ -129,35 +125,11 @@ class Network {
       );
     }
 
-    Map<String, Remote>? previousRemotes;
-    final prevRemotesRaw = _asObjectMap(json['previousRemotes']);
-    if (prevRemotesRaw != null) {
-      previousRemotes = prevRemotesRaw.map(
-        (k, v) => MapEntry(
-          k,
-          Remote.fromMap(Map<String, Object?>.from(v! as Map)),
-        ),
-      );
-    }
-
-    Map<String, Shard>? previousShards;
-    final prevShardsRaw = _asObjectMap(json['previousShards']);
-    if (prevShardsRaw != null) {
-      previousShards = prevShardsRaw.map(
-        (k, v) => MapEntry(
-          k,
-          Shard.fromMap(Map<String, Object?>.from(v! as Map)),
-        ),
-      );
-    }
-
     return Network(
       self: json['self'] as String?,
       leader: json['leader'] as String?,
       remotes: remotes,
       shards: shards,
-      previousRemotes: previousRemotes,
-      previousShards: previousShards,
     );
   }
 }
@@ -167,7 +139,7 @@ class Network {
 /// Omit a field to leave it unchanged. Pass [leader] or [self] as `null` to
 /// clear. For [remotes] / [shards], pass a map; use `null` values for entries
 /// to remove a remote or shard.
-@RequiredMeiliServerVersion('1.13.0')
+@RequiredMeiliServerVersion('1.37.0')
 class UpdateNetworkOptions {
   UpdateNetworkOptions({
     Object? self = _unset,
