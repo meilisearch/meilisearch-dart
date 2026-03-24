@@ -12,4 +12,6 @@ ExperimentalFeatures _$ExperimentalFeaturesFromJson(
 
 Map<String, dynamic> _$UpdateExperimentalFeaturesToJson(
         UpdateExperimentalFeatures instance) =>
-    <String, dynamic>{};
+    <String, dynamic>{
+      if (instance.network case final value?) 'network': value,
+    };

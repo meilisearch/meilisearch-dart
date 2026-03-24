@@ -24,7 +24,9 @@ class ExperimentalFeatures {
   createFactory: false,
 )
 class UpdateExperimentalFeatures {
-  const UpdateExperimentalFeatures();
+  const UpdateExperimentalFeatures({this.network});
+
+  final bool? network;
 
   Map<String, dynamic> toJson() => _$UpdateExperimentalFeaturesToJson(this);
 }

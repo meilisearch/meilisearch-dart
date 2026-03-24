@@ -11,6 +11,7 @@ export 'match_position.dart';
 export 'matching_strategy_enum.dart';
 export 'index_stats.dart';
 export 'all_stats.dart';
+export 'network.dart';
 export 'facet_stat.dart';
 export 'document_container.dart';
 export 'ranking_rules/_exports.dart';
