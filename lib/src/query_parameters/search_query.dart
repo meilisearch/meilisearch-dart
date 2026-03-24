@@ -31,6 +31,8 @@ class SearchQuery extends Queryable {
   final double? rankingScoreThreshold;
   @RequiredMeiliServerVersion('1.3.0')
   final List<dynamic /* double | List<double> */ >? vector;
+  @RequiredMeiliServerVersion('1.9.0')
+  final String? distinct;
 
   const SearchQuery({
     this.offset,
@@ -56,6 +58,7 @@ class SearchQuery extends Queryable {
     this.showRankingScoreDetails,
     this.rankingScoreThreshold,
     this.vector,
+    this.distinct,
   });
 
   @override
@@ -83,6 +86,7 @@ class SearchQuery extends Queryable {
       'showRankingScoreDetails': showRankingScoreDetails,
       'rankingScoreThreshold': rankingScoreThreshold,
       'vector': vector,
+      'distinct': distinct,
     };
   }
 
@@ -108,6 +112,7 @@ class SearchQuery extends Queryable {
     HybridSearch? hybrid,
     bool? showRankingScore,
     List<dynamic>? vector,
+    String? distinct,
     bool? showRankingScoreDetails,
     double? rankingScoreThreshold,
   }) =>
@@ -134,6 +139,7 @@ class SearchQuery extends Queryable {
         hybrid: hybrid ?? this.hybrid,
         showRankingScore: showRankingScore ?? this.showRankingScore,
         vector: vector ?? this.vector,
+        distinct: distinct ?? this.distinct,
         showRankingScoreDetails:
             showRankingScoreDetails ?? this.showRankingScoreDetails,
         rankingScoreThreshold:

@@ -33,6 +33,7 @@ class IndexSearchQuery extends SearchQuery {
     super.hybrid,
     super.showRankingScore,
     super.vector,
+    super.distinct,
     super.showRankingScoreDetails,
     super.rankingScoreThreshold,
   });
@@ -71,6 +72,7 @@ class IndexSearchQuery extends SearchQuery {
     HybridSearch? hybrid,
     bool? showRankingScore,
     List<dynamic /* double | List<double> */ >? vector,
+    String? distinct,
     bool? showRankingScoreDetails,
     double? rankingScoreThreshold,
   }) =>
@@ -99,6 +101,7 @@ class IndexSearchQuery extends SearchQuery {
         hybrid: hybrid ?? this.hybrid,
         showRankingScore: showRankingScore ?? this.showRankingScore,
         vector: vector ?? this.vector,
+        distinct: distinct ?? this.distinct,
         showRankingScoreDetails:
             showRankingScoreDetails ?? this.showRankingScoreDetails,
         rankingScoreThreshold:
