@@ -47,6 +47,67 @@ void main() {
     });
   });
 
+  group("Federated search with distinct", () {
+    setUpClient();
+    late MeiliSearchIndex index1;
+    late MeiliSearchIndex index2;
+
+    setUp(() async {
+      index1 = client.index(randomUid());
+      index2 = client.index(randomUid());
+
+      await Future.wait([
+        index1
+            .updateDistinctAttribute(ktag)
+            .then((task) => task.waitFor(client: client)),
+        index2
+            .updateDistinctAttribute(ktag)
+            .then((task) => task.waitFor(client: client)),
+        index1.addDocuments(books).waitFor(client: client),
+        index2.addDocuments(books).waitFor(client: client),
+      ]);
+    });
+
+    test("Federated search with distinct parameter", () async {
+      final result = await client.multiSearch(MultiSearchQuery(
+        queries: [
+          IndexSearchQuery(
+            query: "",
+            indexUid: index1.uid,
+          ),
+          IndexSearchQuery(
+            query: "",
+            indexUid: index2.uid,
+          ),
+        ],
+        federation: FederationOptions(
+          distinct: ktag,
+        ),
+      ));
+
+      // When using federation, results are merged
+      expect(result.results, isNotEmpty);
+    });
+
+    test("Federated search without distinct parameter", () async {
+      final result = await client.multiSearch(MultiSearchQuery(
+        queries: [
+          IndexSearchQuery(
+            query: "",
+            indexUid: index1.uid,
+          ),
+          IndexSearchQuery(
+            query: "",
+            indexUid: index2.uid,
+          ),
+        ],
+        federation: FederationOptions(),
+      ));
+
+      expect(result.results, isNotEmpty);
+    });
+  });
+
   test('code samples', () async {
     // #docregion multi_search_1
     await client.multiSearch(MultiSearchQuery(queries: [
@@ -54,6 +115,20 @@ void main() {
       IndexSearchQuery(query: 'nemo', indexUid: 'movies', limit: 5),
       IndexSearchQuery(query: 'us', indexUid: 'movies_ratings'),
     ]));
+    // #enddocregion
+  }, skip: true);
+
+  test('federated search with distinct code sample', () async {
+    // #docregion federated_search_distinct
+    await client.multiSearch(MultiSearchQuery(
+      queries: [
+        IndexSearchQuery(query: 'pooh', indexUid: 'movies'),
+        IndexSearchQuery(query: 'pooh', indexUid: 'books'),
+      ],
+      federation: FederationOptions(
+        distinct: 'title',
+      ),
+    ));
     // #enddocregion
   }, skip: true);
 }
