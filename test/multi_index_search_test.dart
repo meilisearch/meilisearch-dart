@@ -108,6 +108,38 @@ void main() {
     });
   });
 
+  group("MultiSearchQuery serialization", () {
+    test("serializes federation.distinct when set", () {
+      final query = MultiSearchQuery(
+        queries: [IndexSearchQuery(indexUid: 'movies')],
+        federation: FederationOptions(distinct: ktag),
+      );
+      final map = query.toSparseMap();
+      expect(map['federation'], isA<Map<String, Object>>());
+      final federation = map['federation'] as Map<String, Object>;
+      expect(federation['distinct'], equals(ktag));
+    });
+
+    test("omits federation.distinct when not set", () {
+      final query = MultiSearchQuery(
+        queries: [IndexSearchQuery(indexUid: 'movies')],
+        federation: FederationOptions(),
+      );
+      final map = query.toSparseMap();
+      expect(map['federation'], isA<Map<String, Object>>());
+      final federation = map['federation'] as Map<String, Object>;
+      expect(federation.containsKey('distinct'), isFalse);
+    });
+
+    test("omits federation when not provided", () {
+      final query = MultiSearchQuery(
+        queries: [IndexSearchQuery(indexUid: 'movies')],
+      );
+      final map = query.toSparseMap();
+      expect(map.containsKey('federation'), isFalse);
+    });
+  });
+
   test('code samples', () async {
     // #docregion multi_search_1
     await client.multiSearch(MultiSearchQuery(queries: [
