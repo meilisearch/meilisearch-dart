@@ -14,4 +14,5 @@ export 'all_stats.dart';
 export 'network.dart';
 export 'facet_stat.dart';
 export 'document_container.dart';
+export 'experimental_features.dart';
 export 'ranking_rules/_exports.dart';

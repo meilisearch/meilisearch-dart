@@ -11,7 +11,9 @@ part 'experimental_features.g.dart';
   createToJson: false,
 )
 class ExperimentalFeatures {
-  const ExperimentalFeatures();
+  const ExperimentalFeatures({this.network});
+
+  final bool? network;
 
   factory ExperimentalFeatures.fromJson(Map<String, dynamic> src) {
     return _$ExperimentalFeaturesFromJson(src);
