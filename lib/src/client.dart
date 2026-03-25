@@ -366,18 +366,4 @@ class MeiliSearchClient {
       ),
     );
   }
-
-  /// Get the status of all experimental features that can be toggled at runtime
-  @RequiredMeiliServerVersion('1.3.0')
-  Future<ExperimentalFeatures> getExperimentalFeatures() async {
-    return http.getExperimentalFeatures();
-  }
-
-  /// Set the status of experimental features that can be toggled at runtime
-  @RequiredMeiliServerVersion('1.3.0')
-  Future<ExperimentalFeatures> updateExperimentalFeatures(
-    UpdateExperimentalFeatures input,
-  ) async {
-    return http.updateExperimentalFeatures(input);
-  }
 }
