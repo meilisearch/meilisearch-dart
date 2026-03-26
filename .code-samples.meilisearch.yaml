@@ -73,6 +73,8 @@ search_post_1: |-
   await client.index('movies').search('American ninja');
 get_task_1: |-
   await client.getTask(1);
+get_task_documents_1: |-
+  await client.getTaskDocuments(1);
 get_all_tasks_1: |-
   await client.getTasks();
 get_settings_1: |-

@@ -283,6 +283,21 @@ class MeiliSearchClient {
     return Task.fromMap(response.data!);
   }
 
+  /// Get the documents associated with a task.
+  @RequiredMeiliServerVersion('1.13.0')
+  Future<Map<String, Object?>> getTaskDocuments(int uid,
+      {int? limit, int? offset, List<String>? fields}) async {
+    final params = <String, Object?>{};
+    if (limit != null) params['limit'] = limit;
+    if (offset != null) params['offset'] = offset;
+    if (fields != null) params['fields'] = fields.join(',');
+    final response = await http.getMethod<Map<String, Object?>>(
+        '/tasks/$uid/documents',
+        queryParameters: params);
+
+    return response.data!;
+  }
+
   /// does a Multi-index search
   @RequiredMeiliServerVersion('1.1.0')
   Future<MultiSearchResult> multiSearch(MultiSearchQuery query) async {
