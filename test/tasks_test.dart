@@ -18,7 +18,7 @@ void main() {
 
     test('Query by type', () async {
       final docs = books;
-      final task = await index.addDocuments(docs);
+      final task = await index.addDocuments(docs).waitFor(client: client);
 
       expect(task.type, 'documentAdditionOrUpdate');
       //test several permutations of indexUids
@@ -39,30 +39,38 @@ void main() {
       }
     });
     test('cancels given an input', () async {
-      final date = DateTime.now();
+      final date = DateTime.utc(2000, 1, 1);
       final response = await client
           .cancelTasks(
-            params: CancelTasksQuery(uids: [1, 2], beforeStartedAt: date),
+            params: CancelTasksQuery(
+              uids: [1000000001, 1000000002],
+              beforeStartedAt: date,
+              indexUids: [uid],
+            ),
           )
           .waitFor(client: client);
 
       expect(
         response.details!['originalFilter'],
-        '?beforeStartedAt=${Uri.encodeComponent(date.toUtc().toIso8601String())}&uids=1%2C2',
+        '?beforeStartedAt=${Uri.encodeComponent(date.toUtc().toIso8601String())}&uids=1000000001%2C1000000002&indexUids=$uid',
       );
     });
 
     test('deletes given an input', () async {
-      final date = DateTime.now();
+      final date = DateTime.utc(2000, 1, 1);
       final response = await client
           .deleteTasks(
-            params: DeleteTasksQuery(uids: [1, 2], beforeStartedAt: date),
+            params: DeleteTasksQuery(
+              uids: [1000000001, 1000000002],
+              beforeStartedAt: date,
+              indexUids: [uid],
+            ),
           )
           .waitFor(client: client);
 
       expect(
         response.details!['originalFilter'],
-        '?beforeStartedAt=${Uri.encodeComponent(date.toUtc().toIso8601String())}&uids=1%2C2',
+        '?beforeStartedAt=${Uri.encodeComponent(date.toUtc().toIso8601String())}&uids=1000000001%2C1000000002&indexUids=$uid',
       );
     });
   });

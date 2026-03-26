@@ -649,7 +649,7 @@ void main() {
       // #docregion export_post_1
       await client.export(
         ExportQuery(
-          url: 'new_instance_url',
+          url: exportSinkUrl,
           apiKey: 'new_instance_api_key',
           payloadSize: "100 MiB",
         ),

@@ -79,6 +79,30 @@ void main() {
             .having((p0) => p0.attributeRankingOrderScore,
                 'attributeRankingOrderScore', isNotNull);
 
+        final attributeRankMatcher =
+            isA<MeiliRankingScoreDetailsAttributeRankRule>()
+                .having((p0) => p0.src, 'src', allOf(isNotNull, isNotEmpty))
+                .having((p0) => p0.score, 'score', isNotNull)
+                .having((p0) => p0.order, 'order', isNotNull);
+
+        final wordPositionMatcher =
+            isA<MeiliRankingScoreDetailsWordPositionRule>()
+                .having((p0) => p0.src, 'src', allOf(isNotNull, isNotEmpty))
+                .having((p0) => p0.score, 'score', isNotNull)
+                .having((p0) => p0.order, 'order', isNotNull);
+
+        final sortMatcher = isA<MeiliRankingScoreDetailsSortRule>()
+            .having((p0) => p0.src, 'src', allOf(isNotNull, isNotEmpty))
+            .having((p0) => p0.order, 'order', isNotNull)
+            .having((p0) => p0.value, 'value', isNotNull);
+
+        final sortRulesMatcher =
+            isA<Map<String, MeiliRankingScoreDetailsSortRule>>().having(
+          (p0) => p0.values,
+          'sort values',
+          everyElement(sortMatcher),
+        );
+
         final wordsMatcher = isA<MeiliRankingScoreDetailsWordsRule>()
             .having((p0) => p0.src, 'src', allOf(isNotNull, isNotEmpty))
             .having((p0) => p0.score, 'score', isNotNull)
@@ -110,11 +134,17 @@ void main() {
 
         final rankingScoreDetailsMatcher = isA<MeiliRankingScoreDetails>()
             .having((p0) => p0.src, 'src', allOf(isNotNull, isNotEmpty))
-            .having((p0) => p0.attribute, 'attribute', attributeMatcher)
+            .having((p0) => p0.attribute, 'attribute',
+                anyOf(isNull, attributeMatcher))
+            .having((p0) => p0.attributeRank, 'attributeRank',
+                anyOf(isNull, attributeRankMatcher))
+            .having((p0) => p0.wordPosition, 'wordPosition',
+                anyOf(isNull, wordPositionMatcher))
             .having((p0) => p0.words, 'words', wordsMatcher)
             .having((p0) => p0.exactness, 'exactness', exactnessMatcher)
             .having((p0) => p0.typo, 'typo', typoMatcher)
             .having((p0) => p0.proximity, 'proximity', proximityMatcher)
+            .having((p0) => p0.sort, 'sort', anyOf(isNull, sortRulesMatcher))
             .having((p0) => p0.customRules, 'customRules',
                 allOf(isNotNull, isEmpty));
 

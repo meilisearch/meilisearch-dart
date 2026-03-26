@@ -155,10 +155,10 @@ void main() {
 
       await index.addDocuments([
         {'book_id': 1234, 'title': 'Pride and Prejudice'}
-      ]);
+      ]).waitFor(client: client);
       await index.addDocuments([
         {'book_id': 5678}
-      ]);
+      ]).waitFor(client: client);
 
       final tasks = await index.getTasks();
 
@@ -169,7 +169,7 @@ void main() {
       final index = client.index(uid);
       final response = await index.addDocuments([
         {'book_id': 1234, 'title': 'Pride and Prejudice'}
-      ]);
+      ]).waitFor(client: client);
 
       final task = await index.getTask(response.uid!);
 
@@ -196,7 +196,7 @@ void main() {
     });
 
     test('extracts all possible properties from task', () async {
-      final task = await client.createIndex(uid);
+      final task = await client.createIndex(uid).waitFor(client: client);
 
       expect(task.uid, greaterThan(0));
       expect(task.indexUid, equals(uid));

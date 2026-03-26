@@ -1,5 +1,3 @@
-version: "3.8"
-
 volumes:
   pub:
 
@@ -21,7 +19,7 @@ services:
       - ./:/home/package
 
   meilisearch:
-    image: getmeili/meilisearch-enterprise:latest
+    image: getmeili/meilisearch-enterprise:v1.39
     ports:
       - "7700"
     environment:

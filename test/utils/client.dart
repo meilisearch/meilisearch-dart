@@ -12,6 +12,8 @@ import '../models/test_client.dart';
 HttpRequest get http => client.http;
 late TestMeiliSearchClient client;
 final random = Random();
+final _uidRandom = Random.secure();
+int _uidCounter = 0;
 
 const bool _kIsWeb = bool.fromEnvironment('dart.library.js_util');
 String get testServer {
@@ -22,6 +24,10 @@ String get testServer {
     return Platform.environment['MEILISEARCH_URL'] ?? defaultUrl;
   }
 }
+
+/// Local path that 404s quickly. Use as export destination in tests to avoid
+/// outbound HTTP / task-queue blocking (see export_test.dart).
+String get exportSinkUrl => '$testServer/__sdk_test_export_sink';
 
 String get testApiKey {
   return 'masterKey';
@@ -67,7 +73,12 @@ void setUpClient() {
 }
 
 String randomUid([String prefix = 'index']) {
-  return '${prefix}_${random.nextInt(9999)}';
+  final timestampPart = DateTime.now().microsecondsSinceEpoch.toRadixString(36);
+  final counterPart =
+      (_uidCounter++ & 0xffff).toRadixString(36).padLeft(4, '0');
+  final randomPart =
+      _uidRandom.nextInt(0x7fffffff).toRadixString(36).padLeft(7, '0');
+  return '${prefix}_${timestampPart}_$counterPart$randomPart';
 }
 
 // Stolen from: https://www.kindacode.com/article/flutter-dart-ways-to-generate-random-strings/
