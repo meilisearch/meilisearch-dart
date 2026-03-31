@@ -8,8 +8,12 @@ part of 'experimental_features.dart';
 
 ExperimentalFeatures _$ExperimentalFeaturesFromJson(
         Map<String, dynamic> json) =>
-    ExperimentalFeatures();
+    ExperimentalFeatures(
+      network: json['network'] as bool?,
+    );
 
 Map<String, dynamic> _$UpdateExperimentalFeaturesToJson(
         UpdateExperimentalFeatures instance) =>
-    <String, dynamic>{};
+    <String, dynamic>{
+      if (instance.network case final value?) 'network': value,
+    };

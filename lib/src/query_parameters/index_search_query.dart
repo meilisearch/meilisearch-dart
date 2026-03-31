@@ -35,6 +35,7 @@ class IndexSearchQuery extends SearchQuery {
     super.vector,
     super.showRankingScoreDetails,
     super.rankingScoreThreshold,
+    super.useNetwork,
   });
 
   @override
@@ -73,6 +74,7 @@ class IndexSearchQuery extends SearchQuery {
     List<dynamic /* double | List<double> */ >? vector,
     bool? showRankingScoreDetails,
     double? rankingScoreThreshold,
+    bool? useNetwork,
   }) =>
       IndexSearchQuery(
         query: query ?? this.query,
@@ -103,5 +105,6 @@ class IndexSearchQuery extends SearchQuery {
             showRankingScoreDetails ?? this.showRankingScoreDetails,
         rankingScoreThreshold:
             rankingScoreThreshold ?? this.rankingScoreThreshold,
+        useNetwork: useNetwork ?? this.useNetwork,
       );
 }

@@ -306,4 +306,64 @@ class MeiliSearchClient {
     );
     return Task.fromMap(response.data!);
   }
+
+  /// Current network topology (requires experimental network feature).
+  @RequiredMeiliServerVersion('1.37.0')
+  Future<Network> getNetwork() async {
+    final response = await http.getMethod<Map<String, Object?>>('/network');
+    return Network.fromMap(response.data!);
+  }
+
+  /// Partially update network topology via `PATCH /network`.
+  @RequiredMeiliServerVersion('1.37.0')
+  Future<Network> updateNetwork(UpdateNetworkOptions input) async {
+    final data = input.toPatchMap();
+    if (data.isEmpty) {
+      throw ArgumentError.value(
+        input,
+        'input',
+        'input must contain at least one field',
+      );
+    }
+    final response =
+        await http.patchMethod<Map<String, Object?>>('/network', data: data);
+    return Network.fromMap(response.data!);
+  }
+
+  /// Register or replace a single remote by name.
+  @RequiredMeiliServerVersion('1.37.0')
+  Future<Network> addRemote(String remoteName, Remote remote) {
+    return updateNetwork(
+      UpdateNetworkOptions(remotes: {remoteName: remote}),
+    );
+  }
+
+  /// Remove a remote by setting its entry to `null` in the patch payload.
+  @RequiredMeiliServerVersion('1.37.0')
+  Future<Network> removeRemote(String remoteName) {
+    return updateNetwork(
+      UpdateNetworkOptions(remotes: {remoteName: null}),
+    );
+  }
+
+  @RequiredMeiliServerVersion('1.37.0')
+  Future<Network> addRemotesToShard(String shardName, List<String> remotes) {
+    return updateNetwork(
+      UpdateNetworkOptions(
+        shards: {shardName: Shard(addRemotes: remotes)},
+      ),
+    );
+  }
+
+  @RequiredMeiliServerVersion('1.37.0')
+  Future<Network> removeRemotesFromShard(
+    String shardName,
+    List<String> remotes,
+  ) {
+    return updateNetwork(
+      UpdateNetworkOptions(
+        shards: {shardName: Shard(removeRemotes: remotes)},
+      ),
+    );
+  }
 }
