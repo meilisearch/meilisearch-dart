@@ -130,12 +130,14 @@ class MeiliSearchIndex {
   Future<Task> addDocuments(
     List<Map<String, Object?>> documents, {
     String? primaryKey,
+    bool? skipCreation,
   }) {
     return _getTask(http.postMethod(
       '/indexes/$uid/documents',
       data: documents,
       queryParameters: {
         if (primaryKey != null) 'primaryKey': primaryKey,
+        if (skipCreation != null) 'skipCreation': skipCreation,
       },
     ));
   }
@@ -145,13 +147,18 @@ class MeiliSearchIndex {
   /// * The passed [documents] must be a valid JSON string representing an array of objects.
   /// *
   /// {@macro meili.index_upsert}
-  Future<Task> addDocumentsJson(String documents, {String? primaryKey}) {
+  Future<Task> addDocumentsJson(String documents,
+      {String? primaryKey, bool? skipCreation}) {
     final decoded = jsonDecode(documents);
 
     if (decoded is List<Object?>) {
       final casted = decoded.whereType<Map<String, Object?>>().toList();
 
-      return addDocuments(casted, primaryKey: primaryKey);
+      return addDocuments(
+        casted,
+        primaryKey: primaryKey,
+        skipCreation: skipCreation,
+      );
     }
 
     throw MeiliSearchApiException(
@@ -173,6 +180,7 @@ class MeiliSearchIndex {
     String documents, {
     String? primaryKey,
     String? csvDelimiter,
+    bool? skipCreation,
   }) {
     return _getTask(http.postMethod(
       '/indexes/$uid/documents',
@@ -180,6 +188,7 @@ class MeiliSearchIndex {
       queryParameters: {
         if (primaryKey != null) 'primaryKey': primaryKey,
         if (csvDelimiter != null) 'csvDelimiter': csvDelimiter,
+        if (skipCreation != null) 'skipCreation': skipCreation,
       },
       contentType: _csvContentType,
     ));
@@ -190,12 +199,14 @@ class MeiliSearchIndex {
   /// * The passed [documents] must be a valid Newline Delimited Json (NdJson) string, where each line corresponds to an object.
   /// *
   /// {@macro meili.index_upsert}
-  Future<Task> addDocumentsNdjson(String documents, {String? primaryKey}) {
+  Future<Task> addDocumentsNdjson(String documents,
+      {String? primaryKey, bool? skipCreation}) {
     return _getTask(http.postMethod(
       '/indexes/$uid/documents',
       data: documents,
       queryParameters: {
         if (primaryKey != null) 'primaryKey': primaryKey,
+        if (skipCreation != null) 'skipCreation': skipCreation,
       },
       contentType: _ndjsonContentType,
     ));
@@ -210,11 +221,14 @@ class MeiliSearchIndex {
     List<Map<String, dynamic>> documents, {
     int batchSize = 1000,
     String? primaryKey,
+    bool? skipCreation,
   }) =>
       Future.wait(
-        documents
-            .slices(batchSize)
-            .map((slice) => addDocuments(slice, primaryKey: primaryKey)),
+        documents.slices(batchSize).map((slice) => addDocuments(
+              slice,
+              primaryKey: primaryKey,
+              skipCreation: skipCreation,
+            )),
       );
 
   /// {@macro meili.add_docs_batches}
@@ -226,6 +240,7 @@ class MeiliSearchIndex {
   Future<List<Task>> addDocumentsCsvInBatches(
     String documents, {
     String? primaryKey,
+    bool? skipCreation,
     int batchSize = 1000,
     String? csvDelimiter,
   }) {
@@ -239,6 +254,7 @@ class MeiliSearchIndex {
               [header, ...slice].join('\n'),
               primaryKey: primaryKey,
               csvDelimiter: csvDelimiter,
+              skipCreation: skipCreation,
             ),
           ),
     );
@@ -252,6 +268,7 @@ class MeiliSearchIndex {
   Future<List<Task>> addDocumentsNdjsonInBatches(
     String documents, {
     String? primaryKey,
+    bool? skipCreation,
     int batchSize = 1000,
   }) {
     final ls = LineSplitter();
@@ -262,6 +279,7 @@ class MeiliSearchIndex {
             (slice) => addDocumentsNdjson(
               slice.join('\n'),
               primaryKey: primaryKey,
+              skipCreation: skipCreation,
             ),
           ),
     );
@@ -275,12 +293,14 @@ class MeiliSearchIndex {
   Future<Task> updateDocuments(
     List<Map<String, Object?>> documents, {
     String? primaryKey,
+    bool? skipCreation,
   }) async {
     return await _getTask(http.putMethod(
       '/indexes/$uid/documents',
       data: documents,
       queryParameters: {
         if (primaryKey != null) 'primaryKey': primaryKey,
+        if (skipCreation != null) 'skipCreation': skipCreation,
       },
     ));
   }
@@ -293,13 +313,18 @@ class MeiliSearchIndex {
   Future<Task> updateDocumentsJson(
     String documents, {
     String? primaryKey,
+    bool? skipCreation,
   }) {
     final decoded = jsonDecode(documents);
 
     if (decoded is List<Object?>) {
       final casted = decoded.whereType<Map<String, Object?>>().toList();
 
-      return updateDocuments(casted, primaryKey: primaryKey);
+      return updateDocuments(
+        casted,
+        primaryKey: primaryKey,
+        skipCreation: skipCreation,
+      );
     }
 
     throw MeiliSearchApiException(
@@ -316,6 +341,7 @@ class MeiliSearchIndex {
   Future<Task> updateDocumentsCsv(
     String documents, {
     String? primaryKey,
+    bool? skipCreation,
     String? csvDelimiter,
   }) {
     return _getTask(http.putMethod(
@@ -324,6 +350,7 @@ class MeiliSearchIndex {
       queryParameters: {
         if (primaryKey != null) 'primaryKey': primaryKey,
         if (csvDelimiter != null) 'csvDelimiter': csvDelimiter,
+        if (skipCreation != null) 'skipCreation': skipCreation,
       },
       contentType: _csvContentType,
     ));
@@ -334,12 +361,14 @@ class MeiliSearchIndex {
   /// * The passed [documents] must be a valid Newline Delimited Json (NdJson) string, where each line corresponds to an object.
   /// *
   /// {@macro meili.index_upsert}
-  Future<Task> updateDocumentsNdjson(String documents, {String? primaryKey}) {
+  Future<Task> updateDocumentsNdjson(String documents,
+      {String? primaryKey, bool? skipCreation}) {
     return _getTask(http.putMethod(
       '/indexes/$uid/documents',
       data: documents,
       queryParameters: {
         if (primaryKey != null) 'primaryKey': primaryKey,
+        if (skipCreation != null) 'skipCreation': skipCreation,
       },
       contentType: _ndjsonContentType,
     ));
@@ -354,11 +383,11 @@ class MeiliSearchIndex {
     List<Map<String, Object?>> documents, {
     int batchSize = 1000,
     String? primaryKey,
+    bool? skipCreation,
   }) =>
       Future.wait(
-        documents
-            .slices(batchSize)
-            .map((slice) => updateDocuments(slice, primaryKey: primaryKey)),
+        documents.slices(batchSize).map((slice) => updateDocuments(slice,
+            primaryKey: primaryKey, skipCreation: skipCreation)),
       );
 
   /// {@macro meili.update_docs_batches}
@@ -369,6 +398,7 @@ class MeiliSearchIndex {
   Future<List<Task>> updateDocumentsCsvInBatches(
     String documents, {
     String? primaryKey,
+    bool? skipCreation,
     int batchSize = 1000,
     String? csvDelimiter,
   }) {
@@ -379,11 +409,10 @@ class MeiliSearchIndex {
 
     return Future.wait(
       split.skip(1).slices(batchSize).map(
-            (slice) => updateDocumentsCsv(
-              [header, ...slice].join('\n'),
-              primaryKey: primaryKey,
-              csvDelimiter: csvDelimiter,
-            ),
+            (slice) => updateDocumentsCsv([header, ...slice].join('\n'),
+                primaryKey: primaryKey,
+                csvDelimiter: csvDelimiter,
+                skipCreation: skipCreation),
           ),
     );
   }
@@ -396,6 +425,7 @@ class MeiliSearchIndex {
   Future<List<Task>> updateDocumentsNdjsonInBatches(
     String documents, {
     String? primaryKey,
+    bool? skipCreation,
     int batchSize = 1000,
   }) {
     final ls = LineSplitter();
@@ -406,6 +436,7 @@ class MeiliSearchIndex {
             (slice) => updateDocumentsNdjson(
               slice.join('\n'),
               primaryKey: primaryKey,
+              skipCreation: skipCreation,
             ),
           ),
     );
