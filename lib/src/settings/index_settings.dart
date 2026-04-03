@@ -39,7 +39,7 @@ class IndexSettings {
   /// List of tokens that will not be considered as word separators by Meilisearch.
   List<String>? nonSeparatorTokens;
 
-  /// Attributes to use in [filters](https://www.meilisearch.com/docs/reference/api/search#filter)
+  /// Attributes to use in [filters](https://www.meilisearch.com/docs/reference/api/search/search-with-post#filter)
   List<String>? filterableAttributes;
 
   /// Search returns documents with distinct (different) values of the given field

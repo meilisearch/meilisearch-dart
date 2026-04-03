@@ -164,7 +164,7 @@ class MeiliSearchIndex {
   /// *
   /// {@template meili.csv}
   /// The passed documents must be a valid CSV string, where the first line contains objects' keys and types, and each subsequent line corresponds to an object.
-  /// [see relevant documentation](https://www.meilisearch.com/docs/learn/core_concepts/documents#csv)
+  /// [see relevant documentation](https://www.meilisearch.com/docs/learn/getting_started/documents#csv)
   /// {@endtemplate}
   ///
   /// *

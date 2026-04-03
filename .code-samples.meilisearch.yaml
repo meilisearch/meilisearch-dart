@@ -212,7 +212,7 @@ geosearch_guide_sort_settings_1: |-
 geosearch_guide_sort_usage_1: "await client.index('restaurants').search(\n    '', SearchQuery(sort: ['_geoPoint(48.8561446, 2.2978204):asc']));"
 geosearch_guide_sort_usage_2: "await client.index('restaurants').search(\n    '',\n    SearchQuery(\n        sort: ['_geoPoint(48.8561446, 2.2978204):asc', 'rating:desc']));"
 authorization_header_1: |-
-  var client = MeiliSearchClient('MEILISEARCH_URL', 'masterKey');
+  var client = MeiliSearchClient('MEILISEARCH_URL', 'MEILISEARCH_KEY');
   await client.getKeys();
 get_one_key_1: |-
   await client.getKey('6062abda-a5aa-4414-ac91-ecd7944c0f8d');
