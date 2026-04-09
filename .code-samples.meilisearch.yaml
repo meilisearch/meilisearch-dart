@@ -140,7 +140,6 @@ get_version_1: |-
   await client.getVersion();
 distinct_attribute_guide_1: |-
   await client.index('jackets').updateDistinctAttribute('product_id');
-field_properties_guide_searchable_1: "await client\n    .index('movies')\n    .updateSearchableAttributes(['title', 'overview', 'genres']);"
 field_properties_guide_displayed_1: "await client.index('movies').updateDisplayedAttributes([\n  'title',\n  'overview',\n  'genres',\n  'release_date',\n]);"
 filtering_guide_1: "await client.index('movie_ratings').search(\n      'Avengers',\n      SearchQuery(\n        filterExpression: Meili.gt(\n          Meili.attr('release_date'),\n          DateTime.utc(1995, 3, 18).toMeiliValue(),\n        ),\n      ),\n    );"
 filtering_guide_2: "await client.index('movie_ratings').search(\n      'Batman',\n      SearchQuery(\n        filterExpression: Meili.and([\n          Meili.attr('release_date')\n              .gt(DateTime.utc(1995, 3, 18).toMeiliValue()),\n          Meili.or([\n            'director'.toMeiliAttribute().eq('Tim Burton'.toMeiliValue()),\n            'director'\n                .toMeiliAttribute()\n                .eq('Christopher Nolan'.toMeiliValue()),\n          ]),\n        ]),\n      ),\n    );"
