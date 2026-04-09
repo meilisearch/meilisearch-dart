@@ -413,12 +413,6 @@ void main() {
       await client.index('jackets').updateDistinctAttribute('product_id');
       // #enddocregion
 
-      // #docregion field_properties_guide_searchable_1
-      await client
-          .index('movies')
-          .updateSearchableAttributes(['title', 'overview', 'genres']);
-      // #enddocregion
-
       // #docregion field_properties_guide_displayed_1
       await client.index('movies').updateDisplayedAttributes([
         'title',
