@@ -1,6 +1,7 @@
 import '../annotations.dart';
 import '../filter_builder/_exports.dart';
 import '../results/matching_strategy_enum.dart';
+import 'federation_options.dart';
 import 'hybrid_search.dart';
 import 'search_query.dart';
 
@@ -9,9 +10,14 @@ class IndexSearchQuery extends SearchQuery {
   final String indexUid;
   final String? query;
 
+  /// Per-query options for federated search (e.g. weight).
+  @RequiredMeiliServerVersion('1.10.0')
+  final FederationOptions? federationOptions;
+
   const IndexSearchQuery({
     required this.indexUid,
     this.query,
+    this.federationOptions,
     super.offset,
     super.limit,
     super.page,
@@ -43,6 +49,7 @@ class IndexSearchQuery extends SearchQuery {
     return {
       'indexUid': indexUid,
       'q': query,
+      'federationOptions': federationOptions?.toMap(),
       ...super.buildMap(),
     };
   }
@@ -51,6 +58,7 @@ class IndexSearchQuery extends SearchQuery {
   IndexSearchQuery copyWith({
     String? indexUid,
     String? query,
+    FederationOptions? federationOptions,
     int? offset,
     int? limit,
     int? page,
@@ -79,6 +87,7 @@ class IndexSearchQuery extends SearchQuery {
       IndexSearchQuery(
         query: query ?? this.query,
         indexUid: indexUid ?? this.indexUid,
+        federationOptions: federationOptions ?? this.federationOptions,
         offset: offset ?? this.offset,
         limit: limit ?? this.limit,
         page: page ?? this.page,

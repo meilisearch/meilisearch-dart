@@ -13,3 +13,5 @@ export 'facet_search_query.dart';
 export 'swap_index.dart';
 export 'hybrid_search.dart';
 export 'export_query.dart';
+export 'federation.dart';
+export 'federation_options.dart';
