@@ -36,6 +36,7 @@ class IndexSearchQuery extends SearchQuery {
     super.showRankingScoreDetails,
     super.rankingScoreThreshold,
     super.showPerformanceDetails,
+    super.useNetwork,
   });
 
   @override
@@ -75,6 +76,7 @@ class IndexSearchQuery extends SearchQuery {
     bool? showRankingScoreDetails,
     double? rankingScoreThreshold,
     bool? showPerformanceDetails,
+    bool? useNetwork,
   }) =>
       IndexSearchQuery(
         query: query ?? this.query,
@@ -107,5 +109,6 @@ class IndexSearchQuery extends SearchQuery {
             rankingScoreThreshold ?? this.rankingScoreThreshold,
         showPerformanceDetails:
             showPerformanceDetails ?? this.showPerformanceDetails,
+        useNetwork: useNetwork ?? this.useNetwork,
       );
 }

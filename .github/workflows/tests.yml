@@ -9,6 +9,7 @@ on:
 
 env:
   MEILISEARCH_URL: http://localhost:7700
+  MEILISEARCH_VERSION: v1.39
 
 jobs:
   integration-tests:
@@ -20,11 +21,11 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        version: ['latest']
+        version: ["latest"]
     name: integration-tests (dart ${{ matrix.version }})
     services:
       meilisearch:
-        image: getmeili/meilisearch-enterprise:latest
+        image: getmeili/meilisearch-enterprise:v1.39
         env:
           MEILI_MASTER_KEY: "masterKey"
           MEILI_NO_ANALYTICS: "true"
@@ -41,8 +42,21 @@ jobs:
           dart pub get
           dart pub get -C tool
           dart pub global activate coverage
+      - name: Wait for Meilisearch readiness
+        run: |
+          for i in {1..60}; do
+            if curl -fsS "$MEILISEARCH_URL/health" > /dev/null; then
+              echo "Meilisearch is ready at version $MEILISEARCH_VERSION"
+              break
+            fi
+            if [ "$i" -eq 60 ]; then
+              echo "Meilisearch did not become ready in time"
+              exit 1
+            fi
+            sleep 1
+          done
       - name: Run integration tests
-        run: dart test --concurrency=4 --reporter=github --coverage=./coverage/reports
+        run: dart test --concurrency=2 --reporter=github --coverage=./coverage/reports
       - name: Generate coverage reports
         run: dart pub global run coverage:format_coverage --report-on=./lib --lcov --in=./coverage/reports --out=coverage/lcov.info
       - name: Report to Codecov
@@ -50,7 +64,6 @@ jobs:
         with:
           file: coverage/lcov.info
           fail_ci_if_error: false
-
 
   linter:
     name: linter-check
@@ -83,7 +96,7 @@ jobs:
       - uses: actions/checkout@v6
       - uses: dart-lang/setup-dart@v1
         with:
-          sdk: 'latest'
+          sdk: "latest"
       - name: check if samples changed
         run: |
           dart pub get
@@ -96,7 +109,7 @@ jobs:
       - uses: actions/checkout@v6
       - uses: dart-lang/setup-dart@v1
         with:
-          sdk: '3.0.0'
+          sdk: "3.0.0"
       - run: dart pub global activate pana
       - name: Run pana
         id: pana-run

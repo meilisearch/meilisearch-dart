@@ -1,5 +1,12 @@
 [comment]: <> (All notable changes to this project will be documented in this file.)
 
+# 0.19.0
+### Changes:
+- Add [replication and sharding](https://www.meilisearch.com/docs/resources/self_hosting/sharding/overview) support
+
+### Breaking Changes:
+None
+
 # 0.18.0
 ### Breaking Changes:
 No breaking change but addition of new features

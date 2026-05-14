@@ -52,14 +52,6 @@ void main() {
         // #enddocregion
       }
 
-      void a8() async {
-        // #docregion getting_started_add_meteorites
-        final json = await File('meteorites.json').readAsString();
-
-        await client.index('meteorites').addDocumentsJson(json);
-        // #enddocregion
-      }
-
       void a10() async {
         // #docregion add_movies_json_1
         // import 'dart:io';
@@ -69,53 +61,10 @@ void main() {
         // #enddocregion
       }
 
-      void a11() async {
-        // #docregion security_guide_delete_key_1
-        var client = MeiliSearchClient('http://localhost:7700', 'masterKey');
-        await client.deleteKey('ac5cd97d-5a4b-4226-a868-2d0eb6d197ab');
-        // #enddocregion
-      }
-
-      void a12() async {
-        // #docregion security_guide_list_keys_1
-        var client = MeiliSearchClient('http://localhost:7700', 'masterKey');
-        await client.getKeys();
-        // #enddocregion
-      }
-
-      void a13() async {
-        // #docregion security_guide_create_key_1
-        var client = MeiliSearchClient('http://localhost:7700', 'masterKey');
-        await client.createKey(
-          description: 'Search patient records key',
-          actions: ['search'],
-          indexes: ['patient_medical_records'],
-          expiresAt: DateTime(2023, 01, 01),
-        );
-        // #enddocregion
-      }
-
       void a14() async {
         // #docregion authorization_header_1
-        var client = MeiliSearchClient('http://localhost:7700', 'masterKey');
+        var client = MeiliSearchClient('MEILISEARCH_URL', 'masterKey');
         await client.getKeys();
-        // #enddocregion
-      }
-
-      void a15() async {
-        // #docregion security_guide_search_key_1
-        var client = MeiliSearchClient('http://localhost:7700', 'apiKey');
-        await client.index('patient_medical_records').search('');
-        // #enddocregion
-      }
-
-      void a16() async {
-        // #docregion security_guide_update_key_1
-        var client = MeiliSearchClient('http://localhost:7700', 'masterKey');
-        await client.updateKey(
-          '74c9c733-3368-4738-bbe5-1d18a5fecb37',
-          description: 'Default Search API Key',
-        );
         // #enddocregion
       }
 
@@ -464,12 +413,6 @@ void main() {
       await client.index('jackets').updateDistinctAttribute('product_id');
       // #enddocregion
 
-      // #docregion field_properties_guide_searchable_1
-      await client
-          .index('movies')
-          .updateSearchableAttributes(['title', 'overview', 'genres']);
-      // #enddocregion
-
       // #docregion field_properties_guide_displayed_1
       await client.index('movies').updateDisplayedAttributes([
         'title',
@@ -524,49 +467,6 @@ void main() {
           );
       // #enddocregion
 
-      // #docregion search_parameter_guide_query_1
-      await client.index('movies').search('shifu');
-      // #enddocregion
-
-      // #docregion search_parameter_guide_offset_1
-      await client.index('movies').search('shifu', SearchQuery(offset: 1));
-      // #enddocregion
-
-      // #docregion search_parameter_guide_limit_1
-      await client.index('movies').search('shifu', SearchQuery(limit: 2));
-      // #enddocregion
-
-      // #docregion search_parameter_guide_matching_strategy_1
-      await client.index('movies').search(
-          'big fat liar', SearchQuery(matchingStrategy: MatchingStrategy.last));
-      // #enddocregion
-
-      // #docregion search_parameter_guide_matching_strategy_2
-      await client.index('movies').search(
-          'big fat liar', SearchQuery(matchingStrategy: MatchingStrategy.all));
-      // #enddocregion
-
-      // #docregion search_parameter_guide_retrieve_1
-      await client.index('movies').search(
-          'shifu', SearchQuery(attributesToRetrieve: ['overview', 'title']));
-      // #enddocregion
-
-      // #docregion search_parameter_guide_crop_1
-      await client.index('movies').search(
-          'shifu', SearchQuery(attributesToCrop: ['overview'], cropLength: 5));
-      // #enddocregion
-
-      // #docregion search_parameter_guide_highlight_1
-      await client.index('movies').search(
-          'winter feast', SearchQuery(attributesToHighlight: ['overview']));
-      // #enddocregion
-
-      // #docregion search_parameter_guide_show_matches_position_1
-      await client
-          .index('movies')
-          .search('winter feast', SearchQuery(showMatchesPosition: true));
-      // #enddocregion
-
       // #docregion primary_field_guide_create_index_primary_key
       await client.createIndex('books', primaryKey: 'reference_number');
       // #enddocregion
@@ -587,102 +487,8 @@ void main() {
       ], primaryKey: 'reference_number');
       // #enddocregion
 
-      // #docregion getting_started_update_ranking_rules
-      await client.index('movies').updateRankingRules([
-        'exactness',
-        'words',
-        'typo',
-        'proximity',
-        'attribute',
-        'sort',
-        'release_date:asc',
-        'rank:desc',
-      ]);
-      // #enddocregion
-
-      // #docregion getting_started_update_searchable_attributes
-      await client.index('movies').updateSearchableAttributes(['title']);
-      // #enddocregion
-
-      // #docregion getting_started_update_stop_words
-      await client.index('movies').updateStopWords(['the']);
-      // #enddocregion
-
       // #docregion getting_started_check_task_status
       await client.getTask(0);
-      // #enddocregion
-
-      // #docregion getting_started_synonyms
-      await client.index('movies').updateSynonyms({
-        'winnie': ['piglet'],
-        'piglet': ['winnie'],
-      });
-      // #enddocregion
-
-      // #docregion getting_started_update_displayed_attributes
-      await client
-          .index('movies')
-          .updateDisplayedAttributes(['title', 'overview', 'poster']);
-      // #enddocregion
-
-      // #docregion getting_started_configure_settings
-      await client.index('meteorites').updateSettings(IndexSettings(
-          filterableAttributes: ['mass', '_geo'],
-          sortableAttributes: ['mass', '_geo']));
-      // #enddocregion
-
-      // #docregion getting_started_geo_radius
-      await client.index('meteorites').search(
-            '',
-            SearchQuery(
-              filterExpression: Meili.geoRadius(
-                (lat: 46.9480, lng: 7.4474),
-                210000,
-              ),
-            ),
-          );
-      // #enddocregion
-
-      // #docregion getting_started_geo_point
-      await client.index('meteorites').search(
-          '', SearchQuery(sort: ['_geoPoint(48.8583701, 2.2922926):asc']));
-      // #enddocregion
-
-      // #docregion getting_started_sorting
-      await client.index('meteorites').search(
-            '',
-            SearchQuery(
-              sort: ['mass:asc'],
-              filterExpression: Meili.attr('mass').lt(200.toMeiliValue()),
-            ),
-          );
-      // #enddocregion
-
-      // #docregion getting_started_filtering
-      await client
-          .index('meteorites')
-          .search('', SearchQuery(filter: 'mass < 200'));
-      // #enddocregion
-
-      // #docregion getting_started_faceting
-      await client.index('books').updateFaceting(Faceting(
-          maxValuesPerFacet: 2,
-          sortFacetValuesBy: {'*': FacetingSortTypes.count}));
-      // #enddocregion
-
-      void a9() async {
-        // #docregion getting_started_typo_tolerance
-        final toUpdate = TypoTolerance(
-          minWordSizeForTypos: MinWordSizeForTypos(oneTypo: 4),
-        );
-        await client.index('movies').updateTypoTolerance(toUpdate);
-        // #enddocregion
-      }
-
-      // #docregion getting_started_pagination
-      await client
-          .index('books')
-          .updatePagination(Pagination(maxTotalHits: 500));
       // #enddocregion
 
       // #docregion filtering_update_settings_1
@@ -692,21 +498,8 @@ void main() {
       ]);
       // #enddocregion
 
-      // #docregion faceted_search_walkthrough_filter_1
-      await client.index('movies').search(
-          'thriller',
-          SearchQuery(filter: [
-            ['genres = Horror', 'genres = Mystery'],
-            'director = "Jordan Peele"'
-          ]));
-      // #enddocregion
-
       // #docregion post_dump_1
       await client.createDump();
-      // #enddocregion
-
-      // #docregion phrase_search_1
-      await client.index('movies').search('"african american" horror');
       // #enddocregion
 
       // #docregion sorting_guide_update_sortable_attributes_1
@@ -740,12 +533,6 @@ void main() {
 
       // #docregion reset_sortable_attributes_1
       await client.index('books').resetSortableAttributes();
-      // #enddocregion
-
-      // #docregion search_parameter_guide_sort_1
-      await client
-          .index('books')
-          .search('science fiction', SearchQuery(sort: ['price:asc']));
       // #enddocregion
 
       // #docregion geosearch_guide_filter_settings_1
@@ -823,27 +610,6 @@ void main() {
       await client.deleteKey('6062abda-a5aa-4414-ac91-ecd7944c0f8d');
       // #enddocregion
 
-      // #docregion search_parameter_guide_crop_marker_1
-      await client.index('movies').search(
-            'shifu',
-            SearchQuery(
-              attributesToCrop: ['overview'],
-              cropMarker: '[…]',
-            ),
-          );
-      // #enddocregion
-
-      // #docregion search_parameter_guide_highlight_tag_1
-      await client.index('movies').search(
-            'winter feast',
-            SearchQuery(
-              attributesToHighlight: ['overview'],
-              highlightPreTag: '<span class="highlight">',
-              highlightPostTag: '</span>',
-            ),
-          );
-      // #enddocregion
-
       // #docregion geosearch_guide_filter_usage_3
       await client.index('restaurants').search(
             '',
@@ -874,31 +640,12 @@ void main() {
       // #docregion getting_started_search
       await client.index('movies').search('botman');
       // #enddocregion
-      // #docregion ranking_score_threshold
-      await client
-          .index('INDEX_NAME')
-          .search('badman', SearchQuery(rankingScoreThreshold: 0.2));
-      // #enddocregion
       // #docregion export_post_1
       await client.export(
         ExportQuery(
-          url: 'new_instance_url',
+          url: exportSinkUrl,
           apiKey: 'new_instance_api_key',
           payloadSize: "100 MiB",
-        ),
-      );
-      // #enddocregion
-      // #docregion export_post_2
-      await client.export(
-        ExportQuery(
-          url: 'new_instance_url',
-          apiKey: 'new_instance_api_key',
-          indexes: {
-            "index_1_uid": ExportIndexOptions(
-              filter: "filter",
-              overrideSettings: true,
-            ),
-          },
         ),
       );
       // #enddocregion
@@ -918,7 +665,7 @@ void main() {
     import 'dart:io';
     import 'dart:convert';
 
-    var client = MeiliSearchClient('http://localhost:7700', 'aSampleMasterKey');
+    var client = MeiliSearchClient('MEILISEARCH_URL', 'aSampleMasterKey');
 
     final json = await File('movies.json').readAsString();
 

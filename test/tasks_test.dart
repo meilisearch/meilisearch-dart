@@ -18,7 +18,7 @@ void main() {
 
     test('Query by type', () async {
       final docs = books;
-      final task = await index.addDocuments(docs);
+      final task = await index.addDocuments(docs).waitFor(client: client);
 
       expect(task.type, 'documentAdditionOrUpdate');
       //test several permutations of indexUids
@@ -39,30 +39,38 @@ void main() {
       }
     });
     test('cancels given an input', () async {
-      final date = DateTime.now();
+      final date = DateTime.utc(2000, 1, 1);
       final response = await client
           .cancelTasks(
-            params: CancelTasksQuery(uids: [1, 2], beforeStartedAt: date),
+            params: CancelTasksQuery(
+              uids: [1000000001, 1000000002],
+              beforeStartedAt: date,
+              indexUids: [uid],
+            ),
           )
           .waitFor(client: client);
 
       expect(
         response.details!['originalFilter'],
-        '?beforeStartedAt=${Uri.encodeComponent(date.toUtc().toIso8601String())}&uids=1%2C2',
+        '?beforeStartedAt=${Uri.encodeComponent(date.toUtc().toIso8601String())}&uids=1000000001%2C1000000002&indexUids=$uid',
       );
     });
 
     test('deletes given an input', () async {
-      final date = DateTime.now();
+      final date = DateTime.utc(2000, 1, 1);
       final response = await client
           .deleteTasks(
-            params: DeleteTasksQuery(uids: [1, 2], beforeStartedAt: date),
+            params: DeleteTasksQuery(
+              uids: [1000000001, 1000000002],
+              beforeStartedAt: date,
+              indexUids: [uid],
+            ),
           )
           .waitFor(client: client);
 
       expect(
         response.details!['originalFilter'],
-        '?beforeStartedAt=${Uri.encodeComponent(date.toUtc().toIso8601String())}&uids=1%2C2',
+        '?beforeStartedAt=${Uri.encodeComponent(date.toUtc().toIso8601String())}&uids=1000000001%2C1000000002&indexUids=$uid',
       );
     });
   });
@@ -70,26 +78,12 @@ void main() {
   test(
     'code samples',
     () async {
-      // #docregion async_guide_filter_by_date_1
-      await client.getTasks(
-        params: TasksQuery(
-          afterEnqueuedAt: DateTime(2020, 10, 11, 11, 49, 53),
-        ),
-      );
-      // #enddocregion
       // #docregion async_guide_multiple_filters_1
       await client.getTasks(
         params: TasksQuery(
           indexUids: ['movies'],
           types: ['documentAdditionOrUpdate', 'documentDeletion'],
           statuses: ['processing'],
-        ),
-      );
-      // #enddocregion
-      // #docregion async_guide_filter_by_ids_1
-      await client.getTasks(
-        params: TasksQuery(
-          uids: [5, 10, 13],
         ),
       );
       // #enddocregion
@@ -100,24 +94,11 @@ void main() {
         ),
       );
       // #enddocregion
-      // #docregion async_guide_filter_by_types_1
-      await client.getTasks(
-        params: TasksQuery(
-          types: ['dumpCreation', 'indexSwap'],
-        ),
-      );
-      // #enddocregion
-      // #docregion async_guide_filter_by_index_uids_1
-      await client.getTasks(params: TasksQuery(indexUids: ['movies']));
-      // #enddocregion
       // #docregion delete_tasks_1
       await client.deleteTasks(params: DeleteTasksQuery(uids: [1, 2]));
       // #enddocregion
       // #docregion cancel_tasks_1
       await client.cancelTasks(params: CancelTasksQuery(uids: [1, 2]));
-      // #enddocregion
-      // #docregion async_guide_canceled_by_1
-      await client.getTasks(params: TasksQuery(canceledBy: [9, 15]));
       // #enddocregion
     },
     skip: true,

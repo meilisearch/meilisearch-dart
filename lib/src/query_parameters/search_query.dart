@@ -33,6 +33,8 @@ class SearchQuery extends Queryable {
   final List<dynamic /* double | List<double> */ >? vector;
   @RequiredMeiliServerVersion('1.35.0')
   final bool? showPerformanceDetails;
+  @RequiredMeiliServerVersion('1.37.0')
+  final bool? useNetwork;
 
   const SearchQuery({
     this.offset,
@@ -59,6 +61,7 @@ class SearchQuery extends Queryable {
     this.rankingScoreThreshold,
     this.vector,
     this.showPerformanceDetails,
+    this.useNetwork,
   });
 
   @override
@@ -87,6 +90,7 @@ class SearchQuery extends Queryable {
       'rankingScoreThreshold': rankingScoreThreshold,
       'vector': vector,
       'showPerformanceDetails': showPerformanceDetails,
+      'useNetwork': useNetwork,
     };
   }
 
@@ -115,6 +119,7 @@ class SearchQuery extends Queryable {
     bool? showRankingScoreDetails,
     double? rankingScoreThreshold,
     bool? showPerformanceDetails,
+    bool? useNetwork,
   }) =>
       SearchQuery(
         offset: offset ?? this.offset,
@@ -145,5 +150,6 @@ class SearchQuery extends Queryable {
             rankingScoreThreshold ?? this.rankingScoreThreshold,
         showPerformanceDetails:
             showPerformanceDetails ?? this.showPerformanceDetails,
+        useNetwork: useNetwork ?? this.useNetwork,
       );
 }

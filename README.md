@@ -53,7 +53,7 @@ You can install the **meilisearch** package by adding a few lines into `pubspec.
 
 ```yaml
 dependencies:
-  meilisearch: ^0.18.0
+  meilisearch: ^0.19.0
 ```
 
 Then open your terminal and update dart packages.
