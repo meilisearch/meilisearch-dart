@@ -35,6 +35,7 @@ class IndexSearchQuery extends SearchQuery {
     super.vector,
     super.showRankingScoreDetails,
     super.rankingScoreThreshold,
+    super.showPerformanceDetails,
     super.useNetwork,
   });
 
@@ -74,6 +75,7 @@ class IndexSearchQuery extends SearchQuery {
     List<dynamic /* double | List<double> */ >? vector,
     bool? showRankingScoreDetails,
     double? rankingScoreThreshold,
+    bool? showPerformanceDetails,
     bool? useNetwork,
   }) =>
       IndexSearchQuery(
@@ -105,6 +107,8 @@ class IndexSearchQuery extends SearchQuery {
             showRankingScoreDetails ?? this.showRankingScoreDetails,
         rankingScoreThreshold:
             rankingScoreThreshold ?? this.rankingScoreThreshold,
+        showPerformanceDetails:
+            showPerformanceDetails ?? this.showPerformanceDetails,
         useNetwork: useNetwork ?? this.useNetwork,
       );
 }

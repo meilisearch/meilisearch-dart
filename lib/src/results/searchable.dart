@@ -30,6 +30,9 @@ abstract class Searcheable<T> {
   final int? processingTimeMs;
   final List<dynamic /*double | List<double>*/ >? vector;
 
+  /// Performance details of the query, available when `showPerformanceDetails` is set to `true`.
+  final Map<String, dynamic>? performanceDetails;
+
   const Searcheable({
     required this.src,
     required this.indexUid,
@@ -39,6 +42,7 @@ abstract class Searcheable<T> {
     required this.processingTimeMs,
     required this.facetStats,
     required this.vector,
+    required this.performanceDetails,
   });
 
   static Searcheable<Map<String, dynamic>> createSearchResult(

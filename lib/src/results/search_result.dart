@@ -11,6 +11,7 @@ class SearchResult<T> extends Searcheable<T> {
     required super.query,
     required super.facetStats,
     required super.vector,
+    required super.performanceDetails,
     required this.offset,
     required this.limit,
     required this.estimatedTotalHits,
@@ -41,6 +42,7 @@ class SearchResult<T> extends Searcheable<T> {
       facetDistribution: _readFacetDistribution(map),
       indexUid: indexUid ?? _readIndexUid(map),
       facetStats: _readFacetStats(map),
+      performanceDetails: _readPerformanceDetails(map),
     );
   }
 
@@ -60,5 +62,6 @@ class SearchResult<T> extends Searcheable<T> {
         offset: offset,
         processingTimeMs: processingTimeMs,
         query: query,
+        performanceDetails: performanceDetails,
       );
 }
