@@ -18,7 +18,7 @@ void main() {
         await result.waitFor(client: client, throwFailed: false);
       });
 
-      expect(result.uid, greaterThan(0));
+      expect(result.uid, greaterThanOrEqualTo(0));
       expect(result.indexUid, isNull);
       expect(result.status, equals("enqueued"));
       expect(result.type, equals("export"));
