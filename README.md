@@ -2,6 +2,8 @@
   <img src="https://raw.githubusercontent.com/meilisearch/integration-guides/main/assets/logos/meilisearch_dart.svg" alt="Meilisearch" width="200" height="200" />
 </p>
 
+test
+
 <h1 align="center">Meilisearch Dart</h1>
 
 <h4 align="center">
