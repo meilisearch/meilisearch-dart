@@ -1,4 +1,5 @@
 export 'multi_search_result.dart';
+export 'federated_search_result.dart';
 export 'searchable.dart';
 export 'tasks_results.dart';
 export 'result.dart';
