@@ -53,6 +53,27 @@ class HttpRequest {
     return dio.options.headers;
   }
 
+  /// Removes entries whose value is `null` from [queryParameters].
+  ///
+  /// Dio throws `type 'Null' is not a subtype of type 'Object'` when the
+  /// query parameters map contains null values, so they are stripped out
+  /// before the request is sent. A null value simply means the parameter is
+  /// not set.
+  ///
+  /// See https://github.com/meilisearch/meilisearch-dart/issues/444
+  static Map<String, Object?>? _sanitizeQueryParameters(
+    Map<String, Object?>? queryParameters,
+  ) {
+    if (queryParameters == null) {
+      return null;
+    }
+
+    return <String, Object?>{
+      for (final entry in queryParameters.entries)
+        if (entry.value != null) entry.key: entry.value,
+    };
+  }
+
   /// GET method
   Future<Response<T>> getMethod<T>(
     String path, {
@@ -62,7 +83,7 @@ class HttpRequest {
     try {
       return await dio.get<T>(
         path,
-        queryParameters: queryParameters,
+        queryParameters: _sanitizeQueryParameters(queryParameters),
         data: data,
       );
     } on DioException catch (e) {
@@ -81,7 +102,7 @@ class HttpRequest {
       return await dio.post<T>(
         path,
         data: data,
-        queryParameters: queryParameters,
+        queryParameters: _sanitizeQueryParameters(queryParameters),
         options: Options(
           contentType: contentType,
         ),
@@ -102,7 +123,7 @@ class HttpRequest {
       return await dio.patch<T>(
         path,
         data: data,
-        queryParameters: queryParameters,
+        queryParameters: _sanitizeQueryParameters(queryParameters),
         options: Options(
           contentType: contentType,
         ),
@@ -123,7 +144,7 @@ class HttpRequest {
       return await dio.put<T>(
         path,
         data: data,
-        queryParameters: queryParameters,
+        queryParameters: _sanitizeQueryParameters(queryParameters),
         options: Options(
           contentType: contentType,
         ),
@@ -143,7 +164,7 @@ class HttpRequest {
       return await dio.delete<T>(
         path,
         data: data,
-        queryParameters: queryParameters,
+        queryParameters: _sanitizeQueryParameters(queryParameters),
       );
     } on DioException catch (e) {
       return _throwException(e);
