@@ -7,7 +7,8 @@ class AllStats {
     this.indexes,
   });
 
-  final int? databaseSize;
+  // Changed from int? to Object? to support both String (human format) and int (raw format)
+  final Object? databaseSize;
   final DateTime? lastUpdate;
   final Map<String, IndexStats>? indexes;
 
@@ -16,7 +17,8 @@ class AllStats {
     final indexesRaw = json['indexes'];
 
     return AllStats(
-      databaseSize: json['databaseSize'] as int?,
+      // Removed the 'as int?' cast so it safely parses either String or int
+      databaseSize: json['databaseSize'],
       lastUpdate:
           lastUpdateRaw is String ? DateTime.tryParse(lastUpdateRaw) : null,
       indexes: indexesRaw is Map<String, Object?>
