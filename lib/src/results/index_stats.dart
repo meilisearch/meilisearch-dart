@@ -9,7 +9,7 @@ class IndexStats {
   final int? numberOfDocuments;
   final bool? isIndexing;
   final Map<String, int>? fieldsDistribution;
-  
+
   // Added this field to capture the dictionary of internal database component sizes
   final Map<String, Object?>? internalDatabaseSizes;
 

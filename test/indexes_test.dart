@@ -136,7 +136,9 @@ void main() {
       );
     });
 
-    test('Getting index stats with custom size formatting and internal database sizes', () async {
+    test(
+        'Getting index stats with custom size formatting and internal database sizes',
+        () async {
       final index = client.index(uid);
 
       final response = await index.addDocuments([

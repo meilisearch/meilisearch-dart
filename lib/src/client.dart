@@ -176,7 +176,7 @@ class MeiliSearchClient {
   }
 
   /// Get all index stats.
-   Future<AllStats> getStats({
+  Future<AllStats> getStats({
     bool? showInternalDatabaseSizes,
     String? sizeFormat, // Accepts 'raw' or 'human'
   }) async {
