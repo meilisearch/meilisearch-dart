@@ -131,9 +131,15 @@ update_typo_tolerance_1: |-
 reset_typo_tolerance_1: |-
   await client.index('books').resetTypoTolerance();
 get_index_stats_1: |-
-  await client.index('movies').getStats();
+  await client.index('movies').getStats(
+    showInternalDatabaseSizes: true,
+    sizeFormat: 'human',
+  );
 get_indexes_stats_1: |-
-  await client.getStats();
+  await client.getStats(
+    showInternalDatabaseSizes: true,
+    sizeFormat: 'human',
+  );
 get_health_1: |-
   await client.health();
 get_version_1: |-

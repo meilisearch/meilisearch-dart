@@ -885,9 +885,20 @@ class MeiliSearchIndex {
   //
 
   /// Get stats of the index.
-  Future<IndexStats> getStats() async {
-    final response =
-        await http.getMethod<Map<String, Object?>>('/indexes/$uid/stats');
+  Future<IndexStats> getStats({
+    bool? showInternalDatabaseSizes,
+    String? sizeFormat, // Accepts 'raw' or 'human'
+  }) async {
+    final queryParams = <String, Object?>{
+      if (showInternalDatabaseSizes != null)
+        'showInternalDatabaseSizes': showInternalDatabaseSizes,
+      if (sizeFormat != null) 'sizeFormat': sizeFormat,
+    };
+
+    final response = await http.getMethod<Map<String, Object?>>(
+      '/indexes/$uid/stats',
+      queryParameters: queryParams,
+    );
 
     return IndexStats.fromMap(response.data!);
   }

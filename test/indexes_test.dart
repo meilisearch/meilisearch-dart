@@ -136,7 +136,9 @@ void main() {
       );
     });
 
-    test('Geting index stats', () async {
+    test(
+        'Getting index stats with custom size formatting and internal database sizes',
+        () async {
       final index = client.index(uid);
 
       final response = await index.addDocuments([
@@ -145,8 +147,31 @@ void main() {
       ]).waitFor(client: client);
 
       expect(response.status, 'succeeded');
-      final stats = await index.getStats();
+
+      // 1. Verify index-level internalDatabaseSizes and human-formatting inside it
+      final stats = await index.getStats(
+        showInternalDatabaseSizes: true,
+        sizeFormat: 'human',
+      );
+
       expect(stats.numberOfDocuments, 2);
+      expect(stats.internalDatabaseSizes, isNotNull);
+      expect(stats.internalDatabaseSizes, isA<Map<String, Object?>>());
+      // Ensure the internal DB values are formatted as Strings (human format)
+      expect(stats.internalDatabaseSizes!.values.first, isA<String>());
+
+      // 2. Verify global client-level databaseSize is a human-readable String
+      final allStats = await client.getStats(
+        showInternalDatabaseSizes: true,
+        sizeFormat: 'human',
+      );
+
+      expect(allStats.databaseSize, isA<String>());
+
+      // 3. Verify fallback behavior (no parameters should leave internal database sizes null)
+      final rawStats = await index.getStats();
+      expect(rawStats.numberOfDocuments, 2);
+      expect(rawStats.internalDatabaseSizes, isNull);
     });
 
     test('gets all tasks by index', () async {

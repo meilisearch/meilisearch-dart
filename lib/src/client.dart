@@ -176,8 +176,20 @@ class MeiliSearchClient {
   }
 
   /// Get all index stats.
-  Future<AllStats> getStats() async {
-    final response = await http.getMethod<Map<String, Object?>>('/stats');
+  Future<AllStats> getStats({
+    bool? showInternalDatabaseSizes,
+    String? sizeFormat, // Accepts 'raw' or 'human'
+  }) async {
+    final queryParams = <String, Object?>{
+      if (showInternalDatabaseSizes != null)
+        'showInternalDatabaseSizes': showInternalDatabaseSizes,
+      if (sizeFormat != null) 'sizeFormat': sizeFormat,
+    };
+
+    final response = await http.getMethod<Map<String, Object?>>(
+      '/stats',
+      queryParameters: queryParams,
+    );
 
     return AllStats.fromMap(response.data!);
   }
