@@ -366,4 +366,68 @@ class MeiliSearchClient {
       ),
     );
   }
+
+  //
+  // Dynamic Search Rules endpoints (experimental, Meilisearch v1.50.0+)
+  //
+  // These endpoints require the `dynamicSearchRules` experimental feature
+  // flag to be enabled on the server, e.g.:
+  //
+  //   await client.http.updateExperimentalFeatures(
+  //     const UpdateExperimentalFeatures(dynamicSearchRules: true),
+  //   );
+  //
+
+  /// Lists Dynamic Search Rules. The server exposes this as a POST so the
+  /// filter expression can travel in the body; pass [params] to paginate
+  /// or filter, or omit it to list rules with the server's default paging.
+  @RequiredMeiliServerVersion('1.50.0')
+  Future<Result<DynamicSearchRule>> listDynamicSearchRules({
+    DynamicSearchRulesQuery? params,
+  }) async {
+    final response = await http.postMethod<Map<String, Object?>>(
+      '/dynamic-search-rules',
+      data: params?.toBody() ?? const <String, Object?>{},
+    );
+
+    return Result<DynamicSearchRule>.fromMapWithType(
+      response.data!,
+      (model) => DynamicSearchRule.fromJson(model),
+    );
+  }
+
+  /// Retrieves a single Dynamic Search Rule by its [uid].
+  @RequiredMeiliServerVersion('1.50.0')
+  Future<DynamicSearchRule> getDynamicSearchRule(String uid) async {
+    final response = await http.getMethod<Map<String, Object?>>(
+      '/dynamic-search-rules/$uid',
+    );
+
+    return DynamicSearchRule.fromJson(response.data!);
+  }
+
+  /// Creates a new Dynamic Search Rule with the given [uid], or updates
+  /// the existing one (upsert). Returns the async [Task] the server
+  /// enqueues to apply the change.
+  @RequiredMeiliServerVersion('1.50.0')
+  Future<Task> updateOrCreateDynamicSearchRule(
+    String uid,
+    DynamicSearchRule rule,
+  ) {
+    return _update(
+      http.patchMethod<Map<String, Object?>>(
+        '/dynamic-search-rules/$uid',
+        data: rule.toUpsertBody(),
+      ),
+    );
+  }
+
+  /// Deletes the Dynamic Search Rule identified by [uid]. Returns the
+  /// async [Task] the server enqueues to apply the deletion.
+  @RequiredMeiliServerVersion('1.50.0')
+  Future<Task> deleteDynamicSearchRule(String uid) {
+    return _update(
+      http.deleteMethod<Map<String, Object?>>('/dynamic-search-rules/$uid'),
+    );
+  }
 }
