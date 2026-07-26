@@ -14,7 +14,7 @@ void main() {
       final json = <String, Object?>{
         'uid': 'black-friday',
         'description': 'Black Friday 2025 rules',
-        'priority': 10,
+        'precedence': 10,
         'active': true,
         'conditions': <String, Object?>{
           'query': <String, Object?>{'isEmpty': true},
@@ -43,7 +43,7 @@ void main() {
 
       expect(rule.uid, 'black-friday');
       expect(rule.description, 'Black Friday 2025 rules');
-      expect(rule.priority, 10);
+      expect(rule.precedence, 10);
       expect(rule.active, isTrue);
 
       expect(rule.conditions, isNotNull);
@@ -70,7 +70,7 @@ void main() {
 
       expect(rule.uid, 'minimal');
       expect(rule.description, isNull);
-      expect(rule.priority, isNull);
+      expect(rule.precedence, isNull);
       expect(rule.active, isNull);
       expect(rule.conditions, isNull);
       expect(rule.actions, isNull);
@@ -93,13 +93,13 @@ void main() {
     test('emits only the fields the caller set (sparse PATCH)', () {
       final rule = DynamicSearchRule(
         uid: 'ignored-when-upserting',
-        priority: 5,
+        precedence: 5,
       );
 
       final body = rule.toUpsertBody();
 
-      expect(body.keys, unorderedEquals(<String>['priority']));
-      expect(body['priority'], 5);
+      expect(body.keys, unorderedEquals(<String>['precedence']));
+      expect(body['precedence'], 5);
     });
 
     test('serializes conditions and actions verbatim', () {
@@ -132,23 +132,39 @@ void main() {
       expect(const DynamicSearchRulesQuery().toBody(), isEmpty);
     });
 
-    test('offset/limit/filter round-trip', () {
-      const q = DynamicSearchRulesQuery(
-        offset: 20,
-        limit: 5,
-        filter: 'active = true AND priority > 5',
-      );
+    test('offset/limit round-trip', () {
+      const q = DynamicSearchRulesQuery(offset: 20, limit: 5);
+      expect(q.toBody(), <String, Object?>{'offset': 20, 'limit': 5});
+    });
 
+    test('filter object round-trip carries query + active', () {
+      const q = DynamicSearchRulesQuery(
+        limit: 10,
+        filter: DynamicSearchRulesFilter(query: 'black friday', active: true),
+      );
       expect(q.toBody(), <String, Object?>{
-        'offset': 20,
-        'limit': 5,
-        'filter': 'active = true AND priority > 5',
+        'limit': 10,
+        'filter': <String, Object?>{
+          'query': 'black friday',
+          'active': true,
+        },
       });
     });
 
-    test('nulls are omitted so sparse queries stay sparse', () {
-      const q = DynamicSearchRulesQuery(limit: 10);
-      expect(q.toBody().keys, ['limit']);
+    test('an entirely empty filter object is dropped from the body', () {
+      const q = DynamicSearchRulesQuery(
+        filter: DynamicSearchRulesFilter(),
+      );
+      expect(q.toBody(), isEmpty);
+    });
+
+    test('sparse filter with only one field only emits that field', () {
+      const q = DynamicSearchRulesQuery(
+        filter: DynamicSearchRulesFilter(active: false),
+      );
+      expect(q.toBody(), <String, Object?>{
+        'filter': <String, Object?>{'active': false},
+      });
     });
   });
 }

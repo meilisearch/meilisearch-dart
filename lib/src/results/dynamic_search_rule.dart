@@ -15,8 +15,11 @@ class DynamicSearchRule {
   /// Human-readable description.
   final String? description;
 
-  /// Higher-priority rules apply first when several rules match.
-  final int? priority;
+  /// Ordering key when several rules match a given query. In v1.50.0 this
+  /// field was renamed from `priority` to `precedence`, and **lower**
+  /// numeric values apply first: a rule with `precedence: 1` is picked
+  /// before a rule with `precedence: 5`.
+  final int? precedence;
 
   /// Whether the rule is currently active.
   final bool? active;
@@ -39,7 +42,7 @@ class DynamicSearchRule {
   const DynamicSearchRule({
     required this.uid,
     this.description,
-    this.priority,
+    this.precedence,
     this.active,
     this.conditions,
     this.actions,
@@ -55,7 +58,7 @@ class DynamicSearchRule {
     return DynamicSearchRule(
       uid: json['uid'] as String? ?? '',
       description: json['description'] as String?,
-      priority: json['priority'] as int?,
+      precedence: json['precedence'] as int?,
       active: json['active'] as bool?,
       conditions: conditionsRaw is Map
           ? Map<String, Object?>.from(conditionsRaw)
@@ -78,7 +81,7 @@ class DynamicSearchRule {
   /// instance are omitted so callers can send sparse updates.
   Map<String, Object?> toUpsertBody() => <String, Object?>{
         if (description != null) 'description': description,
-        if (priority != null) 'priority': priority,
+        if (precedence != null) 'precedence': precedence,
         if (active != null) 'active': active,
         if (conditions != null) 'conditions': conditions,
         if (actions != null) 'actions': actions,
