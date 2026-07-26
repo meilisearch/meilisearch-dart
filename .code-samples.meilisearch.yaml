@@ -249,3 +249,7 @@ get_non_separator_tokens_1: await client.index('articles').getNonSeparatorTokens
 update_non_separator_tokens_1: "await client.index('articles').updateNonSeparatorTokens([\"@\", \"#\"]);"
 reset_non_separator_tokens_1: await client.index('articles').resetNonSeparatorTokens();
 export_post_1: "await client.export(\n  ExportQuery(\n    url: exportSinkUrl,\n    apiKey: 'new_instance_api_key',\n    payloadSize: \"100 MiB\",\n  ),\n);"
+list_dynamic_search_rules_1: "await client.listDynamicSearchRules();"
+get_dynamic_search_rule_1: "await client.getDynamicSearchRule('black-friday');"
+patch_dynamic_search_rule_1: "await client.updateOrCreateDynamicSearchRule(\n  'black-friday',\n  DynamicSearchRule(\n    uid: 'black-friday',\n    description: 'Black Friday 2025 rules',\n    precedence: 10,\n    active: true,\n    conditions: <String, Object?>{\n      'query': <String, Object?>{'isEmpty': true},\n      'time': <String, Object?>{\n        'start': '2025-11-28T00:00:00Z',\n        'end': '2025-11-28T23:59:59Z',\n      },\n    },\n    actions: <Map<String, Object?>>[\n      <String, Object?>{\n        'selector': <String, Object?>{'indexUid': 'products', 'id': '123'},\n        'action': <String, Object?>{'type': 'pin', 'position': 1},\n      },\n    ],\n  ),\n);"
+delete_dynamic_search_rule_1: "await client.deleteDynamicSearchRule('black-friday');"

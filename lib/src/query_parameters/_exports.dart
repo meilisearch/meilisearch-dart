@@ -13,3 +13,4 @@ export 'facet_search_query.dart';
 export 'swap_index.dart';
 export 'hybrid_search.dart';
 export 'export_query.dart';
+export 'dynamic_search_rules_query.dart';
