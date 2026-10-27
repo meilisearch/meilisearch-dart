@@ -37,7 +37,7 @@ reset_pagination_settings_1: |-
   await client.index('movies').resetPagination();
 get_faceting_settings_1: |-
   await client.index('movies').getFaceting();
-update_faceting_settings_1: "await client.index('books').updateFaceting(Faceting(\n        maxValuesPerFacet: 2,\n        sortFacetValuesBy: {\n          '*': FacetingSortTypes.alpha,\n          'genres': FacetingSortTypes.count\n        }));"
+update_faceting_settings_1: "await client.index('books').updateFaceting(Faceting(\n        maxValuesPerFacet: 2,\n        sortFacetValuesBy: {\n          '*': FacetingSortTypes.alpha,\n          'genres': FacetingSortTypes.sampledCount\n        }));"
 reset_faceting_settings_1: |-
   await client.index('movies').resetFaceting();
 get_one_index_1: |-

@@ -1,5 +1,6 @@
 import 'package:meilisearch/meilisearch.dart';
 import 'package:test/test.dart';
+import 'package:pub_semver/pub_semver.dart';
 
 import 'utils/client.dart';
 import 'utils/wait_for.dart';
@@ -495,6 +496,38 @@ void main() {
           equals(toUpdate.toMap()),
         );
       });
+
+      for (final attribute in ['*', 'genres']) {
+        test('Update, get, and reset sampledCount for $attribute', () async {
+          final version = await client.getVersion();
+          if (Version.parse(version['pkgVersion'] as String) <
+              Version(1, 56, 0)) {
+            markTestSkipped(
+                'sampledCount requires Meilisearch v1.56.0 or later');
+            return;
+          }
+
+          final toUpdate = Faceting(
+            maxValuesPerFacet: 200,
+            sortFacetValuesBy: {
+              '*': FacetingSortTypes.alpha,
+              attribute: FacetingSortTypes.sampledCount,
+            },
+          );
+          final update =
+              await index.updateFaceting(toUpdate).waitFor(client: client);
+          expect(update.status, 'succeeded');
+          expect((await index.getFaceting()).toMap(), toUpdate.toMap());
+          expect(
+              (await index.getSettings()).faceting?.toMap(), toUpdate.toMap());
+
+          final reset = await index.resetFaceting().waitFor(client: client);
+          expect(reset.status, 'succeeded');
+          expect((await index.getFaceting()).toMap(), defaultFaceting.toMap());
+          expect((await index.getSettings()).faceting?.toMap(),
+              defaultFaceting.toMap());
+        });
+      }
 
       test("Reset", () async {
         //first update, then reset
