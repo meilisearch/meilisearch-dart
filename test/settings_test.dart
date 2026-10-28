@@ -1,4 +1,5 @@
 import 'package:meilisearch/meilisearch.dart';
+import 'package:pub_semver/pub_semver.dart';
 import 'package:test/test.dart';
 
 import 'utils/client.dart';
@@ -514,6 +515,45 @@ void main() {
           equals(defaultFaceting.toMap()),
         );
       });
+
+      // `sampledCount` was added in Meilisearch v1.56.0, so the test is skipped
+      // when the test server runs an older version.
+      final sampledCountVersion = Version.parse('1.56.0');
+      final serverVersion = meiliServerVersion;
+      final skipSampledCount = serverVersion != null &&
+              serverVersion < sampledCountVersion
+          ? 'requires Meilisearch >= $sampledCountVersion, server is $serverVersion'
+          : false;
+
+      test("Update with sampledCount", () async {
+        final toUpdate = Faceting(
+          maxValuesPerFacet: 200,
+          sortFacetValuesBy: {
+            '*': FacetingSortTypes.sampledCount,
+            'genres': FacetingSortTypes.alpha,
+          },
+        );
+        final response =
+            await index.updateFaceting(toUpdate).waitFor(client: client);
+
+        expect(response.status, "succeeded");
+        final afterUpdate = await index.getFaceting();
+        final afterUpdateFromSettings =
+            await index.getSettings().then((value) => value.faceting);
+
+        expect(
+          afterUpdate.sortFacetValuesBy,
+          allOf(
+            isNotNull,
+            containsPair('*', FacetingSortTypes.sampledCount),
+            containsPair('genres', FacetingSortTypes.alpha),
+          ),
+        );
+        expect(
+          afterUpdateFromSettings?.toMap(),
+          equals(afterUpdate.toMap()),
+        );
+      }, skip: skipSampledCount);
     });
   });
 

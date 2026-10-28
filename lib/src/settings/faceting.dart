@@ -2,7 +2,13 @@ import 'package:meilisearch/src/annotations.dart';
 
 enum FacetingSortTypes {
   alpha('alpha'),
-  count('count');
+  count('count'),
+
+  /// Sorts facet values by an estimated count computed from a sample of the
+  /// documents, instead of counting every matching document.
+  ///
+  /// Requires Meilisearch v1.56.0 or later.
+  sampledCount('sampledCount');
 
   final String value;
 
@@ -21,9 +27,13 @@ class Faceting {
   ///
   /// `count` sorts facet values by the number of documents containing a facet value in descending order.
   ///
+  /// `sampledCount` sorts facet values by an estimated count computed from a
+  /// sample of the documents. Requires Meilisearch v1.56.0 or later.
+  ///
   /// example:
   ///   "*": 'alpha
   ///   "genres": count
+  ///   "tags": sampledCount
   @RequiredMeiliServerVersion('1.3.0')
   final Map<String, FacetingSortTypes>? sortFacetValuesBy;
 

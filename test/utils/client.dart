@@ -33,6 +33,21 @@ String get testApiKey {
   return 'masterKey';
 }
 
+/// Parses a Meilisearch version, tolerating the `v` prefix used by CI and by
+/// the Meilisearch docker tags (for example `v1.56.0`).
+Version? _parseServerVersion(String? raw) {
+  if (raw == null || raw.isEmpty) return null;
+  var normalized = raw.trim();
+  if (normalized.startsWith('v') || normalized.startsWith('V')) {
+    normalized = normalized.substring(1);
+  }
+  // Tags such as `v1.39` omit the patch version, which `Version.parse` rejects.
+  while ('.'.allMatches(normalized).length < 2) {
+    normalized = '$normalized.0';
+  }
+  return Version.parse(normalized);
+}
+
 Version? get meiliServerVersion {
   const meilisearchVersionKey = 'MEILISEARCH_VERSION';
   String? compileTimeValue = String.fromEnvironment(meilisearchVersionKey);
@@ -40,16 +55,11 @@ Version? get meiliServerVersion {
     compileTimeValue = null;
   }
   if (_kIsWeb) {
-    if (compileTimeValue != null) {
-      return Version.parse(compileTimeValue);
-    }
-  } else {
-    var str = Platform.environment[meilisearchVersionKey] ?? compileTimeValue;
-    if (str != null && str.isNotEmpty) {
-      return Version.parse(str);
-    }
+    return _parseServerVersion(compileTimeValue);
   }
-  return null;
+  return _parseServerVersion(
+    Platform.environment[meilisearchVersionKey] ?? compileTimeValue,
+  );
 }
 
 String? get openAiKey {

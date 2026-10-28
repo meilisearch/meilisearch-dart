@@ -144,7 +144,7 @@ void main() {
               maxValuesPerFacet: 2,
               sortFacetValuesBy: {
                 '*': FacetingSortTypes.alpha,
-                'genres': FacetingSortTypes.count
+                'genres': FacetingSortTypes.sampledCount
               }));
       // #enddocregion
 
